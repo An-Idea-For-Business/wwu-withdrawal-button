@@ -15,6 +15,9 @@ declare( strict_types=1 );
 namespace WWU\WithdrawalButton\Core;
 
 use WWU\WithdrawalButton\Admin\AdminController;
+use WWU\WithdrawalButton\Frontend\Assets;
+use WWU\WithdrawalButton\Frontend\WooMyAccount;
+use WWU\WithdrawalButton\Platform\WooCommerce\OrderStatus;
 use WWU\WithdrawalButton\REST\RestApi;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -110,6 +113,17 @@ final class Plugin {
 	private function register_services(): void {
 		$this->rest_api = new RestApi();
 		$this->rest_api->register();
+
+		$services = \WWU\WithdrawalButton\Core\Services::instance();
+
+		// WooCommerce-specific surfaces (status + My Account) when WooCommerce is active.
+		if ( null !== $services->platforms->get( 'woocommerce' ) ) {
+			( new OrderStatus() )->register();
+			( new WooMyAccount() )->register();
+		}
+
+		// Frontend assets (gated internally; the enqueue hook only fires on the front end).
+		( new Assets() )->register();
 
 		if ( is_admin() ) {
 			$this->admin = new AdminController();

@@ -5,6 +5,26 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### F1 — WooCommerce withdrawal flow (1.0.0-alpha.2, 2026-06-13)
+- Platform adapter layer: `OrderDataSource` interface + `NormalizedOrder` VO +
+  HPOS-safe `WooCommerceAdapter` + `PlatformRegistry`; custom order status
+  `wc-wb-requested` (3 status hooks + dual bulk-action hooks).
+- Domain: `LabelResolver` (statutory IT/EN/DE/FR/ES labels, override warning,
+  DE "no hier" guard), `WindowCalculator` (informational 14-day window, never
+  hides the button), `ArticleFiftyNineEvaluator` (per-item exclusions, mixed
+  cart), `ApplicabilityResolver` (consumer-country / Rome I, CH voluntary, B2B
+  VAT, modes), `WithdrawalRequest` VO, `WithdrawalService` (two-step orchestration).
+- Immutable log: `LogChain` (canonical, order-independent hash) + append-only
+  `LogRepository` (GET_LOCK-serialised global hash chain + chain verifier).
+- Frontend: `WooMyAccount` (orders-list action + order-detail injection +
+  account endpoint tab), two-step form template + vanilla JS controller,
+  `Assets` (conditional enqueue + Complianz marker), `GuestAccess` (HMAC token +
+  rate limit), `Template` loader (theme override + realpath confinement).
+- REST: `/withdrawal/lookup`, `/withdrawal/statement`, `/withdrawal/confirm`
+  (per-request ownership/key/token access; enumeration-safe errors).
+- Smoke suites added: `labels`, `applicability`, `window`, `log`.
+- Lint: php -l + node --check clean.
+
 ### Planning (2026-06-13)
 - Interview completed (4 rounds) and two reconnaissance workflows run (12 + 7 sub-agents) with
   adversarial legal verification against EUR-Lex primary sources.

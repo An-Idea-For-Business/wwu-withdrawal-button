@@ -1,0 +1,112 @@
+/**
+ * WWU Withdrawal Button — frontend styles.
+ *
+ * Deliberately neutral and inherit-friendly so the button blends with the theme.
+ * The button must remain legible and prominent (Art. 11a "easily legible") — we
+ * enforce a minimum size and rely on the theme's accent for contrast, never
+ * hiding or de-emphasising it.
+ */
+
+.wwu-wb-button-wrap {
+	margin: 1em 0;
+}
+
+.wwu-wb-button {
+	display: inline-block;
+	padding: 0.7em 1.4em;
+	font-size: 1rem;
+	line-height: 1.2;
+	font-weight: 600;
+	text-decoration: none;
+	border-radius: 5px;
+	cursor: pointer;
+	border: 2px solid currentColor;
+	background: #1a1f3a;
+	color: #fff;
+	transition: opacity 0.2s ease-in-out;
+}
+
+.wwu-wb-button:hover,
+.wwu-wb-button:focus {
+	opacity: 0.9;
+}
+
+.wwu-wb-button:focus-visible {
+	outline: 3px solid #1a1f3a;
+	outline-offset: 2px;
+}
+
+.wwu-wb-window-note {
+	display: inline-block;
+	margin-left: 0.75em;
+	font-size: 0.85rem;
+	color: #666;
+}
+
+.wwu-wb-form-wrap {
+	max-width: 540px;
+	margin: 1.5em 0;
+}
+
+.wwu-wb-form-title {
+	margin-top: 0;
+}
+
+.wwu-wb-field {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 1em;
+}
+
+.wwu-wb-field label {
+	font-weight: 600;
+	margin-bottom: 0.25em;
+}
+
+.wwu-wb-field input,
+.wwu-wb-field textarea {
+	padding: 0.6em 0.7em;
+	font-size: 1rem;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.wwu-wb-step2-intro {
+	font-weight: 600;
+}
+
+.wwu-wb-result {
+	margin-top: 1em;
+	padding: 0.8em 1em;
+	border-radius: 4px;
+}
+
+.wwu-wb-result.is-success {
+	background: #edfaef;
+	border: 1px solid #46b450;
+	color: #1a4d24;
+}
+
+.wwu-wb-result.is-error {
+	background: #fcf0f1;
+	border: 1px solid #d63638;
+	color: #8a1f21;
+}
+
+.wwu-wb-status-notice {
+	margin: 1em 0;
+	padding: 0.6em 1em;
+	background: #f6f7f7;
+	border-left: 4px solid #1a1f3a;
+}
+
+.wwu-wb-noscript {
+	color: #8a1f21;
+}
+
+/* Trap #19 twin rule: keep [hidden] effective even if a theme sets display. */
+.wwu-wb-form-wrap [hidden] {
+	display: none !important;
+}
