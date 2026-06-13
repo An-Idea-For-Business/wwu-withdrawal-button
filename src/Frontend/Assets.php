@@ -33,7 +33,6 @@ final class Assets {
 	 */
 	public function register(): void {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue' ) );
-		add_filter( 'script_loader_tag', array( $this, 'mark_script_tag' ), 10, 2 );
 	}
 
 	/**
@@ -45,6 +44,10 @@ final class Assets {
 		if ( ! $this->should_enqueue() ) {
 			return;
 		}
+
+		// Register the Complianz marker filter only on pages that actually load our
+		// script, so it does not run on every script tag site-wide.
+		add_filter( 'script_loader_tag', array( $this, 'mark_script_tag' ), 10, 2 );
 
 		wp_enqueue_style(
 			'wwu-wb-frontend',
@@ -101,8 +104,7 @@ final class Assets {
 	 * @return bool
 	 */
 	private function should_enqueue(): bool {
-		$settings = (array) get_option( 'wwu_wb_settings', array() );
-		if ( empty( $settings['enabled'] ) ) {
+		if ( ! \WWU\WithdrawalButton\Core\Settings::enabled() ) {
 			return false;
 		}
 		if ( ! Services::instance()->platforms->has_active() ) {

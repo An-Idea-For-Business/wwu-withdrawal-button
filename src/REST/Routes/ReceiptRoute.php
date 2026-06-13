@@ -114,7 +114,8 @@ final class ReceiptRoute extends AbstractRoute {
 				'order_number'  => (string) ( $payload['order_number'] ?? '' ),
 				'submitted_at'  => (string) ( $payload['submitted_at'] ?? $row['created_at'] ),
 				'row_hash'      => (string) $row['row_hash'],
-				'chain_intact'  => 0 === $repo->verify_chain(),
+				// Cheap per-row integrity (O(1)); the full-chain scan is admin-only.
+				'record_intact' => $repo->verify_row( $row ),
 				'within_window' => (bool) ( $payload['within_window'] ?? true ),
 			)
 		);

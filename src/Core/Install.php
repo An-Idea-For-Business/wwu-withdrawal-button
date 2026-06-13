@@ -111,6 +111,7 @@ final class Install {
 	public static function setup_site(): void {
 		self::seed_default_options();
 		self::ensure_secret();
+		self::ensure_form_page();
 
 		Migrator::migrate( (int) get_option( Migrator::OPTION_DB_VERSION, 0 ), (int) WWU_WB_SCHEMA_VERSION );
 
@@ -175,7 +176,8 @@ final class Install {
 			'yes'
 		);
 
-		add_option( 'wwu_wb_labels', array(), '', 'yes' );
+		// Read only inside the withdrawal flow → not autoloaded on every page.
+		add_option( 'wwu_wb_labels', array(), '', 'no' );
 
 		add_option(
 			'wwu_wb_exclusions',
@@ -185,7 +187,7 @@ final class Install {
 				'auto_detect_virtual'   => true,
 			),
 			'',
-			'yes'
+			'no'
 		);
 
 		add_option(
@@ -195,7 +197,7 @@ final class Install {
 				'rfc3161_url' => '',
 			),
 			'',
-			'yes'
+			'no'
 		);
 
 		add_option(
@@ -224,6 +226,38 @@ final class Install {
 		);
 
 		add_option( Migrator::OPTION_DB_VERSION, '0', '', 'yes' );
+	}
+
+	/**
+	 * Ensure a published page with the [wwu_wb_form] shortcode exists, so guests
+	 * (and FluentCart customers) always have a reachable withdrawal surface. The
+	 * page id is stored in settings['public_form_page_id'].
+	 *
+	 * @return void
+	 */
+	private static function ensure_form_page(): void {
+		$settings = (array) get_option( 'wwu_wb_settings', array() );
+		$page_id  = (int) ( $settings['public_form_page_id'] ?? 0 );
+
+		if ( $page_id > 0 && 'page' === get_post_type( $page_id ) && 'trash' !== get_post_status( $page_id ) ) {
+			return; // still valid.
+		}
+
+		$new_id = wp_insert_post(
+			array(
+				'post_title'   => __( 'Right of withdrawal', 'wwu-withdrawal-button' ),
+				'post_name'    => 'right-of-withdrawal',
+				'post_content' => '[wwu_wb_form]',
+				'post_status'  => 'publish',
+				'post_type'    => 'page',
+			),
+			true
+		);
+
+		if ( ! is_wp_error( $new_id ) && $new_id > 0 ) {
+			$settings['public_form_page_id'] = (int) $new_id;
+			update_option( 'wwu_wb_settings', $settings );
+		}
 	}
 
 	/**

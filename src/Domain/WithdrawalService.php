@@ -156,14 +156,20 @@ final class WithdrawalService {
 			)
 		);
 
-		// Persist operational state on the order (mutable; the log is the evidence).
-		$adapter->set_meta( $order->order_ref, 'status', 'pending' );
-		$adapter->set_meta( $order->order_ref, 'request_uid', $request_uid );
-		$adapter->set_meta( $order->order_ref, 'requested_at', $submitted_at );
-		$adapter->set_meta( $order->order_ref, 'locale', $order->locale );
-		$adapter->set_meta( $order->order_ref, 'country', $order->country );
-		$adapter->set_meta( $order->order_ref, 'confirmed_uid', $request_uid );
-		$adapter->set_meta( $order->order_ref, 'late', $within ? 0 : 1 );
+		// Persist operational state on the order in a single write (mutable; the
+		// immutable log is the legal evidence).
+		$adapter->batch_meta(
+			$order->order_ref,
+			array(
+				'status'        => 'pending',
+				'request_uid'   => $request_uid,
+				'requested_at'  => $submitted_at,
+				'locale'        => $order->locale,
+				'country'       => $order->country,
+				'confirmed_uid' => $request_uid,
+				'late'          => $within ? 0 : 1,
+			)
+		);
 
 		$adapter->mark_withdrawal_requested( $order->order_ref );
 		$adapter->add_note(

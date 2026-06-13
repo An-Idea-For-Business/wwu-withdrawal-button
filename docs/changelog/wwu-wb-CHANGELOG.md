@@ -5,6 +5,30 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### Audit hardening — core F0–F6 (1.0.0-alpha.7, 2026-06-13)
+Parallel security + performance + compliance audit (sub-agents). Security: **0
+findings**. Closed all critical/high compliance gaps + all high/medium perf
+findings. See `docs/audits/wwu-wb-core-2026-06-13-AUDIT.md`.
+- **Compliance (critical)**: order-status eligibility gate centralised in
+  `ApplicabilityResolver` (no button on failed/cancelled/refunded/unpaid orders);
+  guest path fixed — `Install::ensure_form_page()` auto-creates the public
+  `[wwu_wb_form]` page, `OrderEmailLink` adds the statutory link (with order key)
+  to WooCommerce customer emails, admin warning when no form page is set.
+- **Compliance (high)**: `NoScriptFlow` server-rendered no-JavaScript fallback
+  (admin-post two-step); JS is now progressive enhancement.
+- **Compliance (medium/low)**: mail-failure now logged (`receipt_failed`) + admin
+  notice (`wwu_wb_mail_failed`); late flag shown in the admin email.
+- **Performance**: DB-1 chain-corruption guard (abort append if `GET_LOCK` fails);
+  public `/verify` does O(1) per-row integrity (full-chain scan cached, admin
+  only); `Core\Settings` per-request option cache across hot resolvers;
+  `batch_meta()` (1 save instead of 7 in confirm); `script_loader_tag` filter
+  scoped to enqueue; `labels/exclusions/timestamp` options set autoload=no.
+- Lint clean (php -l 67 files, node --check).
+
+### F4 + compat (1.0.0-alpha.5/.6, 2026-06-13)
+OpenTimestamps anchoring + Complianz/cache compatibility + FluentCart adapter
+(see commits).
+
 ### F5/F7/F8 — Legal documents, shortcodes, admin dashboard (1.0.0-alpha.4, 2026-06-13)
 - **F5 legal documents**: `ModelForm` (Annex I-B model withdrawal form, official
   wording IT/EN/DE/FR/ES) + `ClauseLibrary` (pre-contractual / terms / privacy

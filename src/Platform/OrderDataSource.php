@@ -97,4 +97,13 @@ interface OrderDataSource {
 	 * @return void
 	 */
 	public function set_meta( string $order_ref, string $key, $value ): void;
+
+	/**
+	 * Write several plugin meta values in a single persist (one save).
+	 *
+	 * @param string $order_ref Order reference.
+	 * @param array  $pairs     key => value pairs (keys without prefix).
+	 * @return void
+	 */
+	public function batch_meta( string $order_ref, array $pairs ): void;
 }

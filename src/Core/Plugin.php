@@ -125,6 +125,7 @@ final class Plugin {
 		if ( null !== $services->platforms->get( 'woocommerce' ) ) {
 			( new OrderStatus() )->register();
 			( new WooMyAccount() )->register();
+			( new \WWU\WithdrawalButton\Mail\OrderEmailLink() )->register();
 		}
 
 		// FluentCart portal injection when FluentCart is active.
@@ -134,6 +135,9 @@ final class Plugin {
 
 		// Frontend assets (gated internally; the enqueue hook only fires on the front end).
 		( new Assets() )->register();
+
+		// No-JavaScript fallback flow (admin-post handlers).
+		( new \WWU\WithdrawalButton\Frontend\NoScriptFlow() )->register();
 
 		// Durable-medium acknowledgement: listens on wwu_wb_withdrawal_confirmed.
 		( new ConfirmationDispatcher() )->register();

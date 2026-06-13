@@ -242,10 +242,11 @@ final class WooMyAccount {
 	 * @return bool
 	 */
 	private function should_show( NormalizedOrder $order ): bool {
-		$settings = (array) get_option( 'wwu_wb_settings', array() );
-		if ( empty( $settings['enabled'] ) ) {
+		if ( ! \WWU\WithdrawalButton\Core\Settings::enabled() ) {
 			return false;
 		}
+		// The status-eligibility gate (no button on failed/cancelled/refunded
+		// orders) is applied centrally inside ApplicabilityResolver::decide().
 		return Services::instance()->applicability->decide( $order )->show;
 	}
 

@@ -33,7 +33,7 @@ final class ArticleFiftyNineEvaluator {
 	 * @return bool
 	 */
 	public function has_withdrawable_item( NormalizedOrder $order ): bool {
-		$settings        = (array) get_option( 'wwu_wb_exclusions', array() );
+		$settings        = \WWU\WithdrawalButton\Core\Settings::get( 'wwu_wb_exclusions' );
 		$excluded_cats   = array_map( 'intval', (array) ( $settings['excluded_category_ids'] ?? array() ) );
 		$excluded_prods  = array_map( 'intval', (array) ( $settings['excluded_product_ids'] ?? array() ) );
 		$auto_detect     = ! empty( $settings['auto_detect_virtual'] );

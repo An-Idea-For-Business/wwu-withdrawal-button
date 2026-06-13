@@ -108,6 +108,12 @@ final class ComplianceStatusPage {
 	private function render_warnings(): void {
 		$warnings = array();
 
+		$settings = (array) get_option( 'wwu_wb_settings', array() );
+		$page_id  = (int) ( $settings['public_form_page_id'] ?? 0 );
+		if ( ! empty( $settings['enabled'] ) && ( $page_id <= 0 || 'publish' !== get_post_status( $page_id ) ) ) {
+			echo '<div class="notice notice-error inline"><p>' . esc_html__( 'No published withdrawal form page is configured. Guests (and FluentCart customers) cannot withdraw. Create a page with the [wwu_wb_form] shortcode and set it in Settings.', 'wwu-withdrawal-button' ) . '</p></div>';
+		}
+
 		if ( defined( 'CMPLZ_VERSION' ) || function_exists( 'cmplz_get_value' ) ) {
 			$warnings[] = __( 'Complianz is active. The withdrawal flow is functional (consent-exempt); the plugin marks its scripts so they are not blocked. Verify on the front end after first activation.', 'wwu-withdrawal-button' );
 		}

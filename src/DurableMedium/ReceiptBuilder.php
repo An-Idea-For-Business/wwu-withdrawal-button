@@ -37,9 +37,12 @@ final class ReceiptBuilder {
 	 * @return array
 	 */
 	public function data( string $request_uid, NormalizedOrder $order, WithdrawalRequest $req, array $log_row, string $submitted_at ): array {
-		$row_hash = (string) ( $log_row['row_hash'] ?? '' );
+		$row_hash    = (string) ( $log_row['row_hash'] ?? '' );
+		$row_payload = isset( $log_row['payload_json'] ) ? (array) json_decode( (string) $log_row['payload_json'], true ) : array();
+		$within      = (bool) ( $row_payload['within_window'] ?? true );
 
 		return array(
+			'within_window' => $within,
 			'request_uid'  => $request_uid,
 			'order_number' => $order->number,
 			'name'         => $req->name,

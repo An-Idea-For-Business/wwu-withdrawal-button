@@ -191,6 +191,17 @@ final class FluentCartAdapter implements OrderDataSource {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public function batch_meta( string $order_ref, array $pairs ): void {
+		$all = (array) get_option( $this->meta_option( $order_ref ), array() );
+		foreach ( $pairs as $key => $value ) {
+			$all[ $key ] = $value;
+		}
+		update_option( $this->meta_option( $order_ref ), $all, false );
+	}
+
+	/**
 	 * Read a value from the per-order meta option.
 	 *
 	 * @param string $order_ref Order id.

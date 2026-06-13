@@ -33,7 +33,7 @@ final class WindowCalculator {
 	 * @return int
 	 */
 	public function window_days( NormalizedOrder $order ): int {
-		$settings = (array) get_option( 'wwu_wb_settings', array() );
+		$settings = \WWU\WithdrawalButton\Core\Settings::main();
 		$days     = isset( $settings['withdrawal_window_days'] ) ? (int) $settings['withdrawal_window_days'] : 14;
 		/**
 		 * Filter the withdrawal-window length (days) for an order.

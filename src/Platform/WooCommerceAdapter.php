@@ -153,6 +153,20 @@ final class WooCommerceAdapter implements OrderDataSource {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public function batch_meta( string $order_ref, array $pairs ): void {
+		$order = $this->load( $order_ref );
+		if ( ! $order ) {
+			return;
+		}
+		foreach ( $pairs as $key => $value ) {
+			$order->update_meta_data( WWU_WB_META_PREFIX . $key, $value );
+		}
+		$order->save(); // single persist for all keys.
+	}
+
+	/**
 	 * Convert a WC_DateTime to DateTimeImmutable (UTC), or null.
 	 *
 	 * @param mixed $date WC_DateTime|null.

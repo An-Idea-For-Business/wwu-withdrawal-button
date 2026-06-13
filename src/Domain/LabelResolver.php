@@ -90,7 +90,7 @@ final class LabelResolver {
 		$lang      = $this->resolve_language( $country, $locale );
 		$statutory = self::STATUTORY[ $lang ][ $index ] ?? self::STATUTORY['en'][ $index ];
 
-		$overrides = (array) get_option( 'wwu_wb_labels', array() );
+		$overrides = \WWU\WithdrawalButton\Core\Settings::get( 'wwu_wb_labels' );
 		$override  = isset( $overrides[ $lang ][ $kind ] ) ? trim( (string) $overrides[ $lang ][ $kind ] ) : '';
 
 		if ( '' === $override ) {

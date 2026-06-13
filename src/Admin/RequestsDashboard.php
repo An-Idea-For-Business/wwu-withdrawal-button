@@ -41,7 +41,7 @@ final class RequestsDashboard {
 		$page  = isset( $_GET['paged'] ) ? max( 1, absint( $_GET['paged'] ) ) : 1; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$rows  = $repo->list_confirmed( $per, ( $page - 1 ) * $per );
 		$total = $repo->count_confirmed();
-		$broken = $repo->verify_chain();
+		$broken = $repo->chain_status_cached();
 
 		echo '<div class="wrap wwu-wb-wrap">';
 		echo '<h1>' . esc_html__( 'Withdrawal requests', 'wwu-withdrawal-button' ) . '</h1>';

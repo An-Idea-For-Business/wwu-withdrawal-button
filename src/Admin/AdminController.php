@@ -84,7 +84,24 @@ final class AdminController {
 	public function register(): void {
 		add_action( 'admin_menu', array( $this, 'register_menu' ) );
 		add_action( 'admin_post_wwu_wb_save_settings', array( $this->settings, 'handle_save' ) );
+		add_action( 'admin_notices', array( $this, 'maybe_mail_failure_notice' ) );
 		$this->assets->register();
+	}
+
+	/**
+	 * Show an admin notice if a durable-medium acknowledgement email failed to send.
+	 *
+	 * @return void
+	 */
+	public function maybe_mail_failure_notice(): void {
+		if ( ! current_user_can( \WWU\WithdrawalButton\REST\Authentication::capability() ) ) {
+			return;
+		}
+		$uid = get_transient( 'wwu_wb_mail_failed' );
+		if ( ! $uid ) {
+			return;
+		}
+		echo '<div class="notice notice-error is-dismissible"><p>' . esc_html__( 'WWU Withdrawal Button: a withdrawal acknowledgement email could not be sent. The consumer is legally entitled to receive it. Check your site\'s email/SMTP configuration and resend from the Requests page.', 'wwu-withdrawal-button' ) . '</p></div>';
 	}
 
 	/**

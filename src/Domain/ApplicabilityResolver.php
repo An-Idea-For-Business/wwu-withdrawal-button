@@ -47,7 +47,7 @@ final class ApplicabilityResolver {
 	 * @return ApplicabilityDecision
 	 */
 	public function decide( NormalizedOrder $order ): ApplicabilityDecision {
-		$config  = (array) get_option( 'wwu_wb_applicability', array() );
+		$config  = \WWU\WithdrawalButton\Core\Settings::get( 'wwu_wb_applicability' );
 		$mode    = (string) ( $config['mode'] ?? 'eu_eea_only' );
 		$country = strtoupper( $order->country );
 
@@ -72,6 +72,14 @@ final class ApplicabilityResolver {
 	 * @return ApplicabilityDecision
 	 */
 	private function evaluate( NormalizedOrder $order, string $mode, string $country, array $config ): ApplicabilityDecision {
+		// Order-status eligibility: a withdrawal right presupposes a concluded
+		// contract. Never show the function on failed / unpaid / cancelled /
+		// refunded / draft orders (covers WooCommerce + FluentCart via the
+		// normalized status).
+		if ( ! $this->is_eligible_status( $order ) ) {
+			return new ApplicabilityDecision( false, false, 'ineligible_status', $country );
+		}
+
 		// B2B: a provided VAT number is treated as out of scope when configured.
 		if ( $order->has_vat_number && ! empty( $config['b2b_vat_out_of_scope'] ) ) {
 			return new ApplicabilityDecision( false, false, 'b2b_vat', $country );
@@ -97,11 +105,35 @@ final class ApplicabilityResolver {
 			case 'eu_eea_only':
 			default:
 				// Switzerland (and other non-EU/EEA) consumers: no statutory mandate.
+				// (status/B2B/Art.59 gates already applied above.)
 				if ( ! $in_scope ) {
 					$reason = Countries::is_switzerland( $country ) ? 'switzerland_voluntary' : 'out_of_scope';
 					return new ApplicabilityDecision( false, false, $reason, $country );
 				}
 				return new ApplicabilityDecision( true, true, 'mandatory', $country );
 		}
+	}
+
+	/**
+	 * Whether the order's status corresponds to a concluded, withdrawable contract.
+	 *
+	 * @param NormalizedOrder $order Order.
+	 * @return bool
+	 */
+	private function is_eligible_status( NormalizedOrder $order ): bool {
+		$status = strtolower( (string) $order->status );
+
+		// Allowlist of contract-bearing statuses across WooCommerce + FluentCart.
+		$eligible = array( 'processing', 'completed', 'on-hold', 'paid', 'partially-paid', 'partially_paid', 'shipped', 'delivered' );
+
+		/**
+		 * Filter the order statuses for which a withdrawal right is presumed to exist.
+		 *
+		 * @param string[]        $eligible Lower-case unprefixed status slugs.
+		 * @param NormalizedOrder $order    Order.
+		 */
+		$eligible = array_map( 'strtolower', (array) apply_filters( 'wwu_wb_eligible_statuses', $eligible, $order ) );
+
+		return in_array( $status, $eligible, true );
 	}
 }

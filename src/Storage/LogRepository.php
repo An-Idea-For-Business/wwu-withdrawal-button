@@ -56,7 +56,13 @@ final class LogRepository {
 		$payload    = isset( $row['payload'] ) && is_array( $row['payload'] ) ? $row['payload'] : array();
 
 		// Acquire the append lock so prev_hash reflects the real latest row.
+		// If the lock cannot be acquired we MUST abort: appending without it could
+		// compute prev_hash against a stale latest row and corrupt the chain.
 		$got_lock = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT GET_LOCK(%s, %d)', self::LOCK, 5 ) );
+		if ( 1 !== $got_lock ) {
+			Debug::error( 'log', 'append_lock_failed', array( 'event' => (string) ( $row['event'] ?? '' ) ) );
+			return 0;
+		}
 
 		try {
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery
@@ -187,6 +193,48 @@ final class LogRepository {
 		$table = LogTable::name();
 		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery
 		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$table} WHERE event = %s", 'confirmed' ) );
+	}
+
+	/**
+	 * Verify a single stored row's own hash (cheap O(1) integrity check).
+	 *
+	 * Recomputes row_hash from the row's evidence fields + its stored prev_hash.
+	 * Used by the public verify endpoint instead of scanning the whole chain.
+	 *
+	 * @param array $row A stored log row (associative).
+	 * @return bool
+	 */
+	public function verify_row( array $row ): bool {
+		$evidence = array(
+			'request_uid' => (string) ( $row['request_uid'] ?? '' ),
+			'platform'    => (string) ( $row['platform'] ?? '' ),
+			'order_ref'   => (string) ( $row['order_ref'] ?? '' ),
+			'event'       => (string) ( $row['event'] ?? '' ),
+			'payload'     => json_decode( (string) ( $row['payload_json'] ?? '' ), true ) ?: array(),
+			'ip_address'  => (string) ( $row['ip_address'] ?? '' ),
+			'created_at'  => (string) ( $row['created_at'] ?? '' ),
+		);
+		$computed = LogChain::compute( (string) ( $row['prev_hash'] ?? '' ), $evidence );
+		return hash_equals( $computed, (string) ( $row['row_hash'] ?? '' ) );
+	}
+
+	/**
+	 * Cached whole-chain integrity status for the admin dashboard.
+	 *
+	 * Caches the verify_chain() result in a transient so the (potentially O(n))
+	 * scan runs at most once per cache window, never on a public request.
+	 *
+	 * @param int $ttl Cache lifetime in seconds.
+	 * @return int First broken row id, or 0 if intact.
+	 */
+	public function chain_status_cached( int $ttl = 900 ): int {
+		$cached = get_transient( 'wwu_wb_chain_status' );
+		if ( false !== $cached ) {
+			return (int) $cached;
+		}
+		$broken = $this->verify_chain();
+		set_transient( 'wwu_wb_chain_status', $broken, $ttl );
+		return $broken;
 	}
 
 	/**

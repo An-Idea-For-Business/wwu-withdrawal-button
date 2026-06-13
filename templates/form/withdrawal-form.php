@@ -24,9 +24,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
+<?php
+// phpcs:disable WordPress.Security.NonceVerification.Recommended
+$wwu_wb_key   = isset( $_GET['key'] ) ? sanitize_text_field( wp_unslash( $_GET['key'] ) ) : '';
+$wwu_wb_token = isset( $_GET['access_token'] ) ? sanitize_text_field( wp_unslash( $_GET['access_token'] ) ) : '';
+// phpcs:enable WordPress.Security.NonceVerification.Recommended
+?>
 <div class="wwu-wb-form-wrap" data-no-translation
 	data-order-ref="<?php echo esc_attr( $order_ref ); ?>"
-	data-key="<?php echo esc_attr( isset( $_GET['key'] ) ? sanitize_text_field( wp_unslash( $_GET['key'] ) ) : '' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>">
+	data-key="<?php echo esc_attr( $wwu_wb_key ); ?>"
+	data-access-token="<?php echo esc_attr( $wwu_wb_token ); ?>">
 
 	<h2 class="wwu-wb-form-title"><?php echo esc_html( $withdraw_label ); ?></h2>
 
@@ -34,7 +41,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<p class="wwu-wb-noscript"><?php esc_html_e( 'JavaScript is required to use the withdrawal form. You may also use the model withdrawal form provided in our terms.', 'wwu-withdrawal-button' ); ?></p>
 	</noscript>
 
-	<form class="wwu-wb-form" data-step="1">
+	<form class="wwu-wb-form" data-step="1" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+		<input type="hidden" name="action" value="wwu_wb_noscript_statement" />
+		<input type="hidden" name="order_ref" value="<?php echo esc_attr( $order_ref ); ?>" />
+		<input type="hidden" name="key" value="<?php echo esc_attr( $wwu_wb_key ); ?>" />
+		<input type="hidden" name="access_token" value="<?php echo esc_attr( $wwu_wb_token ); ?>" />
+		<?php wp_nonce_field( 'wwu_wb_noscript' ); ?>
 		<p class="wwu-wb-field">
 			<label for="wwu-wb-name"><?php esc_html_e( 'Your name', 'wwu-withdrawal-button' ); ?></label>
 			<input type="text" id="wwu-wb-name" name="name" value="<?php echo esc_attr( $name ); ?>" required autocomplete="name" />

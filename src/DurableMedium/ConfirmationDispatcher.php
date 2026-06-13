@@ -99,7 +99,24 @@ final class ConfirmationDispatcher {
 		);
 
 		$mailer = new Mailer();
-		$mailer->send_html( (string) $email['to'], (string) $email['subject'], (string) $email['html'], (array) $email['attachments'] );
+		$sent   = $mailer->send_html( (string) $email['to'], (string) $email['subject'], (string) $email['html'], (array) $email['attachments'] );
+
+		if ( ! $sent ) {
+			// The acknowledgement MUST reach the consumer (Art. 11a(4)). Record the
+			// failure in the immutable log and flag an admin notice for follow-up.
+			Debug::error( 'durable_medium', 'receipt.email_failed', array( 'request_uid' => $request_uid ) );
+			set_transient( 'wwu_wb_mail_failed', $request_uid, WEEK_IN_SECONDS );
+			$log_repo->append(
+				array(
+					'request_uid'    => $request_uid,
+					'platform'       => $order->platform,
+					'order_ref'      => $order->order_ref,
+					'customer_email' => $req->email,
+					'event'          => 'receipt_failed',
+					'payload'        => array( 'reason' => 'wp_mail_returned_false' ),
+				)
+			);
+		}
 
 		// Merchant notification.
 		$merchant = (string) ( $settings['merchant_email'] ?? get_option( 'admin_email' ) );
