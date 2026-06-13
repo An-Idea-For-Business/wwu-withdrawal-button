@@ -34,7 +34,22 @@ $orders_url = isset( $orders_url ) ? (string) $orders_url : '';
 
 	<?php if ( ! $logged_in ) : ?>
 
-		<p><?php esc_html_e( 'To start a withdrawal, open the link in your order confirmation email, or log in to your account to choose an order.', 'wwu-withdrawal-button' ); ?></p>
+		<p><?php esc_html_e( 'Enter your order number and the email you used at checkout to start a withdrawal. You can also use the link in your order confirmation email, or log in to your account.', 'wwu-withdrawal-button' ); ?></p>
+
+		<form class="wwu-wb-lookup wwu-wb-form-wrap" data-wwu-wb-lookup>
+			<div class="wwu-wb-field">
+				<label for="wwu-wb-lookup-order"><?php esc_html_e( 'Order number', 'wwu-withdrawal-button' ); ?></label>
+				<input id="wwu-wb-lookup-order" name="order_ref" type="text" autocomplete="off" required>
+			</div>
+			<div class="wwu-wb-field">
+				<label for="wwu-wb-lookup-email"><?php esc_html_e( 'Email used at checkout', 'wwu-withdrawal-button' ); ?></label>
+				<input id="wwu-wb-lookup-email" name="email" type="email" autocomplete="email" required>
+			</div>
+			<div class="wwu-wb-actions">
+				<button type="submit" class="wwu-wb-button"><?php esc_html_e( 'Find my order', 'wwu-withdrawal-button' ); ?></button>
+			</div>
+			<p class="wwu-wb-result" role="alert" hidden></p>
+		</form>
 
 	<?php elseif ( empty( $rows ) ) : ?>
 

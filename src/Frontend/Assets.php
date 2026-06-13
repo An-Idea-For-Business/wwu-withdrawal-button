@@ -82,6 +82,8 @@ final class Assets {
 					'genericError' => __( 'Something went wrong. Please try again.', 'wwu-withdrawal-button' ),
 					'confirmed'    => __( 'Your withdrawal has been registered. We have emailed you a confirmation.', 'wwu-withdrawal-button' ),
 					'step2Intro'   => __( 'Please confirm your withdrawal. This is the final step.', 'wwu-withdrawal-button' ),
+					'lookupSubmit' => __( 'Find my order', 'wwu-withdrawal-button' ),
+					'lookupFailed' => __( 'If those details match an eligible order, you can continue. Please check your order number and email and try again.', 'wwu-withdrawal-button' ),
 				),
 			)
 		);

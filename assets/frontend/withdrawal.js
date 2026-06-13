@@ -120,8 +120,54 @@
 		} );
 	}
 
+	/**
+	 * Wire the guest lookup form (order number + email → access token → form).
+	 *
+	 * On success the server returns a token bound to (order_ref, email); we reload
+	 * the same page with ?wwu_wb_order & ?access_token so the server renders the
+	 * two-step form. On failure we show a single generic message (no enumeration).
+	 *
+	 * @param {HTMLElement} form The .wwu-wb-lookup form element.
+	 */
+	function initLookup( form ) {
+		form.addEventListener( 'submit', function ( ev ) {
+			ev.preventDefault();
+			var btn = form.querySelector( 'button[type="submit"]' );
+			var result = form.querySelector( '.wwu-wb-result' );
+			var orderRef = ( form.querySelector( '[name="order_ref"]' ) || {} ).value || '';
+			var email = ( form.querySelector( '[name="email"]' ) || {} ).value || '';
+			var label = btn ? btn.textContent : '';
+
+			if ( btn ) {
+				btn.disabled = true;
+				btn.textContent = i18n.submitting || 'Submitting…';
+			}
+
+			post( 'withdrawal/lookup', { order_ref: orderRef, email: email } ).then( function ( res ) {
+				var url = new URL( window.location.href );
+				url.searchParams.set( 'wwu_wb_order', res.order_ref );
+				url.searchParams.set( 'access_token', res.access_token );
+				window.location.assign( url.toString() );
+			} ).catch( function () {
+				// Always the same generic message — never reveal which field failed.
+				if ( result ) {
+					result.hidden = false;
+					result.textContent = i18n.lookupFailed || 'If those details match an eligible order, you can continue. Please check and try again.';
+					result.className = 'wwu-wb-result is-error';
+				}
+				if ( btn ) {
+					btn.disabled = false;
+					btn.textContent = label || i18n.lookupSubmit || 'Find my order';
+				}
+			} );
+		} );
+	}
+
 	document.addEventListener( 'DOMContentLoaded', function () {
-		var wraps = document.querySelectorAll( '.wwu-wb-form-wrap' );
+		var wraps = document.querySelectorAll( '.wwu-wb-form-wrap:not(.wwu-wb-lookup)' );
 		Array.prototype.forEach.call( wraps, initForm );
+
+		var lookups = document.querySelectorAll( '.wwu-wb-lookup' );
+		Array.prototype.forEach.call( lookups, initLookup );
 	} );
 }() );
