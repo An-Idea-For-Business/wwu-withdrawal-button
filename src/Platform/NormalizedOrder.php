@@ -21,38 +21,91 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 final class NormalizedOrder {
 
+	/** @var string Adapter key ('woocommerce'|'fluentcart'). */
+	public $platform;
+
+	/** @var string Stable order reference (id/number as string). */
+	public $order_ref;
+
+	/** @var string Human order number. */
+	public $number;
+
+	/** @var string Billing email. */
+	public $email;
+
+	/** @var int User ID (0 for guest). */
+	public $customer_id;
+
+	/** @var string Consumer country (billing → shipping). */
+	public $country;
+
+	/** @var string Native status slug (unprefixed). */
+	public $status;
+
+	/** @var string Locale captured at checkout (may be empty). */
+	public $locale;
+
+	/** @var \DateTimeImmutable|null Order created date. */
+	public $created;
+
+	/** @var \DateTimeImmutable|null Paid date. */
+	public $paid;
+
+	/** @var \DateTimeImmutable|null Completed/delivered date. */
+	public $completed;
+
+	/** @var array<int,array<string,mixed>> Line items. */
+	public $items;
+
+	/** @var bool Whether a VAT/business number was provided. */
+	public $has_vat_number;
+
 	/**
 	 * Constructor.
 	 *
-	 * @param string                     $platform       Adapter key ('woocommerce'|'fluentcart').
-	 * @param string                     $order_ref      Stable order reference (id/number as string).
-	 * @param string                     $number         Human order number.
-	 * @param string                     $email          Billing email.
-	 * @param int                        $customer_id    User ID (0 for guest).
-	 * @param string                     $country        Consumer country (billing → shipping).
-	 * @param string                     $status         Native status slug (unprefixed).
-	 * @param string                     $locale         Locale captured at checkout (may be empty).
-	 * @param \DateTimeImmutable|null    $created        Order created date.
-	 * @param \DateTimeImmutable|null    $paid           Paid date.
-	 * @param \DateTimeImmutable|null    $completed      Completed/delivered date.
-	 * @param array<int,array<string,mixed>> $items      Line items: [{product_id, name, qty, virtual, downloadable, type, category_ids}].
-	 * @param bool                       $has_vat_number Whether a VAT/business number was provided.
+	 * @param string                         $platform       Adapter key.
+	 * @param string                         $order_ref      Stable order reference.
+	 * @param string                         $number         Human order number.
+	 * @param string                         $email          Billing email.
+	 * @param int                            $customer_id    User ID (0 for guest).
+	 * @param string                         $country        Consumer country.
+	 * @param string                         $status         Native status slug (unprefixed).
+	 * @param string                         $locale         Locale captured at checkout.
+	 * @param \DateTimeImmutable|null        $created        Order created date.
+	 * @param \DateTimeImmutable|null        $paid           Paid date.
+	 * @param \DateTimeImmutable|null        $completed      Completed/delivered date.
+	 * @param array<int,array<string,mixed>> $items          Line items.
+	 * @param bool                           $has_vat_number Whether a VAT/business number was provided.
 	 */
 	public function __construct(
-		public string $platform,
-		public string $order_ref,
-		public string $number,
-		public string $email,
-		public int $customer_id,
-		public string $country,
-		public string $status,
-		public string $locale,
-		public ?\DateTimeImmutable $created,
-		public ?\DateTimeImmutable $paid,
-		public ?\DateTimeImmutable $completed,
-		public array $items,
-		public bool $has_vat_number
-	) {}
+		string $platform,
+		string $order_ref,
+		string $number,
+		string $email,
+		int $customer_id,
+		string $country,
+		string $status,
+		string $locale,
+		?\DateTimeImmutable $created,
+		?\DateTimeImmutable $paid,
+		?\DateTimeImmutable $completed,
+		array $items,
+		bool $has_vat_number
+	) {
+		$this->platform       = $platform;
+		$this->order_ref      = $order_ref;
+		$this->number         = $number;
+		$this->email          = $email;
+		$this->customer_id    = $customer_id;
+		$this->country        = $country;
+		$this->status         = $status;
+		$this->locale         = $locale;
+		$this->created        = $created;
+		$this->paid           = $paid;
+		$this->completed      = $completed;
+		$this->items          = $items;
+		$this->has_vat_number = $has_vat_number;
+	}
 
 	/**
 	 * Whether this order belongs to a guest (no account).

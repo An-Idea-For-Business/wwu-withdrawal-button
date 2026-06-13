@@ -18,6 +18,18 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 final class WithdrawalRequest {
 
+	/** @var string Consumer name (Art. 11a(2)(a)). */
+	public $name;
+
+	/** @var string Identified contract (Art. 11a(2)(b)). */
+	public $order_ref;
+
+	/** @var string Electronic means for the acknowledgement (Art. 11a(2)(c)). */
+	public $email;
+
+	/** @var string Optional reason (never required by law). */
+	public $reason;
+
 	/**
 	 * Constructor.
 	 *
@@ -26,12 +38,12 @@ final class WithdrawalRequest {
 	 * @param string $email     Electronic means for the acknowledgement (Art. 11a(2)(c)).
 	 * @param string $reason    Optional reason (never required by law).
 	 */
-	public function __construct(
-		public string $name,
-		public string $order_ref,
-		public string $email,
-		public string $reason = ''
-	) {}
+	public function __construct( string $name, string $order_ref, string $email, string $reason = '' ) {
+		$this->name      = $name;
+		$this->order_ref = $order_ref;
+		$this->email     = $email;
+		$this->reason    = $reason;
+	}
 
 	/**
 	 * Build + sanitise from raw request data.
