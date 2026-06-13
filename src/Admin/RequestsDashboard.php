@@ -73,6 +73,8 @@ final class RequestsDashboard {
 		// Plain-language reminder of the legal nature of the action.
 		echo '<p class="description" style="max-width:820px;">' . esc_html__( 'A withdrawal is the consumer\'s unilateral right — there is nothing to approve. Once exercised within the period, reimburse the consumer within 14 days (same payment method). Use "Refund order" to issue the refund, then mark the request as processed.', 'wwu-withdrawal-button' ) . '</p>';
 
+		$this->render_procedure_guide();
+
 		// Chain-integrity badge.
 		if ( 0 === $broken ) {
 			echo '<p><span class="wwu-wb-badge wwu-wb-badge--ok">' . esc_html__( 'Evidence log: chain intact', 'wwu-withdrawal-button' ) . '</span></p>';
@@ -147,6 +149,35 @@ final class RequestsDashboard {
 		}
 
 		echo '</div>';
+	}
+
+	/**
+	 * Render the collapsible "What to do now" procedure guide.
+	 *
+	 * Plain-language, step-by-step of how to handle a request once it arrives,
+	 * accurate to Art. 56–57 Codice del Consumo (reimburse within 14 days, returns,
+	 * withholding, same payment method). Strings are i18n so they localise with the
+	 * plugin's translations.
+	 *
+	 * @return void
+	 */
+	private function render_procedure_guide(): void {
+		$steps = array(
+			__( 'Check the request is in scope. The list hides orders outside the right of withdrawal; "In time" shows whether it was within the 14-day window. A late one is still recorded — verify its validity before refusing it.', 'wwu-withdrawal-button' ),
+			__( 'If the order is goods, the consumer must send them back within 14 days. You may withhold the refund until you receive the goods back, or until the consumer proves they have shipped them — whichever is earlier.', 'wwu-withdrawal-button' ),
+			__( 'Reimburse within 14 days of being informed of the withdrawal. Refund ALL payments received, including the standard delivery cost, using the same payment method the consumer used (unless they expressly agreed otherwise). Click "Refund order" to do it in WooCommerce — the refund is recorded automatically in the evidence log.', 'wwu-withdrawal-button' ),
+			__( 'Mark the request as processed once you have refunded (and received any returned goods). This closes it in this list; the immutable log keeps the full history.', 'wwu-withdrawal-button' ),
+		);
+
+		echo '<details class="wwu-wb-help" style="max-width:820px;margin:1em 0;padding:0.5em 1em;border:1px solid #dcdcde;border-radius:6px;background:#fff;">';
+		echo '<summary style="cursor:pointer;font-weight:600;">' . esc_html__( 'What to do after receiving a request', 'wwu-withdrawal-button' ) . '</summary>';
+		echo '<ol style="margin:1em 0 0.5em;padding-left:1.4em;line-height:1.6;">';
+		foreach ( $steps as $step ) {
+			echo '<li style="margin-bottom:0.6em;">' . esc_html( $step ) . '</li>';
+		}
+		echo '</ol>';
+		echo '<p class="description">' . esc_html__( 'This is operational guidance, not legal advice. For services fully performed with the consumer\'s prior express consent, and other Art. 59 cases, the right of withdrawal does not apply.', 'wwu-withdrawal-button' ) . '</p>';
+		echo '</details>';
 	}
 
 	/**
