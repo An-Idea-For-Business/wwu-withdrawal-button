@@ -96,6 +96,8 @@ final class AdminController {
 		add_action( 'admin_post_wwu_wb_save_settings', array( $this->settings, 'handle_save' ) );
 		add_action( 'admin_post_wwu_wb_send_test_email', array( $this->dashboard, 'handle_test_email' ) );
 		add_action( 'admin_post_wwu_wb_preview_email', array( $this->settings, 'handle_preview_email' ) );
+		add_action( 'admin_post_wwu_wb_mark_processed', array( $this->requests, 'handle_mark_processed' ) );
+		add_action( 'admin_post_wwu_wb_resend', array( $this->requests, 'handle_resend' ) );
 		add_action( 'admin_notices', array( $this, 'maybe_mail_failure_notice' ) );
 		add_action( 'admin_notices', array( $this, 'maybe_pdf_missing_notice' ) );
 		$this->assets->register();

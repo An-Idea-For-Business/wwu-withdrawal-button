@@ -5,6 +5,25 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### Merchant process workflow + list CSS (1.0.0-alpha.14, 2026-06-14)
+- **Process workflow on the admin Requests page.** A withdrawal is the consumer's
+  unilateral right (no "approve" step) — so the actions are operational: a
+  **Status** column (Open / Processed), **Mark processed** (records the state on
+  the order + logs `request_processed` to the immutable log), **Resend email**
+  (re-dispatches the acknowledgement — fulfils the failure notice's "resend from
+  the Requests page" promise; reconstructs the statement from the confirmed log
+  row), and **Refund order** (deep-links to the WooCommerce order screen where the
+  refund is issued within the 14-day deadline). A plain-language banner explains
+  the legal nature (reimburse within 14 days, same payment method).
+  `ConfirmationDispatcher::dispatch()` now returns the send result and exposes a
+  `resend( uid )` method.
+- **Front-end list CSS.** Removed the duplicate "Right of withdrawal" heading
+  (the My Account endpoint / page already render it) and gave the orders chooser
+  a self-contained `.wwu-wb-orders` style (replacing WooCommerce's
+  `shop_table_responsive`, which clashed with the theme and overlapped the
+  button/status): padded cells, row borders, a compact inline status pill, a
+  small button variant, and a theme-independent mobile stack.
+
 ### Frontend usability: order list, verify page, email preview, block (1.0.0-alpha.13, 2026-06-14)
 - **Eligible-orders list**: the My Account "Right of withdrawal" tab rendered an
   empty placeholder, and the public `[wwu_wb_form]` page with no order in context

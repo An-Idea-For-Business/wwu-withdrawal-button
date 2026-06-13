@@ -15,6 +15,7 @@ declare( strict_types=1 );
 
 namespace WWU\WithdrawalButton\DurableMedium;
 
+use WWU\WithdrawalButton\Core\Services;
 use WWU\WithdrawalButton\Domain\WithdrawalRequest;
 use WWU\WithdrawalButton\Frontend\Template;
 use WWU\WithdrawalButton\Mail\Mailer;
@@ -49,9 +50,9 @@ final class ConfirmationDispatcher {
 	 * @param WithdrawalRequest $req         Statement.
 	 * @param int               $log_id      Confirmed log row id.
 	 * @param OrderDataSource   $adapter     Adapter.
-	 * @return void
+	 * @return bool True if the consumer acknowledgement was handed to the mailer.
 	 */
-	public function dispatch( string $request_uid, NormalizedOrder $order, WithdrawalRequest $req, int $log_id, OrderDataSource $adapter ): void {
+	public function dispatch( string $request_uid, NormalizedOrder $order, WithdrawalRequest $req, int $log_id, OrderDataSource $adapter ): bool {
 		$settings = (array) get_option( 'wwu_wb_settings', array() );
 
 		$log_repo = new LogRepository();
@@ -191,5 +192,49 @@ final class ConfirmationDispatcher {
 		 * @param array  $data        Receipt data.
 		 */
 		do_action( 'wwu_wb_receipt_sent', $request_uid, '' !== $pdf_path ? 'email+pdf' : 'email', $data );
+
+		return $sent;
+	}
+
+	/**
+	 * Resend the acknowledgement for an existing confirmed request.
+	 *
+	 * Reconstructs the statement + order from the immutable log (the confirmed row
+	 * stores the full statement) and re-runs dispatch(). Used by the admin Requests
+	 * page so a merchant can resend after fixing email/SMTP — the failure notice
+	 * tells them to "resend from the Requests page".
+	 *
+	 * @param string $request_uid Request UUID.
+	 * @return bool True if the email was handed to the mailer.
+	 */
+	public function resend( string $request_uid ): bool {
+		$repo = new LogRepository();
+		$row  = $repo->find( $request_uid, 'confirmed' );
+		if ( ! $row ) {
+			return false;
+		}
+
+		$payload   = (array) json_decode( (string) $row['payload_json'], true );
+		$statement = (array) ( $payload['statement'] ?? array() );
+
+		$platform = (string) $row['platform'];
+		$order_ref = (string) $row['order_ref'];
+
+		$adapter = Services::instance()->platforms->get( $platform );
+		if ( ! $adapter ) {
+			$adapter = Services::instance()->platforms->resolve_for_order( $order_ref );
+		}
+		if ( ! $adapter ) {
+			return false;
+		}
+
+		$order = $adapter->get_order( $order_ref );
+		if ( ! $order ) {
+			return false;
+		}
+
+		$req = WithdrawalRequest::from_input( $statement );
+
+		return $this->dispatch( $request_uid, $order, $req, (int) $row['id'], $adapter );
 	}
 }
