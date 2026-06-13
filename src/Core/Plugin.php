@@ -139,6 +139,9 @@ final class Plugin {
 					return $emails;
 				}
 			);
+
+			// Record reimbursements against a withdrawal in the evidence log.
+			( new \WWU\WithdrawalButton\Platform\WooRefundRecorder() )->register();
 		}
 
 		// FluentCart portal injection when FluentCart is active.

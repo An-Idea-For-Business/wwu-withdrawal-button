@@ -121,10 +121,8 @@ final class RequestsDashboard {
 				? '<span class="wwu-wb-badge wwu-wb-badge--ok">' . esc_html__( 'Yes', 'wwu-withdrawal-button' ) . '</span>'
 				: '<span class="wwu-wb-badge wwu-wb-badge--warn">' . esc_html__( 'Flagged late', 'wwu-withdrawal-button' ) . '</span>' ) . '</td>';
 
-			// Processing status.
-			echo '<td>' . ( '' !== $processed_at
-				? '<span class="wwu-wb-badge wwu-wb-badge--ok">' . esc_html__( 'Processed', 'wwu-withdrawal-button' ) . '</span>'
-				: '<span class="wwu-wb-badge wwu-wb-badge--warn">' . esc_html__( 'Open', 'wwu-withdrawal-button' ) . '</span>' ) . '</td>';
+			// Processing status (refunded > processed > open).
+			echo '<td>' . $this->status_cell( $order_ref, $processed_at ) . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built with escaped parts + wc_price.
 
 			echo '<td><a href="' . esc_url( VerifiableLink::verify_url( $uid ) ) . '" target="_blank" rel="noopener">' . esc_html__( 'Verify', 'wwu-withdrawal-button' ) . '</a></td>';
 
@@ -149,6 +147,41 @@ final class RequestsDashboard {
 		}
 
 		echo '</div>';
+	}
+
+	/**
+	 * Build the processing-status cell: refunded (with amount) wins over the
+	 * manual "processed" flag, which wins over "open". The refunded amount is read
+	 * live from WooCommerce (source of truth); the refund event itself is recorded
+	 * in the immutable log by WooRefundRecorder.
+	 *
+	 * @param string $order_ref    Order reference.
+	 * @param string $processed_at Processed timestamp ('' if not processed).
+	 * @return string
+	 */
+	private function status_cell( string $order_ref, string $processed_at ): string {
+		$refunded = 0.0;
+		$currency = '';
+		if ( function_exists( 'wc_get_order' ) ) {
+			$order = wc_get_order( $order_ref );
+			if ( $order instanceof \WC_Order ) {
+				$refunded = (float) $order->get_total_refunded();
+				$currency = (string) $order->get_currency();
+			}
+		}
+
+		if ( $refunded > 0 ) {
+			$amount = function_exists( 'wc_price' )
+				? wp_kses_post( wc_price( $refunded, array( 'currency' => $currency ) ) )
+				: esc_html( number_format_i18n( $refunded, 2 ) . ' ' . $currency );
+			return '<span class="wwu-wb-badge wwu-wb-badge--ok">' . esc_html__( 'Refunded', 'wwu-withdrawal-button' ) . ' ' . $amount . '</span>';
+		}
+
+		if ( '' !== $processed_at ) {
+			return '<span class="wwu-wb-badge wwu-wb-badge--ok">' . esc_html__( 'Processed', 'wwu-withdrawal-button' ) . '</span>';
+		}
+
+		return '<span class="wwu-wb-badge wwu-wb-badge--warn">' . esc_html__( 'Open', 'wwu-withdrawal-button' ) . '</span>';
 	}
 
 	/**
@@ -207,6 +240,7 @@ final class RequestsDashboard {
 		$repo = new LogRepository();
 		$row  = '' !== $uid ? $repo->find( $uid, 'confirmed' ) : null;
 
+		$done = false;
 		if ( $row ) {
 			$adapter = $this->adapter( (string) $row['platform'] );
 			if ( $adapter ) {
@@ -225,10 +259,12 @@ final class RequestsDashboard {
 						),
 					)
 				);
+				$done = true;
 			}
 		}
 
-		$this->redirect_back( 'processed' );
+		// Honest feedback: don't claim success if nothing was written.
+		$this->redirect_back( $done ? 'processed' : 'mark_failed' );
 	}
 
 	/**
@@ -239,7 +275,19 @@ final class RequestsDashboard {
 	public function handle_resend(): void {
 		$this->guard();
 		$uid = $this->request_uid();
-		$ok  = '' !== $uid && ( new ConfirmationDispatcher() )->resend( $uid );
+		if ( '' === $uid ) {
+			$this->redirect_back( 'resend_failed' );
+		}
+
+		// Debounce accidental double-clicks: a resend sends a real email to the
+		// consumer, so suppress repeats within a short window.
+		$throttle = 'wwu_wb_resend_' . md5( $uid );
+		if ( get_transient( $throttle ) ) {
+			$this->redirect_back( 'resend_throttled' );
+		}
+		set_transient( $throttle, 1, 20 );
+
+		$ok = ( new ConfirmationDispatcher() )->resend( $uid );
 		$this->redirect_back( $ok ? 'resent' : 'resend_failed' );
 	}
 
@@ -294,9 +342,11 @@ final class RequestsDashboard {
 			return;
 		}
 		$map = array(
-			'processed'     => array( 'success', __( 'Request marked as processed.', 'wwu-withdrawal-button' ) ),
-			'resent'        => array( 'success', __( 'Acknowledgement email resent.', 'wwu-withdrawal-button' ) ),
-			'resend_failed' => array( 'error', __( 'Could not resend the email — check your email/SMTP configuration.', 'wwu-withdrawal-button' ) ),
+			'processed'        => array( 'success', __( 'Request marked as processed.', 'wwu-withdrawal-button' ) ),
+			'mark_failed'      => array( 'error', __( 'Could not mark the request as processed — the order could not be loaded.', 'wwu-withdrawal-button' ) ),
+			'resent'           => array( 'success', __( 'Acknowledgement email resent.', 'wwu-withdrawal-button' ) ),
+			'resend_failed'    => array( 'error', __( 'Could not resend the email — check your email/SMTP configuration.', 'wwu-withdrawal-button' ) ),
+			'resend_throttled' => array( 'warning', __( 'Please wait a few seconds before resending again.', 'wwu-withdrawal-button' ) ),
 		);
 		if ( ! isset( $map[ $msg ] ) ) {
 			return;
