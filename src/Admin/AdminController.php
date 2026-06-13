@@ -94,6 +94,7 @@ final class AdminController {
 	public function register(): void {
 		add_action( 'admin_menu', array( $this, 'register_menu' ) );
 		add_action( 'admin_post_wwu_wb_save_settings', array( $this->settings, 'handle_save' ) );
+		add_action( 'admin_post_wwu_wb_send_test_email', array( $this->dashboard, 'handle_test_email' ) );
 		add_action( 'admin_notices', array( $this, 'maybe_mail_failure_notice' ) );
 		add_action( 'admin_notices', array( $this, 'maybe_pdf_missing_notice' ) );
 		$this->assets->register();

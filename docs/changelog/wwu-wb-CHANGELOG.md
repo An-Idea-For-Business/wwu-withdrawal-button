@@ -5,7 +5,21 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
-### Usability + bugfix from live testing (1.0.0-alpha.10, 2026-06-13)
+### Email diagnostics + onboarding rework (1.0.0-alpha.11, 2026-06-14)
+- **Decoupled the PDF from the send**: `ConfirmationDispatcher` now guards the
+  optional PDF render/store with `PdfBuilder::is_available()`. A missing Dompdf
+  can never affect the acknowledgement email (which is the legal durable medium);
+  the PDF is only an extra copy.
+- **Email-delivery diagnostics on the dashboard** (the real answer to "why didn't
+  I get an email?"): a checklist row detects a known SMTP plugin (FluentSMTP, WP
+  Mail SMTP, Post SMTP, Easy WP SMTP, Mailster) or a `phpmailer_init` integration
+  and warns when none is present, plus a **"Send test email"** button. The handler
+  is capability-gated + nonce-checked + throttled and always sends only to the
+  current admin's own address (never request input), so it can't be abused as a
+  relay. Reviewed by parallel security + correctness sub-agents (0 findings).
+- **Onboarding rework**: the dashboard no longer leads with page-creation unless a
+  form page is actually missing; when everything is in place it explains **how the
+  plugin works** (the 4-step consumer flow) and where the button appears.
 - **Fix (visible bug)**: `Template::render()` had a `$name` parameter colliding
   with template variables of the same key (`extract(EXTR_SKIP)` skipped them), so
   the form's "name" field (and the email) showed the template path instead of the

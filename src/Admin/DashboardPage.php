@@ -1,9 +1,18 @@
 <?php
 /**
- * Onboarding dashboard — the friendly "is everything set up, and where does the
- * button appear?" page. Written for non-technical merchants: a setup checklist
- * with status + one-click fixes, a plain explanation of where the button shows,
- * and the reasons it might be hidden on a given order.
+ * Onboarding dashboard — the friendly "is everything set up, how does it work,
+ * and where does the button appear?" landing page.
+ *
+ * Written for non-technical merchants. It shows:
+ *   - a setup checklist (status + one-click fixes) — including a real
+ *     "email delivery" check with a Send-test-email button, because the most
+ *     common "nothing happens" complaint is a missing SMTP transport, not the
+ *     plugin itself;
+ *   - a short "How it works" walkthrough of the consumer flow;
+ *   - where the button appears, and the reasons it can legitimately be hidden.
+ *
+ * Page-creation guidance is shown ONLY when a form page is actually missing —
+ * if everything is in place the page explains how the plugin works instead.
  *
  * @package WWU\WithdrawalButton
  */
@@ -14,6 +23,7 @@ namespace WWU\WithdrawalButton\Admin;
 
 use WWU\WithdrawalButton\Core\Settings;
 use WWU\WithdrawalButton\DurableMedium\PdfBuilder;
+use WWU\WithdrawalButton\Mail\Mailer;
 use WWU\WithdrawalButton\REST\Authentication;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -26,6 +36,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class DashboardPage {
 
 	/**
+	 * Nonce action for the "send test email" button.
+	 *
+	 * @var string
+	 */
+	private const TEST_EMAIL_NONCE = 'wwu_wb_test_email';
+
+	/**
+	 * Transient holding the throttle flag for the test-email button.
+	 *
+	 * @var string
+	 */
+	private const TEST_EMAIL_THROTTLE = 'wwu_wb_test_email_throttle';
+
+	/**
+	 * Transient holding the last test-email result for display.
+	 *
+	 * @var string
+	 */
+	private const TEST_EMAIL_RESULT = 'wwu_wb_test_email_result';
+
+	/**
 	 * Render the dashboard.
 	 *
 	 * @return void
@@ -35,20 +66,22 @@ final class DashboardPage {
 			return;
 		}
 
-		$settings  = Settings::main();
-		$app       = (array) get_option( 'wwu_wb_applicability', array() );
-		$enabled   = ! empty( $settings['enabled'] );
-		$page_id   = (int) ( $settings['public_form_page_id'] ?? 0 );
-		$page_ok   = $page_id > 0 && 'publish' === get_post_status( $page_id );
-		$pdf_ok    = PdfBuilder::is_available();
-		$woo       = class_exists( 'WooCommerce' );
-		$fluent    = function_exists( 'fluent_cart_api' );
-		$mode      = (string) ( $app['mode'] ?? 'eu_eea_only' );
+		$settings = Settings::main();
+		$app      = (array) get_option( 'wwu_wb_applicability', array() );
+		$enabled  = ! empty( $settings['enabled'] );
+		$page_id  = (int) ( $settings['public_form_page_id'] ?? 0 );
+		$page_ok  = $page_id > 0 && 'publish' === get_post_status( $page_id );
+		$pdf_ok   = PdfBuilder::is_available();
+		$woo      = class_exists( 'WooCommerce' );
+		$fluent   = function_exists( 'fluent_cart_api' );
+		$mode     = (string) ( $app['mode'] ?? 'eu_eea_only' );
+		$mail     = $this->mail_transport();
 
 		echo '<div class="wrap wwu-wb-wrap">';
 		echo '<h1>' . esc_html__( 'WWU Withdrawal Button', 'wwu-withdrawal-button' ) . '</h1>';
 		echo '<p>' . esc_html__( 'The EU online right-of-withdrawal function (Art. 11a / Art. 54-bis) for WooCommerce & FluentCart.', 'wwu-withdrawal-button' ) . '</p>';
 
+		$this->maybe_render_test_email_result();
 		$this->render_go_live( $settings );
 
 		// --- Setup checklist ---
@@ -70,37 +103,68 @@ final class DashboardPage {
 			( $woo ? 'WooCommerce ' : '' ) . ( $fluent ? 'FluentCart ' : '' ) . ( ( $woo || $fluent ) ? __( 'active.', 'wwu-withdrawal-button' ) : __( 'Activate WooCommerce or FluentCart.', 'wwu-withdrawal-button' ) )
 		);
 
+		// Form page: only frame it as "something to create" when it is missing.
+		// When it exists we just confirm it and say what it is for.
+		if ( $page_ok ) {
+			$this->row(
+				true,
+				__( 'Withdrawal form page', 'wwu-withdrawal-button' ),
+				__( 'Published — this is the public page guests (buyers without an account) use to start a withdrawal.', 'wwu-withdrawal-button' ),
+				array( get_permalink( $page_id ), __( 'View page', 'wwu-withdrawal-button' ) )
+			);
+		} else {
+			$this->row(
+				false,
+				__( 'Withdrawal form page', 'wwu-withdrawal-button' ),
+				__( 'No published form page yet. Guests without an account need one. Re-activate the plugin to create it automatically, or publish a page containing the [wwu_wb_form] shortcode.', 'wwu-withdrawal-button' )
+			);
+		}
+
+		// Email delivery — the row that actually answers "why didn't I get an email?".
+		$mail_detail = '' !== $mail['name']
+			? sprintf( /* translators: %s: SMTP plugin name. */ __( 'Sending through %s. Use the test below to confirm it reaches your inbox.', 'wwu-withdrawal-button' ), $mail['name'] )
+			: __( 'No SMTP plugin detected. WordPress\'s built-in mail is often dropped or marked as spam by mail servers — the acknowledgement email may silently fail. Install an SMTP plugin (e.g. FluentSMTP, free) and send the test below.', 'wwu-withdrawal-button' );
 		$this->row(
-			$page_ok,
-			__( 'Withdrawal form page', 'wwu-withdrawal-button' ),
-			$page_ok
-				? sprintf( /* translators: %s: page URL. */ __( 'Published: %s', 'wwu-withdrawal-button' ), get_permalink( $page_id ) )
-				: __( 'No published form page. Guests need it. Re-activate the plugin to auto-create it.', 'wwu-withdrawal-button' ),
-			$page_ok ? array( get_permalink( $page_id ), __( 'View page', 'wwu-withdrawal-button' ) ) : ''
+			$mail['active'],
+			__( 'Email delivery', 'wwu-withdrawal-button' ),
+			$mail_detail,
+			null,
+			$mail['active'] ? 'ok' : 'warn'
 		);
 
 		$this->row(
 			$pdf_ok,
-			__( 'PDF receipts', 'wwu-withdrawal-button' ),
+			__( 'PDF receipts (optional)', 'wwu-withdrawal-button' ),
 			$pdf_ok
-				? __( 'PDF library available — receipts include a PDF copy.', 'wwu-withdrawal-button' )
-				: __( 'PDF library not found. The email receipt still works, but to also attach a PDF, install the plugin from the official ZIP (which bundles the library) instead of a source copy.', 'wwu-withdrawal-button' ),
+				? __( 'PDF library available — the receipt email also carries a PDF copy.', 'wwu-withdrawal-button' )
+				: __( 'PDF library not found. The email receipt still works (it is the legal durable medium); to also attach a PDF, install the plugin from the official ZIP, which bundles the library.', 'wwu-withdrawal-button' ),
 			null,
 			$pdf_ok ? 'ok' : 'warn'
 		);
 
 		echo '</tbody></table>';
 
+		$this->render_test_email_box( $mail );
+
+		// --- How it works ---
+		echo '<h2>' . esc_html__( 'How it works', 'wwu-withdrawal-button' ) . '</h2>';
+		echo '<ol style="max-width:880px;line-height:1.7;">';
+		echo '<li>' . esc_html__( 'An eligible buyer opens their order and clicks the statutory withdrawal button (its wording is fixed by law for each language).', 'wwu-withdrawal-button' ) . '</li>';
+		echo '<li>' . esc_html__( 'A two-step form appears: they review what they are withdrawing from, then explicitly confirm. No dark patterns, no extra hurdles.', 'wwu-withdrawal-button' ) . '</li>';
+		echo '<li>' . esc_html__( 'On confirmation the order is flagged "withdrawal requested", and the consumer immediately receives an acknowledgement of receipt by email (the legal durable medium) — plus a PDF and a permanent verifiable link when available.', 'wwu-withdrawal-button' ) . '</li>';
+		echo '<li>' . esc_html__( 'Every step is written to a tamper-evident, append-only log so you can prove what happened and when. You then handle the refund as usual.', 'wwu-withdrawal-button' ) . '</li>';
+		echo '</ol>';
+
 		// --- Where does the button appear ---
 		echo '<h2>' . esc_html__( 'Where the button appears', 'wwu-withdrawal-button' ) . '</h2>';
 		echo '<ul style="list-style:disc;margin-left:1.4em;max-width:880px;">';
 		echo '<li>' . esc_html__( 'In the customer account, on each eligible order (order list + order detail) and in the "Right of withdrawal" account tab.', 'wwu-withdrawal-button' ) . '</li>';
-		echo '<li>' . esc_html__( 'As a link inside the WooCommerce order emails (so guests without an account can reach it).', 'wwu-withdrawal-button' ) . '</li>';
+		echo '<li>' . esc_html__( 'As a link inside the WooCommerce order emails, so guests without an account can reach it.', 'wwu-withdrawal-button' ) . '</li>';
 		echo '<li>' . wp_kses_post( sprintf( /* translators: %s: shortcodes. */ __( 'Anywhere you place a shortcode: %s.', 'wwu-withdrawal-button' ), '<code>[wwu_wb_button]</code>, <code>[wwu_wb_form]</code>' ) ) . '</li>';
 		echo '</ul>';
 
 		// --- Why it might not appear ---
-		echo '<h2>' . esc_html__( "Why the button might not show on an order", 'wwu-withdrawal-button' ) . '</h2>';
+		echo '<h2>' . esc_html__( 'Why the button might not show on an order', 'wwu-withdrawal-button' ) . '</h2>';
 		echo '<p>' . esc_html__( 'The button only appears where a real withdrawal right exists. It is hidden when:', 'wwu-withdrawal-button' ) . '</p>';
 		echo '<ul style="list-style:disc;margin-left:1.4em;max-width:880px;">';
 		echo '<li>' . wp_kses_post(
@@ -142,13 +206,169 @@ final class DashboardPage {
 	}
 
 	/**
+	 * Render the "Send test email" box (form + last result).
+	 *
+	 * The button posts to admin-post.php; the handler sends a real email to the
+	 * current admin only (never an arbitrary address), so this is a safe way for
+	 * a non-technical merchant to prove whether outgoing mail works at all.
+	 *
+	 * @param array $mail Transport info from mail_transport().
+	 * @return void
+	 */
+	private function render_test_email_box( array $mail ): void {
+		$to = $this->test_recipient();
+
+		echo '<div class="wwu-wb-clause" style="max-width:880px;margin:1em 0;padding:1em 1.2em;border:1px solid #dcdcde;border-radius:6px;background:#f6f7f7;">';
+		echo '<p style="margin-top:0;"><strong>' . esc_html__( 'Test email delivery', 'wwu-withdrawal-button' ) . '</strong></p>';
+		echo '<p class="description">' . esc_html(
+			sprintf(
+				/* translators: %s: recipient email. */
+				__( 'Sends a one-off test message to your address (%s). If it does not arrive (check spam too), outgoing email is not configured — install/configure an SMTP plugin. This does not depend on the PDF library.', 'wwu-withdrawal-button' ),
+				$to
+			)
+		) . '</p>';
+		echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
+		echo '<input type="hidden" name="action" value="wwu_wb_send_test_email" />';
+		wp_nonce_field( self::TEST_EMAIL_NONCE );
+		echo '<button type="submit" class="button">' . esc_html__( 'Send test email', 'wwu-withdrawal-button' ) . '</button>';
+		echo '</form>';
+		echo '</div>';
+	}
+
+	/**
+	 * Show the outcome of the last test-email send, if any (one-shot transient).
+	 *
+	 * @return void
+	 */
+	private function maybe_render_test_email_result(): void {
+		if ( isset( $_GET['wwu_wb_test_throttled'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			echo '<div class="notice notice-warning is-dismissible"><p>' . esc_html__( 'Please wait a few seconds before sending another test email.', 'wwu-withdrawal-button' ) . '</p></div>';
+		}
+
+		$result = get_transient( self::TEST_EMAIL_RESULT );
+		if ( ! is_array( $result ) ) {
+			return;
+		}
+		delete_transient( self::TEST_EMAIL_RESULT );
+
+		$to = isset( $result['to'] ) ? (string) $result['to'] : '';
+		if ( ! empty( $result['ok'] ) ) {
+			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html(
+				sprintf(
+					/* translators: %s: recipient email. */
+					__( 'Test email handed to WordPress for %s. If it does not arrive within a minute (check spam), your mail transport is dropping it — configure an SMTP plugin.', 'wwu-withdrawal-button' ),
+					$to
+				)
+			) . '</p></div>';
+		} else {
+			echo '<div class="notice notice-error is-dismissible"><p>' . esc_html(
+				sprintf(
+					/* translators: %s: recipient email. */
+					__( 'WordPress could not send the test email to %s (wp_mail returned an error). Outgoing email is not working on this site — install and configure an SMTP plugin (e.g. FluentSMTP).', 'wwu-withdrawal-button' ),
+					$to
+				)
+			) . '</p></div>';
+		}
+	}
+
+	/**
+	 * Handle the "send test email" admin-post request.
+	 *
+	 * Security: capability-gated + nonce + short throttle; the recipient is ALWAYS
+	 * the current user's own address (falling back to the site admin email), never
+	 * a value taken from the request — so the button can never be abused to relay
+	 * mail to arbitrary addresses. PRG redirect back to the dashboard.
+	 *
+	 * @return void
+	 */
+	public function handle_test_email(): void {
+		if ( ! current_user_can( Authentication::capability() ) ) {
+			wp_die( esc_html__( 'Insufficient permissions.', 'wwu-withdrawal-button' ) );
+		}
+		check_admin_referer( self::TEST_EMAIL_NONCE );
+
+		$redirect = admin_url( 'admin.php?page=' . AdminController::MENU_SLUG );
+
+		// Rate limit: one test every 15 seconds, to avoid hammering the mailer.
+		if ( get_transient( self::TEST_EMAIL_THROTTLE ) ) {
+			wp_safe_redirect( add_query_arg( 'wwu_wb_test_throttled', '1', $redirect ) );
+			exit;
+		}
+		set_transient( self::TEST_EMAIL_THROTTLE, 1, 15 );
+
+		$to = $this->test_recipient();
+
+		$subject = __( 'WWU Withdrawal Button — test email', 'wwu-withdrawal-button' );
+		$body    = '<p>' . esc_html__( 'This is a test message from the WWU Withdrawal Button plugin.', 'wwu-withdrawal-button' ) . '</p>'
+			. '<p>' . esc_html__( 'If you received it, outgoing email works and withdrawal acknowledgements will be delivered.', 'wwu-withdrawal-button' ) . '</p>';
+
+		$ok = ( new Mailer() )->send_html( $to, $subject, $body );
+
+		set_transient(
+			self::TEST_EMAIL_RESULT,
+			array(
+				'ok' => $ok,
+				'to' => $to,
+			),
+			5 * MINUTE_IN_SECONDS
+		);
+
+		wp_safe_redirect( $redirect );
+		exit;
+	}
+
+	/**
+	 * The fixed recipient for the test email (current admin, never request input).
+	 *
+	 * @return string
+	 */
+	private function test_recipient(): string {
+		$user = wp_get_current_user();
+		$to   = $user ? (string) $user->user_email : '';
+		if ( ! is_email( $to ) ) {
+			$to = (string) get_option( 'admin_email' );
+		}
+		return $to;
+	}
+
+	/**
+	 * Detect a known SMTP/mail-integration plugin, or any phpmailer_init hook.
+	 *
+	 * @return array{name:string,active:bool} name is '' when unknown; active is
+	 *               true when a known plugin OR a phpmailer_init listener is present.
+	 */
+	private function mail_transport(): array {
+		$name = '';
+		if ( defined( 'FLUENTMAIL_PLUGIN_VERSION' ) || function_exists( 'wpFluentMail' ) ) {
+			$name = 'FluentSMTP';
+		} elseif ( defined( 'WPMS_PLUGIN_VER' ) || function_exists( 'wp_mail_smtp' ) ) {
+			$name = 'WP Mail SMTP';
+		} elseif ( defined( 'POST_SMTP_VER' ) || class_exists( 'PostmanOptions' ) ) {
+			$name = 'Post SMTP';
+		} elseif ( defined( 'EasyWPSMTP_PLUGIN_VERSION' ) || defined( 'SWPSMTP_PLUGIN_VERSION' ) ) {
+			$name = 'Easy WP SMTP';
+		} elseif ( defined( 'MAILSTER_VERSION' ) ) {
+			$name = 'Mailster';
+		}
+
+		// A known plugin is a strong signal; otherwise, anything hooking
+		// phpmailer_init usually means an SMTP integration is configured.
+		$active = '' !== $name || ( false !== has_action( 'phpmailer_init' ) );
+
+		return array(
+			'name'   => $name,
+			'active' => $active,
+		);
+	}
+
+	/**
 	 * Render a checklist row.
 	 *
-	 * @param bool         $ok     Pass/fail.
-	 * @param string       $label  Row label.
-	 * @param string       $detail Detail text.
+	 * @param bool              $ok     Pass/fail.
+	 * @param string            $label  Row label.
+	 * @param string            $detail Detail text.
 	 * @param array|string|null $action [url, text] action link, '' for none.
-	 * @param string       $level  'ok'|'warn'|'err' (overrides the icon when $ok is false).
+	 * @param string            $level  'ok'|'warn'|'err' (overrides the icon when $ok is false).
 	 * @return void
 	 */
 	private function row( bool $ok, string $label, string $detail, $action = '', string $level = '' ): void {
