@@ -156,6 +156,7 @@ final class SettingsPage {
 		);
 		update_option( 'wwu_wb_debug', $debug );
 		Audience::reset_cache();
+		\WWU\WithdrawalButton\Compat\Complianz::bust_cache();
 
 		wp_safe_redirect(
 			add_query_arg(

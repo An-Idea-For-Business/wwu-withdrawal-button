@@ -15,12 +15,15 @@ declare( strict_types=1 );
 namespace WWU\WithdrawalButton\Core;
 
 use WWU\WithdrawalButton\Admin\AdminController;
+use WWU\WithdrawalButton\Compat\CacheExclusions;
+use WWU\WithdrawalButton\Compat\Complianz;
 use WWU\WithdrawalButton\DurableMedium\ConfirmationDispatcher;
 use WWU\WithdrawalButton\Frontend\Assets;
 use WWU\WithdrawalButton\Frontend\WooMyAccount;
 use WWU\WithdrawalButton\Platform\WooCommerce\OrderStatus;
 use WWU\WithdrawalButton\REST\RestApi;
 use WWU\WithdrawalButton\Shortcodes\Shortcodes;
+use WWU\WithdrawalButton\Timestamp\TimestampService;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -130,8 +133,15 @@ final class Plugin {
 		// Durable-medium acknowledgement: listens on wwu_wb_withdrawal_confirmed.
 		( new ConfirmationDispatcher() )->register();
 
+		// Trusted timestamping (OpenTimestamps) of the immutable-log hash.
+		( new TimestampService() )->register();
+
 		// Shortcodes (button / form / status / model form / info).
 		( new Shortcodes() )->register();
+
+		// Ecosystem compatibility (Complianz consent-block whitelist + cache exclusions).
+		( new Complianz() )->register();
+		( new CacheExclusions() )->register();
 
 		if ( is_admin() ) {
 			$this->admin = new AdminController();

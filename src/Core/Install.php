@@ -117,6 +117,9 @@ final class Install {
 		// Endpoint rewrite rules are registered in the frontend layer (F1+); flushing
 		// here is harmless and ensures they take effect as soon as they exist.
 		flush_rewrite_rules( false );
+
+		// Invalidate any Complianz blocked-scripts cache so our marker is honoured.
+		\WWU\WithdrawalButton\Compat\Complianz::bust_cache();
 	}
 
 	/**
@@ -250,6 +253,7 @@ final class Install {
 	 */
 	public static function deactivate( bool $network_wide ): void {
 		wp_clear_scheduled_hook( self::CRON_COMPLETE_NETWORK );
+		\WWU\WithdrawalButton\Timestamp\TimestampService::clear_cron();
 		flush_rewrite_rules( false );
 	}
 }
