@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0-alpha.14
+Stable tag: 1.0.0-alpha.15
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -61,7 +61,7 @@ The plugin records withdrawal declarations (name, identified contract, email, IP
 
 == Changelog ==
 
-= 1.0.0-alpha.14 =
+= 1.0.0-alpha.15 =
 * Withdrawal flow (WooCommerce HPOS + FluentCart), statutory labels (IT/EN/DE/FR/ES), two-step + no-JS fallback, durable-medium acknowledgement (email + PDF + verifiable link), tamper-evident hash-chained log + OpenTimestamps, Annex I-B model form + legal clauses, shortcodes, admin dashboard + compliance page, Complianz/cache compatibility. Security audit: 0 findings.
 
 = 1.0.0-alpha.1 =
@@ -69,5 +69,5 @@ The plugin records withdrawal declarations (name, identified contract, email, IP
 
 == Upgrade Notice ==
 
-= 1.0.0-alpha.14 =
+= 1.0.0-alpha.15 =
 Feature-complete alpha. Test thoroughly on staging before production; not yet a stable release.

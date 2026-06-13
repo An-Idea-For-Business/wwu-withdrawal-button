@@ -5,6 +5,20 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### Refund evidence + procedure guide (1.0.0-alpha.15, 2026-06-14)
+- **Reimbursement is now recorded in the evidence log.** `WooRefundRecorder`
+  hooks `woocommerce_order_refunded` and appends a `refund_issued` event (amount,
+  currency, refund id, timestamp, acting user) for orders that have a withdrawal
+  request — proof that the trader met the 14-day reimbursement duty. The Requests
+  page Status column shows "Refunded <amount>" (read live from WooCommerce).
+- **"What to do after receiving a request" guide** on the Requests page: a
+  collapsible, plain-language step-by-step (scope check → returns/withholding →
+  reimburse within 14 days, same payment method → mark processed), accurate to
+  Art. 56–57 with an Art. 59 caveat. i18n.
+- Process-workflow review fixes: honest `mark_failed` feedback when the order
+  can't be loaded; a 20s debounce on "Resend email" to avoid double-sending to
+  the consumer.
+
 ### Merchant process workflow + list CSS (1.0.0-alpha.14, 2026-06-14)
 - **Process workflow on the admin Requests page.** A withdrawal is the consumer's
   unilateral right (no "approve" step) — so the actions are operational: a
