@@ -1,0 +1,54 @@
+name: "🐛 Bug report"
+description: Report a defect in the plugin
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. For **security** issues, do **not** use this form — see [SECURITY.md](../blob/main/SECURITY.md).
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the bug, including what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Go to …
+        2. Click …
+        3. See …
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: E-commerce platform
+      options:
+        - WooCommerce (HPOS)
+        - WooCommerce (legacy storage)
+        - FluentCart
+        - Other / not sure
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      placeholder: "Plugin x.y.z · WordPress x.y · WooCommerce/FluentCart x.y · PHP x.y"
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment notes
+      description: Multisite? Cache plugin? Complianz / TranslatePress / WPML / Polylang active? Any console/PHP errors?
+  - type: textarea
+    id: debug-snapshot
+    attributes:
+      label: Debug snapshot (optional)
+      description: Output of the Debug Inspector "Copy snapshot" button (secrets are auto-masked).
+      render: json

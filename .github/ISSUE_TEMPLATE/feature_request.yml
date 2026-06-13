@@ -1,0 +1,33 @@
+name: "✨ Feature request"
+description: Suggest an improvement or a missing compliance capability
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / use case
+      description: What are you trying to achieve? If it relates to a legal requirement, cite the article.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+  - type: dropdown
+    id: jurisdiction
+    attributes:
+      label: Jurisdiction (if relevant)
+      multiple: true
+      options:
+        - EU / EEA generic
+        - Italy
+        - Germany
+        - France
+        - Spain
+        - Other
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered

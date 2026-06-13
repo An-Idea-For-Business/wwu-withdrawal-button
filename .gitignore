@@ -1,0 +1,44 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# WWU Withdrawal Button — .gitignore
+# Everything here is intentionally kept OUT of the public GitHub repository.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Internal, non-distributed materials (marketing, HyperFrames video project,
+# internal notes, scratch). This whole folder NEVER goes to the public repo.
+/_internal/
+
+# Secrets / environment — NEVER commit (workspace convention)
+.env
+*.env
+.env.*
+
+# Composer dependencies (bundled into the release ZIP by the build script,
+# not tracked in git). Run `composer install` after cloning.
+/vendor/
+
+# Node tooling (block editor build, asset pipeline)
+/node_modules/
+/build/
+
+# Distribution artifacts (the packaged plugin ZIP is attached to GitHub Releases)
+/dist/
+*.zip
+
+# Generated compiled translations are tracked, but .po~ backups are not
+languages/*.po~
+
+# Test artifacts
+/tests/screenshots/
+/.phpunit.result.cache
+coverage/
+
+# Editor / OS noise
+.idea/
+.vscode/
+*.sublime-*
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log

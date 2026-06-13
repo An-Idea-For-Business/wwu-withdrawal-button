@@ -1,0 +1,47 @@
+{
+	"name": "an-idea-for-business/wwu-withdrawal-button",
+	"description": "EU online right-of-withdrawal function (withdrawal button, Art. 11a / Art. 54-bis) for WooCommerce & FluentCart.",
+	"type": "wordpress-plugin",
+	"license": "GPL-3.0-or-later",
+	"keywords": [
+		"woocommerce",
+		"fluentcart",
+		"gdpr",
+		"consumer-rights",
+		"right-of-withdrawal",
+		"recesso",
+		"widerruf",
+		"retractation",
+		"desistimiento",
+		"eu-compliance"
+	],
+	"homepage": "https://github.com/An-Idea-For-Business/wwu-withdrawal-button",
+	"authors": [
+		{ "name": "mredodos" },
+		{ "name": "Matteo Alfieri", "homepage": "https://anideaforbusiness.com" },
+		{ "name": "WebWakeUp", "homepage": "https://webwakeup.it" }
+	],
+	"support": {
+		"issues": "https://github.com/An-Idea-For-Business/wwu-withdrawal-button/issues"
+	},
+	"require": {
+		"php": ">=7.4",
+		"dompdf/dompdf": "^3.1"
+	},
+	"require-dev": {
+		"squizlabs/php_codesniffer": "^3.9",
+		"wp-coding-standards/wpcs": "^3.1",
+		"phpcompatibility/phpcompatibility-wp": "^2.1"
+	},
+	"config": {
+		"vendor-dir": "vendor",
+		"optimize-autoloader": true,
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	},
+	"scripts": {
+		"lint": "phpcs --standard=phpcs.xml.dist src/ wwu-withdrawal-button.php uninstall.php",
+		"lint:fix": "phpcbf --standard=phpcs.xml.dist src/ wwu-withdrawal-button.php uninstall.php"
+	}
+}

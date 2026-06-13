@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🔒 Report a security vulnerability
+    url: https://github.com/An-Idea-For-Business/wwu-withdrawal-button/security/advisories/new
+    about: Please report security issues privately, never as a public issue.
+  - name: 💬 Questions & discussion
+    url: https://github.com/An-Idea-For-Business/wwu-withdrawal-button/discussions
+    about: Ask questions and discuss the plugin and the law it implements.
