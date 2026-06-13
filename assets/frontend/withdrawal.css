@@ -1,38 +1,76 @@
 /**
  * WWU Withdrawal Button — frontend styles.
  *
- * Deliberately neutral and inherit-friendly so the button blends with the theme.
- * The button must remain legible and prominent (Art. 11a "easily legible") — we
- * enforce a minimum size and rely on the theme's accent for contrast, never
- * hiding or de-emphasising it.
+ * Every visual element is themeable two ways:
+ *   1. CSS custom properties (--wwu-wb-*) — one-line overrides (colors, radius,
+ *      spacing). Override them from the admin "Custom CSS" box, e.g.
+ *        :root { --wwu-wb-accent: #f49619; --wwu-wb-radius: 8px; }
+ *   2. Plain classes (.wwu-wb-*) — full control for anything else.
+ *
+ * The full token + class reference is listed in the plugin Settings page.
+ *
+ * Legibility note: the withdrawal button must stay legible and prominent
+ * (Art. 11a "easily legible"); do not hide or low-contrast it via custom CSS.
  */
 
+:root {
+	/* Accent (buttons) */
+	--wwu-wb-accent:        #1a1f3a;
+	--wwu-wb-accent-text:   #ffffff;
+	--wwu-wb-accent-focus:  #1a1f3a;
+	/* Shape */
+	--wwu-wb-radius:        5px;
+	--wwu-wb-field-radius:  4px;
+	/* Buttons */
+	--wwu-wb-button-padding:   0.7em 1.4em;
+	--wwu-wb-button-font-size: 1rem;
+	--wwu-wb-button-font-weight: 600;
+	--wwu-wb-button-border:    2px solid currentColor;
+	/* Form */
+	--wwu-wb-form-max-width:   540px;
+	--wwu-wb-field-border:     #c3c4c7;
+	--wwu-wb-field-padding:    0.6em 0.7em;
+	--wwu-wb-label-weight:     600;
+	/* Notes / states */
+	--wwu-wb-note-color:       #666666;
+	--wwu-wb-success-bg:       #edfaef;
+	--wwu-wb-success-border:   #46b450;
+	--wwu-wb-success-text:     #1a4d24;
+	--wwu-wb-error-bg:         #fcf0f1;
+	--wwu-wb-error-border:     #d63638;
+	--wwu-wb-error-text:       #8a1f21;
+	--wwu-wb-notice-bg:        #f6f7f7;
+	--wwu-wb-notice-accent:    #1a1f3a;
+	--wwu-wb-spacing:          1em;
+}
+
 .wwu-wb-button-wrap {
-	margin: 1em 0;
+	margin: var(--wwu-wb-spacing) 0;
 }
 
 .wwu-wb-button {
 	display: inline-block;
-	padding: 0.7em 1.4em;
-	font-size: 1rem;
+	padding: var(--wwu-wb-button-padding);
+	font-size: var(--wwu-wb-button-font-size);
 	line-height: 1.2;
-	font-weight: 600;
+	font-weight: var(--wwu-wb-button-font-weight);
 	text-decoration: none;
-	border-radius: 5px;
+	border-radius: var(--wwu-wb-radius);
 	cursor: pointer;
-	border: 2px solid currentColor;
-	background: #1a1f3a;
-	color: #fff;
+	border: var(--wwu-wb-button-border);
+	background: var(--wwu-wb-accent);
+	color: var(--wwu-wb-accent-text);
 	transition: opacity 0.2s ease-in-out;
 }
 
 .wwu-wb-button:hover,
 .wwu-wb-button:focus {
 	opacity: 0.9;
+	color: var(--wwu-wb-accent-text);
 }
 
 .wwu-wb-button:focus-visible {
-	outline: 3px solid #1a1f3a;
+	outline: 3px solid var(--wwu-wb-accent-focus);
 	outline-offset: 2px;
 }
 
@@ -40,11 +78,11 @@
 	display: inline-block;
 	margin-left: 0.75em;
 	font-size: 0.85rem;
-	color: #666;
+	color: var(--wwu-wb-note-color);
 }
 
 .wwu-wb-form-wrap {
-	max-width: 540px;
+	max-width: var(--wwu-wb-form-max-width);
 	margin: 1.5em 0;
 }
 
@@ -55,20 +93,20 @@
 .wwu-wb-field {
 	display: flex;
 	flex-direction: column;
-	margin-bottom: 1em;
+	margin-bottom: var(--wwu-wb-spacing);
 }
 
 .wwu-wb-field label {
-	font-weight: 600;
+	font-weight: var(--wwu-wb-label-weight);
 	margin-bottom: 0.25em;
 }
 
 .wwu-wb-field input,
 .wwu-wb-field textarea {
-	padding: 0.6em 0.7em;
+	padding: var(--wwu-wb-field-padding);
 	font-size: 1rem;
-	border: 1px solid #c3c4c7;
-	border-radius: 4px;
+	border: 1px solid var(--wwu-wb-field-border);
+	border-radius: var(--wwu-wb-field-radius);
 	width: 100%;
 	box-sizing: border-box;
 }
@@ -78,32 +116,55 @@
 }
 
 .wwu-wb-result {
-	margin-top: 1em;
+	margin-top: var(--wwu-wb-spacing);
 	padding: 0.8em 1em;
-	border-radius: 4px;
+	border-radius: var(--wwu-wb-field-radius);
 }
 
 .wwu-wb-result.is-success {
-	background: #edfaef;
-	border: 1px solid #46b450;
-	color: #1a4d24;
+	background: var(--wwu-wb-success-bg);
+	border: 1px solid var(--wwu-wb-success-border);
+	color: var(--wwu-wb-success-text);
 }
 
 .wwu-wb-result.is-error {
-	background: #fcf0f1;
-	border: 1px solid #d63638;
-	color: #8a1f21;
+	background: var(--wwu-wb-error-bg);
+	border: 1px solid var(--wwu-wb-error-border);
+	color: var(--wwu-wb-error-text);
 }
 
 .wwu-wb-status-notice {
-	margin: 1em 0;
+	margin: var(--wwu-wb-spacing) 0;
 	padding: 0.6em 1em;
-	background: #f6f7f7;
-	border-left: 4px solid #1a1f3a;
+	background: var(--wwu-wb-notice-bg);
+	border-left: 4px solid var(--wwu-wb-notice-accent);
+}
+
+.wwu-wb-notice {
+	margin: var(--wwu-wb-spacing) 0;
+	color: var(--wwu-wb-note-color);
 }
 
 .wwu-wb-noscript {
-	color: #8a1f21;
+	color: var(--wwu-wb-error-text);
+}
+
+.wwu-wb-model-form {
+	margin: 1.5em 0;
+}
+
+.wwu-wb-model-form__fields {
+	list-style: none;
+	padding: 0;
+}
+
+.wwu-wb-model-form__fields li {
+	padding: 0.35em 0;
+	border-bottom: 1px dashed var(--wwu-wb-field-border);
+}
+
+.wwu-wb-info {
+	margin: var(--wwu-wb-spacing) 0;
 }
 
 /* Trap #19 twin rule: keep [hidden] effective even if a theme sets display. */

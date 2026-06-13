@@ -5,6 +5,19 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### Custom CSS + styling reference (1.0.0-alpha.9, 2026-06-13)
+- Frontend CSS refactored to expose **CSS custom properties** (`--wwu-wb-*`) on
+  every element (accent, radius, button/field/notice colors, spacing) for
+  one-line theming, while keeping all `.wwu-wb-*` classes for full control.
+- **Settings → Appearance — Custom CSS**: a textarea where the merchant pastes
+  CSS (loaded inline after the plugin styles, so it overrides), plus a collapsible
+  **reference listing every CSS variable (with default + purpose) and every class
+  (with what it targets)** and ready examples. Sanitised via `Sanitizer::css()`
+  (strips tags/`</style>` break-out, neutralises `expression()`/`javascript:`/
+  `behavior:`/`@import`; 50 KB cap). Applied on the frontend surfaces and the
+  no-JS fallback pages. Compliance note in the UI: must not hide/shrink/low-contrast
+  the statutory button.
+
 ### Audit hardening — core F0–F6 (1.0.0-alpha.7, 2026-06-13)
 Parallel security + performance + compliance audit (sub-agents). Security: **0
 findings**. Closed all critical/high compliance gaps + all high/medium perf

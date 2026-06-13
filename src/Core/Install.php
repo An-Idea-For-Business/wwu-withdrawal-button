@@ -160,6 +160,7 @@ final class Install {
 				'merchant_email'       => get_option( 'admin_email' ),
 				'retention_years'      => 10,
 				'go_live_date'         => WWU_WB_GO_LIVE_DATE,
+				'custom_css'           => '',
 			),
 			'',
 			'yes'
