@@ -64,9 +64,19 @@ final class ConfirmationDispatcher {
 
 		$data = ( new ReceiptBuilder() )->data( $request_uid, $order, $req, $log_row, $submitted_at );
 
-		// Generate + store the PDF (best-effort; the email itself is the durable medium).
+		// Generate + store the PDF (best-effort, fully OPTIONAL).
+		//
+		// The durable-medium obligation (Art. 11a(4)) is met by the acknowledgement
+		// EMAIL itself, which always carries the full textual content. The PDF is an
+		// extra copy. We therefore guard the whole block with is_available(): when
+		// Dompdf is absent (e.g. a plain source checkout without the bundled vendor/
+		// dir) we skip rendering + storage entirely and the email still goes out.
+		// This keeps a missing PDF library from ever interfering with the send — the
+		// underlying builders are already non-throwing, but the explicit guard makes
+		// the "PDF is optional" contract obvious at the call site and avoids the
+		// extra warn-log + filesystem round-trip when it can't produce anything.
 		$pdf_path = '';
-		if ( ! empty( $settings['send_pdf'] ) ) {
+		if ( ! empty( $settings['send_pdf'] ) && PdfBuilder::is_available() ) {
 			$pdf_html  = Template::render( 'pdf/receipt-pdf.php', $data );
 			$pdf_bytes = ( new PdfBuilder() )->render( $pdf_html );
 			$pdf_path  = ( new ReceiptStore() )->save( $request_uid, $pdf_bytes );
