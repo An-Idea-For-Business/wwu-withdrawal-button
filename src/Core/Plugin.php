@@ -20,6 +20,7 @@ use WWU\WithdrawalButton\Frontend\Assets;
 use WWU\WithdrawalButton\Frontend\WooMyAccount;
 use WWU\WithdrawalButton\Platform\WooCommerce\OrderStatus;
 use WWU\WithdrawalButton\REST\RestApi;
+use WWU\WithdrawalButton\Shortcodes\Shortcodes;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -128,6 +129,9 @@ final class Plugin {
 
 		// Durable-medium acknowledgement: listens on wwu_wb_withdrawal_confirmed.
 		( new ConfirmationDispatcher() )->register();
+
+		// Shortcodes (button / form / status / model form / info).
+		( new Shortcodes() )->register();
 
 		if ( is_admin() ) {
 			$this->admin = new AdminController();

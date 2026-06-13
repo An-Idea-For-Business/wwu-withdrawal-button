@@ -155,6 +155,41 @@ final class LogRepository {
 	}
 
 	/**
+	 * List recent confirmed withdrawal requests (for the admin dashboard).
+	 *
+	 * @param int $limit  Max rows.
+	 * @param int $offset Offset.
+	 * @return array<int,array<string,mixed>>
+	 */
+	public function list_confirmed( int $limit = 50, int $offset = 0 ): array {
+		global $wpdb;
+		$table = LogTable::name();
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM {$table} WHERE event = %s ORDER BY id DESC LIMIT %d OFFSET %d",
+				'confirmed',
+				max( 1, $limit ),
+				max( 0, $offset )
+			),
+			ARRAY_A
+		);
+		return is_array( $rows ) ? $rows : array();
+	}
+
+	/**
+	 * Count confirmed withdrawal requests.
+	 *
+	 * @return int
+	 */
+	public function count_confirmed(): int {
+		global $wpdb;
+		$table = LogTable::name();
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery
+		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$table} WHERE event = %s", 'confirmed' ) );
+	}
+
+	/**
 	 * Verify the global hash chain. Returns the id of the first broken row, or 0
 	 * if the chain is intact.
 	 *

@@ -52,3 +52,43 @@
 .wwu-wb-level-warn td {
 	background: #fcf9e8;
 }
+
+.wwu-wb-badge {
+	display: inline-block;
+	padding: 3px 10px;
+	border-radius: 12px;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.wwu-wb-badge--ok {
+	background: #edfaef;
+	color: #1a4d24;
+	border: 1px solid #46b450;
+}
+
+.wwu-wb-badge--warn {
+	background: #fcf9e8;
+	color: #7a5c00;
+	border: 1px solid #dba617;
+}
+
+.wwu-wb-badge--err {
+	background: #fcf0f1;
+	color: #8a1f21;
+	border: 1px solid #d63638;
+}
+
+.wwu-wb-warnings li {
+	margin: 0.4em 0;
+}
+
+.wwu-wb-clause {
+	margin: 0.6em 0;
+}
+
+.wwu-wb-pagination a,
+.wwu-wb-pagination strong {
+	display: inline-block;
+	padding: 2px 8px;
+}

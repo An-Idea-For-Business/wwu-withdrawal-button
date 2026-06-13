@@ -5,6 +5,20 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### F5/F7/F8 — Legal documents, shortcodes, admin dashboard (1.0.0-alpha.4, 2026-06-13)
+- **F5 legal documents**: `ModelForm` (Annex I-B model withdrawal form, official
+  wording IT/EN/DE/FR/ES) + `ClauseLibrary` (pre-contractual / terms / privacy
+  clauses, IT+EN full, others EN-fallback with review note).
+- **F7 shortcodes**: `[wwu_wb_button]`, `[wwu_wb_form]`, `[wwu_wb_status]`,
+  `[wwu_wb_model_form]`, `[wwu_wb_info]` — order-scoped ones gated by ownership/
+  key/token, render nothing on failure.
+- **F8 admin**: Requests dashboard (confirmed requests from the immutable log,
+  late flag, evidence link, chain-integrity badge) + Compliance page (go-live
+  countdown, document checklist + copyable clauses + model-form shortcode,
+  Complianz/TranslatePress/cache environment notes). New menu: Dashboard /
+  Requests / Compliance / Settings / Debug Inspector.
+- Lint clean.
+
 ### F3 — Durable medium (1.0.0-alpha.3, 2026-06-13)
 - `ConfirmationDispatcher` listens on `wwu_wb_withdrawal_confirmed` and sends the
   acknowledgement of receipt synchronously (Art. 11a(4) "without undue delay"),

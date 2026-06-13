@@ -24,9 +24,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 final class AdminController {
 
-	public const MENU_SLUG      = 'wwu-withdrawal-button';
-	public const SETTINGS_SLUG  = 'wwu-wb-settings';
-	public const INSPECTOR_SLUG = 'wwu-wb-inspector';
+	public const MENU_SLUG       = 'wwu-withdrawal-button';
+	public const REQUESTS_SLUG   = 'wwu-wb-requests';
+	public const COMPLIANCE_SLUG = 'wwu-wb-compliance';
+	public const SETTINGS_SLUG   = 'wwu-wb-settings';
+	public const INSPECTOR_SLUG  = 'wwu-wb-inspector';
 
 	/**
 	 * Settings page handler.
@@ -43,6 +45,20 @@ final class AdminController {
 	private $inspector;
 
 	/**
+	 * Requests dashboard handler.
+	 *
+	 * @var RequestsDashboard
+	 */
+	private $requests;
+
+	/**
+	 * Compliance status page handler.
+	 *
+	 * @var ComplianceStatusPage
+	 */
+	private $compliance;
+
+	/**
 	 * Asset loader.
 	 *
 	 * @var AdminAssets
@@ -53,9 +69,11 @@ final class AdminController {
 	 * Constructor.
 	 */
 	public function __construct() {
-		$this->settings  = new SettingsPage();
-		$this->inspector = new InspectorPage();
-		$this->assets    = new AdminAssets();
+		$this->settings   = new SettingsPage();
+		$this->inspector  = new InspectorPage();
+		$this->requests   = new RequestsDashboard();
+		$this->compliance = new ComplianceStatusPage();
+		$this->assets     = new AdminAssets();
 	}
 
 	/**
@@ -94,6 +112,24 @@ final class AdminController {
 			$capability,
 			self::MENU_SLUG,
 			array( $this, 'render_dashboard' )
+		);
+
+		add_submenu_page(
+			self::MENU_SLUG,
+			__( 'Withdrawal requests', 'wwu-withdrawal-button' ),
+			__( 'Requests', 'wwu-withdrawal-button' ),
+			$capability,
+			self::REQUESTS_SLUG,
+			array( $this->requests, 'render' )
+		);
+
+		add_submenu_page(
+			self::MENU_SLUG,
+			__( 'Compliance', 'wwu-withdrawal-button' ),
+			__( 'Compliance', 'wwu-withdrawal-button' ),
+			$capability,
+			self::COMPLIANCE_SLUG,
+			array( $this->compliance, 'render' )
 		);
 
 		add_submenu_page(
