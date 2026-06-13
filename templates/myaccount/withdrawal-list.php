@@ -24,7 +24,13 @@ $logged_in  = ! empty( $logged_in );
 $orders_url = isset( $orders_url ) ? (string) $orders_url : '';
 ?>
 <div class="wwu-wb-account-intro">
-	<h2><?php esc_html_e( 'Right of withdrawal', 'wwu-withdrawal-button' ); ?></h2>
+	<?php
+	/*
+	 * No heading here: the My Account endpoint and the page already render their
+	 * own "Right of withdrawal" title, so a heading in this template would be a
+	 * duplicate. The intro paragraph below provides the context instead.
+	 */
+	?>
 
 	<?php if ( ! $logged_in ) : ?>
 
@@ -40,7 +46,7 @@ $orders_url = isset( $orders_url ) ? (string) $orders_url : '';
 	<?php else : ?>
 
 		<p><?php esc_html_e( 'Choose an order to withdraw from:', 'wwu-withdrawal-button' ); ?></p>
-		<table class="wwu-wb-orders shop_table shop_table_responsive">
+		<table class="wwu-wb-orders">
 			<thead>
 				<tr>
 					<th><?php esc_html_e( 'Order', 'wwu-withdrawal-button' ); ?></th>
@@ -51,13 +57,13 @@ $orders_url = isset( $orders_url ) ? (string) $orders_url : '';
 			<tbody>
 				<?php foreach ( $rows as $row ) : ?>
 					<tr>
-						<td data-title="<?php esc_attr_e( 'Order', 'wwu-withdrawal-button' ); ?>"><?php echo esc_html( '#' . (string) $row['number'] ); ?></td>
-						<td data-title="<?php esc_attr_e( 'Date', 'wwu-withdrawal-button' ); ?>"><?php echo esc_html( (string) $row['date'] ); ?></td>
-						<td data-title="<?php esc_attr_e( 'Action', 'wwu-withdrawal-button' ); ?>">
+						<td class="wwu-wb-orders__num"><?php echo esc_html( '#' . (string) $row['number'] ); ?></td>
+						<td class="wwu-wb-orders__date"><?php echo esc_html( (string) $row['date'] ); ?></td>
+						<td class="wwu-wb-orders__action">
 							<?php if ( '' !== (string) $row['status'] ) : ?>
-								<span class="wwu-wb-status-notice"><?php echo esc_html( sprintf( /* translators: %s: status. */ __( 'Request status: %s', 'wwu-withdrawal-button' ), (string) $row['status'] ) ); ?></span>
+								<span class="wwu-wb-status-pill"><?php echo esc_html( sprintf( /* translators: %s: status. */ __( 'Request: %s', 'wwu-withdrawal-button' ), (string) $row['status'] ) ); ?></span>
 							<?php else : ?>
-								<a class="wwu-wb-button" href="<?php echo esc_url( (string) $row['url'] ); ?>"><?php echo esc_html( (string) $row['label'] ); ?></a>
+								<a class="wwu-wb-button wwu-wb-button--sm" href="<?php echo esc_url( (string) $row['url'] ); ?>"><?php echo esc_html( (string) $row['label'] ); ?></a>
 							<?php endif; ?>
 						</td>
 					</tr>

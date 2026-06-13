@@ -81,6 +81,79 @@
 	color: var(--wwu-wb-note-color);
 }
 
+/* Small button variant (used in the orders chooser table). */
+.wwu-wb-button--sm {
+	padding: 0.45em 1em;
+	font-size: 0.9rem;
+	white-space: nowrap;
+}
+
+/* Orders chooser (My Account tab + public form page). */
+.wwu-wb-account-intro {
+	margin: 1em 0;
+}
+
+.wwu-wb-orders {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 1em 0;
+}
+
+.wwu-wb-orders th,
+.wwu-wb-orders td {
+	text-align: left;
+	padding: 0.7em 1em;
+	border-bottom: 1px solid var(--wwu-wb-field-border);
+	vertical-align: middle;
+}
+
+.wwu-wb-orders thead th {
+	font-weight: 600;
+	border-bottom-width: 2px;
+}
+
+.wwu-wb-orders__action {
+	white-space: nowrap;
+}
+
+/* Compact, inline status pill — no block margins inside a table cell. */
+.wwu-wb-status-pill {
+	display: inline-block;
+	padding: 0.3em 0.7em;
+	font-size: 0.85rem;
+	line-height: 1.2;
+	border-radius: 999px;
+	background: var(--wwu-wb-notice-bg);
+	border: 1px solid var(--wwu-wb-field-border);
+	color: var(--wwu-wb-note-color);
+	white-space: nowrap;
+}
+
+/* Stack the table into rows on small screens (no theme dependency). */
+@media (max-width: 600px) {
+	.wwu-wb-orders thead {
+		display: none;
+	}
+	.wwu-wb-orders,
+	.wwu-wb-orders tbody,
+	.wwu-wb-orders tr,
+	.wwu-wb-orders td {
+		display: block;
+		width: 100%;
+	}
+	.wwu-wb-orders td {
+		border-bottom: none;
+		padding: 0.2em 0;
+	}
+	.wwu-wb-orders tr {
+		border-bottom: 1px solid var(--wwu-wb-field-border);
+		padding: 0.8em 0;
+	}
+	.wwu-wb-orders__num {
+		font-weight: 600;
+	}
+}
+
 .wwu-wb-form-wrap {
 	max-width: var(--wwu-wb-form-max-width);
 	margin: 1.5em 0;
