@@ -15,6 +15,8 @@ declare( strict_types=1 );
 namespace WWU\WithdrawalButton\Admin;
 
 use WWU\WithdrawalButton\Debug\Audience;
+use WWU\WithdrawalButton\Frontend\Template;
+use WWU\WithdrawalButton\Mail\WooAckEmail;
 use WWU\WithdrawalButton\REST\Authentication;
 use WWU\WithdrawalButton\Security\Sanitizer;
 
@@ -33,6 +35,13 @@ final class SettingsPage {
 	 * @var string
 	 */
 	private const NONCE = 'wwu_wb_save_settings';
+
+	/**
+	 * Nonce action for the email-preview link.
+	 *
+	 * @var string
+	 */
+	private const PREVIEW_NONCE = 'wwu_wb_preview_email';
 
 	/**
 	 * Render the settings page.
@@ -223,7 +232,83 @@ final class SettingsPage {
 		echo '<p class="description">' . esc_html__( 'The URL slug of the "Right of withdrawal" tab in the customer account. Change only if it conflicts.', 'wwu-withdrawal-button' ) . '</p>';
 		echo '</td></tr>';
 
+		// Live preview of the acknowledgement email (opens in a new tab).
+		$preview_url = wp_nonce_url( admin_url( 'admin-post.php?action=wwu_wb_preview_email' ), self::PREVIEW_NONCE );
+		echo '<tr><th scope="row">' . esc_html__( 'Email preview', 'wwu-withdrawal-button' ) . '</th><td>';
+		echo '<a class="button" href="' . esc_url( $preview_url ) . '" target="_blank" rel="noopener">' . esc_html__( 'Preview the acknowledgement email', 'wwu-withdrawal-button' ) . '</a>';
+		echo '<p class="description">' . esc_html__( 'Opens a sample of the email the consumer receives. On WooCommerce it uses your store\'s email branding (header, footer, colours) exactly as it will be sent.', 'wwu-withdrawal-button' ) . '</p>';
+		echo '</td></tr>';
+
 		echo '</tbody></table>';
+	}
+
+	/**
+	 * Render a styled preview of the acknowledgement email with sample data.
+	 *
+	 * Capability-gated + nonce-checked. Renders nothing real — it builds the email
+	 * from representative sample data so the merchant can see how it looks. On
+	 * WooCommerce it goes through the WC_Email style inliner (store branding);
+	 * otherwise it renders the plain standalone template. Outputs a full HTML
+	 * document in the browser and exits.
+	 *
+	 * @return void
+	 */
+	public function handle_preview_email(): void {
+		if ( ! current_user_can( Authentication::capability() ) ) {
+			wp_die( esc_html__( 'Insufficient permissions.', 'wwu-withdrawal-button' ) );
+		}
+		check_admin_referer( self::PREVIEW_NONCE );
+
+		$data = $this->sample_receipt_data();
+		$html = '';
+
+		// Prefer the branded WooCommerce email when WooCommerce is available.
+		if ( class_exists( '\WC_Email' ) && function_exists( 'WC' ) && WC() && method_exists( WC(), 'mailer' ) ) {
+			$emails = WC()->mailer()->get_emails();
+			$key    = WooAckEmail::CLASS_KEY;
+			if ( isset( $emails[ $key ] ) && method_exists( $emails[ $key ], 'preview' ) ) {
+				$html = (string) $emails[ $key ]->preview( $data );
+			}
+		}
+
+		// Fallback: the plain standalone template (FluentCart / no WooCommerce).
+		if ( '' === $html ) {
+			$html = Template::render( 'emails/withdrawal-confirmation.php', $data );
+		}
+
+		nocache_headers();
+		header( 'Content-Type: text/html; charset=utf-8' );
+		header( 'X-Robots-Tag: noindex, nofollow' );
+		echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- email templates escape their own values; WC style_inline returns trusted markup.
+		exit;
+	}
+
+	/**
+	 * Representative sample data for the email preview (no real order needed).
+	 *
+	 * @return array
+	 */
+	private function sample_receipt_data(): array {
+		$format = get_option( 'date_format', 'Y-m-d' ) . ' ' . get_option( 'time_format', 'H:i' );
+		return array(
+			'name'            => __( 'Sample Customer', 'wwu-withdrawal-button' ),
+			'order_number'    => '1234',
+			'items'           => __( 'Sample product × 1', 'wwu-withdrawal-button' ),
+			'email'           => 'customer@example.com',
+			'reason'          => '',
+			'submitted_local' => wp_date( $format ),
+			'submitted_at'    => gmdate( 'Y-m-d\TH:i:s\Z' ),
+			'row_hash'        => str_repeat( '0', 64 ),
+			'trader'          => array(
+				'name'    => (string) get_bloginfo( 'name' ),
+				'address' => '',
+				'email'   => (string) get_option( 'admin_email' ),
+			),
+			'download_url'    => '#',
+			'verify_url'      => '#',
+			'within_window'   => true,
+			'site_name'       => (string) get_bloginfo( 'name' ),
+		);
 	}
 
 	/**

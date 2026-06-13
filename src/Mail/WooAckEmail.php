@@ -123,6 +123,22 @@ class WooAckEmail extends \WC_Email {
 	}
 
 	/**
+	 * Render a fully-styled preview of this email for given data.
+	 *
+	 * Sets the data, builds the content and runs WooCommerce's own CSS inliner
+	 * (style_inline) so the preview looks exactly like the delivered email,
+	 * including the store's email branding. Sends nothing.
+	 *
+	 * @param array $data Sample (or real) receipt data.
+	 * @return string Full HTML email document.
+	 */
+	public function preview( array $data ): string {
+		$this->ack_data                       = $data;
+		$this->placeholders['{order_number}'] = (string) ( $data['order_number'] ?? '' );
+		return $this->style_inline( $this->get_content() );
+	}
+
+	/**
 	 * HTML body (WC header/footer wrapper + our statutory content).
 	 *
 	 * @return string
