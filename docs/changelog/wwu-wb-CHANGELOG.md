@@ -5,6 +5,16 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### FluentCart get_order() returned null — Eloquent magic-method guard removed (1.0.0-alpha.23, 2026-06-14)
+The admin diagnostic showed the final layer: with the collection now iterated
+(alpha.21), `get_order(1)` still returned null. Root cause in `FluentCartAdapter::load()`:
+the lookup was guarded by `method_exists($model, 'find')`, but Eloquent's `find()` is a
+**magic static** (`__callStatic` → query builder), so `method_exists()` returns false and
+the guard skipped the lookup entirely — returning null for every order. Removed the guard
+(kept `class_exists` + try/catch). Same family as the alpha.21 `(array)`-on-a-collection
+bug: wrong assumptions about Eloquent magic methods. FluentCart orders now load and the
+chooser/button render.
+
 ### Smoke-test runner fixed + FluentCart regression tests (1.0.0-alpha.22, 2026-06-14)
 - **Inspector smoke-test runner was dead** (`TypeError: (suite.tests || []).forEach is
   not a function` on "Run ALL"). Root cause: `suite_rfc3161()` returned the already-

@@ -106,7 +106,10 @@ final class FluentCartAdapter implements OrderDataSource {
 		}
 		$order = null;
 		$model = '\\FluentCart\\App\\Models\\Order';
-		if ( class_exists( $model ) && method_exists( $model, 'find' ) ) {
+		// Do NOT guard with method_exists($model, 'find'): Eloquent's find() is a
+		// magic static (__callStatic → query builder), so method_exists() returns
+		// false and would skip the lookup entirely, returning null for every order.
+		if ( class_exists( $model ) ) {
 			try {
 				$order = $model::find( (int) $order_ref );
 			} catch ( \Throwable $e ) {
