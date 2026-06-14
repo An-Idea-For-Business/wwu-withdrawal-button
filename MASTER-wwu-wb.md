@@ -6,6 +6,7 @@
 - **Status:** **MVP feature-complete** (F0–F8 + audit hardening) on branch `claude/mvp-implementation` ([PR #1](https://github.com/An-Idea-For-Business/wwu-withdrawal-button/pull/1)) — in live testing. Current build `1.0.0-alpha.27`.
 - **Target version:** `1.0.0` · **License:** GPL-3.0-or-later
 - **Credits:** mredodos · Matteo Alfieri (An Idea for Business) · WebWakeUp ([webwakeup.it](https://webwakeup.it))
+- **Product page (live):** [webwakeup.it/wwu-withdrawal-button](https://webwakeup.it/wwu-withdrawal-button/)
 - **Legal go-live:** **2026-06-19** (contracts concluded on/after)
 - **Last updated:** 2026-06-14 (NA click-to-cancel SPEC added)
 

@@ -20,6 +20,8 @@
 
 > ⚠️ **The obligation applies to distance contracts concluded on or after 19 June 2026.** This is a technical aid to compliance, **not legal advice** — have your own counsel review your store's documents.
 
+🌐 **Product page & docs:** [webwakeup.it/wwu-withdrawal-button](https://webwakeup.it/wwu-withdrawal-button/)
+
 ---
 
 ## Why this exists

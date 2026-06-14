@@ -4,11 +4,13 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0-alpha.19
+Stable tag: 1.0.0-alpha.27
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 The EU online withdrawal button (Art. 11a / Art. 54-bis) for WooCommerce & FluentCart: statutory two-step withdrawal, durable-medium receipt, immutable log.
+
+Product page & documentation: https://webwakeup.it/wwu-withdrawal-button/
 
 == Description ==
 
