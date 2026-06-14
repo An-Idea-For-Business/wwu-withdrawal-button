@@ -80,6 +80,18 @@ interface OrderDataSource {
 	public function add_note( string $order_ref, string $note ): void;
 
 	/**
+	 * Whether the order has been refunded (fully or partially) on the platform.
+	 *
+	 * Used to reflect the merchant's refund in the consumer/admin status surfaces
+	 * (e.g. show "Refunded" once the money is back), independent of the plugin's
+	 * own processed flag.
+	 *
+	 * @param string $order_ref Order reference.
+	 * @return bool
+	 */
+	public function is_refunded( string $order_ref ): bool;
+
+	/**
 	 * Read a plugin meta value (HPOS-safe).
 	 *
 	 * @param string $order_ref Order reference.

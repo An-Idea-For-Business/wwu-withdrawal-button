@@ -5,6 +5,23 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### Status surfaces: refund detection, localized labels, prominent FluentCart button (1.0.0-alpha.26, 2026-06-14)
+More live-test polish on the per-order / chooser status surfaces:
+- **Refund now reflected on FluentCart too.** Added `OrderDataSource::is_refunded()`
+  (WooCommerce: `get_total_refunded() > 0`; FluentCart: `payment_status` refunded/
+  partially-refunded). `request_status_label()` and both chooser branches now show
+  **"Refunded"** once the money is back — previously a refunded FluentCart order kept
+  showing "Withdrawal handled". Refund > handled > requested precedence, one shared
+  helper for every surface.
+- **"Withdrawal handled" / "Withdrawal requested" were showing in English.** The
+  context-less `__()` strings used by the chooser/notice weren't in the .po (only a
+  `msgctxt "Order status"` variant existed, which is a different gettext key). Added the
+  bare entries + translations to all four .po + the .pot and recompiled the .mo.
+- **FluentCart per-order button is now an actual button.** The FluentCart portal is a Vue
+  SPA where the plugin stylesheet may not load, so the injected withdrawal link rendered
+  as plain underlined text. The button template now accepts an `inline` flag that adds
+  self-contained inline styles; `FluentCartPortal::button_html()` passes it.
+
 ### Live-test fixes: re-request guard, dashboard order link, guidance i18n (1.0.0-alpha.25, 2026-06-14)
 Three issues found in live FluentCart testing:
 - **Button no longer offered on an order already withdrawn/processed.** The per-order

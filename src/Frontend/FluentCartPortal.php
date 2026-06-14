@@ -275,6 +275,9 @@ final class FluentCartPortal {
 				'url'            => $url,
 				'label'          => $services->labels->withdraw_label( $order->country, $locale ),
 				'days_remaining' => $services->window->days_remaining( $order ),
+				// FluentCart portal is a Vue SPA where the plugin stylesheet may not
+				// load — render the button with self-contained inline styles.
+				'inline'         => true,
 			)
 		);
 	}

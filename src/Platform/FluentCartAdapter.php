@@ -271,6 +271,18 @@ final class FluentCartAdapter implements OrderDataSource {
 	/**
 	 * {@inheritDoc}
 	 */
+	public function is_refunded( string $order_ref ): bool {
+		$order = $this->load( $order_ref );
+		if ( ! $order ) {
+			return false;
+		}
+		$payment = strtolower( (string) ( $this->attr( $order, 'payment_status' ) ?? '' ) );
+		return in_array( $payment, array( 'refunded', 'partially_refunded', 'partially-refunded' ), true );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public function verify_owner( string $order_ref, int $user_id ): bool {
 		$order = $this->load( $order_ref );
 		if ( ! $order || $user_id <= 0 ) {

@@ -92,6 +92,14 @@ final class WooCommerceAdapter implements OrderDataSource {
 	/**
 	 * {@inheritDoc}
 	 */
+	public function is_refunded( string $order_ref ): bool {
+		$order = $this->load( $order_ref );
+		return $order instanceof \WC_Order && (float) $order->get_total_refunded() > 0;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public function verify_owner( string $order_ref, int $user_id ): bool {
 		$order = $this->load( $order_ref );
 		if ( ! $order || $user_id <= 0 ) {

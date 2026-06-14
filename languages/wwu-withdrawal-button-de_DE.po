@@ -1453,3 +1453,11 @@ msgstr "Geprüft am %s."
 #: wwu-withdrawal-button.php:148
 msgid "WWU Withdrawal Button requires PHP %1$s or higher. You are running PHP %2$s."
 msgstr "WWU Widerrufsschaltfläche erfordert PHP %1$s oder höher. Sie verwenden PHP %2$s."
+
+#: src/Frontend/EligibleOrders.php
+msgid "Withdrawal handled"
+msgstr "Widerruf bearbeitet"
+
+#: src/Frontend/EligibleOrders.php
+msgid "Withdrawal requested"
+msgstr "Widerruf beantragt"

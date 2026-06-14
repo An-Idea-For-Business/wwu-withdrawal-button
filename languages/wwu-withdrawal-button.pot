@@ -1453,3 +1453,11 @@ msgstr ""
 #: wwu-withdrawal-button.php:148
 msgid "WWU Withdrawal Button requires PHP %1$s or higher. You are running PHP %2$s."
 msgstr ""
+
+#: src/Frontend/EligibleOrders.php
+msgid "Withdrawal handled"
+msgstr ""
+
+#: src/Frontend/EligibleOrders.php
+msgid "Withdrawal requested"
+msgstr ""

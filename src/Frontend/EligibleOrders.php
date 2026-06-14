@@ -51,6 +51,10 @@ final class EligibleOrders {
 	 * @return string Translated label, or '' if there is no request.
 	 */
 	public static function request_status_label( OrderDataSource $adapter, string $order_ref ): string {
+		// Refund wins: once the money is back, that is the most meaningful state.
+		if ( $adapter->is_refunded( $order_ref ) ) {
+			return __( 'Refunded', 'wwu-withdrawal-button' );
+		}
 		$processed = (string) $adapter->get_meta( $order_ref, 'processed_at' );
 		if ( '' !== $processed ) {
 			return __( 'Withdrawal handled', 'wwu-withdrawal-button' );
@@ -225,20 +229,12 @@ final class EligibleOrders {
 				continue;
 			}
 
-			$status    = (string) $adapter->get_meta( $order->order_ref, 'status' );
-			$processed = (string) $adapter->get_meta( $order->order_ref, 'processed_at' );
-			$eligible  = $enabled && $services->applicability->decide( $order )->show;
+			$status_label = self::request_status_label( $adapter, $order->order_ref );
+			$eligible     = $enabled && $services->applicability->decide( $order )->show;
 
-			if ( '' === $status && ! $eligible ) {
+			// Hide orders that are neither actionable nor already requested.
+			if ( '' === $status_label && ! $eligible ) {
 				continue;
-			}
-
-			if ( '' !== $processed ) {
-				$status_label = __( 'Withdrawal handled', 'wwu-withdrawal-button' );
-			} elseif ( '' !== $status ) {
-				$status_label = __( 'Withdrawal requested', 'wwu-withdrawal-button' );
-			} else {
-				$status_label = '';
 			}
 
 			$locale = '' !== $order->locale ? $order->locale : determine_locale();
@@ -294,27 +290,15 @@ final class EligibleOrders {
 				continue;
 			}
 
-			$status    = (string) $adapter->get_meta( $order->order_ref, 'status' );
-			$processed = (string) $adapter->get_meta( $order->order_ref, 'processed_at' );
-			$refunded  = (float) $wc_order->get_total_refunded();
-			$eligible  = $enabled && $services->applicability->decide( $order )->show;
+			// Consumer-facing, localized status (refund → handled → requested), shared
+			// with the per-order surfaces. Never the raw internal 'pending' value.
+			$status_label = self::request_status_label( $adapter, $order->order_ref );
+			$eligible     = $enabled && $services->applicability->decide( $order )->show;
 
 			// Only surface orders the customer can act on or has already acted on;
 			// hide orders that are simply out of scope to avoid noise.
-			if ( '' === $status && ! $eligible ) {
+			if ( '' === $status_label && ! $eligible ) {
 				continue;
-			}
-
-			// Consumer-facing, localized status — never the raw internal 'pending'
-			// value, and reflecting the merchant's progress (refund / handled).
-			if ( $refunded > 0 ) {
-				$status_label = __( 'Refunded', 'wwu-withdrawal-button' );
-			} elseif ( '' !== $processed ) {
-				$status_label = __( 'Withdrawal handled', 'wwu-withdrawal-button' );
-			} elseif ( '' !== $status ) {
-				$status_label = __( 'Withdrawal requested', 'wwu-withdrawal-button' );
-			} else {
-				$status_label = '';
 			}
 
 			$created = $wc_order->get_date_created();
