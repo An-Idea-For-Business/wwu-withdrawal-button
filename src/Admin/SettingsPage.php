@@ -84,6 +84,7 @@ final class SettingsPage {
 		echo '</tbody></table>';
 
 		$this->render_applicability_section( $settings );
+		$this->render_guidance_section( $settings );
 		$this->render_receipt_section( $settings );
 
 		echo '<h2>' . esc_html__( 'Debug', 'wwu-withdrawal-button' ) . '</h2>';
@@ -176,6 +177,33 @@ final class SettingsPage {
 		echo '<tr><th scope="row">' . esc_html__( 'Business (B2B) orders', 'wwu-withdrawal-button' ) . '</th><td>';
 		echo '<label><input type="checkbox" name="applicability_b2b" value="1" ' . checked( ! empty( $app['b2b_vat_out_of_scope'] ), true, false ) . ' /> ';
 		echo esc_html__( 'Hide the button when a VAT number was provided (treat as business / out of scope).', 'wwu-withdrawal-button' ) . '</label>';
+		echo '</td></tr>';
+
+		echo '</tbody></table>';
+	}
+
+	/**
+	 * Render the "Consumer guidance" section (window length + custom text).
+	 *
+	 * @param array $settings Current settings.
+	 * @return void
+	 */
+	private function render_guidance_section( array $settings ): void {
+		$days   = isset( $settings['withdrawal_window_days'] ) ? max( 14, (int) $settings['withdrawal_window_days'] ) : 14;
+		$custom = isset( $settings['custom_guidance'] ) ? (string) $settings['custom_guidance'] : '';
+
+		echo '<h2>' . esc_html__( 'Consumer guidance', 'wwu-withdrawal-button' ) . '</h2>';
+		echo '<table class="form-table" role="presentation"><tbody>';
+
+		echo '<tr><th scope="row">' . esc_html__( 'Withdrawal period (days)', 'wwu-withdrawal-button' ) . '</th><td>';
+		echo '<input type="number" name="withdrawal_window_days" min="14" max="365" value="' . esc_attr( (string) $days ) . '" class="small-text" />';
+		echo '<p class="description">' . esc_html__( 'The legal minimum is 14. You may grant MORE (e.g. 30) as a voluntary extension — the figure shown to customers updates accordingly. You cannot set less than 14.', 'wwu-withdrawal-button' ) . '</p>';
+		echo '</td></tr>';
+
+		echo '<tr><th scope="row">' . esc_html__( 'Custom guidance text', 'wwu-withdrawal-button' ) . '</th><td>';
+		echo '<textarea name="custom_guidance" rows="6" class="large-text" placeholder="' . esc_attr__( 'Leave empty to use the built-in explanation. Paste your own to fully replace it — e.g. to spell out exemptions for event tickets or services started immediately.', 'wwu-withdrawal-button' ) . '">' . esc_textarea( $custom ) . '</textarea>';
+		echo '<p class="description">' . esc_html__( 'When set, this replaces the default "how withdrawal works" block shown to customers. Basic HTML is allowed. You are responsible for its legal accuracy — keep it truthful and do not discourage withdrawal.', 'wwu-withdrawal-button' ) . '</p>';
+		echo '<p class="description">' . wp_kses_post( __( 'For products with no right of withdrawal (e.g. dated event tickets, immediate-access digital content), the proper fix is to exempt them per Art. 59 — see the upcoming Exemptions feature. Do not simply hide the button without the legal conditions.', 'wwu-withdrawal-button' ) ) . '</p>';
 		echo '</td></tr>';
 
 		echo '</tbody></table>';
@@ -468,6 +496,10 @@ final class SettingsPage {
 		$settings['send_pdf']        = Sanitizer::bool( $_POST['send_pdf'] ?? '' );
 		$settings['merchant_email']  = sanitize_email( (string) ( $_POST['merchant_email'] ?? '' ) );
 		$settings['retention_years'] = max( 1, min( 30, (int) ( $_POST['retention_years'] ?? 10 ) ) );
+		// Consumer guidance: window is clamped to the 14-day legal minimum; custom
+		// text replaces the default block (basic HTML allowed, merchant-owned).
+		$settings['withdrawal_window_days'] = max( 14, min( 365, (int) ( $_POST['withdrawal_window_days'] ?? 14 ) ) );
+		$settings['custom_guidance']        = wp_kses_post( wp_unslash( $_POST['custom_guidance'] ?? '' ) );
 		$new_slug                    = sanitize_title( (string) ( $_POST['endpoint_slug'] ?? 'wwu-withdrawal' ) );
 		$settings['endpoint_slug']   = '' !== $new_slug ? $new_slug : 'wwu-withdrawal';
 		update_option( 'wwu_wb_settings', $settings );
