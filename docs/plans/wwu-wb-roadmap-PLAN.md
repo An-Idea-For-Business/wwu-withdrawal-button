@@ -2,7 +2,7 @@
 
 > Phased build plan for the EU withdrawal-button compliance plugin. Each large implementation phase is followed by a dedicated **audit phase** (Standard #13). "Done" for any phase requires the relevant rows of the [compliance matrix](../legal/wwu-wb-compliance-matrix.md) to be ✅ and the functional-completeness gate (Standard #14) to hold for the surfaces it ships.
 
-**Last updated:** 2026-06-14 (added P1+ public REST API for automations) · **SPEC:** [`../specs/wwu-wb-eu-withdrawal-button-SPEC.md`](../specs/wwu-wb-eu-withdrawal-button-SPEC.md)
+**Last updated:** 2026-06-14 (added P1+ public REST API + developer hooks/filters API) · **SPEC:** [`../specs/wwu-wb-eu-withdrawal-button-SPEC.md`](../specs/wwu-wb-eu-withdrawal-button-SPEC.md)
 
 ---
 
@@ -30,7 +30,7 @@
 | **F8** | Admin polish + Requests Dashboard + Compliance Status | Settings, Dashboard (filters/export/chain badge), Compliance Status (go-live countdown, doc checklist, warnings), Standard #12 tooltips/help/onboarding | **A8** (UX completeness gate #14) |
 | **F9** | Release engineering | README/CONTRIBUTING/CODE_OF_CONDUCT/SECURITY/issue+PR templates, GitHub Actions (php-lint, phpcs, smoke), build script (Dompdf vendor → ZIP), `readme.txt`, GitHub Release `v1.0.0`, GitHub repo public | cumulative ship-readiness audit |
 | **P-video** | HyperFrames explanatory video (QUEUED) | `_internal/video/` script + HyperFrames composition + render — **triggered when F0–F9 done** | — |
-| **P1+** | Post-MVP | RFC 3161/eIDAS (Aruba/Namirial), full `.ots` PHP verifier, partial/line-item withdrawal, FluentCRM hook, wordpress.org submission, EEA labels, refund-draft workflow, **Art. 59 exemptions feature incl. digital/service consent-capture** ([SPEC ready](../specs/wwu-wb-withdrawal-exemptions-SPEC.md)), **public REST API for automations** (see below) | — |
+| **P1+** | Post-MVP | RFC 3161/eIDAS (Aruba/Namirial), full `.ots` PHP verifier, partial/line-item withdrawal, FluentCRM hook, wordpress.org submission, EEA labels, refund-draft workflow, **Art. 59 exemptions feature incl. digital/service consent-capture** ([SPEC ready](../specs/wwu-wb-withdrawal-exemptions-SPEC.md)), **public REST API for automations** (see below), **developer hooks & filters API + reference** (see below) | — |
 
 ---
 
@@ -108,6 +108,31 @@
 - **Auth:** WordPress Application Passwords / OAuth via standard WP REST auth; per-route capability checks; never expose secrets; rate-limited; every write append-only-logged in the evidence chain.
 - **Docs:** an OpenAPI/Swagger description + examples; versioned namespace (`wwu-wb/v1` stays stable, breaking changes → `v2`).
 - **Why post-1.0:** the 1.0 priority is legal compliance for merchants; a stable public API is an ecosystem feature that benefits from the data model settling first. Design SPEC to be written before build.
+
+### P1+ — Developer hooks & filters API + reference (post-1.0)
+
+> User request (2026-06-14): make the plugin extensible / embeddable in other solutions via a documented, stable **action & filter API** — so integrators can extend behaviour or build on top of it (the PHP counterpart to the public REST API above).
+
+- **Audit + formalise the extension points that already exist.** The plugin already exposes
+  several: filters `wwu_wb_applicability_decision`, `wwu_wb_eligible_statuses`,
+  `wwu_wb_excluded_product_ids`, `wwu_wb_exception_types`, `wwu_wb_exemption_consent`,
+  `wwu_wb_email_content`, `wwu_wb_order_admin_url`, `wwu_wb_force_enqueue_frontend`; actions
+  `wwu_wb_withdrawal_confirmed`, `wwu_wb_receipt_sent`. Catalogue them, lock their signatures
+  as a **stable contract**, and version any breaking change.
+- **Add the extension points integrators will want** (each with a clear, typed signature):
+  before/after the statement + confirmation, on status transition, on log append, on
+  timestamp confirmation, around label/window resolution, around durable-medium rendering,
+  and a platform-adapter registration filter so a third party can add a new e-commerce
+  platform (`wwu_wb_register_platform`).
+- **Ship a developer reference** — a `docs/` "Hooks & Filters" page (every hook: when it
+  fires, args, return, example) + inline `@hook`/`@filter` docblocks, mirroring the
+  Standard #12 "every extension point documented" discipline.
+- **Optional helper API** — a small public facade (e.g. `WWU_WB::is_withdrawable($order)`,
+  `WWU_WB::request_status($order_ref)`) so other plugins/themes can query state without
+  touching internals.
+- **Why post-1.0:** same as the REST API — freeze the data model first, then publish a
+  contract people can safely build on. Pairs naturally with the REST API and the FluentCRM
+  integration (which will consume these hooks). Design SPEC before build.
 
 ---
 
