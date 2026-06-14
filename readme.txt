@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0-alpha.17
+Stable tag: 1.0.0-alpha.19
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -61,6 +61,12 @@ The plugin records withdrawal declarations (name, identified contract, email, IP
 
 == Changelog ==
 
+= 1.0.0-alpha.19 =
+* FluentCart customer portal: the "Right of withdrawal" account page, the sidebar entry, the per-order button and the dashboard banner now work. Every FluentCart hook was corrected to the official FluentCart developer contract (verified against dev.fluentcart.com), and the order chooser reads each order's data through the correct customer/address relations. Fixes the blank page and missing button seen in live testing.
+
+= 1.0.0-alpha.18 =
+* FluentCart: first cut of the customer-portal withdrawal surfaces, and a platform-agnostic order chooser that merges WooCommerce and FluentCart orders.
+
 = 1.0.0-alpha.17 =
 * Withdrawal flow (WooCommerce HPOS + FluentCart), statutory labels (IT/EN/DE/FR/ES), two-step + no-JS fallback, durable-medium acknowledgement (email + PDF + verifiable link), tamper-evident hash-chained log + OpenTimestamps, Annex I-B model form + legal clauses, shortcodes, admin dashboard + compliance page, Complianz/cache compatibility. Security audit: 0 findings.
 
@@ -68,6 +74,9 @@ The plugin records withdrawal declarations (name, identified contract, email, IP
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.0.0-alpha.19 =
+Recommended for FluentCart stores: fixes the customer-account withdrawal page (was blank) and the per-order button. Test on staging before production; not yet a stable release.
 
 = 1.0.0-alpha.17 =
 Feature-complete alpha. Test thoroughly on staging before production; not yet a stable release.
