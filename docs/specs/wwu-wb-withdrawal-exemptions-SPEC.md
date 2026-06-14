@@ -1,10 +1,16 @@
 # SPEC — Product/service withdrawal exemptions (Art. 59 / Art. 16)
 
-Design only (no implementation yet). Answers the community question: *"Can I exempt
-certain products/services — e.g. digital products with immediate access, or services
-already performed?"* The answer is **yes, but only under strict legal conditions** —
-so the right design is not "hide the button" but **capture the legal prerequisites
-and exempt only when they are met**.
+Answers the community question: *"Can I exempt certain products/services — e.g. digital
+products with immediate access, or services already performed?"* The answer is **yes, but
+only under strict legal conditions** — so the right design is not "hide the button" but
+**capture the legal prerequisites and exempt only when they are met**.
+
+> **Status: P1 + P2 + P3 shipped, FluentCart capture shipped** (1.0.0-alpha.27 → alpha.30).
+> Per-reason tagging, evaluator, **WooCommerce + FluentCart** checkout consent capture, the
+> durable-medium confirmation e-mail, retention/purge, the GDPR clause and a Consent-records
+> view are live. The WooCommerce **block** Checkout (Store API) capture shipped in alpha.32 (Additional Checkout Fields API) — **all WooCommerce + FluentCart capture surfaces are now live**; EDD is the next platform ([SPEC](wwu-wb-edd-integration-SPEC.md)).
+> The legal basis is documented in [the evidence note](../legal/wwu-wb-exemption-consent-evidence-NOTE.md);
+> the verified FluentCart hooks in [the FluentCart analysis](../analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md).
 
 > Legal references verified by research (EUR-Lex, Codice del Consumo, CJEU). Not legal
 > advice — the merchant remains responsible; this feature helps them do it correctly.
@@ -196,14 +202,27 @@ never looks like a denied right.
    products to a specific legal reason (§7), capture consent for the conditional ones,
    and otherwise apply the button to everything.
 3. FluentCart consent-capture hook parity — confirm the equivalent checkout hook + meta.
+   **Open** — asked to the FluentCart team (`_internal/marketing/fluentcart-team-request.md`,
+   item 4). The read side (`ConsentReader`) is already platform-agnostic, so once the
+   FluentCart checkout writes `_wwu_wb_consent` order meta, conditional reasons gate there
+   too with no further change.
 4. Phasing: P1 admin UI + reason tagging (uses existing evaluator); P2 checkout consent
    + gate; P3 email confirmation + log event + consumer transparency. Each with an audit.
-   **Status: P1 SHIPPED (1.0.0-alpha.27, 2026-06-14)** — `ExceptionTypes` registry +
-   `ExemptionResolver` (by_reason map + back-compat fold) + upgraded
-   `ArticleFiftyNineEvaluator` (unconditional exempt / conditional gated on the
-   `wwu_wb_exemption_consent` filter / seal-based never auto-hidden) + Settings UI +
-   smoke suite `exemptions`. P2 (checkout consent capture writing that filter's data) +
-   P3 remain — tracked as task #41.
+   - **P1 SHIPPED (1.0.0-alpha.27, 2026-06-14)** — `ExceptionTypes` registry +
+     `ExemptionResolver` (by_reason map + back-compat fold) + upgraded
+     `ArticleFiftyNineEvaluator` (unconditional exempt / conditional gated on the
+     `wwu_wb_exemption_consent` filter / seal-based never auto-hidden) + Settings UI +
+     smoke suite `exemptions`.
+   - **P2 SHIPPED (1.0.0-alpha.28, 2026-06-14)** — WooCommerce classic-checkout consent
+     capture: `WooCheckoutConsent` (per-reason required checkbox + server-side gate +
+     `_wwu_wb_consent` order meta with verbatim wording + SHA-256 + timestamp + IP + order
+     note + append-only `exemption_consent` log event), `ConsentText` (statutory wording,
+     `wwu_wb_consent_text` filter, IT/EN/FR/ES/DE), `ConsentReader` (platform-agnostic feed
+     into the evaluator), `ExemptionResolver::reason_for()` (order-independent lookup),
+     smoke suite `consent`. **Remaining in P2:** WooCommerce **block** Checkout (Store API)
+     + FluentCart checkout capture (see §12.3).
+   - **P3 (next):** consumer-facing transparency copy ("why is this item exempt") + the
+     trader's durable-medium confirmation line in the acknowledgement email — task #41.
 
 ## References
 

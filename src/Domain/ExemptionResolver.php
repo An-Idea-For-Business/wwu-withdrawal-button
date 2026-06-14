@@ -43,10 +43,30 @@ final class ExemptionResolver {
 		$category_ids = array_map( 'intval', (array) ( $item['category_ids'] ?? array() ) );
 
 		// Back-compat filter (legacy integrators) → treated as a 'manual' exclusion.
+		// Only this order-aware path needs the order context; the rest of the lookup
+		// is order-independent and shared with the checkout path via reason_for().
 		$filtered = array_map( 'intval', (array) apply_filters( 'wwu_wb_excluded_product_ids', array(), $order ) );
 		if ( $product_id > 0 && in_array( $product_id, $filtered, true ) ) {
 			return 'manual';
 		}
+
+		return self::reason_for( $product_id, $category_ids );
+	}
+
+	/**
+	 * The exemption reason id tagging a product/category pair, or null when none.
+	 *
+	 * Order-independent counterpart of {@see reason_for_item()}: it consults only the
+	 * merchant's per-reason map, so it can run at CHECKOUT (cart items, no order yet)
+	 * as well as for a placed order. It deliberately does NOT apply the legacy
+	 * `wwu_wb_excluded_product_ids` filter — that filter is scoped to a placed order.
+	 *
+	 * @param int   $product_id   Product id.
+	 * @param int[] $category_ids Product category ids.
+	 * @return string|null Reason id (a key of ExceptionTypes::all()) or null.
+	 */
+	public static function reason_for( int $product_id, array $category_ids ): ?string {
+		$category_ids = array_map( 'intval', $category_ids );
 
 		foreach ( self::map() as $reason => $sets ) {
 			$products   = array_map( 'intval', (array) ( $sets['products'] ?? array() ) );

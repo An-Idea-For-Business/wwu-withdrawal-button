@@ -41,6 +41,10 @@ final class ClauseLibrary {
 			'it' => 'Registro delle dichiarazioni di recesso — Quando eserciti il diritto di recesso online, registriamo la tua dichiarazione (nome, contratto identificato, indirizzo email per la conferma), l\'indirizzo IP e la data e ora di trasmissione in un archivio immodificabile, ai fini dell\'adempimento di un obbligo legale (art. 6, par. 1, lett. c GDPR) e per finalità probatorie/di accountability (art. 6, par. 1, lett. f GDPR). Questi dati sono conservati per il periodo necessario a tutelare i diritti delle parti (per impostazione predefinita 10 anni). Per le richieste relative ai tuoi dati puoi contattarci agli estremi indicati in questa informativa.',
 			'en' => 'Withdrawal log — When you exercise your right of withdrawal online, we record your statement (name, identified contract, email for the confirmation), your IP address and the date and time of submission in a tamper-evident, append-only log, in order to comply with a legal obligation (Art. 6(1)(c) GDPR) and for evidentiary/accountability purposes (Art. 6(1)(f) GDPR). This data is retained for the period necessary to protect the rights of the parties (10 years by default). For requests regarding your data, contact us using the details in this policy.',
 		),
+		'consent_privacy' => array(
+			'it' => 'Prova del consenso alle esenzioni dal recesso — Per i prodotti o servizi per cui la legge esclude il diritto di recesso solo previo tuo consenso espresso (contenuti digitali ad accesso immediato; servizi eseguiti immediatamente), al momento dell\'ordine registriamo il testo del consenso e della presa d\'atto che hai accettato, con data e ora e — salvo tua disattivazione — l\'indirizzo IP, al solo fine di poter dimostrare la validità dell\'esenzione e di esercitare o difendere un diritto in sede giudiziaria. La base giuridica è il legittimo interesse (art. 6, par. 1, lett. f GDPR; cfr. art. 17, par. 3, lett. e GDPR). Conserviamo questi dati per il periodo di prescrizione applicabile (per impostazione predefinita 10 anni), trascorso il quale l\'indirizzo IP viene cancellato/anonimizzato. Puoi opporti al trattamento (art. 21 GDPR), compatibilmente con l\'accertamento o la difesa di un diritto. Questo consenso ai sensi del Codice del Consumo è distinto da un eventuale consenso al trattamento dei dati ai sensi del GDPR.',
+			'en' => 'Evidence of withdrawal-exemption consent — For products or services where the law removes the right of withdrawal only with your prior express consent (digital content with immediate access; services performed immediately), at order time we record the exact consent + acknowledgement wording you accepted, with the date and time and — unless you have turned it off — your IP address, for the sole purpose of being able to prove the exemption is valid and to establish, exercise or defend a legal claim. The legal basis is legitimate interest (Art. 6(1)(f) GDPR; see Art. 17(3)(e) GDPR). We keep this data for the applicable limitation period (10 years by default), after which the IP address is deleted/anonymised. You may object to the processing (Art. 21 GDPR), subject to the establishment or defence of legal claims. This consent under consumer law is distinct from any consent to data processing under the GDPR.',
+		),
 	);
 
 	/**
@@ -56,7 +60,7 @@ final class ClauseLibrary {
 	/**
 	 * Get a clause.
 	 *
-	 * @param string $type 'precontractual'|'terms'|'privacy'.
+	 * @param string $type 'precontractual'|'terms'|'privacy'|'consent_privacy'.
 	 * @param string $lang Language code.
 	 * @return string
 	 */

@@ -175,7 +175,8 @@ final class DashboardPage {
 			)
 		) . '</li>';
 		echo '<li>' . esc_html__( 'The order is not in a contract state (failed, cancelled, refunded, awaiting payment).', 'wwu-withdrawal-button' ) . '</li>';
-		echo '<li>' . esc_html__( 'Every item is excluded from the right of withdrawal (e.g. delivered digital content), or it is a business (VAT) order.', 'wwu-withdrawal-button' ) . '</li>';
+		echo '<li>' . wp_kses_post( __( 'Every item is exempt under Art. 59 — either an <strong>unconditional</strong> reason (custom-made, perishable, dated services…), or one of the two <strong>conditional</strong> reasons (digital immediate access / service fully performed) <em>for which the consumer\'s consent was captured at checkout</em>. Note: <strong>physical products are never auto-hidden</strong> (they always keep the right), and a conditional item <strong>without</strong> captured consent also keeps the button — fail-safe toward the consumer.', 'wwu-withdrawal-button' ) ) . '</li>';
+		echo '<li>' . esc_html__( 'It is a business (VAT) order, if you treat B2B as out of scope.', 'wwu-withdrawal-button' ) . '</li>';
 		echo '<li>' . esc_html__( 'The function is disabled in Settings.', 'wwu-withdrawal-button' ) . '</li>';
 		echo '</ul>';
 		echo '<p>' . wp_kses_post(

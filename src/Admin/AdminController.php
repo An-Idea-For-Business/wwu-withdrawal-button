@@ -28,6 +28,7 @@ final class AdminController {
 
 	public const MENU_SLUG       = 'wwu-withdrawal-button';
 	public const REQUESTS_SLUG   = 'wwu-wb-requests';
+	public const CONSENT_SLUG    = 'wwu-wb-consents';
 	public const COMPLIANCE_SLUG = 'wwu-wb-compliance';
 	public const SETTINGS_SLUG   = 'wwu-wb-settings';
 	public const INSPECTOR_SLUG  = 'wwu-wb-inspector';
@@ -52,6 +53,13 @@ final class AdminController {
 	 * @var RequestsDashboard
 	 */
 	private $requests;
+
+	/**
+	 * Consent-records page handler.
+	 *
+	 * @var ConsentRecordsPage
+	 */
+	private $consents;
 
 	/**
 	 * Compliance status page handler.
@@ -81,6 +89,7 @@ final class AdminController {
 		$this->settings   = new SettingsPage();
 		$this->inspector  = new InspectorPage();
 		$this->requests   = new RequestsDashboard();
+		$this->consents   = new ConsentRecordsPage();
 		$this->compliance = new ComplianceStatusPage();
 		$this->dashboard  = new DashboardPage();
 		$this->assets     = new AdminAssets();
@@ -98,6 +107,7 @@ final class AdminController {
 		add_action( 'admin_post_wwu_wb_preview_email', array( $this->settings, 'handle_preview_email' ) );
 		add_action( 'admin_post_wwu_wb_mark_processed', array( $this->requests, 'handle_mark_processed' ) );
 		add_action( 'admin_post_wwu_wb_resend', array( $this->requests, 'handle_resend' ) );
+		add_action( 'admin_post_wwu_wb_export_consents', array( $this->consents, 'handle_export' ) );
 		add_action( 'admin_notices', array( $this, 'maybe_mail_failure_notice' ) );
 		add_action( 'admin_notices', array( $this, 'maybe_pdf_missing_notice' ) );
 		$this->assets->register();
@@ -176,6 +186,15 @@ final class AdminController {
 			$capability,
 			self::REQUESTS_SLUG,
 			array( $this->requests, 'render' )
+		);
+
+		add_submenu_page(
+			self::MENU_SLUG,
+			__( 'Consent records', 'wwu-withdrawal-button' ),
+			__( 'Consent records', 'wwu-withdrawal-button' ),
+			$capability,
+			self::CONSENT_SLUG,
+			array( $this->consents, 'render' )
 		);
 
 		add_submenu_page(

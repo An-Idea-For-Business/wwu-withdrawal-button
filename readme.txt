@@ -4,11 +4,11 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0-alpha.27
+Stable tag: 1.0.0-alpha.33
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-The EU online withdrawal button (Art. 11a / Art. 54-bis) for WooCommerce & FluentCart: statutory two-step withdrawal, durable-medium receipt, immutable log.
+The EU online withdrawal button (Art. 11a / Art. 54-bis) for WooCommerce, FluentCart & Easy Digital Downloads: statutory two-step withdrawal, durable-medium receipt, immutable log.
 
 Product page & documentation: https://webwakeup.it/wwu-withdrawal-button/
 
@@ -22,7 +22,7 @@ WWU Withdrawal Button makes a WooCommerce or FluentCart store compliant out of t
 * A **two-step flow**: withdrawal statement, then a confirmation labelled only with the statutory words. No dark patterns, no mandatory reason.
 * An **acknowledgement of receipt on a durable medium**: immediate email + attached PDF + a permanent verifiable link, with the exact submission date and time.
 * A **tamper-evident immutable log** (append-only, hash-chained, with IP and contract data) anchored to OpenTimestamps for free trusted timestamping, with a pluggable RFC 3161 / eIDAS provider.
-* **WooCommerce (HPOS + legacy) and FluentCart** support via a common adapter.
+* **WooCommerce (HPOS + legacy), FluentCart and Easy Digital Downloads (3.0+)** support via a common adapter.
 * **Compliance documents**: generates the Annex I-B model withdrawal form and ready clauses for Privacy / Terms / pre-contractual information.
 * Compatible with **Complianz** and **TranslatePress**; **shortcodes**, **blocks**, hooks and template overrides for customisation.
 
@@ -43,6 +43,12 @@ Any trader concluding distance B2C contracts via an online interface with EU/EEA
 = Does it replace the model withdrawal form? =
 No. The button is **additional** to the Annex I-B model form, which remains mandatory in pre-contractual information. The plugin generates both.
 
+= Do digital products lose the right of withdrawal automatically? =
+No. The right of withdrawal applies by default, **including** to digital products. It is removed only for the two conditional Art. 59 exemptions (digital content with immediate access; a service fully performed) and only when the consumer gives prior express consent + acknowledgement at checkout. The plugin captures that on the WooCommerce checkout (a required tick-box), stores it as evidence, and only then hides the button — otherwise the button stays (fail-safe). **Physical products never need consent.** For the digital exemption the plugin also e-mails the consumer a durable-medium confirmation, as the law requires.
+
+= Do I have to keep a register of these consents? =
+The law does not name a "register", but the burden of proof is on you (Art. 6(9) Dir. 2011/83/EU; GDPR accountability Art. 5(2)) — you must be able to prove the consent. The plugin keeps it for you: the agreed wording, a SHA-256 hash, the date/time and (optionally) the IP are stored on the order and anchored in the tamper-evident log; a **Consent records** admin screen lists and exports them. The IP is anonymised automatically after the retention period.
+
 = Is the timestamp legally valid? =
 OpenTimestamps provides a free, independently-verifiable Bitcoin-anchored proof. A pluggable RFC 3161 / eIDAS qualified-timestamp provider is available for stronger "data certa".
 
@@ -61,7 +67,30 @@ No other external services are used. The plugin does not load remote scripts, fo
 
 The plugin records withdrawal declarations (name, identified contract, email, IP address, date and time) in an append-only, tamper-evident log on **your own server**, because Art. 54-bis requires this as legal evidence (GDPR Art. 6(1)(c)/(f)). It generates a ready-to-paste privacy clause for your policy. Data is retained for a configurable period (10 years by default), and the uninstaller keeps the evidence log by default (legal hold) unless you opt to erase it.
 
+For the conditional Art. 59 exemptions, the plugin also stores the consumer's checkout consent + acknowledgement (the agreed wording, a hash, the date/time and — unless you turn it off — the IP) as evidence to prove the exemption is valid. The lawful basis is **legitimate interest** (GDPR Art. 6(1)(f); defence of legal claims), **not** GDPR consent. The IP lives only on the order (never in the immutable log) and is automatically anonymised once the retention period lapses. A second ready-to-paste privacy clause is generated for this processing.
+
 == Changelog ==
+
+= 1.0.0-alpha.33 =
+* Added **Easy Digital Downloads (EDD 3.0+)** as a third supported platform: the withdrawal button, evidence flow and exemption consent capture now work on EDD stores (with category-aware exemptions). Needs a live EDD test. Consent capture now spans WooCommerce (classic + block), FluentCart and EDD.
+
+= 1.0.0-alpha.32 =
+* Exemption consent capture now also works on the WooCommerce **block-based Checkout** (via the official Additional Checkout Fields API, WooCommerce 9.9+), reaching full parity with the classic checkout and FluentCart. Pure PHP, no build step. Also adds the design SPEC for a future Easy Digital Downloads (EDD) integration. Needs a live block-checkout test; fail-safe until verified.
+
+= 1.0.0-alpha.31 =
+* Exemptions settings redesigned: the reasons are grouped (conditional / unconditional / seal-based) with tooltips, examples, a "What do you sell?" guided helper, a preview of what the consumer sees (checkbox + confirmation e-mail), and a status panel — all using the WWU UI Kit. Completed the Italian (and FR/ES/DE) translations, including the exemption labels that previously showed in English. The withdrawal button itself is unchanged.
+
+= 1.0.0-alpha.30 =
+* Exemptions consent capture now works on **FluentCart** too (checkout acknowledgement + durable-medium confirmation), reaching parity with WooCommerce. Built on FluentCart hooks re-verified against the official docs. FluentCart exemptions match by product ID. The "Open order" admin link now uses FluentCart's own order URL. Needs a live FluentCart test; fail-safe until verified.
+
+= 1.0.0-alpha.29 =
+* Exemptions (Art. 59) — durable-medium confirmation + evidence, retention, GDPR. For the conditional exemptions the plugin now e-mails the consumer a durable-medium confirmation reproducing the agreed consent wording (constitutive for digital content, Art. 59(1)(o)) and logs the dispatch separately. Stored consents have a configurable retention (default 10 years) with a daily routine that anonymises the IP afterwards; the IP is configurable and never written to the immutable log. Adds a ready-to-paste GDPR privacy clause (legitimate interest) and a "Consent records" admin page with CSV export. Clearer wording everywhere: physical products never need consent; the button is hidden only after consent is captured (fail-safe).
+
+= 1.0.0-alpha.28 =
+* Exemptions (Art. 59) — checkout consent capture. For the two conditional exemptions (digital content with immediate access; service fully performed), WooCommerce checkout now shows a required acknowledgement tick-box and stores the agreed wording (with a SHA-256 hash, timestamp and IP) on the order as evidence — so the button is hidden for those items only once the consumer has lawfully consented. Statutory wording is filterable via `wwu_wb_consent_text`. Classic WooCommerce checkout; the block Checkout and FluentCart capture are tracked follow-ups.
+
+= 1.0.0-alpha.27 =
+* Exemptions (Art. 59) — per-reason product/category tagging. Mark products or categories as exempt by a specific statutory reason (custom-made, perishable, sealed hygiene, dated services, digital immediate, service performed, …), each with its legal reference and plain-language guidance. The right of withdrawal stays the default — including digital products — and conditional reasons keep the button until consent is captured.
 
 = 1.0.0-alpha.19 =
 * FluentCart customer portal: the "Right of withdrawal" account page, the sidebar entry, the per-order button and the dashboard banner now work. Every FluentCart hook was corrected to the official FluentCart developer contract (verified against dev.fluentcart.com), and the order chooser reads each order's data through the correct customer/address relations. Fixes the blank page and missing button seen in live testing.
@@ -76,6 +105,24 @@ The plugin records withdrawal declarations (name, identified contract, email, IP
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.0.0-alpha.33 =
+Adds Easy Digital Downloads (EDD 3.0+) support. No change for WooCommerce/FluentCart stores. If you run EDD, test the checkout + button on staging.
+
+= 1.0.0-alpha.32 =
+Adds consent capture on the WooCommerce block Checkout (requires WooCommerce 9.9+ for the conditional field). No change to the classic checkout. Test on staging if you use the block checkout.
+
+= 1.0.0-alpha.31 =
+Settings/exemptions UI overhaul + completed Italian/FR/ES/DE translations (the exemption section was partly in English). No change to the withdrawal flow. Safe to update.
+
+= 1.0.0-alpha.30 =
+Adds FluentCart checkout consent capture for the conditional exemptions (parity with WooCommerce). Test on a staging FluentCart store before production; fail-safe (the button stays) until the field is verified on your setup.
+
+= 1.0.0-alpha.29 =
+Completes the digital/service exemptions: durable-medium confirmation e-mail (required for the digital exemption), configurable consent retention with automatic IP anonymisation, a GDPR privacy clause and a Consent records page. Review the new clause and your retention setting. Test on staging; not yet a stable release.
+
+= 1.0.0-alpha.28 =
+Adds lawful consent capture at checkout for digital-immediate and service-performed exemptions. If you exempt those product types, the button is now hidden only after the consumer ticks the required acknowledgement. Test on staging; not yet a stable release.
 
 = 1.0.0-alpha.19 =
 Recommended for FluentCart stores: fixes the customer-account withdrawal page (was blank) and the per-order button. Test on staging before production; not yet a stable release.

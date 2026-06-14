@@ -5,6 +5,188 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### Third platform — Easy Digital Downloads (EDD) adapter + checkout consent capture (1.0.0-alpha.33, 2026-06-14)
+Adds **Easy Digital Downloads 3.0+** as a third supported platform (after WooCommerce +
+FluentCart), implementing the [EDD SPEC](../specs/wwu-wb-edd-integration-SPEC.md) on the
+official-source-verified surface.
+- **`Platform\EddAdapter`** (`OrderDataSource`) — loads orders via `edd_get_order()` →
+  `EDD\Orders\Order`, normalises email / WP user id / status (`complete` → eligible) /
+  refund (`refunded`/`partially_refunded`) / line items (downloads, **category-aware** via
+  `download_category`) / billing country; ownership via `user_id`, guest via `payment_key`;
+  notes via `edd_add_note`; plugin meta in first-class EDD order meta (`edd_*_order_meta`,
+  prefix `wwu_wb_`). All calls guarded (version-tolerant), per-request cache.
+- **`Frontend\EddCheckoutConsent`** — renders the required conditional acknowledgement on
+  `edd_purchase_form_before_submit`, blocks via `edd_checkout_error_checks` (`edd_set_error`),
+  and captures on `edd_built_order` ($order_id + $_POST both available at checkout time, unlike
+  `edd_complete_purchase`). Reuses `WooCheckoutConsent::build_consent_entries` +
+  `ExemptionConfirmation` (durable-medium e-mail) + the PII-free immutable-log event;
+  `ConsentReader` reads the consent through the adapter, unchanged. **EDD exemptions are
+  category-aware** (better than FluentCart's product-ID-only).
+- **`PlatformRegistry`** registers `EddAdapter` (active when `edd_get_order` exists);
+  **`RequestsDashboard`** "Open order" link uses `edd_get_admin_url(...)` for EDD.
+- Smoke: `EddAdapter::eligible_status('complete') → 'completed'`. No new i18n strings (reuses
+  existing). **Needs a live EDD test.** Consent capture now spans **WooCommerce (classic +
+  block), FluentCart and EDD**.
+
+### Exemptions — WooCommerce block Checkout consent capture + EDD integration SPEC (1.0.0-alpha.32, 2026-06-14)
+Closes the last consent-capture gap (WooCommerce **block** Checkout) and plans the next
+platform (Easy Digital Downloads). Built on a verified official-docs research pass.
+- **`Frontend\WooBlockCheckoutConsent`** — captures consent on the block-based Checkout via the
+  official **Additional Checkout Fields API** (pure PHP, no JS build; WooCommerce **9.9.0+**).
+  Registers a required `checkbox` (location `order`) per conditional reason, gated by a
+  JSON-Schema `required`/`hidden` on `cart.items` so it only appears/requires when the cart
+  contains a tagged product (product-ID gating). WooCommerce validates it **server-side** on the
+  Store API request and persists it to order meta automatically; on
+  `woocommerce_store_api_checkout_order_processed` we read the value, re-derive the order's
+  conditional items via the verified order path (which **does** resolve categories), and run the
+  same capture as classic checkout (`build_consent_entries` + durable-medium e-mail + PII-free
+  log). Classic and block paths share the `_wwu_wb_consent` / `consent_logged` meta + idempotency
+  guard — never a double capture. No-op (fail-safe) on WC < 9.9 or the shortcode checkout.
+  Conditional product-id gating is cached in a transient, refreshed on settings save.
+- **Cross-platform parity reached** — exemption consent capture now works on **WooCommerce
+  (classic + block) and FluentCart**. No remaining WooCommerce capture gap.
+- **EDD integration SPEC** ([docs/specs/wwu-wb-edd-integration-SPEC.md](../specs/wwu-wb-edd-integration-SPEC.md))
+  — design for a third platform adapter (Easy Digital Downloads 3.0+), with the integration
+  surface verified against official EDD sources (`edd_get_order`/`EDD\Orders\*`, `edd_*_order_meta`,
+  `edd_purchase_form_*` + `edd_checkout_error_checks` + `edd_complete_purchase`, `download_category`,
+  `edd_get_admin_url`). EDD exemptions will be **category-aware** (unlike FluentCart). Not yet
+  implemented — awaiting confirmation.
+- **Needs a live block-checkout test.** The classic-checkout path is unchanged.
+
+### Exemptions management UX + full i18n (1.0.0-alpha.31, 2026-06-14)
+Merchant-experience pass on the Art. 59 exemptions ([SPEC](../specs/wwu-wb-exemptions-ux-SPEC.md)).
+The core withdrawal button is untouched; this only makes the *exemption* setup legible and
+fixes the Italian (and FR/ES/DE) translations the merchant saw in English.
+- **Grouped, kit-based settings** — the ~13 reasons are now organised into three WWU UI Kit
+  accordions (**Conditional — need consent / Unconditional — exempt by nature / Seal-based —
+  assess on return**), each reason with a `?` tooltip (the hint), a collapsible **example**
+  (Standard #12, input→outcome), and the existing product/category-ID inputs. `ExceptionTypes::group()`
+  derives the bucket from the existing flags; each reason ships an `example`.
+- **Guided "What do you sell?" helper** — five cards (event tickets / digital downloads &
+  recordings / live sessions like Zoom / immediate services / physical goods) explain the correct
+  Art. 59 reason and link to the matching group. Suggest-only — it never writes IDs (stays fail-safe).
+- **"What the consumer sees" preview** — under each conditional reason, a preview of the exact
+  checkbox wording + the durable-medium confirmation e-mail, built by the same code the consumer
+  e-mail uses (`ExemptionConfirmation::preview_html()`), so the preview can't drift.
+- **Exemptions status panel** — a UI Kit notice with badges: reasons configured, product/category
+  ID counts, IP-capture on/off, retention years, and when the IP-purge last ran
+  (`wwu_wb_consent_last_purge`).
+- **Landing** — a dedicated "Vendi biglietti, corsi o contenuti digitali?" section with the three
+  worked examples (events / recordings / Zoom) + the fail-safe line.
+- **Full i18n** — completed all previously-untranslated IT strings (incl. the exemption-reason
+  catalogue) + the new UX strings, in IT/EN/FR/ES/DE; `.mo` recompiled (target 0 untranslated).
+- Smoke suite `consent` extended (group derivation, every reason has an example, preview present
+  for conditional / empty for unconditional).
+
+### Exemptions — FluentCart checkout consent capture + canonical admin order URL (1.0.0-alpha.30, 2026-06-14)
+Brings the exemption consent capture to **FluentCart**, reaching cross-platform parity
+with WooCommerce, after FluentCart support answered our integration questions and each hook
+was **re-verified against the official docs**
+([analysis](../analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md) — the verification caught real
+discrepancies vs the support reply).
+- **`Frontend\FluentCartCheckoutConsent`** — mirrors `WooCheckoutConsent` on the verified
+  FluentCart hooks: render on `fluent_cart/after_payment_methods` (action), block on
+  `fluent_cart/checkout/validate_before_process` (filter → `WP_Error`), capture on
+  `fluent_cart/checkout/prepare_other_data` (action). The **authoritative capture** reads the
+  order's line items via the adapter's already-verified `order_items` path (never the
+  unverified Cart shape); render/validate read the cart **best-effort + guarded**, so if the
+  cart can't be read no checkbox is shown and checkout is not blocked — **fail-safe** (the
+  button stays; no path wrongly hides it). Reuses `WooCheckoutConsent::build_consent_entries`
+  + `Mail\ExemptionConfirmation` (durable-medium e-mail + dispatch log) + the PII-free
+  immutable-log event; `Frontend\ConsentReader` already reads it platform-agnostically.
+- **Note:** FluentCart line items don't resolve product categories, so FluentCart exemptions
+  match by **product ID only** (category tagging is a no-op there until categories are resolved).
+- **Canonical admin order URL** — `RequestsDashboard`'s "Open order (refund)" link now uses
+  the FluentCart Order model's `getViewUrl('admin')` (verified), falling back to the canonical
+  SPA route `admin.php?page=fluent-cart#/orders/{id}/view` (with the `/view` suffix). Still
+  filterable via `wwu_wb_order_admin_url`.
+- **Verified-hooks reference** recorded in the FluentCart analysis doc (confirmed vs docs:
+  checkout render/validate/prepare hooks, Order meta API, `getViewUrl`; discrepancies flagged:
+  `subscription_canceled` is `fluent_cart/payments/subscription_canceled`, `order_paid` does
+  not exist → use `order_paid_done`; `smartcode_fallback`/`editor_shortcodes` + `cancelRemoteSubscription`
+  `effective_from` are support-claim-only, deferred until live-tested).
+- **Needs a live FluentCart test** (whether a custom checkout field survives the FluentCart
+  submission is version-dependent). Until verified, the fail-safe holds. Remaining capture gap:
+  WooCommerce **block** Checkout (Store API).
+
+### Exemptions feature — P3: durable-medium confirmation + evidence, retention, GDPR (1.0.0-alpha.29, 2026-06-14)
+Closes the gaps an official-source legal review surfaced
+([legal note](../legal/wwu-wb-exemption-consent-evidence-NOTE.md), verified against EUR-Lex /
+Gazzetta Ufficiale / Garante + EDPB). The checkout capture (P2) proved *what* the consumer
+accepted; this phase delivers the rest the law actually requires.
+- **Durable-medium confirmation e-mail (`ExemptionConfirmation`)** — for the digital exemption
+  the confirmation on a durable medium is **constitutive** (Art. 16(1)(m)(iii) + 14(4)(b)(iii)
+  CRD = Art. 59(1)(o) CdC): without it the exemption does not hold. On order creation the
+  plugin now e-mails the consumer a confirmation **reproducing the verbatim consent +
+  acknowledgement** wording, before performance begins, for both conditional reasons, and
+  **logs the dispatch as its own immutable-log event** (`exemption_confirmation_sent`) — the
+  consent log alone does not prove delivery, so the two legal acts are logged separately.
+- **Retention + purge (`ConsentRetention`)** — a daily cron anonymises the IP on stored
+  consents once the configurable horizon (`retention_years`, default 10y per art. 2946 c.c.)
+  lapses. GDPR storage limitation (Art. 5(1)(e) + recital 39) requires a deletion horizon — an
+  "immutable forever" record is itself a defect. The consent immutable-log events are now
+  **PII-free** (text hash + reason + timestamp only); the IP lives **only** on the purgeable
+  order meta, so the hash chain stays verifiable while the personal data is erasable.
+- **Configurable IP capture** — `wwu_wb_settings['consent_capture_ip']` (default on). The IP is
+  the most exposed field under the GDPR strict-necessity test, so the merchant can turn it off;
+  the wording + hash + timestamp remain.
+- **GDPR privacy clause** — a second ready-to-paste clause (`consent_privacy`, IT/EN) covers the
+  consent-evidence processing with the correct basis: **legitimate interest (Art. 6(1)(f))**,
+  retention tied to the limitation period, Art. 21 objection, Art. 17(3)(e) limit — **not** GDPR
+  consent. Surfaced on the Compliance page.
+- **"Consent records" admin page** — a paginated, CSV-exportable list (order, reason, date,
+  text hash, IP/anonymised, confirmation status), framed as **evidence to discharge the burden
+  of proof, not a legally-named "register"**. CSV-injection guarded.
+- **Copy-everywhere** — Settings exemptions section, the conditional-reason hints, the dashboard
+  "why the button might not show", README + readme.txt FAQ/Privacy and the marketing docs now
+  state clearly: **physical products never need consent**; only the two conditional reasons do;
+  the plugin captures consent first, then hides the button; without consent the button stays
+  (fail-safe); and the stored consent is **evidence**, not a register.
+- **Legal note** `docs/legal/wwu-wb-exemption-consent-evidence-NOTE.md` — the verified basis the
+  above is built on (no named register; durable-medium constitutive for digital; 10y defensible
+  retention; lawful basis = legitimate interest; tamper-evident anchoring is best practice, not a
+  mandate). **Not legal advice** — re-verify the in-force CdC text on Normattiva (post D.Lgs.
+  26/2023) and have counsel validate the final copy.
+- Smoke suite `consent` extended (privacy clause present IT/EN; confirmation no-op guards).
+
+### Exemptions feature — P2: checkout consent capture (1.0.0-alpha.28, 2026-06-14)
+Second phase of the Art. 59 / Art. 16 exemptions feature
+([SPEC](../specs/wwu-wb-withdrawal-exemptions-SPEC.md)). The two **conditional**
+exemptions (digital immediate access 59_o, service fully performed 59_a) only remove
+the right of withdrawal when the consumer gave **prior express consent** AND
+**acknowledged losing the right**. This phase captures exactly that at the WooCommerce
+checkout, so those items are hidden from the button **only once the consent exists** —
+the missing half that made conditional reasons fail-safe (button always shown) until now.
+- **`WooCheckoutConsent`** (WooCommerce classic checkout) — detects conditional-exempt
+  items in the cart and renders one **required acknowledgement checkbox per reason**
+  (`woocommerce_review_order_before_submit`), blocks checkout server-side until each is
+  ticked (`woocommerce_checkout_process`), and stores the agreed wording **verbatim +
+  SHA-256 hash + timestamp + IP** on the order meta `_wwu_wb_consent`
+  (`woocommerce_checkout_create_order`). After the order exists it writes an order note +
+  an **append-only immutable-log event** (`exemption_consent`) as durable evidence.
+- **`ConsentText`** — statutory acknowledgement wording per consent kind (digital /
+  service), i18n in IT/EN/FR/ES/DE, fully overridable via the new **`wwu_wb_consent_text`**
+  filter. The exact text the consumer agreed to is stored on the order, so it is
+  reconstructable later even if the default changes.
+- **`ConsentReader`** — feeds the stored consent back to the evaluator through the
+  existing `wwu_wb_exemption_consent` filter, **platform-agnostically** (reads the order
+  meta via the adapter): WooCommerce works today; FluentCart will work as soon as its
+  checkout-capture hook lands (asked to the FluentCart team) — the read side needs no
+  further change.
+- **`ExemptionResolver::reason_for($product_id, $category_ids)`** — order-independent
+  reason lookup so the same per-reason map drives both the placed-order evaluator and the
+  cart at checkout.
+- **Settings copy updated** — the Exemptions section now states that the consent tick-box
+  is added automatically on the WooCommerce checkout and points at the `wwu_wb_consent_text`
+  filter.
+- **Smoke suite `consent`** — wording per kind + filterability, order-independent reason
+  lookup, and the storable-entry builder (only ticked + conditional reasons produce
+  entries). The evaluator round-trip stays covered by suite `exemptions`.
+- **Scope:** classic (PHP/shortcode) WooCommerce checkout. The block-based Checkout
+  (Store API) and FluentCart checkout capture are tracked follow-ups; until then those
+  paths keep the button (fail-safe). P3 (consumer-facing transparency copy + durable-medium
+  confirmation line in the email) is the next phase.
+
 ### Exemptions feature — P1: per-reason tagging + evaluator (1.0.0-alpha.27, 2026-06-14)
 First phase of the Art. 59 / Art. 16 product/service exemptions feature
 ([SPEC](../specs/wwu-wb-withdrawal-exemptions-SPEC.md)). The withdrawal right stays

@@ -499,49 +499,284 @@ final class SettingsPage {
 		$legacy_c = array_map( 'intval', (array) ( $exclusions['excluded_category_ids'] ?? array() ) );
 
 		echo '<h2>' . esc_html__( 'Exemptions (Art. 59)', 'wwu-withdrawal-button' ) . '</h2>';
-		echo '<p class="description" style="max-width:860px;">' . wp_kses_post( __( 'The right of withdrawal applies <strong>by default</strong> — including to digital products. Exempt a product or category only when a specific statutory exception actually applies. Enter product IDs and/or category IDs (comma-separated) under the matching reason. For the two <strong>conditional</strong> reasons the button is hidden only once the consumer\'s consent + acknowledgement is captured at checkout (a later release) — until then the button stays, which is the safe, compliant default. Seal-based reasons depend on the consumer unsealing after delivery, so they are never auto-hidden.', 'wwu-withdrawal-button' ) ) . '</p>';
+		echo '<p class="description" style="max-width:860px;">' . wp_kses_post( __( 'The right of withdrawal applies <strong>by default to every product</strong>, including digital goods and services. <strong>Physical products never need consent</strong> — the 14-day right just applies and no checkbox is ever shown for them. Only the <strong>two conditional exemptions</strong> (digital content with immediate access; a service fully performed) remove the right, and only when the consumer gives <strong>prior express consent</strong> AND <strong>acknowledges losing the right</strong>. Tag a product or category under a specific reason below by entering product IDs and/or category IDs (comma-separated).', 'wwu-withdrawal-button' ) ) . '</p>';
 
-		echo '<table class="form-table" role="presentation"><tbody>';
+		echo '<p class="description" style="max-width:860px;">' . wp_kses_post( __( 'For the two conditional reasons the plugin <strong>captures the consent first, then hides the button</strong>: on the <strong>WooCommerce checkout</strong> it adds the required tick-box automatically and stores the agreed wording on the order. Until that tick-box is confirmed — and on platforms/checkouts where capture is not available yet — the button <strong>stays visible, even on digital items</strong> (fail-safe toward the consumer\'s right). The plugin never hides the button "on digital" blindly. The acknowledgement wording is filterable via <code>wwu_wb_consent_text</code>. Seal-based reasons depend on the consumer unsealing after delivery, so they are never auto-hidden.', 'wwu-withdrawal-button' ) ) . '</p>';
 
+		echo '<p class="description" style="max-width:860px;">' . wp_kses_post( __( 'The stored consent is <strong>evidence to discharge your burden of proof</strong> (Art. 6(9) Dir. 2011/83/EU; GDPR accountability Art. 5(2)) — not a legally-named "register". For the <strong>digital</strong> exemption the law also requires you to send the consumer a confirmation on a <strong>durable medium</strong> (e-mail) before access begins, or the exemption does not hold. See the plugin\'s legal note for the full basis.', 'wwu-withdrawal-button' ) ) . '</p>';
+
+		$main_opt   = (array) get_option( 'wwu_wb_settings', array() );
+		$capture_ip = array_key_exists( 'consent_capture_ip', $main_opt ) ? ! empty( $main_opt['consent_capture_ip'] ) : true;
+
+		// Status panel + guided "what do you sell?" helper (WWU UI Kit notices).
+		$this->render_exemptions_status( $by_reason, $legacy_p, $legacy_c, $capture_ip );
+		$this->render_exemptions_helper();
+
+		// Bucket the reasons by behavioural group (derived from their flags).
+		$by_group = array(
+			'conditional'   => array(),
+			'unconditional' => array(),
+			'seal_based'    => array(),
+		);
 		foreach ( \WWU\WithdrawalButton\Domain\ExceptionTypes::all() as $id => $def ) {
-			if ( 'manual' === $id ) {
-				continue; // Rendered last, merged with any legacy flat lists.
-			}
-			$row = ( isset( $by_reason[ $id ] ) && is_array( $by_reason[ $id ] ) ) ? $by_reason[ $id ] : array();
-			$p   = implode( ', ', array_map( 'intval', (array) ( $row['products'] ?? array() ) ) );
-			$c   = implode( ', ', array_map( 'intval', (array) ( $row['categories'] ?? array() ) ) );
-
-			$tag = '';
-			if ( ! empty( $def['conditional'] ) ) {
-				$tag = ' <span style="display:inline-block;background:#fcf0d3;color:#7a4100;font-size:11px;padding:1px 7px;border-radius:10px;">' . esc_html__( 'needs consent', 'wwu-withdrawal-button' ) . '</span>';
-			} elseif ( ! empty( $def['seal_based'] ) ) {
-				$tag = ' <span style="display:inline-block;background:#e7e9ec;color:#444;font-size:11px;padding:1px 7px;border-radius:10px;">' . esc_html__( 'not auto-hidden', 'wwu-withdrawal-button' ) . '</span>';
-			}
-
-			echo '<tr><th scope="row" style="font-weight:600;">' . esc_html( (string) $def['label'] ) . $tag // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tag is static escaped markup.
-				. '<br><span style="font-weight:400;color:#666;font-size:12px;">' . esc_html( (string) $def['legal_ref'] ) . '</span></th><td>';
-			echo '<label style="margin-right:14px;">' . esc_html__( 'Product IDs', 'wwu-withdrawal-button' ) . ' <input type="text" class="regular-text" name="exempt[' . esc_attr( (string) $id ) . '][products]" value="' . esc_attr( $p ) . '" placeholder="' . esc_attr__( 'e.g. 12, 84', 'wwu-withdrawal-button' ) . '"></label>';
-			echo '<label>' . esc_html__( 'Category IDs', 'wwu-withdrawal-button' ) . ' <input type="text" class="regular-text" name="exempt[' . esc_attr( (string) $id ) . '][categories]" value="' . esc_attr( $c ) . '" placeholder="' . esc_attr__( 'e.g. 5', 'wwu-withdrawal-button' ) . '"></label>';
-			echo '<p class="description">' . esc_html( (string) $def['hint'] ) . '</p>';
-			echo '</td></tr>';
+			$by_group[ \WWU\WithdrawalButton\Domain\ExceptionTypes::group( (string) $id ) ][ (string) $id ] = $def;
 		}
 
-		// Manual / legacy catch-all reason.
-		$manual    = ( isset( $by_reason['manual'] ) && is_array( $by_reason['manual'] ) ) ? $by_reason['manual'] : array();
-		$manual_p  = array_values( array_unique( array_merge( array_map( 'intval', (array) ( $manual['products'] ?? array() ) ), $legacy_p ) ) );
-		$manual_c  = array_values( array_unique( array_merge( array_map( 'intval', (array) ( $manual['categories'] ?? array() ) ), $legacy_c ) ) );
-		echo '<tr><th scope="row" style="font-weight:600;">' . esc_html__( 'Manually excluded (no specific reason)', 'wwu-withdrawal-button' ) . '</th><td>';
-		echo '<label style="margin-right:14px;">' . esc_html__( 'Product IDs', 'wwu-withdrawal-button' ) . ' <input type="text" class="regular-text" name="exempt[manual][products]" value="' . esc_attr( implode( ', ', $manual_p ) ) . '"></label>';
-		echo '<label>' . esc_html__( 'Category IDs', 'wwu-withdrawal-button' ) . ' <input type="text" class="regular-text" name="exempt[manual][categories]" value="' . esc_attr( implode( ', ', $manual_c ) ) . '"></label>';
-		echo '<p class="description">' . esc_html__( 'Catch-all. Prefer a specific reason above so the exemption is auditable. (Migrated from any older exclusion list.)', 'wwu-withdrawal-button' ) . '</p>';
-		echo '</td></tr>';
+		$groups = array(
+			'conditional'   => array(
+				__( 'Conditional — these need the consumer\'s consent', 'wwu-withdrawal-button' ),
+				__( 'Tag here only digital content with immediate access and services fully performed. The button is hidden ONLY after the consumer consents at checkout; otherwise it stays (fail-safe).', 'wwu-withdrawal-button' ),
+				true,
+			),
+			'unconditional' => array(
+				__( 'Unconditional — exempt by nature (no consent)', 'wwu-withdrawal-button' ),
+				__( 'These have no right of withdrawal by law (custom-made, perishable, dated events, …). Tagged products hide the button with no checkbox.', 'wwu-withdrawal-button' ),
+				false,
+			),
+			'seal_based'    => array(
+				__( 'Seal-based — assess on return (never auto-hidden)', 'wwu-withdrawal-button' ),
+				__( 'These depend on the consumer unsealing after delivery, which cannot be known at order time. Tag them, but the button stays; assess on return.', 'wwu-withdrawal-button' ),
+				false,
+			),
+		);
 
-		// Legacy crude auto-detect toggle.
-		echo '<tr><th scope="row">' . esc_html__( 'Auto-exclude delivered digital (legacy)', 'wwu-withdrawal-button' ) . '</th><td>';
-		echo '<label><input type="checkbox" name="exempt_auto_detect" value="1" ' . checked( $auto, true, false ) . '> ' . esc_html__( 'Treat virtual/downloadable items on completed orders as exempt. OFF by default — the proper path is the "Digital content with immediate access" reason with consent capture.', 'wwu-withdrawal-button' ) . '</label>';
-		echo '</td></tr>';
+		foreach ( $groups as $gkey => $g ) {
+			$ids        = $by_group[ $gkey ];
+			$configured = 0;
+			foreach ( array_keys( $ids ) as $rid ) {
+				$r = ( isset( $by_reason[ $rid ] ) && is_array( $by_reason[ $rid ] ) ) ? $by_reason[ $rid ] : array();
+				if ( ! empty( $r['products'] ) || ! empty( $r['categories'] ) || ( 'manual' === $rid && ( ! empty( $legacy_p ) || ! empty( $legacy_c ) ) ) ) {
+					++$configured;
+				}
+			}
 
-		echo '</tbody></table>';
+			echo '<details class="wwu-ui-accordion" id="wwu-wb-group-' . esc_attr( $gkey ) . '"' . ( $g[2] ? ' open' : '' ) . '>';
+			echo '<summary class="wwu-ui-accordion-header"><span>' . esc_html( $g[0] ) . '</span><span class="wwu-ui-accordion-meta">';
+			if ( $configured > 0 ) {
+				echo '<span class="wwu-ui-badge success-soft">' . esc_html(
+					sprintf(
+						/* translators: %d: number of reasons with products/categories tagged. */
+						_n( '%d configured', '%d configured', $configured, 'wwu-withdrawal-button' ),
+						$configured
+					)
+				) . '</span> ';
+			}
+			echo '<span class="wwu-ui-badge neutral">' . esc_html( (string) count( $ids ) ) . '</span></span></summary>';
+			echo '<div class="wwu-ui-accordion-body">';
+			echo '<p class="description">' . esc_html( $g[1] ) . '</p>';
+			foreach ( $ids as $rid => $rdef ) {
+				$this->render_reason_block( (string) $rid, $rdef, $by_reason, $legacy_p, $legacy_c );
+			}
+			echo '</div></details>';
+		}
+
+		// Advanced: legacy auto-detect + IP capture toggle.
+		$this->render_exemptions_advanced( $auto, $capture_ip );
+	}
+
+	/**
+	 * Render a single exemption-reason block (label + tooltip + example + inputs +,
+	 * for conditional reasons, a "what the consumer sees" preview). Used inside the
+	 * grouped accordions. The 'manual' reason also folds in any legacy flat lists.
+	 *
+	 * @param string              $id        Reason id.
+	 * @param array<string,mixed> $def       Reason definition (ExceptionTypes::all()).
+	 * @param array<string,mixed> $by_reason Saved per-reason map.
+	 * @param int[]               $legacy_p  Legacy flat product ids (for 'manual').
+	 * @param int[]               $legacy_c  Legacy flat category ids (for 'manual').
+	 * @return void
+	 */
+	private function render_reason_block( string $id, array $def, array $by_reason, array $legacy_p, array $legacy_c ): void {
+		$row = ( isset( $by_reason[ $id ] ) && is_array( $by_reason[ $id ] ) ) ? $by_reason[ $id ] : array();
+		$p   = array_map( 'intval', (array) ( $row['products'] ?? array() ) );
+		$c   = array_map( 'intval', (array) ( $row['categories'] ?? array() ) );
+		if ( 'manual' === $id ) {
+			$p = array_values( array_unique( array_merge( $p, $legacy_p ) ) );
+			$c = array_values( array_unique( array_merge( $c, $legacy_c ) ) );
+		}
+
+		$tag = '';
+		if ( ! empty( $def['conditional'] ) ) {
+			$tag = ' <span class="wwu-ui-badge warning-soft wwu-ui-badge-sm">' . esc_html__( 'needs consent', 'wwu-withdrawal-button' ) . '</span>';
+		} elseif ( ! empty( $def['seal_based'] ) ) {
+			$tag = ' <span class="wwu-ui-badge neutral wwu-ui-badge-sm">' . esc_html__( 'not auto-hidden', 'wwu-withdrawal-button' ) . '</span>';
+		}
+
+		$hint = (string) ( $def['hint'] ?? '' );
+
+		echo '<div class="wwu-wb-reason" id="wwu-wb-reason-' . esc_attr( $id ) . '" style="border:1px solid #e0e0e0;border-radius:4px;padding:12px 14px;margin:0 0 10px;background:#fff;">';
+		echo '<p style="margin:0 0 8px;font-weight:600;">' . esc_html( (string) ( $def['label'] ?? $id ) ) . $tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tag is static escaped kit markup.
+		if ( '' !== $hint ) {
+			echo ' <span class="wwu-wb-help" tabindex="0" title="' . esc_attr( $hint ) . '" style="display:inline-block;width:16px;height:16px;line-height:16px;text-align:center;border-radius:50%;background:#e0e0e0;color:#333;font-size:11px;cursor:help;">?</span>';
+		}
+		echo '<br><span style="font-weight:400;color:#666;font-size:12px;">' . esc_html( (string) ( $def['legal_ref'] ?? '' ) ) . '</span></p>';
+
+		echo '<label style="margin-right:14px;">' . esc_html__( 'Product IDs', 'wwu-withdrawal-button' ) . ' <input type="text" class="regular-text" name="exempt[' . esc_attr( $id ) . '][products]" value="' . esc_attr( implode( ', ', $p ) ) . '" placeholder="' . esc_attr__( 'e.g. 12, 84', 'wwu-withdrawal-button' ) . '"></label>';
+		echo '<label>' . esc_html__( 'Category IDs', 'wwu-withdrawal-button' ) . ' <input type="text" class="regular-text" name="exempt[' . esc_attr( $id ) . '][categories]" value="' . esc_attr( implode( ', ', $c ) ) . '" placeholder="' . esc_attr__( 'e.g. 5', 'wwu-withdrawal-button' ) . '"></label>';
+
+		if ( ! empty( $def['example'] ) ) {
+			echo '<details style="margin-top:8px;"><summary style="cursor:pointer;color:#2271b1;">' . esc_html__( 'Show example', 'wwu-withdrawal-button' ) . '</summary><p class="description" style="margin:6px 0 0;">' . esc_html( (string) $def['example'] ) . '</p></details>';
+		}
+
+		if ( ! empty( $def['conditional'] ) ) {
+			echo '<p class="description" style="color:#1d6b2f;margin-top:8px;"><strong>' . esc_html__( 'How the plugin enforces this:', 'wwu-withdrawal-button' ) . '</strong> ' . esc_html__( 'on the WooCommerce / FluentCart checkout a required acknowledgement tick-box is added automatically. The button stays visible until the consumer ticks it; only then is it hidden for this item. On other checkouts/platforms the button stays (fail-safe). For the digital reason you must also deliver a durable-medium (e-mail) confirmation to the consumer before access begins.', 'wwu-withdrawal-button' ) . '</p>';
+
+			$consent_text = \WWU\WithdrawalButton\Domain\ConsentText::for_reason( $id );
+			$email_html   = \WWU\WithdrawalButton\Mail\ExemptionConfirmation::preview_html( $id );
+			if ( '' !== $consent_text ) {
+				echo '<details style="margin-top:6px;"><summary style="cursor:pointer;color:#2271b1;">' . esc_html__( 'Preview what the consumer sees', 'wwu-withdrawal-button' ) . '</summary>';
+				echo '<div style="border-left:3px solid #2271b1;padding:8px 12px;background:#f6f7f7;margin-top:6px;">';
+				echo '<p style="margin:0 0 4px;"><strong>' . esc_html__( 'At checkout, the buyer must tick:', 'wwu-withdrawal-button' ) . '</strong></p>';
+				echo '<p style="margin:0 0 10px;font-style:italic;">&ldquo;' . esc_html( $consent_text ) . '&rdquo;</p>';
+				if ( '' !== $email_html ) {
+					echo '<p style="margin:0 0 4px;"><strong>' . esc_html__( 'And receives this confirmation e-mail:', 'wwu-withdrawal-button' ) . '</strong></p>';
+					echo '<div style="background:#fff;border:1px solid #e0e0e0;padding:8px 10px;">' . $email_html . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- preview_html() escapes its content internally.
+				}
+				echo '</div></details>';
+			}
+		}
+
+		echo '</div>';
+	}
+
+	/**
+	 * Render the exemptions status / health panel (UI Kit notice + badges).
+	 *
+	 * @param array<string,mixed> $by_reason  Saved per-reason map.
+	 * @param int[]               $legacy_p   Legacy flat product ids.
+	 * @param int[]               $legacy_c   Legacy flat category ids.
+	 * @param bool                $capture_ip Whether IP capture is on.
+	 * @return void
+	 */
+	private function render_exemptions_status( array $by_reason, array $legacy_p, array $legacy_c, bool $capture_ip ): void {
+		$reasons_configured = 0;
+		$product_ids        = 0;
+		$category_ids       = 0;
+		foreach ( $by_reason as $rid => $sets ) {
+			if ( ! is_array( $sets ) ) {
+				continue;
+			}
+			$pn = count( array_filter( array_map( 'intval', (array) ( $sets['products'] ?? array() ) ) ) );
+			$cn = count( array_filter( array_map( 'intval', (array) ( $sets['categories'] ?? array() ) ) ) );
+			if ( $pn > 0 || $cn > 0 ) {
+				++$reasons_configured;
+			}
+			$product_ids  += $pn;
+			$category_ids += $cn;
+		}
+		$product_ids  += count( $legacy_p );
+		$category_ids += count( $legacy_c );
+
+		$years      = max( 1, min( 30, (int) ( Settings::main()['retention_years'] ?? 10 ) ) );
+		$last_purge = (string) get_option( 'wwu_wb_consent_last_purge', '' );
+
+		echo '<div class="wwu-ui-notice info" style="margin:12px 0;"><p style="margin:0 0 6px;"><strong>' . esc_html__( 'Exemptions status', 'wwu-withdrawal-button' ) . '</strong></p>';
+		echo '<p style="margin:0;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">';
+
+		echo '<span class="wwu-ui-badge ' . ( $reasons_configured > 0 ? 'success-soft' : 'neutral' ) . '">' . esc_html(
+			sprintf(
+				/* translators: %d: number of reasons configured. */
+				_n( '%d reason configured', '%d reasons configured', $reasons_configured, 'wwu-withdrawal-button' ),
+				$reasons_configured
+			)
+		) . '</span>';
+
+		echo '<span class="wwu-ui-badge neutral">' . esc_html(
+			sprintf(
+				/* translators: 1: product id count, 2: category id count. */
+				__( '%1$d product IDs, %2$d category IDs', 'wwu-withdrawal-button' ),
+				$product_ids,
+				$category_ids
+			)
+		) . '</span>';
+
+		echo '<span class="wwu-ui-badge ' . ( $capture_ip ? 'info-soft' : 'neutral' ) . '">' . esc_html(
+			$capture_ip ? __( 'IP capture: on', 'wwu-withdrawal-button' ) : __( 'IP capture: off', 'wwu-withdrawal-button' )
+		) . '</span>';
+
+		echo '<span class="wwu-ui-badge neutral">' . esc_html(
+			sprintf(
+				/* translators: %d: retention years. */
+				__( 'Retention: %d years', 'wwu-withdrawal-button' ),
+				$years
+			)
+		) . '</span>';
+
+		$purge_label = '' !== $last_purge
+			? sprintf( /* translators: %s: human time diff. */ __( 'IP purge last ran %s ago', 'wwu-withdrawal-button' ), human_time_diff( (int) strtotime( $last_purge ) ) )
+			: __( 'IP purge: not run yet (runs daily)', 'wwu-withdrawal-button' );
+		echo '<span class="wwu-ui-badge neutral">' . esc_html( $purge_label ) . '</span>';
+
+		echo '</p></div>';
+	}
+
+	/**
+	 * Render the guided "What do you sell?" helper (UI Kit notice + nested accordions).
+	 * Suggest-only: it explains the legal mapping and points to the matching reason
+	 * group; it never writes IDs for the merchant.
+	 *
+	 * @return void
+	 */
+	private function render_exemptions_helper(): void {
+		$cards = array(
+			array(
+				__( 'Event tickets (a specific date)', 'wwu-withdrawal-button' ),
+				__( 'A ticket for an event tied to a specific date has NO right of withdrawal (Art. 59(1)(n)). Tag it under "Accommodation / transport / leisure on a specific date" in the Unconditional group — the button is hidden, no checkbox.', 'wwu-withdrawal-button' ),
+				'unconditional',
+			),
+			array(
+				__( 'Digital downloads & recordings', 'wwu-withdrawal-button' ),
+				__( 'Content the buyer downloads or streams immediately is a CONDITIONAL exemption (Art. 59(1)(o)): tag it under "Digital content with immediate access" in the Conditional group. The buyer sees a consent checkbox and receives a durable-medium e-mail; only then is the button hidden. (A subscription/membership: the initial order keeps the right; the digital access is the 59(1)(o) part.)', 'wwu-withdrawal-button' ),
+				'conditional',
+			),
+			array(
+				__( 'Live sessions (e.g. Zoom)', 'wwu-withdrawal-button' ),
+				__( 'A dated live session (e.g. a webinar on a fixed date) → treat like an event ticket: "leisure on a specific date" (Unconditional). A session that simply starts immediately, with no fixed event date → "Service fully performed" (Conditional, needs consent).', 'wwu-withdrawal-button' ),
+				'conditional',
+			),
+			array(
+				__( 'Services performed immediately', 'wwu-withdrawal-button' ),
+				__( 'A service that begins at once and is fully performed → "Service fully performed" (Art. 59(1)(a), Conditional). The buyer consents at checkout; the exemption applies only once the service is fully performed (partial → pro-rata, the right survives).', 'wwu-withdrawal-button' ),
+				'conditional',
+			),
+			array(
+				__( 'Physical goods', 'wwu-withdrawal-button' ),
+				__( 'Nothing to do — physical products always keep the 14-day right and always show the button. Only tag the specific exceptions (custom-made, perishable, sealed hygiene) under the matching reason.', 'wwu-withdrawal-button' ),
+				'',
+			),
+		);
+
+		echo '<div class="wwu-ui-notice" style="margin:12px 0;"><p style="margin:0 0 8px;"><strong>' . esc_html__( 'What do you sell? (quick guide)', 'wwu-withdrawal-button' ) . '</strong></p>';
+		foreach ( $cards as $card ) {
+			echo '<details style="margin:0 0 6px;border:1px solid #e0e0e0;border-radius:4px;background:#fff;">';
+			echo '<summary style="cursor:pointer;padding:8px 12px;font-weight:600;">' . esc_html( $card[0] ) . '</summary>';
+			echo '<div style="padding:0 12px 10px;">';
+			echo '<p class="description" style="margin:4px 0;">' . esc_html( $card[1] ) . '</p>';
+			if ( '' !== $card[2] ) {
+				echo '<p style="margin:6px 0 0;"><a href="#wwu-wb-group-' . esc_attr( $card[2] ) . '">' . esc_html__( '→ Go to the matching group below', 'wwu-withdrawal-button' ) . '</a></p>';
+			}
+			echo '</div></details>';
+		}
+		echo '</div>';
+	}
+
+	/**
+	 * Render the advanced exemption toggles (legacy auto-detect + IP capture).
+	 *
+	 * @param bool $auto       Whether legacy auto-detect is on.
+	 * @param bool $capture_ip Whether IP capture is on.
+	 * @return void
+	 */
+	private function render_exemptions_advanced( bool $auto, bool $capture_ip ): void {
+		echo '<details class="wwu-ui-accordion" style="margin-top:10px;">';
+		echo '<summary class="wwu-ui-accordion-header"><span>' . esc_html__( 'Advanced (legacy auto-detect + privacy)', 'wwu-withdrawal-button' ) . '</span></summary>';
+		echo '<div class="wwu-ui-accordion-body">';
+
+		echo '<p style="margin:0 0 10px;"><label><input type="checkbox" name="exempt_auto_detect" value="1" ' . checked( $auto, true, false ) . '> <strong>' . esc_html__( 'Auto-exclude delivered digital (legacy)', 'wwu-withdrawal-button' ) . '</strong></label><br><span class="description">' . esc_html__( 'Treat virtual/downloadable items on completed orders as exempt. OFF by default — the proper path is the "Digital content with immediate access" reason with consent capture.', 'wwu-withdrawal-button' ) . '</span></p>';
+
+		echo '<p style="margin:0;"><label><input type="checkbox" name="consent_capture_ip" value="1" ' . checked( $capture_ip, true, false ) . '> <strong>' . esc_html__( 'Store consumer IP with the consent', 'wwu-withdrawal-button' ) . '</strong></label><br><span class="description">' . esc_html__( 'Record the IP address alongside each captured consent as corroborating evidence. Stored only on the order (anonymised automatically after the retention period), never in the immutable log. Turn off to minimise personal data — the agreed wording, its hash and the timestamp remain.', 'wwu-withdrawal-button' ) . '</span></p>';
+
+		echo '</div></details>';
 	}
 
 	/**
@@ -563,6 +798,8 @@ final class SettingsPage {
 		$settings['send_pdf']        = Sanitizer::bool( $_POST['send_pdf'] ?? '' );
 		$settings['merchant_email']  = sanitize_email( (string) ( $_POST['merchant_email'] ?? '' ) );
 		$settings['retention_years'] = max( 1, min( 30, (int) ( $_POST['retention_years'] ?? 10 ) ) );
+		// IP capture for the exemption-consent evidence (GDPR strict-necessity → configurable).
+		$settings['consent_capture_ip'] = Sanitizer::bool( $_POST['consent_capture_ip'] ?? '' );
 		// Consumer guidance: window is clamped to the 14-day legal minimum; custom
 		// text replaces the default block (basic HTML allowed, merchant-owned).
 		$settings['withdrawal_window_days'] = max( 14, min( 365, (int) ( $_POST['withdrawal_window_days'] ?? 14 ) ) );
@@ -603,6 +840,8 @@ final class SettingsPage {
 		$exclusions['auto_detect_virtual'] = Sanitizer::bool( $_POST['exempt_auto_detect'] ?? '' );
 		unset( $exclusions['excluded_product_ids'], $exclusions['excluded_category_ids'] );
 		update_option( 'wwu_wb_exclusions', $exclusions );
+		// The block-checkout field gating caches the conditional product ids; refresh it.
+		\WWU\WithdrawalButton\Frontend\WooBlockCheckoutConsent::flush_cache();
 
 		// Timestamp provider.
 		$timestamp = (array) get_option( 'wwu_wb_timestamp', array() );

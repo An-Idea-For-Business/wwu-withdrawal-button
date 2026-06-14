@@ -142,12 +142,32 @@ final class Plugin {
 
 			// Record reimbursements against a withdrawal in the evidence log.
 			( new \WWU\WithdrawalButton\Platform\WooRefundRecorder() )->register();
+
+			// Capture the consumer's consent + acknowledgement at checkout for the two
+			// conditional exemptions (digital immediate / service performed). Classic
+			// checkout (shortcode) + block Checkout (Store API, Additional Checkout
+			// Fields API) — mutually exclusive per order, sharing the same order meta.
+			( new \WWU\WithdrawalButton\Frontend\WooCheckoutConsent() )->register();
+			( new \WWU\WithdrawalButton\Frontend\WooBlockCheckoutConsent() )->register();
 		}
 
-		// FluentCart portal injection when FluentCart is active.
+		// FluentCart portal injection + checkout consent capture when FluentCart is active.
 		if ( null !== $services->platforms->get( 'fluentcart' ) ) {
 			( new \WWU\WithdrawalButton\Frontend\FluentCartPortal() )->register();
+			( new \WWU\WithdrawalButton\Frontend\FluentCartCheckoutConsent() )->register();
 		}
+
+		// EDD checkout consent capture when Easy Digital Downloads is active.
+		if ( null !== $services->platforms->get( 'edd' ) ) {
+			( new \WWU\WithdrawalButton\Frontend\EddCheckoutConsent() )->register();
+		}
+
+		// Feed captured exemption consent (any platform's order meta) back to the
+		// evaluator so conditional exemptions hide the button only once consent exists.
+		( new \WWU\WithdrawalButton\Frontend\ConsentReader() )->register();
+
+		// Daily retention purge: anonymise the IP on stored consents past the horizon.
+		( new ConsentRetention() )->register();
 
 		// Frontend assets (gated internally; the enqueue hook only fires on the front end).
 		( new Assets() )->register();

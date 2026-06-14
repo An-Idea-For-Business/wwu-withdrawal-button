@@ -119,6 +119,9 @@ final class Install {
 		// here is harmless and ensures they take effect as soon as they exist.
 		flush_rewrite_rules( false );
 
+		// Daily consent-retention purge (GDPR storage limitation).
+		ConsentRetention::schedule();
+
 		// Invalidate any Complianz blocked-scripts cache so our marker is honoured.
 		\WWU\WithdrawalButton\Compat\Complianz::bust_cache();
 	}
@@ -159,6 +162,7 @@ final class Install {
 				'receipt_link_enabled' => true,
 				'merchant_email'       => get_option( 'admin_email' ),
 				'retention_years'      => 10,
+				'consent_capture_ip'   => true,
 				'go_live_date'         => WWU_WB_GO_LIVE_DATE,
 				'custom_css'           => '',
 			),
@@ -294,6 +298,7 @@ final class Install {
 	 */
 	public static function deactivate( bool $network_wide ): void {
 		wp_clear_scheduled_hook( self::CRON_COMPLETE_NETWORK );
+		ConsentRetention::unschedule();
 		\WWU\WithdrawalButton\Timestamp\TimestampService::clear_cron();
 		flush_rewrite_rules( false );
 	}

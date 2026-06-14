@@ -53,7 +53,7 @@ final class ComplianceStatusPage {
 		echo '<p><strong>' . esc_html__( 'Pre-contractual info shortcode:', 'wwu-withdrawal-button' ) . '</strong> <code>[wwu_wb_info type="precontractual" lang="it"]</code></p>';
 
 		$lang = strtolower( substr( determine_locale(), 0, 2 ) );
-		foreach ( array( 'precontractual', 'terms', 'privacy' ) as $type ) {
+		foreach ( array( 'precontractual', 'terms', 'privacy', 'consent_privacy' ) as $type ) {
 			echo '<details class="wwu-wb-clause"><summary>' . esc_html( $this->clause_label( $type ) ) . '</summary>';
 			echo '<textarea readonly rows="6" style="width:100%;">' . esc_textarea( ClauseLibrary::get( $type, $lang ) ) . '</textarea>';
 			echo '</details>';
@@ -146,6 +146,8 @@ final class ComplianceStatusPage {
 				return __( 'General terms clause', 'wwu-withdrawal-button' );
 			case 'privacy':
 				return __( 'Privacy policy clause (withdrawal log)', 'wwu-withdrawal-button' );
+			case 'consent_privacy':
+				return __( 'Privacy policy clause (exemption-consent evidence)', 'wwu-withdrawal-button' );
 			case 'precontractual':
 			default:
 				return __( 'Pre-contractual information clause', 'wwu-withdrawal-button' );
