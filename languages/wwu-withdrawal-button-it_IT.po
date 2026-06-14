@@ -1,0 +1,1463 @@
+# Copyright (C) 2026 WebWakeUp
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: WWU Withdrawal Button\n"
+"Report-Msgid-Bugs-To: https://github.com/An-Idea-For-Business/wwu-withdrawal-button\n"
+"POT-Creation-Date: 2026-06-13 23:58+0000\n"
+"PO-Revision-Date: 2026-06-14 00:00+0000\n"
+"Last-Translator: WebWakeUp <info@webwakeup.it>\n"
+"Language-Team: WebWakeUp\n"
+"Language: it_IT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: WWU translate workflow\n"
+"X-Domain: wwu-withdrawal-button\n"
+
+#: src/Admin/AdminAssets.php:69
+#: src/Admin/InspectorPage.php:55
+msgid "Polling: on"
+msgstr "Polling: attivo"
+
+#: src/Admin/AdminAssets.php:70
+msgid "Polling: off"
+msgstr "Polling: disattivo"
+
+#: src/Admin/AdminAssets.php:71
+#: src/Admin/InspectorPage.php:57
+msgid "Pause"
+msgstr "Pausa"
+
+#: src/Admin/AdminAssets.php:72
+msgid "Resume"
+msgstr "Riprendi"
+
+#: src/Admin/AdminAssets.php:73
+msgid "Copied."
+msgstr "Copiato."
+
+#: src/Admin/AdminAssets.php:74
+msgid "Running…"
+msgstr "In esecuzione…"
+
+#: src/Admin/AdminController.php:125
+msgid "WWU Withdrawal Button: the PDF library was not found, so the receipt is sent by email only (no PDF attachment). This is fine to go live, but to also attach a PDF copy, install the plugin using the official packaged ZIP (it bundles the library) instead of a plain source copy."
+msgstr "WWU Withdrawal Button: la libreria PDF non è stata trovata; la ricevuta viene inviata solo via e-mail (senza allegato PDF). Il plugin è comunque operativo, ma per allegare anche una copia PDF installa il plugin tramite il file ZIP ufficiale (che include la libreria) anziché una copia del solo codice sorgente."
+
+#: src/Admin/AdminController.php:142
+msgid "WWU Withdrawal Button: a withdrawal acknowledgement email could not be sent. The consumer is legally entitled to receive it. Check your site's email/SMTP configuration and resend from the Requests page."
+msgstr "WWU Withdrawal Button: non è stato possibile inviare l'e-mail di conferma della revoca. Il consumatore ha diritto a riceverla per legge. Verifica la configurazione e-mail/SMTP del sito e invia nuovamente dall'elenco Richieste."
+
+#: src/Admin/AdminController.php:154
+#: src/Admin/AdminController.php:155
+msgid "Withdrawal Button"
+msgstr "Pulsante di recesso"
+
+#: src/Admin/AdminController.php:165
+#: src/Admin/AdminController.php:166
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: src/Admin/AdminController.php:174
+#: src/Admin/DashboardPage.php:194
+#: src/Admin/RequestsDashboard.php:69
+msgid "Withdrawal requests"
+msgstr "Richieste di recesso"
+
+#: src/Admin/AdminController.php:175
+msgid "Requests"
+msgstr "Richieste"
+
+#: src/Admin/AdminController.php:183
+#: src/Admin/AdminController.php:184
+#: src/Admin/ComplianceStatusPage.php:43
+msgid "Compliance"
+msgstr "Conformità"
+
+#: src/Admin/AdminController.php:192
+#: src/Admin/AdminController.php:193
+#: src/Admin/DashboardPage.php:192
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: src/Admin/AdminController.php:201
+#: src/Admin/AdminController.php:202
+msgid "Debug Inspector"
+msgstr "Debug Inspector"
+
+#: src/Admin/ComplianceStatusPage.php:114
+msgid "No published withdrawal form page is configured. Guests (and FluentCart customers) cannot withdraw. Create a page with the [wwu_wb_form] shortcode and set it in Settings."
+msgstr "Nessuna pagina del modulo di recesso pubblicata è configurata. Gli ospiti (e i clienti FluentCart) non possono esercitare il recesso. Crea una pagina con lo shortcode [wwu_wb_form] e impostala nelle Impostazioni."
+
+#: src/Admin/ComplianceStatusPage.php:118
+msgid "Complianz is active. The withdrawal flow is functional (consent-exempt); the plugin marks its scripts so they are not blocked. Verify on the front end after first activation."
+msgstr "Complianz è attivo. Il flusso di recesso è funzionante (esente da consenso); il plugin contrassegna i propri script affinché non vengano bloccati. Verifica sul sito pubblico dopo la prima attivazione."
+
+#: src/Admin/ComplianceStatusPage.php:121
+msgid "TranslatePress is active. Statutory button labels are marked data-no-translation so they are not machine-translated; confirm the per-language wording is correct."
+msgstr "TranslatePress è attivo. Le etichette di legge del pulsante sono contrassegnate con data-no-translation in modo da non essere tradotte automaticamente; verifica che la formulazione per ogni lingua sia corretta."
+
+#: src/Admin/ComplianceStatusPage.php:124
+msgid "A page-cache plugin is active. Exclude the My Account / withdrawal form pages from full-page cache so the button reflects the live state."
+msgstr "È attivo un plugin di cache di pagina. Escludi le pagine Il mio account / modulo di recesso dalla cache di pagina intera in modo che il pulsante rispecchi lo stato in tempo reale."
+
+#: src/Admin/ComplianceStatusPage.php:130
+msgid "Environment notes"
+msgstr "Note sull'ambiente"
+
+#: src/Admin/ComplianceStatusPage.php:146
+msgid "General terms clause"
+msgstr "Clausola nelle condizioni generali"
+
+#: src/Admin/ComplianceStatusPage.php:148
+msgid "Privacy policy clause (withdrawal log)"
+msgstr "Clausola nell'informativa privacy (registro recessi)"
+
+#: src/Admin/ComplianceStatusPage.php:151
+msgid "Pre-contractual information clause"
+msgstr "Clausola nelle informazioni precontrattuali"
+
+#: src/Admin/ComplianceStatusPage.php:49
+msgid "Documents to update (requirement 6)"
+msgstr "Documenti da aggiornare (requisito 6)"
+
+#: src/Admin/ComplianceStatusPage.php:50
+msgid "The withdrawal button is additional to the Annex I-B model form, which stays mandatory. Update these documents and place the model form in your pre-contractual information."
+msgstr "Il pulsante di recesso si aggiunge al modulo tipo Allegato I-B, che rimane obbligatorio. Aggiorna questi documenti e inserisci il modulo tipo nelle informazioni precontrattuali."
+
+#: src/Admin/ComplianceStatusPage.php:52
+msgid "Annex I-B model form shortcode:"
+msgstr "Shortcode del modulo tipo Allegato I-B:"
+
+#: src/Admin/ComplianceStatusPage.php:53
+msgid "Pre-contractual info shortcode:"
+msgstr "Shortcode delle informazioni precontrattuali:"
+
+#: src/Admin/ComplianceStatusPage.php:75
+msgid "Legal go-live"
+msgstr "Entrata in vigore dell'obbligo"
+
+#: src/Admin/ComplianceStatusPage.php:84
+msgid "The obligation applies from %1$s — %2$d days to go (for contracts concluded on/after that date)."
+msgstr "L'obbligo si applica a partire dal %1$s — %2$d giorni alla scadenza (per i contratti conclusi da tale data in poi)."
+
+#: src/Admin/ComplianceStatusPage.php:93
+msgid "The obligation has been in effect since %s."
+msgstr "L'obbligo è in vigore dal %s."
+
+#: src/Admin/DashboardPage.php:102
+msgid "E-commerce platform detected"
+msgstr "Piattaforma e-commerce rilevata"
+
+#: src/Admin/DashboardPage.php:103
+msgid "active."
+msgstr "attiva."
+
+#: src/Admin/DashboardPage.php:103
+msgid "Activate WooCommerce or FluentCart."
+msgstr "Attiva WooCommerce o FluentCart."
+
+#: src/Admin/DashboardPage.php:111
+#: src/Admin/DashboardPage.php:118
+msgid "Withdrawal form page"
+msgstr "Pagina del modulo di recesso"
+
+#: src/Admin/DashboardPage.php:112
+msgid "Published — this is the public page guests (buyers without an account) use to start a withdrawal."
+msgstr "Pubblicata — è la pagina pubblica che gli ospiti (acquirenti senza account) utilizzano per avviare il recesso."
+
+#: src/Admin/DashboardPage.php:113
+msgid "View page"
+msgstr "Visualizza pagina"
+
+#: src/Admin/DashboardPage.php:119
+msgid "No published form page yet. Guests without an account need one. Re-activate the plugin to create it automatically, or publish a page containing the [wwu_wb_form] shortcode."
+msgstr "Nessuna pagina modulo pubblicata. Gli ospiti senza account ne hanno bisogno. Riattiva il plugin per crearla automaticamente oppure pubblica una pagina contenente lo shortcode [wwu_wb_form]."
+
+#: src/Admin/DashboardPage.php:125
+msgid "Sending through %s. Use the test below to confirm it reaches your inbox."
+msgstr "Invio tramite %s. Usa il test qui sotto per confermare che l'e-mail arrivi nella tua casella."
+
+#: src/Admin/DashboardPage.php:126
+msgid "No SMTP plugin detected. WordPress's built-in mail is often dropped or marked as spam by mail servers — the acknowledgement email may silently fail. Install an SMTP plugin (e.g. FluentSMTP, free) and send the test below."
+msgstr "Nessun plugin SMTP rilevato. La posta integrata di WordPress viene spesso rifiutata o contrassegnata come spam dai server di posta — l'e-mail di conferma potrebbe non essere recapitata silenziosamente. Installa un plugin SMTP (ad es. FluentSMTP, gratuito) e invia il test qui sotto."
+
+#: src/Admin/DashboardPage.php:129
+msgid "Email delivery"
+msgstr "Consegna e-mail"
+
+#: src/Admin/DashboardPage.php:137
+msgid "PDF receipts (optional)"
+msgstr "Ricevute PDF (opzionale)"
+
+#: src/Admin/DashboardPage.php:139
+msgid "PDF library available — the receipt email also carries a PDF copy."
+msgstr "Libreria PDF disponibile — l'e-mail di ricevuta include anche una copia PDF."
+
+#: src/Admin/DashboardPage.php:140
+msgid "PDF library not found. The email receipt still works (it is the legal durable medium); to also attach a PDF, install the plugin from the official ZIP, which bundles the library."
+msgstr "Libreria PDF non trovata. La ricevuta via e-mail è comunque funzionante (è il supporto durevole legale); per allegare anche un PDF installa il plugin dal file ZIP ufficiale, che include la libreria."
+
+#: src/Admin/DashboardPage.php:150
+msgid "How it works"
+msgstr "Come funziona"
+
+#: src/Admin/DashboardPage.php:152
+msgid "An eligible buyer opens their order and clicks the statutory withdrawal button (its wording is fixed by law for each language)."
+msgstr "Un acquirente avente diritto apre il proprio ordine e clicca il pulsante di recesso previsto dalla legge (la cui formulazione è fissata per legge in ogni lingua)."
+
+#: src/Admin/DashboardPage.php:153
+msgid "A two-step form appears: they review what they are withdrawing from, then explicitly confirm. No dark patterns, no extra hurdles."
+msgstr "Viene visualizzato un modulo in due passaggi: il consumatore verifica da cosa intende recedere, quindi conferma esplicitamente. Nessun dark pattern, nessun ostacolo aggiuntivo."
+
+#: src/Admin/DashboardPage.php:154
+msgid "On confirmation the order is flagged \"withdrawal requested\", and the consumer immediately receives an acknowledgement of receipt by email (the legal durable medium) — plus a PDF and a permanent verifiable link when available."
+msgstr "Alla conferma, l'ordine viene contrassegnato come \"recesso richiesto\" e il consumatore riceve immediatamente un'attestazione di ricevimento via e-mail (il supporto durevole legale) — più un PDF e un link verificabile permanente, quando disponibili."
+
+#: src/Admin/DashboardPage.php:155
+msgid "Every step is written to a tamper-evident, append-only log so you can prove what happened and when. You then handle the refund as usual."
+msgstr "Ogni passaggio viene registrato in un log immodificabile ad aggiunta progressiva, così puoi dimostrare cosa è successo e quando. Gestisci poi il rimborso come di consueto."
+
+#: src/Admin/DashboardPage.php:159
+msgid "Where the button appears"
+msgstr "Dove compare il pulsante"
+
+#: src/Admin/DashboardPage.php:161
+msgid "In the customer account, on each eligible order (order list + order detail) and in the \"Right of withdrawal\" account tab."
+msgstr "Nell'area clienti, su ogni ordine idoneo (elenco ordini + dettaglio ordine) e nella scheda account \"Diritto di recesso\"."
+
+#: src/Admin/DashboardPage.php:162
+msgid "As a link inside the WooCommerce order emails, so guests without an account can reach it."
+msgstr "Come link nelle e-mail degli ordini WooCommerce, in modo che gli ospiti senza account possano accedervi."
+
+#: src/Admin/DashboardPage.php:163
+msgid "Anywhere you place a shortcode: %s."
+msgstr "Ovunque inserisci uno shortcode: %s."
+
+#: src/Admin/DashboardPage.php:167
+msgid "Why the button might not show on an order"
+msgstr "Perché il pulsante potrebbe non comparire su un ordine"
+
+#: src/Admin/DashboardPage.php:168
+msgid "The button only appears where a real withdrawal right exists. It is hidden when:"
+msgstr "Il pulsante compare solo dove esiste un reale diritto di recesso. È nascosto quando:"
+
+#: src/Admin/DashboardPage.php:173
+msgid "The consumer is <strong>outside the scope of your applicability mode</strong> (currently: <strong>%s</strong>). For example, a Switzerland order is hidden in \"EU/EEA only\" mode — that is correct, Swiss law mandates no button."
+msgstr "Il consumatore è <strong>fuori dall'ambito di applicazione del tuo modalità</strong> (attualmente: <strong>%s</strong>). Ad esempio, un ordine dalla Svizzera è nascosto nella modalità \"Solo UE/SEE\" — è corretto: la legge svizzera non impone alcun pulsante."
+
+#: src/Admin/DashboardPage.php:177
+msgid "The order is not in a contract state (failed, cancelled, refunded, awaiting payment)."
+msgstr "L'ordine non è in uno stato contrattuale (fallito, annullato, rimborsato, in attesa di pagamento)."
+
+#: src/Admin/DashboardPage.php:178
+msgid "Every item is excluded from the right of withdrawal (e.g. delivered digital content), or it is a business (VAT) order."
+msgstr "Tutti gli articoli sono esclusi dal diritto di recesso (ad es. contenuto digitale consegnato), oppure è un ordine B2B (con partita IVA)."
+
+#: src/Admin/DashboardPage.php:179
+msgid "The function is disabled in Settings."
+msgstr "La funzione è disabilitata nelle Impostazioni."
+
+#: src/Admin/DashboardPage.php:184
+msgid "Want it to show on <em>every</em> order regardless of country? Set the mode to \"Always show it\" in <a href=\"%s\">Settings → Where the button applies</a>."
+msgstr "Vuoi che compaia su <em>ogni</em> ordine indipendentemente dal paese? Imposta la modalità su \"Mostralo sempre\" in <a href=\"%s\">Impostazioni → Dove si applica il pulsante</a>."
+
+#: src/Admin/DashboardPage.php:190
+msgid "Next steps"
+msgstr "Prossimi passi"
+
+#: src/Admin/DashboardPage.php:193
+msgid "Compliance & documents"
+msgstr "Conformità e documenti"
+
+#: src/Admin/DashboardPage.php:200
+msgid "A free open-source compliance tool by %s, with mredodos and Matteo Alfieri (An Idea for Business)."
+msgstr "Uno strumento di conformità gratuito e open source di %s, con mredodos e Matteo Alfieri (An Idea for Business)."
+
+#: src/Admin/DashboardPage.php:222
+msgid "Test email delivery"
+msgstr "Verifica consegna e-mail"
+
+#: src/Admin/DashboardPage.php:226
+msgid "Sends a one-off test message to your address (%s). If it does not arrive (check spam too), outgoing email is not configured — install/configure an SMTP plugin. This does not depend on the PDF library."
+msgstr "Invia un messaggio di prova una tantum al tuo indirizzo (%s). Se non arriva (controlla anche la spam), la posta in uscita non è configurata — installa o configura un plugin SMTP. Questa funzione non dipende dalla libreria PDF."
+
+#: src/Admin/DashboardPage.php:233
+msgid "Send test email"
+msgstr "Invia e-mail di prova"
+
+#: src/Admin/DashboardPage.php:245
+msgid "Please wait a few seconds before sending another test email."
+msgstr "Attendi alcuni secondi prima di inviare un'altra e-mail di prova."
+
+#: src/Admin/DashboardPage.php:259
+msgid "Test email handed to WordPress for %s. If it does not arrive within a minute (check spam), your mail transport is dropping it — configure an SMTP plugin."
+msgstr "E-mail di prova consegnata a WordPress per %s. Se non arriva entro un minuto (controlla la spam), il trasporto posta la sta scartando — configura un plugin SMTP."
+
+#: src/Admin/DashboardPage.php:267
+msgid "WordPress could not send the test email to %s (wp_mail returned an error). Outgoing email is not working on this site — install and configure an SMTP plugin (e.g. FluentSMTP)."
+msgstr "WordPress non ha potuto inviare l'e-mail di prova a %s (wp_mail ha restituito un errore). La posta in uscita non funziona su questo sito — installa e configura un plugin SMTP (ad es. FluentSMTP)."
+
+#: src/Admin/DashboardPage.php:286
+#: src/Admin/RequestsDashboard.php:332
+#: src/Admin/SettingsPage.php:317
+#: src/Admin/SettingsPage.php:459
+#: src/REST/Authentication.php:55
+#: src/REST/Authentication.php:80
+msgid "Insufficient permissions."
+msgstr "Permessi insufficienti."
+
+#: src/Admin/DashboardPage.php:301
+msgid "WWU Withdrawal Button — test email"
+msgstr "WWU Withdrawal Button — e-mail di prova"
+
+#: src/Admin/DashboardPage.php:302
+msgid "This is a test message from the WWU Withdrawal Button plugin."
+msgstr "Questo è un messaggio di prova del plugin WWU Withdrawal Button."
+
+#: src/Admin/DashboardPage.php:303
+msgid "If you received it, outgoing email works and withdrawal acknowledgements will be delivered."
+msgstr "Se hai ricevuto questo messaggio, la posta in uscita funziona e le conferme di recesso verranno recapitate."
+
+#: src/Admin/DashboardPage.php:403
+#: src/Admin/SettingsPage.php:79
+msgid "Mandatory for EU/EEA consumers on contracts concluded on or after %s."
+msgstr "Obbligatorio per i consumatori UE/SEE per i contratti conclusi il %s o successivamente."
+
+#: src/Admin/DashboardPage.php:418
+msgid "Always show it"
+msgstr "Mostralo sempre"
+
+#: src/Admin/DashboardPage.php:420
+msgid "Custom country list"
+msgstr "Elenco paesi personalizzato"
+
+#: src/Admin/DashboardPage.php:423
+msgid "Only EU/EEA consumers"
+msgstr "Solo consumatori UE/SEE"
+
+#: src/Admin/DashboardPage.php:81
+msgid "WWU Withdrawal Button"
+msgstr "WWU Withdrawal Button"
+
+#: src/Admin/DashboardPage.php:82
+msgid "The EU online right-of-withdrawal function (Art. 11a / Art. 54-bis) for WooCommerce & FluentCart."
+msgstr "La funzione di recesso online dell'UE (Art. 11a / Art. 54-bis) per WooCommerce e FluentCart."
+
+#: src/Admin/DashboardPage.php:88
+msgid "Setup checklist"
+msgstr "Lista di controllo configurazione"
+
+#: src/Admin/DashboardPage.php:93
+msgid "Withdrawal function enabled"
+msgstr "Funzione di recesso abilitata"
+
+#: src/Admin/DashboardPage.php:95
+msgid "The button is live for eligible consumers."
+msgstr "Il pulsante è attivo per i consumatori idonei."
+
+#: src/Admin/DashboardPage.php:96
+msgid "Turn it on in Settings to start showing the button."
+msgstr "Attivalo nelle Impostazioni per iniziare a mostrare il pulsante."
+
+#: src/Admin/DashboardPage.php:97
+msgid "Enable now"
+msgstr "Attiva ora"
+
+#: src/Admin/InspectorPage.php:39
+msgid "WWU Withdrawal Button — Debug Inspector"
+msgstr "WWU Withdrawal Button — Debug Inspector"
+
+#: src/Admin/InspectorPage.php:45
+msgid "Debug is not enabled for your account. Enable it under <a href=\"%s\">Settings → Debug</a>, then reload this page."
+msgstr "Il debug non è abilitato per il tuo account. Abilitalo in <a href=\"%s\">Impostazioni → Debug</a>, poi ricarica questa pagina."
+
+#: src/Admin/InspectorPage.php:56
+msgid "entries"
+msgstr "voci"
+
+#: src/Admin/InspectorPage.php:58
+msgid "Clear view"
+msgstr "Svuota vista"
+
+#: src/Admin/InspectorPage.php:62
+msgid "Smoke tests"
+msgstr "Smoke test"
+
+#: src/Admin/InspectorPage.php:64
+msgid "Run ALL"
+msgstr "Esegui TUTTI"
+
+#: src/Admin/InspectorPage.php:72
+msgid "Live entries"
+msgstr "Voci in tempo reale"
+
+#: src/Admin/InspectorPage.php:74
+msgid "Level"
+msgstr "Livello"
+
+#: src/Admin/InspectorPage.php:75
+msgid "Channel"
+msgstr "Canale"
+
+#: src/Admin/InspectorPage.php:76
+msgid "Event"
+msgstr "Evento"
+
+#: src/Admin/InspectorPage.php:77
+msgid "Context"
+msgstr "Contesto"
+
+#: src/Admin/InspectorPage.php:81
+msgid "Snapshot"
+msgstr "Snapshot"
+
+#: src/Admin/InspectorPage.php:82
+msgid "Fetch snapshot"
+msgstr "Recupera snapshot"
+
+#: src/Admin/InspectorPage.php:83
+msgid "Copy"
+msgstr "Copia"
+
+#: src/Admin/RequestsDashboard.php:100
+msgid "Country"
+msgstr "Paese"
+
+#: src/Admin/RequestsDashboard.php:101
+msgid "In time"
+msgstr "Nei termini"
+
+#: src/Admin/RequestsDashboard.php:102
+msgid "Status"
+msgstr "Stato"
+
+#: src/Admin/RequestsDashboard.php:103
+msgid "Evidence"
+msgstr "Prove"
+
+#: src/Admin/RequestsDashboard.php:104
+msgid "Actions"
+msgstr "Azioni"
+
+#: src/Admin/RequestsDashboard.php:123
+#: templates/public/verify-receipt.php:73
+msgid "Yes"
+msgstr "Sì"
+
+#: src/Admin/RequestsDashboard.php:124
+msgid "Flagged late"
+msgstr "Segnalato come tardivo"
+
+#: src/Admin/RequestsDashboard.php:129
+msgid "Verify"
+msgstr "Verifica"
+
+#: src/Admin/RequestsDashboard.php:166
+msgid "Check the request is in scope. The list hides orders outside the right of withdrawal; \"In time\" shows whether it was within the 14-day window. A late one is still recorded — verify its validity before refusing it."
+msgstr "Verifica che la richiesta rientri nell'ambito di applicazione. L'elenco nasconde gli ordini esclusi dal diritto di recesso; \"Nei termini\" indica se la richiesta è stata presentata entro i 14 giorni. Una richiesta tardiva viene comunque registrata — verificane la validità prima di rifiutarla."
+
+#: src/Admin/RequestsDashboard.php:167
+msgid "If the order is goods, the consumer must send them back within 14 days. You may withhold the refund until you receive the goods back, or until the consumer proves they have shipped them — whichever is earlier."
+msgstr "Se l'ordine riguarda beni materiali, il consumatore deve restituirli entro 14 giorni. Puoi trattenere il rimborso fino alla ricezione dei beni o fino a quando il consumatore dimostri di averli spedito — a seconda di quale delle due condizioni si verifichi prima."
+
+#: src/Admin/RequestsDashboard.php:168
+msgid "Reimburse within 14 days of being informed of the withdrawal. Refund ALL payments received, including the standard delivery cost, using the same payment method the consumer used (unless they expressly agreed otherwise). Click \"Refund order\" to do it in WooCommerce — the refund is recorded automatically in the evidence log."
+msgstr "Rimborsa entro 14 giorni dal momento in cui sei stato informato del recesso. Restituisci TUTTI i pagamenti ricevuti, incluse le spese di spedizione standard, con lo stesso metodo di pagamento utilizzato dal consumatore (salvo esplicito accordo contrario). Clicca \"Rimborsa ordine\" per farlo in WooCommerce — il rimborso viene registrato automaticamente nel log delle prove."
+
+#: src/Admin/RequestsDashboard.php:169
+msgid "Mark the request as processed once you have refunded (and received any returned goods). This closes it in this list; the immutable log keeps the full history."
+msgstr "Segna la richiesta come elaborata una volta effettuato il rimborso (e ricevuti eventuali beni restituiti). Questo la chiude in questo elenco; il log immodificabile conserva la cronologia completa."
+
+#: src/Admin/RequestsDashboard.php:173
+msgid "What to do after receiving a request"
+msgstr "Cosa fare dopo aver ricevuto una richiesta"
+
+#: src/Admin/RequestsDashboard.php:179
+msgid "This is operational guidance, not legal advice. For services fully performed with the consumer's prior express consent, and other Art. 59 cases, the right of withdrawal does not apply."
+msgstr "Questa è una guida operativa, non una consulenza legale. Per i servizi completamente eseguiti con il previo consenso espresso del consumatore e per gli altri casi dell'Art. 59, il diritto di recesso non si applica."
+
+#: src/Admin/RequestsDashboard.php:208
+msgid "Refunded"
+msgstr "Rimborsato"
+
+#: src/Admin/RequestsDashboard.php:212
+msgid "Processed"
+msgstr "Elaborato"
+
+#: src/Admin/RequestsDashboard.php:215
+msgid "Open"
+msgstr "Aperto"
+
+#: src/Admin/RequestsDashboard.php:232
+msgid "Mark processed"
+msgstr "Segna come elaborato"
+
+#: src/Admin/RequestsDashboard.php:236
+msgid "Resend email"
+msgstr "Invia di nuovo l'e-mail"
+
+#: src/Admin/RequestsDashboard.php:240
+msgid "Refund order"
+msgstr "Rimborsa ordine"
+
+#: src/Admin/RequestsDashboard.php:376
+msgid "Request marked as processed."
+msgstr "Richiesta contrassegnata come elaborata."
+
+#: src/Admin/RequestsDashboard.php:377
+msgid "Could not mark the request as processed — the order could not be loaded."
+msgstr "Impossibile contrassegnare la richiesta come elaborata — l'ordine non ha potuto essere caricato."
+
+#: src/Admin/RequestsDashboard.php:378
+msgid "Acknowledgement email resent."
+msgstr "E-mail di conferma inviata nuovamente."
+
+#: src/Admin/RequestsDashboard.php:379
+msgid "Could not resend the email — check your email/SMTP configuration."
+msgstr "Impossibile inviare nuovamente l'e-mail — verifica la configurazione e-mail/SMTP."
+
+#: src/Admin/RequestsDashboard.php:380
+msgid "Please wait a few seconds before resending again."
+msgstr "Attendi alcuni secondi prima di inviare di nuovo."
+
+#: src/Admin/RequestsDashboard.php:74
+msgid "A withdrawal is the consumer's unilateral right — there is nothing to approve. Once exercised within the period, reimburse the consumer within 14 days (same payment method). Use \"Refund order\" to issue the refund, then mark the request as processed."
+msgstr "Il recesso è un diritto unilaterale del consumatore — non c'è nulla da approvare. Una volta esercitato entro il termine, rimborsa il consumatore entro 14 giorni (con lo stesso metodo di pagamento). Usa \"Rimborsa ordine\" per emettere il rimborso, quindi segna la richiesta come elaborata."
+
+#: src/Admin/RequestsDashboard.php:80
+msgid "Evidence log: chain intact"
+msgstr "Log delle prove: catena integra"
+
+#: src/Admin/RequestsDashboard.php:85
+msgid "Evidence log: integrity broken at row #%d — investigate."
+msgstr "Log delle prove: integrità compromessa alla riga n. %d — indaga."
+
+#: src/Admin/RequestsDashboard.php:92
+msgid "No withdrawal requests yet."
+msgstr "Nessuna richiesta di recesso ancora."
+
+#: src/Admin/RequestsDashboard.php:97
+msgid "Date/time (submitted)"
+msgstr "Data/ora (invio)"
+
+#: src/Admin/RequestsDashboard.php:98
+#: templates/emails/admin-notification.php:30
+#: templates/emails/plain/wwu-wb-withdrawal-ack.php:27
+#: templates/emails/withdrawal-confirmation.php:36
+#: templates/emails/wwu-wb-withdrawal-ack.php:50
+#: templates/form/withdrawal-form.php:60
+#: templates/myaccount/withdrawal-list.php:72
+#: templates/pdf/receipt-pdf.php:48
+#: templates/public/verify-receipt.php:66
+msgid "Order"
+msgstr "Ordine"
+
+#: src/Admin/RequestsDashboard.php:99
+#: templates/emails/admin-notification.php:31
+#: templates/emails/plain/wwu-wb-withdrawal-ack.php:29
+#: templates/emails/withdrawal-confirmation.php:38
+#: templates/emails/wwu-wb-withdrawal-ack.php:58
+#: templates/pdf/receipt-pdf.php:50
+msgid "Consumer"
+msgstr "Consumatore"
+
+#: src/Admin/SettingsPage.php:100
+msgid "All admins"
+msgstr "Tutti gli amministratori"
+
+#: src/Admin/SettingsPage.php:101
+msgid "Specific roles"
+msgstr "Ruoli specifici"
+
+#: src/Admin/SettingsPage.php:102
+msgid "Specific users"
+msgstr "Utenti specifici"
+
+#: src/Admin/SettingsPage.php:103
+msgid "Current user only"
+msgstr "Solo utente corrente"
+
+#: src/Admin/SettingsPage.php:111
+msgid "Console level"
+msgstr "Livello console"
+
+#: src/Admin/SettingsPage.php:123
+msgid "Save settings"
+msgstr "Salva impostazioni"
+
+#: src/Admin/SettingsPage.php:129
+msgid "WWU Withdrawal Button — a free open-source compliance tool by %s, with mredodos and Matteo Alfieri (An Idea for Business)."
+msgstr "WWU Withdrawal Button — uno strumento di conformità gratuito e open source di %s, con mredodos e Matteo Alfieri (An Idea for Business)."
+
+#: src/Admin/SettingsPage.php:154
+msgid "Where the button applies"
+msgstr "Dove si applica il pulsante"
+
+#: src/Admin/SettingsPage.php:157
+msgid "Applicability"
+msgstr "Ambito di applicazione"
+
+#: src/Admin/SettingsPage.php:160
+msgid "Only EU/EEA consumers (legal minimum — recommended)"
+msgstr "Solo consumatori UE/SEE (minimo legale — consigliato)"
+
+#: src/Admin/SettingsPage.php:161
+msgid "Always show it (to every consumer, also non-EU)"
+msgstr "Mostralo sempre (a tutti i consumatori, anche extra-UE)"
+
+#: src/Admin/SettingsPage.php:162
+msgid "Only a custom list of countries"
+msgstr "Solo un elenco personalizzato di paesi"
+
+#: src/Admin/SettingsPage.php:168
+msgid "The button is mandatory only for EU/EEA consumers. \"Always show it\" is a safe superset if you prefer one consistent flow (showing it to non-EU buyers is allowed and low-risk)."
+msgstr "Il pulsante è obbligatorio solo per i consumatori UE/SEE. \"Mostralo sempre\" è un sovrainsieme sicuro se preferisci un flusso uniforme (mostrarlo agli acquirenti extra-UE è consentito ed è a basso rischio)."
+
+#: src/Admin/SettingsPage.php:171
+msgid "Custom countries"
+msgstr "Paesi personalizzati"
+
+#: src/Admin/SettingsPage.php:173
+msgid "Two-letter country codes, comma-separated. Used only with the \"custom list\" mode."
+msgstr "Codici paese a due lettere, separati da virgola. Utilizzato solo con la modalità \"elenco personalizzato\"."
+
+#: src/Admin/SettingsPage.php:176
+msgid "Business (B2B) orders"
+msgstr "Ordini aziendali (B2B)"
+
+#: src/Admin/SettingsPage.php:178
+msgid "Hide the button when a VAT number was provided (treat as business / out of scope)."
+msgstr "Nascondi il pulsante quando è stata fornita una partita IVA (tratta come ordine aziendale / fuori ambito)."
+
+#: src/Admin/SettingsPage.php:196
+msgid "Receipt & evidence"
+msgstr "Ricevuta e prove"
+
+#: src/Admin/SettingsPage.php:199
+msgid "Attach PDF receipt"
+msgstr "Allega ricevuta PDF"
+
+#: src/Admin/SettingsPage.php:201
+msgid "Attach a PDF copy to the acknowledgement email (the email itself is always the durable medium)."
+msgstr "Allega una copia PDF all'e-mail di conferma (l'e-mail stessa è sempre il supporto durevole)."
+
+#: src/Admin/SettingsPage.php:203
+msgid "PDF library not detected — PDF receipts are currently disabled (the email still works). Install the plugin from the official ZIP to enable PDFs."
+msgstr "Libreria PDF non rilevata — le ricevute PDF sono attualmente disabilitate (l'e-mail funziona comunque). Installa il plugin dal file ZIP ufficiale per abilitare i PDF."
+
+#: src/Admin/SettingsPage.php:207
+msgid "Notification email"
+msgstr "E-mail di notifica"
+
+#: src/Admin/SettingsPage.php:209
+msgid "Where to notify you of new withdrawal requests."
+msgstr "Dove ricevere le notifiche delle nuove richieste di recesso."
+
+#: src/Admin/SettingsPage.php:212
+msgid "Evidence retention (years)"
+msgstr "Conservazione delle prove (anni)"
+
+#: src/Admin/SettingsPage.php:214
+msgid "How long to keep the immutable log (default 10 — the contract limitation period)."
+msgstr "Per quanto tempo conservare il log immodificabile (predefinito: 10 anni — il termine di prescrizione contrattuale)."
+
+#: src/Admin/SettingsPage.php:226
+msgid "Trusted timestamp"
+msgstr "Marca temporale certificata"
+
+#: src/Admin/SettingsPage.php:229
+msgid "OpenTimestamps (free, Bitcoin-anchored — recommended)"
+msgstr "OpenTimestamps (gratuito, ancorato a Bitcoin — consigliato)"
+
+#: src/Admin/SettingsPage.php:230
+msgid "RFC 3161 timestamp authority (immediate; eIDAS-qualified options)"
+msgstr "Autorità di marca temporale RFC 3161 (immediata; opzioni qualificate eIDAS)"
+
+#: src/Admin/SettingsPage.php:231
+msgid "None (the hash chain alone is the evidence)"
+msgstr "Nessuna (la catena di hash è sufficiente come prova)"
+
+#: src/Admin/SettingsPage.php:237
+msgid "Only a one-way hash leaves your site — never personal data. OpenTimestamps anchors to Bitcoin (free, ~hours). RFC 3161 gets an immediate signed token from a Time-Stamp Authority."
+msgstr "Dal tuo sito esce solo un hash unidirezionale — mai dati personali. OpenTimestamps si ancora a Bitcoin (gratuito, ~ore). RFC 3161 ottiene un token firmato immediato da un'Autorità di Marca Temporale."
+
+#: src/Admin/SettingsPage.php:241
+msgid "RFC 3161 — TSA endpoint"
+msgstr "RFC 3161 — endpoint TSA"
+
+#: src/Admin/SettingsPage.php:243
+msgid "Free, no account: <code>http://timestamp.sectigo.com/qualified</code> (eIDAS-qualified) or <code>http://timestamp.digicert.com</code>. For a national qualified provider (e.g. Aruba, InfoCert, D-Trust, Universign, FNMT, SwissSign) paste their RFC 3161 endpoint and fill in the credentials below."
+msgstr "Gratuito, senza account: <code>http://timestamp.sectigo.com/qualified</code> (qualificato eIDAS) o <code>http://timestamp.digicert.com</code>. Per un fornitore qualificato nazionale (ad es. Aruba, InfoCert, D-Trust, Universign, FNMT, SwissSign) incolla il loro endpoint RFC 3161 e compila le credenziali qui sotto."
+
+#: src/Admin/SettingsPage.php:246
+msgid "RFC 3161 — credentials (optional)"
+msgstr "RFC 3161 — credenziali (opzionale)"
+
+#: src/Admin/SettingsPage.php:247
+msgid "Username (only for account-based QTSPs)"
+msgstr "Nome utente (solo per i QTSP basati su account)"
+
+#: src/Admin/SettingsPage.php:248
+msgid "Password — leave blank to keep the saved one"
+msgstr "Password — lascia vuoto per mantenere quella salvata"
+
+#: src/Admin/SettingsPage.php:249
+msgid "Basic-auth username/password, only required by paid qualified providers. Free TSAs need none. The password is stored on your server and never shown again."
+msgstr "Nome utente/password Basic-auth, richiesti solo dai fornitori qualificati a pagamento. Le TSA gratuite non ne hanno bisogno. La password è memorizzata sul tuo server e non viene mai più mostrata."
+
+#: src/Admin/SettingsPage.php:254
+msgid "My Account tab slug"
+msgstr "Slug della scheda Il mio account"
+
+#: src/Admin/SettingsPage.php:256
+msgid "The URL slug of the \"Right of withdrawal\" tab in the customer account. Change only if it conflicts."
+msgstr "Lo slug URL della scheda \"Diritto di recesso\" nell'area clienti. Modifica solo in caso di conflitto."
+
+#: src/Admin/SettingsPage.php:261
+msgid "Email preview"
+msgstr "Anteprima e-mail"
+
+#: src/Admin/SettingsPage.php:262
+msgid "Preview the acknowledgement email"
+msgstr "Anteprima dell'e-mail di conferma"
+
+#: src/Admin/SettingsPage.php:263
+msgid "Opens a sample of the email the consumer receives. On WooCommerce it uses your store's email branding (header, footer, colours) exactly as it will be sent."
+msgstr "Apre un esempio dell'e-mail che riceve il consumatore. Su WooCommerce utilizza l'identità visiva delle e-mail del tuo negozio (intestazione, piè di pagina, colori) esattamente come verrà inviata."
+
+#: src/Admin/SettingsPage.php:280
+msgid "Free, Bitcoin-anchored, no account — the default. Proof completes after a block (~hours)."
+msgstr "Gratuito, ancorato a Bitcoin, senza account — predefinito. La prova si completa dopo un blocco (~ore)."
+
+#: src/Admin/SettingsPage.php:281
+msgid "Free RFC 3161. Its /qualified endpoint is eIDAS-qualified and needs no account — recommended free option."
+msgstr "RFC 3161 gratuito. L'endpoint /qualified è qualificato eIDAS e non richiede account — opzione gratuita consigliata."
+
+#: src/Admin/SettingsPage.php:282
+msgid "Free RFC 3161 timestamp authority, no account: http://timestamp.digicert.com"
+msgstr "Autorità di marca temporale RFC 3161 gratuita, senza account: http://timestamp.digicert.com"
+
+#: src/Admin/SettingsPage.php:283
+msgid "Italian eIDAS-qualified timestamp (marca temporale). Paid account; widely accepted in Italy."
+msgstr "Marca temporale qualificata eIDAS italiana (marca temporale). Account a pagamento; ampiamente accettata in Italia."
+
+#: src/Admin/SettingsPage.php:284
+msgid "Italian eIDAS-qualified timestamp. Paid account."
+msgstr "Marca temporale qualificata eIDAS italiana. Account a pagamento."
+
+#: src/Admin/SettingsPage.php:285
+msgid "German eIDAS-qualified timestamp (Bundesdruckerei). Account required."
+msgstr "Marca temporale qualificata eIDAS tedesca (Bundesdruckerei). Account obbligatorio."
+
+#: src/Admin/SettingsPage.php:286
+msgid "French eIDAS-qualified timestamp. Account required."
+msgstr "Marca temporale qualificata eIDAS francese. Account obbligatorio."
+
+#: src/Admin/SettingsPage.php:287
+msgid "Spanish eIDAS-qualified timestamp (national mint). Registration required."
+msgstr "Marca temporale qualificata eIDAS spagnola (zecca nazionale). Registrazione obbligatoria."
+
+#: src/Admin/SettingsPage.php:288
+msgid "Swiss ZertES-qualified timestamp. Account required."
+msgstr "Marca temporale qualificata ZertES svizzera. Account obbligatorio."
+
+#: src/Admin/SettingsPage.php:292
+msgid "Timestamp providers — which to choose"
+msgstr "Fornitori di marca temporale — quale scegliere"
+
+#: src/Admin/SettingsPage.php:296
+msgid "site"
+msgstr "sito"
+
+#: src/Admin/SettingsPage.php:299
+msgid "Any RFC 3161 authority works — paste its endpoint above and add credentials if it is account-based. Running OpenTimestamps and an RFC 3161 token together gives two independent proofs."
+msgstr "Qualsiasi autorità RFC 3161 è compatibile — incolla il suo endpoint sopra e aggiungi le credenziali se è basata su account. Usare contemporaneamente OpenTimestamps e un token RFC 3161 fornisce due prove indipendenti."
+
+#: src/Admin/SettingsPage.php:353
+msgid "Sample Customer"
+msgstr "Cliente di esempio"
+
+#: src/Admin/SettingsPage.php:355
+msgid "Sample product × 1"
+msgstr "Prodotto di esempio × 1"
+
+#: src/Admin/SettingsPage.php:382
+msgid "Appearance — Custom CSS"
+msgstr "Aspetto — CSS personalizzato"
+
+#: src/Admin/SettingsPage.php:383
+msgid "Paste CSS to restyle any element of the withdrawal flow on your site. It is loaded after the plugin styles, so it always wins. Tip: override the CSS variables below for quick color/shape changes, or target the classes for full control."
+msgstr "Incolla CSS per ridefinire lo stile di qualsiasi elemento del flusso di recesso sul tuo sito. Viene caricato dopo gli stili del plugin, quindi ha sempre la precedenza. Suggerimento: sovrascrivi le variabili CSS qui sotto per modifiche rapide a colori e forme, oppure usa le classi per il controllo completo."
+
+#: src/Admin/SettingsPage.php:384
+msgid "Compliance note:"
+msgstr "Nota di conformità:"
+
+#: src/Admin/SettingsPage.php:384
+msgid "the withdrawal button must stay legible and prominent (Art. 11a). Do not hide it, shrink it, or reduce its contrast."
+msgstr "il pulsante di recesso deve rimanere leggibile e ben visibile (Art. 11a). Non nasconderlo, rimpicciolirlo né ridurne il contrasto."
+
+#: src/Admin/SettingsPage.php:390
+msgid "Button background color"
+msgstr "Colore di sfondo del pulsante"
+
+#: src/Admin/SettingsPage.php:391
+msgid "Button text color"
+msgstr "Colore del testo del pulsante"
+
+#: src/Admin/SettingsPage.php:392
+msgid "Button focus outline color"
+msgstr "Colore del contorno focus del pulsante"
+
+#: src/Admin/SettingsPage.php:393
+msgid "Button corner radius"
+msgstr "Raggio degli angoli del pulsante"
+
+#: src/Admin/SettingsPage.php:394
+msgid "Input/result corner radius"
+msgstr "Raggio degli angoli di input/risultato"
+
+#: src/Admin/SettingsPage.php:395
+msgid "Button padding"
+msgstr "Padding del pulsante"
+
+#: src/Admin/SettingsPage.php:396
+msgid "Button font size"
+msgstr "Dimensione del carattere del pulsante"
+
+#: src/Admin/SettingsPage.php:397
+msgid "Button font weight"
+msgstr "Peso del carattere del pulsante"
+
+#: src/Admin/SettingsPage.php:398
+msgid "Button border"
+msgstr "Bordo del pulsante"
+
+#: src/Admin/SettingsPage.php:399
+msgid "Form max width"
+msgstr "Larghezza massima del modulo"
+
+#: src/Admin/SettingsPage.php:400
+msgid "Input border color"
+msgstr "Colore del bordo dell'input"
+
+#: src/Admin/SettingsPage.php:401
+msgid "Input padding"
+msgstr "Padding dell'input"
+
+#: src/Admin/SettingsPage.php:402
+msgid "Field label weight"
+msgstr "Peso dell'etichetta del campo"
+
+#: src/Admin/SettingsPage.php:403
+msgid "Helper/note text color"
+msgstr "Colore del testo di aiuto/nota"
+
+#: src/Admin/SettingsPage.php:404
+msgid "Success message colors"
+msgstr "Colori del messaggio di successo"
+
+#: src/Admin/SettingsPage.php:405
+msgid "Error message colors"
+msgstr "Colori del messaggio di errore"
+
+#: src/Admin/SettingsPage.php:406
+msgid "Status-notice colors"
+msgstr "Colori dell'avviso di stato"
+
+#: src/Admin/SettingsPage.php:407
+msgid "Vertical spacing rhythm"
+msgstr "Ritmo spaziatura verticale"
+
+#: src/Admin/SettingsPage.php:412
+msgid "Wrapper around the withdrawal button"
+msgstr "Contenitore attorno al pulsante di recesso"
+
+#: src/Admin/SettingsPage.php:413
+msgid "Every button/CTA (withdraw, continue, confirm)"
+msgstr "Ogni pulsante/CTA (recesso, continua, conferma)"
+
+#: src/Admin/SettingsPage.php:414
+msgid "The Step-1 \"Continue\" button"
+msgstr "Il pulsante \"Continua\" del passo 1"
+
+#: src/Admin/SettingsPage.php:415
+msgid "The statutory \"Confirm withdrawal\" button"
+msgstr "Il pulsante di legge \"Conferma recesso\""
+
+#: src/Admin/SettingsPage.php:416
+msgid "The \"X days left\" note next to the button"
+msgstr "La nota \"X giorni rimasti\" accanto al pulsante"
+
+#: src/Admin/SettingsPage.php:417
+msgid "The withdrawal form container"
+msgstr "Il contenitore del modulo di recesso"
+
+#: src/Admin/SettingsPage.php:418
+msgid "The form heading"
+msgstr "L'intestazione del modulo"
+
+#: src/Admin/SettingsPage.php:419
+msgid "Each field row (label + input)"
+msgstr "Ogni riga di campo (etichetta + input)"
+
+#: src/Admin/SettingsPage.php:420
+msgid "The actions row holding a button"
+msgstr "La riga delle azioni contenente un pulsante"
+
+#: src/Admin/SettingsPage.php:421
+msgid "The Step-2 confirmation block + its intro text"
+msgstr "Il blocco di conferma del passo 2 + il relativo testo introduttivo"
+
+#: src/Admin/SettingsPage.php:422
+msgid "The result message (success / error states)"
+msgstr "Il messaggio di risultato (stati di successo / errore)"
+
+#: src/Admin/SettingsPage.php:423
+msgid "The \"request status\" notice on an order"
+msgstr "L'avviso \"stato della richiesta\" su un ordine"
+
+#: src/Admin/SettingsPage.php:424
+msgid "Generic inline notice"
+msgstr "Avviso inline generico"
+
+#: src/Admin/SettingsPage.php:425
+msgid "The Annex I-B model form block"
+msgstr "Il blocco del modulo tipo Allegato I-B"
+
+#: src/Admin/SettingsPage.php:426
+msgid "The pre-contractual info block"
+msgstr "Il blocco delle informazioni precontrattuali"
+
+#: src/Admin/SettingsPage.php:429
+msgid "CSS reference — variables & classes"
+msgstr "Riferimento CSS — variabili e classi"
+
+#: src/Admin/SettingsPage.php:431
+msgid "CSS variables (quick overrides)"
+msgstr "Variabili CSS (sovrascritture rapide)"
+
+#: src/Admin/SettingsPage.php:432
+msgid "Variable"
+msgstr "Variabile"
+
+#: src/Admin/SettingsPage.php:432
+msgid "Default"
+msgstr "Predefinito"
+
+#: src/Admin/SettingsPage.php:432
+msgid "Controls"
+msgstr "Controlla"
+
+#: src/Admin/SettingsPage.php:438
+msgid "Classes (full control)"
+msgstr "Classi (controllo completo)"
+
+#: src/Admin/SettingsPage.php:439
+msgid "Class"
+msgstr "Classe"
+
+#: src/Admin/SettingsPage.php:439
+msgid "Targets"
+msgstr "Destinazione"
+
+#: src/Admin/SettingsPage.php:445
+msgid "Examples"
+msgstr "Esempi"
+
+#: src/Admin/SettingsPage.php:61
+msgid "WWU Withdrawal Button — Settings"
+msgstr "WWU Withdrawal Button — Impostazioni"
+
+#: src/Admin/SettingsPage.php:64
+msgid "Settings saved."
+msgstr "Impostazioni salvate."
+
+#: src/Admin/SettingsPage.php:71
+msgid "General"
+msgstr "Generale"
+
+#: src/Admin/SettingsPage.php:73
+msgid "Enable withdrawal function"
+msgstr "Abilita funzione di recesso"
+
+#: src/Admin/SettingsPage.php:75
+msgid "Show the withdrawal button to eligible consumers."
+msgstr "Mostra il pulsante di recesso ai consumatori idonei."
+
+#: src/Admin/SettingsPage.php:89
+msgid "Debug"
+msgstr "Debug"
+
+#: src/Admin/SettingsPage.php:92
+msgid "Enable debug"
+msgstr "Abilita debug"
+
+#: src/Admin/SettingsPage.php:94
+msgid "Collect runtime diagnostics and expose the /debug REST endpoints + Inspector."
+msgstr "Raccoglie le diagnostiche di runtime ed espone gli endpoint REST /debug e l'Inspector."
+
+#: src/Admin/SettingsPage.php:97
+msgid "Audience"
+msgstr "Destinatari"
+
+#: src/Core/Install.php:253
+#: src/Frontend/WooMyAccount.php:92
+msgid "Right of withdrawal"
+msgstr "Diritto di recesso"
+
+#: src/Domain/WithdrawalService.php:125
+msgid "No pending withdrawal to confirm. Please start again."
+msgstr "Nessun recesso in attesa da confermare. Inizia nuovamente."
+
+#: src/Domain/WithdrawalService.php:128
+msgid "This confirmation has expired. Please start the withdrawal again."
+msgstr "Questa conferma è scaduta. Avvia nuovamente la procedura di recesso."
+
+#: src/Domain/WithdrawalService.php:131
+msgid "Invalid confirmation. Please start the withdrawal again."
+msgstr "Conferma non valida. Avvia nuovamente la procedura di recesso."
+
+#: src/Domain/WithdrawalService.php:178
+msgid "Right of withdrawal exercised by the consumer (within the period)."
+msgstr "Diritto di recesso esercitato dal consumatore (entro il termine)."
+
+#: src/Domain/WithdrawalService.php:179
+msgid "Right of withdrawal exercised by the consumer — flagged outside the computed period; please verify validity."
+msgstr "Diritto di recesso esercitato dal consumatore — segnalato come fuori dal periodo calcolato; verifica la validità."
+
+#: src/DurableMedium/ConfirmationDispatcher.php:159
+msgid "New withdrawal request — order %s"
+msgstr "Nuova richiesta di recesso — ordine %s"
+
+#: src/DurableMedium/ConfirmationDispatcher.php:90
+msgid "Acknowledgement of your withdrawal — order %s"
+msgstr "Conferma del tuo recesso — ordine %s"
+
+#: src/Frontend/Assets.php:80
+msgid "Submitting…"
+msgstr "Invio in corso…"
+
+#: src/Frontend/Assets.php:81
+msgid "Confirming…"
+msgstr "Conferma in corso…"
+
+#: src/Frontend/Assets.php:82
+msgid "Something went wrong. Please try again."
+msgstr "Si è verificato un errore. Riprova."
+
+#: src/Frontend/Assets.php:83
+msgid "Your withdrawal has been registered. We have emailed you a confirmation."
+msgstr "Il tuo recesso è stato registrato. Ti abbiamo inviato una conferma via e-mail."
+
+#: src/Frontend/Assets.php:84
+#: src/Frontend/NoScriptFlow.php:83
+#: templates/form/withdrawal-form.php:78
+msgid "Please confirm your withdrawal. This is the final step."
+msgstr "Conferma il tuo recesso. Questo è il passaggio finale."
+
+#: src/Frontend/Assets.php:85
+#: templates/myaccount/withdrawal-list.php:54
+msgid "Find my order"
+msgstr "Trova il mio ordine"
+
+#: src/Frontend/Assets.php:86
+msgid "If those details match an eligible order, you can continue. Please check your order number and email and try again."
+msgstr "Se i dati corrispondono a un ordine idoneo, puoi continuare. Verifica il numero d'ordine e l'e-mail e riprova."
+
+#: src/Frontend/NoScriptFlow.php:129
+msgid "Withdrawal registered"
+msgstr "Recesso registrato"
+
+#: src/Frontend/NoScriptFlow.php:130
+msgid "Your withdrawal has been registered. We have emailed you a confirmation on a durable medium."
+msgstr "Il tuo recesso è stato registrato. Ti abbiamo inviato una conferma su supporto durevole via e-mail."
+
+#: src/Frontend/NoScriptFlow.php:141
+msgid "Security check failed. Please reload the form and try again."
+msgstr "Verifica di sicurezza non riuscita. Ricarica il modulo e riprova."
+
+#: src/Frontend/NoScriptFlow.php:155
+#: src/REST/Routes/WithdrawalRoute.php:41
+msgid "Invalid request."
+msgstr "Richiesta non valida."
+
+#: src/Frontend/NoScriptFlow.php:199
+msgid "Back to the site"
+msgstr "Torna al sito"
+
+#: src/Frontend/NoScriptFlow.php:70
+#: src/Frontend/NoScriptFlow.php:125
+msgid "Withdrawal"
+msgstr "Recesso"
+
+#: src/Frontend/NoScriptFlow.php:71
+#: src/REST/Routes/WithdrawalRoute.php:170
+msgid "Please provide your name and a valid email address."
+msgstr "Fornisci il tuo nome e un indirizzo e-mail valido."
+
+#: src/Frontend/WooMyAccount.php:169
+#: src/Shortcodes/Shortcodes.php:142
+msgid "Withdrawal request status: %s"
+msgstr "Stato della richiesta di recesso: %s"
+
+#: src/Mail/WooAckEmail.php:65
+msgid "Withdrawal acknowledgement"
+msgstr "Conferma di recesso"
+
+#: src/Mail/WooAckEmail.php:66
+msgid "Acknowledgement of receipt sent to the consumer when they withdraw from a contract. This email is legally required (Art. 11a / Art. 54-bis); disabling it here only reverts to a plain built-in template — the acknowledgement is still sent."
+msgstr "Conferma di ricevimento inviata al consumatore quando esercita il recesso da un contratto. Questa e-mail è obbligatoria per legge (Art. 11a / Art. 54-bis); disabilitarla qui ripristina solo il template integrato semplice — la conferma viene comunque inviata."
+
+#: src/Mail/WooAckEmail.php:86
+msgid "Acknowledgement of your withdrawal — order {order_number}"
+msgstr "Conferma del tuo recesso — ordine {order_number}"
+
+#: src/Mail/WooAckEmail.php:95
+#: templates/emails/withdrawal-confirmation.php:30
+msgid "Acknowledgement of receipt of your withdrawal"
+msgstr "Attestazione di ricevimento del tuo recesso"
+
+#: src/Platform/WooCommerce/OrderStatus.php:122
+msgid "Mark as withdrawal requested"
+msgstr "Segna come recesso richiesto"
+
+#: src/Platform/WooCommerce/OrderStatus.php:142
+msgid "Marked as withdrawal requested (bulk)."
+msgstr "Contrassegnato come recesso richiesto (in blocco)."
+
+#: src/Platform/WooCommerce/OrderStatus.php:76
+#: src/Platform/WooCommerce/OrderStatus.php:94
+#: src/Platform/WooCommerce/OrderStatus.php:106
+msgctxt "Order status"
+msgid "Withdrawal requested"
+msgstr "Recesso richiesto"
+
+#: src/Platform/WooCommerce/OrderStatus.php:82
+msgid "Withdrawal requested <span class=\"count\">(%s)</span>"
+msgid_plural "Withdrawal requested <span class=\"count\">(%s)</span>"
+msgstr[0] "Recesso richiesto <span class=\"count\">(%s)</span>"
+msgstr[1] "Recesso richiesto <span class=\"count\">(%s)</span>"
+
+#: src/Platform/WooCommerceAdapter.php:122
+msgid "Withdrawal requested by the consumer."
+msgstr "Recesso richiesto dal consumatore."
+
+#: src/REST/Authentication.php:48
+#: src/REST/Authentication.php:73
+msgid "Authentication required."
+msgstr "Autenticazione richiesta."
+
+#: src/REST/Authentication.php:87
+msgid "Debug is not enabled for your account. Enable it under WWU Withdrawal Button → Settings → Debug."
+msgstr "Il debug non è abilitato per il tuo account. Abilitalo in WWU Withdrawal Button → Impostazioni → Debug."
+
+#: src/REST/Routes/ReceiptRoute.php:65
+#: src/REST/Routes/ReceiptRoute.php:96
+msgid "Too many attempts."
+msgstr "Troppi tentativi."
+
+#: src/REST/Routes/ReceiptRoute.php:70
+#: src/REST/Routes/ReceiptRoute.php:101
+#: src/REST/Routes/ReceiptRoute.php:107
+msgid "Not found."
+msgstr "Non trovato."
+
+#: src/REST/Routes/ReceiptRoute.php:75
+msgid "Receipt not available."
+msgstr "Ricevuta non disponibile."
+
+#: src/REST/Routes/WithdrawalRoute.php:121
+msgid "Too many attempts. Please try again in a few minutes."
+msgstr "Troppi tentativi. Riprova tra qualche minuto."
+
+#: src/REST/Routes/WithdrawalRoute.php:194
+msgid "Missing confirmation token. Please start again."
+msgstr "Token di conferma mancante. Inizia nuovamente."
+
+#: src/Shortcodes/Shortcodes.php:101
+msgid "Order not found or access could not be verified."
+msgstr "Ordine non trovato o accesso non verificabile."
+
+#: src/Shortcodes/Shortcodes.php:137
+msgid "No withdrawal request for this order."
+msgstr "Nessuna richiesta di recesso per questo ordine."
+
+#: templates/button/withdrawal-button.php:28
+msgid "%d day left to withdraw"
+msgid_plural "%d days left to withdraw"
+msgstr[0] "%d giorno rimasto per recedere"
+msgstr[1] "%d giorni rimasti per recedere"
+
+#: templates/emails/admin-notification.php:23
+msgid "New withdrawal request"
+msgstr "Nuova richiesta di recesso"
+
+#: templates/emails/admin-notification.php:26
+msgid "Flagged outside the computed withdrawal period"
+msgstr "Segnalata fuori dal periodo di recesso calcolato"
+
+#: templates/emails/admin-notification.php:26
+msgid "please verify whether the request is still valid."
+msgstr "verifica se la richiesta è ancora valida."
+
+#: templates/emails/admin-notification.php:32
+#: templates/emails/plain/wwu-wb-withdrawal-ack.php:28
+#: templates/emails/withdrawal-confirmation.php:37
+#: templates/emails/wwu-wb-withdrawal-ack.php:54
+#: templates/pdf/receipt-pdf.php:49
+msgid "Goods / services"
+msgstr "Beni / servizi"
+
+#: templates/emails/admin-notification.php:34
+msgid "Reason"
+msgstr "Motivo"
+
+#: templates/emails/admin-notification.php:36
+#: templates/public/verify-receipt.php:69
+msgid "Submitted"
+msgstr "Inviato"
+
+#: templates/emails/admin-notification.php:38
+msgid "The order has been marked \"Withdrawal requested\". Remember the refund obligation (within 14 days). This request is recorded in the immutable log."
+msgstr "L'ordine è stato contrassegnato come \"Recesso richiesto\". Ricorda l'obbligo di rimborso (entro 14 giorni). Questa richiesta è registrata nel log immodificabile."
+
+#: templates/emails/admin-notification.php:39
+msgid "View the evidence record"
+msgstr "Visualizza il registro delle prove"
+
+#: templates/emails/plain/wwu-wb-withdrawal-ack.php:24
+#: templates/emails/withdrawal-confirmation.php:32
+#: templates/emails/wwu-wb-withdrawal-ack.php:42
+msgid "Dear %s,"
+msgstr "Gentile %s,"
+
+#: templates/emails/plain/wwu-wb-withdrawal-ack.php:25
+#: templates/emails/withdrawal-confirmation.php:33
+#: templates/emails/wwu-wb-withdrawal-ack.php:44
+msgid "We confirm that we have received your withdrawal from the following distance contract. This message is your acknowledgement of receipt on a durable medium."
+msgstr "Confermiamo di aver ricevuto il tuo recesso dal seguente contratto a distanza. Questo messaggio è la tua attestazione di ricevimento su supporto durevole."
+
+#: templates/emails/plain/wwu-wb-withdrawal-ack.php:31
+#: templates/emails/withdrawal-confirmation.php:40
+#: templates/emails/wwu-wb-withdrawal-ack.php:63
+#: templates/form/withdrawal-form.php:68
+#: templates/pdf/receipt-pdf.php:52
+msgid "Reason (optional)"
+msgstr "Motivo (facoltativo)"
+
+#: templates/emails/plain/wwu-wb-withdrawal-ack.php:33
+#: templates/emails/withdrawal-confirmation.php:42
+#: templates/emails/wwu-wb-withdrawal-ack.php:68
+#: templates/pdf/receipt-pdf.php:54
+msgid "Date and time of submission"
+msgstr "Data e ora di invio"
+
+#: templates/emails/plain/wwu-wb-withdrawal-ack.php:35
+#: templates/emails/withdrawal-confirmation.php:46
+#: templates/emails/wwu-wb-withdrawal-ack.php:73
+msgid "Addressee (trader):"
+msgstr "Destinatario (professionista):"
+
+#: templates/emails/plain/wwu-wb-withdrawal-ack.php:42
+msgid "Download your receipt (PDF):"
+msgstr "Scarica la tua ricevuta (PDF):"
+
+#: templates/emails/plain/wwu-wb-withdrawal-ack.php:45
+msgid "Verify this receipt:"
+msgstr "Verifica questa ricevuta:"
+
+#: templates/emails/withdrawal-confirmation.php:51
+#: templates/emails/wwu-wb-withdrawal-ack.php:78
+msgid "Download your receipt (PDF)"
+msgstr "Scarica la tua ricevuta (PDF)"
+
+#: templates/emails/withdrawal-confirmation.php:55
+#: templates/emails/wwu-wb-withdrawal-ack.php:82
+msgid "Evidence reference:"
+msgstr "Riferimento della prova:"
+
+#: templates/emails/withdrawal-confirmation.php:56
+#: templates/emails/wwu-wb-withdrawal-ack.php:84
+msgid "Verify this receipt"
+msgstr "Verifica questa ricevuta"
+
+#: templates/emails/wwu-wb-withdrawal-ack.php:46
+msgid "Withdrawal details"
+msgstr "Dettagli del recesso"
+
+#: templates/form/withdrawal-form.php:46
+msgid "JavaScript is required to use the withdrawal form. You may also use the model withdrawal form provided in our terms."
+msgstr "Per utilizzare il modulo di recesso è necessario JavaScript. Puoi anche utilizzare il modulo tipo di recesso fornito nelle nostre condizioni."
+
+#: templates/form/withdrawal-form.php:56
+msgid "Your name"
+msgstr "Il tuo nome"
+
+#: templates/form/withdrawal-form.php:64
+msgid "Email for the confirmation"
+msgstr "E-mail per la conferma"
+
+#: templates/form/withdrawal-form.php:69
+msgid "You are not required to give a reason."
+msgstr "Non sei obbligato a indicare un motivo."
+
+#: templates/form/withdrawal-form.php:73
+msgid "Continue"
+msgstr "Continua"
+
+#: templates/myaccount/withdrawal-list.php:42
+msgid "Enter your order number and the email you used at checkout to start a withdrawal. You can also use the link in your order confirmation email, or log in to your account."
+msgstr "Inserisci il numero d'ordine e l'e-mail utilizzata al momento del checkout per avviare un recesso. Puoi anche utilizzare il link nell'e-mail di conferma dell'ordine, oppure accedere al tuo account."
+
+#: templates/myaccount/withdrawal-list.php:46
+msgid "Order number"
+msgstr "Numero d'ordine"
+
+#: templates/myaccount/withdrawal-list.php:50
+msgid "Email used at checkout"
+msgstr "E-mail utilizzata al checkout"
+
+#: templates/myaccount/withdrawal-list.php:61
+msgid "You have no orders that can be withdrawn right now. The button appears on eligible orders within the withdrawal period."
+msgstr "Non hai ordini da cui è possibile recedere al momento. Il pulsante compare sugli ordini idonei entro il periodo di recesso."
+
+#: templates/myaccount/withdrawal-list.php:63
+msgid "Go to my orders"
+msgstr "Vai ai miei ordini"
+
+#: templates/myaccount/withdrawal-list.php:68
+msgid "Choose an order to withdraw from:"
+msgstr "Scegli un ordine da cui recedere:"
+
+#: templates/myaccount/withdrawal-list.php:73
+msgid "Date"
+msgstr "Data"
+
+#: templates/myaccount/withdrawal-list.php:74
+msgid "Action"
+msgstr "Azione"
+
+#: templates/myaccount/withdrawal-list.php:84
+msgid "Request: %s"
+msgstr "Richiesta: %s"
+
+#: templates/partials/consumer-guidance.php:25
+msgid "You can withdraw from this contract within %d days, without giving any reason. It takes two short steps and we will email you a confirmation straight away."
+msgstr "Puoi recedere da questo contratto entro %d giorni, senza dover fornire alcun motivo. Bastano due brevi passaggi e ti invieremo subito una conferma via e-mail."
+
+#: templates/partials/consumer-guidance.php:30
+msgid "How it works & what happens next"
+msgstr "Come funziona e cosa succede dopo"
+
+#: templates/partials/consumer-guidance.php:32
+msgid "You have %d days to withdraw — counted from when you (or someone you nominated) received the goods, or from the day the contract was concluded for a service."
+msgstr "Hai %d giorni per recedere — calcolati da quando tu (o una persona da te designata) hai ricevuto i beni, oppure dal giorno della conclusione del contratto per un servizio."
+
+#: templates/partials/consumer-guidance.php:33
+msgid "You do not need to explain why. There are no hidden steps and no obligation to call us."
+msgstr "Non devi spiegare il motivo. Non ci sono passaggi nascosti né obbligo di contattarci telefonicamente."
+
+#: templates/partials/consumer-guidance.php:34
+msgid "Fill in your name and email, then confirm. Right after confirming, we email you an acknowledgement of receipt — keep it as your proof."
+msgstr "Inserisci nome ed e-mail, poi conferma. Subito dopo la conferma ti inviamo un'attestazione di ricevimento via e-mail — conservala come prova."
+
+#: templates/partials/consumer-guidance.php:35
+msgid "We refund all payments you made for the order, including the standard delivery cost, within 14 days, using the same payment method you used."
+msgstr "Rimborsiamo tutti i pagamenti da te effettuati per l'ordine, incluse le spese di spedizione standard, entro 14 giorni, con lo stesso metodo di pagamento da te utilizzato."
+
+#: templates/partials/consumer-guidance.php:36
+msgid "If your order is physical goods, please send them back within 14 days of telling us. We may wait until we receive them (or your proof of return) before refunding; return shipping may be at your expense unless we stated otherwise."
+msgstr "Se il tuo ordine riguarda beni fisici, rispediscili entro 14 giorni dalla comunicazione del recesso. Potremmo attendere la ricezione dei beni (o la tua prova di spedizione) prima di effettuare il rimborso; le spese di restituzione potrebbero essere a tuo carico, salvo diversa indicazione da parte nostra."
+
+#: templates/partials/consumer-guidance.php:37
+msgid "Some items cannot be withdrawn by law (for example, sealed items unsealed after delivery, or digital content you agreed to start immediately). If that applies, we will let you know."
+msgstr "Alcuni articoli non possono essere oggetto di recesso per legge (ad esempio, beni sigillati aperti dopo la consegna o contenuti digitali di cui hai richiesto l'esecuzione immediata). Se applicabile, te lo comunicheremo."
+
+#: templates/partials/consumer-guidance.php:39
+msgid "If anything is unclear, contact us before confirming — we are happy to help."
+msgstr "Se qualcosa non è chiaro, contattaci prima di confermare — siamo a tua disposizione."
+
+#: templates/pdf/receipt-pdf.php:44
+msgid "Acknowledgement of receipt of withdrawal"
+msgstr "Attestazione di ricevimento del recesso"
+
+#: templates/pdf/receipt-pdf.php:45
+msgid "durable medium (Art. 11a Dir. 2011/83/EU)"
+msgstr "supporto durevole (Art. 11a Dir. 2011/83/UE)"
+
+#: templates/pdf/receipt-pdf.php:55
+msgid "Addressee (trader)"
+msgstr "Destinatario (professionista)"
+
+#: templates/pdf/receipt-pdf.php:59
+msgid "Declaration"
+msgstr "Dichiarazione"
+
+#: templates/pdf/receipt-pdf.php:60
+msgid "I, %1$s, hereby give notice that I withdraw from my contract of sale of the following goods/services: %2$s."
+msgstr "Io sottoscritto/a %1$s, con la presente comunico il mio recesso dal contratto di vendita relativo ai seguenti beni/servizi: %2$s."
+
+#: templates/pdf/receipt-pdf.php:64
+msgid "Tamper-evidence reference (SHA-256 of the immutable-log record):"
+msgstr "Riferimento antimanomissione (SHA-256 del record nel log immodificabile):"
+
+#: templates/pdf/receipt-pdf.php:66
+msgid "Request ID:"
+msgstr "ID richiesta:"
+
+#: templates/pdf/receipt-pdf.php:67
+msgid "Verify:"
+msgstr "Verifica:"
+
+#: templates/public/verify-receipt.php:38
+#: templates/public/verify-receipt.php:62
+msgid "Withdrawal receipt verification"
+msgstr "Verifica della ricevuta di recesso"
+
+#: templates/public/verify-receipt.php:56
+msgid "Verified — record intact"
+msgstr "Verificato — record integro"
+
+#: templates/public/verify-receipt.php:58
+msgid "Record could not be verified"
+msgstr "Impossibile verificare il record"
+
+#: templates/public/verify-receipt.php:72
+msgid "Within statutory window"
+msgstr "Entro il termine di legge"
+
+#: templates/public/verify-receipt.php:73
+msgid "No (late — still recorded)"
+msgstr "No (tardivo — comunque registrato)"
+
+#: templates/public/verify-receipt.php:75
+msgid "Evidence hash"
+msgstr "Hash della prova"
+
+#: templates/public/verify-receipt.php:83
+msgid "This page confirms that the withdrawal record exists and matches its tamper-evident entry in the immutable log. The evidence hash above is the fingerprint of that entry."
+msgstr "Questa pagina conferma che il record di recesso esiste e corrisponde alla sua voce antimanomissione nel log immodificabile. L'hash della prova riportato sopra è l'impronta digitale di tale voce."
+
+#: templates/public/verify-receipt.php:84
+msgid "The withdrawal record could not be matched against the immutable log. Please contact the trader."
+msgstr "Impossibile abbinare il record di recesso al log immodificabile. Contatta il professionista."
+
+#: templates/public/verify-receipt.php:87
+msgid "Checked on %s."
+msgstr "Verificato il %s."
+
+#: wwu-withdrawal-button.php:148
+msgid "WWU Withdrawal Button requires PHP %1$s or higher. You are running PHP %2$s."
+msgstr "WWU Withdrawal Button richiede PHP %1$s o versione superiore. Stai utilizzando PHP %2$s."
+
+#: src/Frontend/EligibleOrders.php
+msgid "Withdrawal handled"
+msgstr "Recesso gestito"
+
+#: src/Frontend/EligibleOrders.php
+msgid "Withdrawal requested"
+msgstr "Recesso richiesto"

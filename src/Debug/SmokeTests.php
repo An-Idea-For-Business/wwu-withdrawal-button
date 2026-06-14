@@ -35,11 +35,29 @@ final class SmokeTests {
 	 * @var array<string,string>
 	 */
 	private const SUITES = array(
-		'foundation' => 'suite_foundation',
-		'tables'     => 'suite_tables',
-		'collector'  => 'suite_collector',
-		'audience'   => 'suite_audience',
+		'foundation'    => 'suite_foundation',
+		'tables'        => 'suite_tables',
+		'collector'     => 'suite_collector',
+		'audience'      => 'suite_audience',
+		'labels'        => 'suite_labels',
+		'applicability' => 'suite_applicability',
+		'window'         => 'suite_window',
+		'log'            => 'suite_log',
+		'durable_medium' => 'suite_durable_medium',
+		'rfc3161'        => 'suite_rfc3161',
+		'fluentcart'     => 'suite_fluentcart',
+		'exemptions'     => 'suite_exemptions',
 	);
+
+	/**
+	 * List the available suite names (single source of truth for the UI buttons,
+	 * so the Inspector never drifts out of sync with the registered suites).
+	 *
+	 * @return string[]
+	 */
+	public static function suite_names(): array {
+		return array_keys( self::SUITES );
+	}
 
 	/**
 	 * Run a suite ('all' or a specific name) and return the canonical report.
@@ -228,6 +246,360 @@ final class SmokeTests {
 	}
 
 	/**
+	 * Suite: labels (statutory wording per country + confirmation "only words").
+	 *
+	 * @return array
+	 */
+	private function suite_labels(): array {
+		$tests    = array();
+		$resolver = new \WWU\WithdrawalButton\Domain\LabelResolver();
+
+		$cases = array(
+			array( 'IT', 'it_IT', 'recedere dal contratto qui', 'conferma recesso' ),
+			array( 'DE', 'de_DE', 'Vertrag widerrufen', 'Widerruf bestätigen' ),
+			array( 'FR', 'fr_FR', 'renoncer au contrat ici', 'confirmer la rétractation' ),
+			array( 'ES', 'es_ES', 'desistir del contrato aquí', 'confirmar desistimiento' ),
+			array( 'IE', 'en_US', 'withdraw from contract here', 'confirm withdrawal' ),
+		);
+		foreach ( $cases as $case ) {
+			list( $country, $locale, $withdraw, $confirm ) = $case;
+			$tests[] = $this->assert(
+				'labels.withdraw.' . strtolower( $country ),
+				$resolver->withdraw_label( $country, $locale ) === $withdraw,
+				$country . ' → "' . $resolver->withdraw_label( $country, $locale ) . '"'
+			);
+			$tests[] = $this->assert(
+				'labels.confirm.' . strtolower( $country ),
+				$resolver->confirm_label( $country, $locale ) === $confirm,
+				$country . ' → "' . $resolver->confirm_label( $country, $locale ) . '"'
+			);
+		}
+
+		// The German withdrawal label must NOT contain "hier".
+		$tests[] = $this->assert(
+			'labels.de_no_hier',
+			false === stripos( $resolver->withdraw_label( 'DE', 'de_DE' ), 'hier' ),
+			'German withdrawal label correctly omits "hier".'
+		);
+
+		return $tests;
+	}
+
+	/**
+	 * Suite: applicability (EU mandatory, CH voluntary, B2B + Art.59 exclusions).
+	 *
+	 * @return array
+	 */
+	private function suite_applicability(): array {
+		$tests    = array();
+		$resolver = new \WWU\WithdrawalButton\Domain\ApplicabilityResolver();
+
+		// Relies on the default seeded mode (eu_eea_only). Cases below are deterministic.
+		$it   = $this->fake_order( 'IT', 'completed', false, array( $this->fake_item( false ) ) );
+		$ch   = $this->fake_order( 'CH', 'completed', false, array( $this->fake_item( false ) ) );
+		$b2b  = $this->fake_order( 'IT', 'completed', true, array( $this->fake_item( false ) ) );
+		$only_digital = $this->fake_order( 'IT', 'completed', false, array( $this->fake_item( true ) ) );
+
+		$d_it  = $resolver->decide( $it );
+		$d_ch  = $resolver->decide( $ch );
+		$d_b2b = $resolver->decide( $b2b );
+		$d_dig = $resolver->decide( $only_digital );
+
+		$tests[] = $this->assert( 'applicability.it_mandatory', $d_it->show && $d_it->mandatory, 'IT consumer: shown + mandatory.' );
+		$tests[] = $this->assert( 'applicability.ch_not_mandatory', ! $d_ch->mandatory, 'CH consumer: not mandatory (reason: ' . $d_ch->reason . ').' );
+		$tests[] = $this->assert( 'applicability.b2b_excluded', ! $d_b2b->show, 'B2B (VAT) excluded (reason: ' . $d_b2b->reason . ').' );
+
+		// Digital auto-exclusion now defaults OFF (the right is the default; the
+		// digital exemption needs captured consent). A completed digital order is
+		// shown UNLESS the merchant has opted in. Invariant: shown iff auto-detect off.
+		$exclusions = (array) \WWU\WithdrawalButton\Core\Settings::get( 'wwu_wb_exclusions' );
+		$auto_on    = ! empty( $exclusions['auto_detect_virtual'] );
+		$tests[]    = $this->assert( 'applicability.digital_matches_auto_detect', $d_dig->show === ! $auto_on, 'Completed digital order shown iff auto-detect off (auto_detect=' . ( $auto_on ? 'on' : 'off' ) . ', show=' . ( $d_dig->show ? 'yes' : 'no' ) . ').' );
+
+		// Deterministic exclusion via the wwu_wb_excluded_product_ids filter.
+		$excl_filter = static function ( $ids ) {
+			$ids[] = 123;
+			return $ids;
+		};
+		add_filter( 'wwu_wb_excluded_product_ids', $excl_filter );
+		$d_excl = $resolver->decide( $this->fake_order( 'IT', 'completed', false, array( $this->fake_item( false ) ) ) );
+		remove_filter( 'wwu_wb_excluded_product_ids', $excl_filter );
+		$tests[] = $this->assert( 'applicability.excluded_product_hidden', ! $d_excl->show && 'no_withdrawal_right' === $d_excl->reason, 'Product in the excluded list is hidden (reason: ' . $d_excl->reason . ').' );
+
+		// Regression (alpha.20): an order with NO readable items must still be
+		// withdrawable by default — the right is the default, Art.59 is the exception.
+		$d_noitem = $resolver->decide( $this->fake_order( 'IT', 'paid', false, array() ) );
+		$tests[]  = $this->assert( 'applicability.empty_items_withdrawable', $d_noitem->show, 'Order with no readable items defaults to withdrawable (reason: ' . $d_noitem->reason . ').' );
+
+		// Regression (alpha.20): FluentCart signals a concluded contract via a 'paid'
+		// status — it must read as an eligible, mandatory case for an EU consumer.
+		$d_paid  = $resolver->decide( $this->fake_order( 'IT', 'paid', false, array( $this->fake_item( false ) ) ) );
+		$tests[] = $this->assert( 'applicability.paid_status_eligible', $d_paid->show && $d_paid->mandatory, "'paid' status is an eligible concluded contract." );
+
+		// Regression (alpha.20): an undeterminable country is out of scope (hidden)
+		// in the default eu_eea_only mode.
+		$d_noc   = $resolver->decide( $this->fake_order( '', 'paid', false, array( $this->fake_item( false ) ) ) );
+		$tests[] = $this->assert( 'applicability.empty_country_out_of_scope', ! $d_noc->show && 'out_of_scope' === $d_noc->reason, 'Empty country → out_of_scope/hidden (reason: ' . $d_noc->reason . ').' );
+
+		return $tests;
+	}
+
+	/**
+	 * Suite: fluentcart (platform-agnostic adapter helpers — Eloquent collection
+	 * unwrap + payment-status normalization). Runs without FluentCart active.
+	 *
+	 * @return array
+	 */
+	private function suite_fluentcart(): array {
+		$tests   = array();
+		$adapter = '\\WWU\\WithdrawalButton\\Platform\\FluentCartAdapter';
+
+		// Collection unwrap: a fake Eloquent-like collection exposing ->all().
+		$collection = new class() {
+			/**
+			 * Mimic Illuminate\Support\Collection::all().
+			 *
+			 * @return array
+			 */
+			public function all(): array {
+				return array( (object) array( 'id' => 7 ), (object) array( 'id' => 8 ) );
+			}
+		};
+		$unwrapped = $adapter::unwrap_collection( $collection );
+		$tests[]   = $this->assert(
+			'fluentcart.collection_unwrap',
+			is_array( $unwrapped ) && 2 === count( $unwrapped ) && isset( $unwrapped[0]->id ) && 7 === $unwrapped[0]->id,
+			'Eloquent collection unwrapped to its models via ->all() (not (array) internals).'
+		);
+		$tests[] = $this->assert( 'fluentcart.unwrap_array_passthrough', array( 'a', 'b' ) === $adapter::unwrap_collection( array( 'a', 'b' ) ), 'Plain array passes through unwrap.' );
+		$tests[] = $this->assert( 'fluentcart.unwrap_scalar_empty', array() === $adapter::unwrap_collection( 'x' ), 'Scalar unwraps to empty array (no crash).' );
+
+		// Status: payment_status drives eligibility.
+		$tests[] = $this->assert( 'fluentcart.status_paid', 'paid' === $adapter::eligible_status( 'pending', 'paid' ), 'pending fulfillment + paid payment → "paid" (eligible).' );
+		$tests[] = $this->assert( 'fluentcart.status_keep_completed', 'completed' === $adapter::eligible_status( 'completed', 'paid' ), 'completed fulfillment preserved.' );
+		$tests[] = $this->assert( 'fluentcart.status_unpaid', 'pending' === $adapter::eligible_status( 'pending', 'unpaid' ), 'unpaid order keeps its non-eligible status.' );
+
+		return $tests;
+	}
+
+	/**
+	 * Suite: window (deadline computation + late detection).
+	 *
+	 * @return array
+	 */
+	private function suite_window(): array {
+		$tests = array();
+		$calc  = new \WWU\WithdrawalButton\Domain\WindowCalculator();
+
+		$recent = $this->fake_order( 'IT', 'completed', false, array( $this->fake_item( false ) ), new \DateTimeImmutable( '-2 days' ) );
+		$old    = $this->fake_order( 'IT', 'completed', false, array( $this->fake_item( false ) ), new \DateTimeImmutable( '-30 days' ) );
+
+		$tests[] = $this->assert( 'window.recent_within', $calc->is_within_window( $recent ), 'Order 2 days old is within the 14-day window.' );
+		$tests[] = $this->assert( 'window.old_outside', ! $calc->is_within_window( $old ), 'Order 30 days old is outside the window.' );
+		$days = $calc->days_remaining( $recent );
+		$tests[] = $this->assert( 'window.days_remaining', is_int( $days ) && $days >= 11 && $days <= 12, 'Days remaining ≈ 12 (got ' . var_export( $days, true ) . ').' );
+
+		return $tests;
+	}
+
+	/**
+	 * Suite: log (hash-chain logic — pure, does NOT write to the evidence table).
+	 *
+	 * @return array
+	 */
+	private function suite_log(): array {
+		$tests = array();
+
+		$prev = \WWU\WithdrawalButton\Storage\LogChain::genesis();
+		$ev_a = array( 'event' => 'confirmed', 'payload' => array( 'b' => 2, 'a' => 1 ), 'ip_address' => '1.2.3.4' );
+		$ev_b = array( 'event' => 'confirmed', 'payload' => array( 'a' => 1, 'b' => 2 ), 'ip_address' => '1.2.3.4' );
+
+		$h_a = \WWU\WithdrawalButton\Storage\LogChain::compute( $prev, $ev_a );
+		$h_b = \WWU\WithdrawalButton\Storage\LogChain::compute( $prev, $ev_b );
+
+		$tests[] = $this->assert( 'log.hash_is_sha256', 64 === strlen( $h_a ) && ctype_xdigit( $h_a ), 'row_hash is 64 hex chars.' );
+		$tests[] = $this->assert( 'log.order_independent', $h_a === $h_b, 'Canonicalisation makes the hash key-order independent.' );
+
+		$ev_tampered = $ev_a;
+		$ev_tampered['ip_address'] = '9.9.9.9';
+		$h_t = \WWU\WithdrawalButton\Storage\LogChain::compute( $prev, $ev_tampered );
+		$tests[] = $this->assert( 'log.tamper_sensitive', $h_a !== $h_t, 'Changing any evidence field changes the hash.' );
+
+		$tests[] = $this->assert( 'log.genesis_stable', \WWU\WithdrawalButton\Storage\LogChain::genesis() === $prev, 'Genesis hash is stable per site.' );
+
+		// Verify the live chain is intact (0 = no broken row).
+		$broken = ( new \WWU\WithdrawalButton\Storage\LogRepository() )->verify_chain();
+		$tests[] = $this->assert( 'log.chain_intact', 0 === $broken, 0 === $broken ? 'Live chain intact.' : 'Chain broken at row ' . $broken . '.' );
+
+		return $tests;
+	}
+
+	/**
+	 * Suite: durable_medium (link token round-trip, PDF availability, store path).
+	 *
+	 * @return array
+	 */
+	private function suite_durable_medium(): array {
+		$tests = array();
+		$uid   = '00000000-0000-4000-8000-000000000000';
+
+		$token = \WWU\WithdrawalButton\DurableMedium\VerifiableLink::token( $uid );
+		$tests[] = $this->assert(
+			'durable_medium.link_token_roundtrip',
+			\WWU\WithdrawalButton\DurableMedium\VerifiableLink::verify( $uid, $token ) && ! \WWU\WithdrawalButton\DurableMedium\VerifiableLink::verify( $uid, $token . 'x' ),
+			'Receipt link token verifies and rejects tampering.'
+		);
+
+		$available = \WWU\WithdrawalButton\DurableMedium\PdfBuilder::is_available();
+		$tests[] = array(
+			'name'   => 'durable_medium.pdf_library',
+			'status' => $available ? 'pass' : 'skip',
+			'output' => $available ? 'Dompdf available — PDF receipts enabled.' : 'Dompdf not installed (run composer install). Email-only durable medium still works.',
+		);
+
+		$path = ( new \WWU\WithdrawalButton\DurableMedium\ReceiptStore() )->path_for( $uid );
+		$tests[] = $this->assert(
+			'durable_medium.store_path',
+			false !== strpos( $path, 'wwu-wb/receipts' ) && false !== strpos( $path, $uid . '.pdf' ),
+			'Receipt store path is confined and uid-named.'
+		);
+
+		return $tests;
+	}
+
+	/**
+	 * Suite: exemptions (Art. 59 registry + per-reason resolver + evaluator gates).
+	 *
+	 * @return array
+	 */
+	private function suite_exemptions(): array {
+		$tests = array();
+		$types = '\\WWU\\WithdrawalButton\\Domain\\ExceptionTypes';
+		$ev    = new \WWU\WithdrawalButton\Domain\ArticleFiftyNineEvaluator();
+
+		// Registry sanity.
+		$tests[] = $this->assert( 'exemptions.registry_digital_conditional', $types::is_conditional( '59_o' ), 'Digital-immediate (59_o) is conditional.' );
+		$tests[] = $this->assert( 'exemptions.registry_service_conditional', $types::is_conditional( '59_a' ), 'Service-performed (59_a) is conditional.' );
+		$tests[] = $this->assert( 'exemptions.registry_custom_unconditional', ! $types::is_conditional( '59_c' ), 'Custom-made (59_c) is unconditional.' );
+		$tests[] = $this->assert( 'exemptions.registry_hygiene_seal', $types::is_seal_based( '59_e' ), 'Sealed hygiene (59_e) is seal-based.' );
+
+		// Helper to build a single-item / multi-item order.
+		$mk = function ( array $product_ids ) {
+			$items = array();
+			foreach ( $product_ids as $pid ) {
+				$items[] = array( 'product_id' => (int) $pid, 'name' => 'P' . $pid, 'qty' => 1, 'virtual' => false, 'downloadable' => false, 'type' => 'simple', 'category_ids' => array() );
+			}
+			return $this->fake_order( 'IT', 'completed', false, $items );
+		};
+
+		// Back-compat filter → 'manual' (unconditional) → exempt.
+		$f = static function ( $ids ) {
+			$ids[] = 4242;
+			return $ids;
+		};
+		add_filter( 'wwu_wb_excluded_product_ids', $f );
+		$tests[] = $this->assert( 'exemptions.filter_excludes_single', ! $ev->has_withdrawable_item( $mk( array( 4242 ) ) ), 'Filter-excluded single-item order has no withdrawable item.' );
+		$tests[] = $this->assert( 'exemptions.mixed_cart_still_shows', $ev->has_withdrawable_item( $mk( array( 4242, 1 ) ) ), 'Mixed cart (excluded + normal) stays withdrawable.' );
+		remove_filter( 'wwu_wb_excluded_product_ids', $f );
+
+		// Per-reason via option: tag product 7777 under the conditional 59_o.
+		$saved = get_option( 'wwu_wb_exclusions' );
+		update_option(
+			'wwu_wb_exclusions',
+			array(
+				'by_reason'           => array( '59_o' => array( 'products' => array( 7777 ), 'categories' => array() ) ),
+				'auto_detect_virtual' => false,
+			)
+		);
+		\WWU\WithdrawalButton\Core\Settings::flush();
+
+		$tests[] = $this->assert( 'exemptions.conditional_no_consent_keeps_button', $ev->has_withdrawable_item( $mk( array( 7777 ) ) ), 'Conditional reason WITHOUT captured consent keeps the button (fail-safe).' );
+
+		$cf = static function ( $consent ) {
+			$consent[] = array( 'product_id' => 7777, 'reason_id' => '59_o' );
+			return $consent;
+		};
+		add_filter( 'wwu_wb_exemption_consent', $cf );
+		$tests[] = $this->assert( 'exemptions.conditional_with_consent_exempts', ! $ev->has_withdrawable_item( $mk( array( 7777 ) ) ), 'Conditional reason WITH captured consent exempts the item.' );
+		remove_filter( 'wwu_wb_exemption_consent', $cf );
+
+		// Tag a product under a seal-based reason → never auto-hidden.
+		update_option(
+			'wwu_wb_exclusions',
+			array(
+				'by_reason'           => array( '59_e' => array( 'products' => array( 8888 ), 'categories' => array() ) ),
+				'auto_detect_virtual' => false,
+			)
+		);
+		\WWU\WithdrawalButton\Core\Settings::flush();
+		$tests[] = $this->assert( 'exemptions.seal_based_keeps_button', $ev->has_withdrawable_item( $mk( array( 8888 ) ) ), 'Seal-based reason never auto-hides the button.' );
+
+		// Unconditional reason → exempt.
+		update_option(
+			'wwu_wb_exclusions',
+			array(
+				'by_reason'           => array( '59_c' => array( 'products' => array( 9999 ), 'categories' => array() ) ),
+				'auto_detect_virtual' => false,
+			)
+		);
+		\WWU\WithdrawalButton\Core\Settings::flush();
+		$tests[] = $this->assert( 'exemptions.unconditional_exempts', ! $ev->has_withdrawable_item( $mk( array( 9999 ) ) ), 'Unconditional reason (custom-made) exempts the item.' );
+
+		// Restore.
+		update_option( 'wwu_wb_exclusions', is_array( $saved ) ? $saved : array() );
+		\WWU\WithdrawalButton\Core\Settings::flush();
+
+		return $tests;
+	}
+
+	/**
+	 * Build a synthetic normalized order for tests.
+	 *
+	 * @param string                  $country Country code.
+	 * @param string                  $status  Status.
+	 * @param bool                    $vat     Whether a VAT number is present.
+	 * @param array                   $items   Line items.
+	 * @param \DateTimeImmutable|null $created Created date.
+	 * @return \WWU\WithdrawalButton\Platform\NormalizedOrder
+	 */
+	private function fake_order( string $country, string $status, bool $vat, array $items, ?\DateTimeImmutable $created = null ): \WWU\WithdrawalButton\Platform\NormalizedOrder {
+		$created = $created ?? new \DateTimeImmutable( '-1 day' );
+		return new \WWU\WithdrawalButton\Platform\NormalizedOrder(
+			'woocommerce',
+			'TEST-1',
+			'TEST-1',
+			'buyer@example.com',
+			0,
+			$country,
+			$status,
+			'en_US',
+			$created,
+			$created,
+			$status === 'completed' ? $created : null,
+			$items,
+			$vat
+		);
+	}
+
+	/**
+	 * Build a synthetic line item.
+	 *
+	 * @param bool $digital Whether the item is virtual/downloadable.
+	 * @return array
+	 */
+	private function fake_item( bool $digital ): array {
+		return array(
+			'product_id'   => 123,
+			'name'         => 'Test product',
+			'qty'          => 1,
+			'virtual'      => $digital,
+			'downloadable' => $digital,
+			'type'         => 'simple',
+			'category_ids' => array(),
+		);
+	}
+
+	/**
 	 * Build a single test result.
 	 *
 	 * @param string $name      Dotted test name.
@@ -235,6 +607,51 @@ final class SmokeTests {
 	 * @param string $output    Human-readable output.
 	 * @return array
 	 */
+	/**
+	 * RFC 3161 provider: request building + status parsing + guards (offline).
+	 *
+	 * @return array
+	 */
+	private function suite_rfc3161(): array {
+		$tests = array();
+
+		// Guard: empty endpoint makes no request and returns null.
+		$empty = new \WWU\WithdrawalButton\Timestamp\Rfc3161Provider( array( 'endpoint' => '' ) );
+		$tests[] = $this->assert( 'rfc3161.empty_endpoint_null', null === $empty->stamp( str_repeat( 'a', 64 ) ), 'Empty endpoint returns null (no request made).' );
+
+		// Guard: a non-hex digest returns null before any network call.
+		$prov = new \WWU\WithdrawalButton\Timestamp\Rfc3161Provider( array( 'endpoint' => 'http://timestamp.sectigo.com' ) );
+		$tests[] = $this->assert( 'rfc3161.bad_hex_null', null === $prov->stamp( 'not-a-hex' ), 'Non-hex digest returns null.' );
+
+		// Pure-logic checks via reflection (no network).
+		try {
+			$ref    = new \ReflectionClass( $prov );
+			$build  = $ref->getMethod( 'build_request' );
+			$build->setAccessible( true );
+			$status = $ref->getMethod( 'read_status' );
+			$status->setAccessible( true );
+
+			$digest = hash( 'sha256', 'wwu', true );
+			$der    = (string) $build->invoke( $prov, $digest, "\x12\x34\x56\x78" );
+
+			$tests[] = $this->assert( 'rfc3161.request_is_sequence', isset( $der[0] ) && "\x30" === $der[0], 'TimeStampReq is a DER SEQUENCE.' );
+			$tests[] = $this->assert( 'rfc3161.request_has_sha256_oid', false !== strpos( $der, "\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x01" ), 'Request carries the SHA-256 OID.' );
+			$tests[] = $this->assert( 'rfc3161.request_embeds_digest', false !== strpos( $der, $digest ), 'Request embeds the 32-byte digest.' );
+
+			// SEQUENCE { SEQUENCE { INTEGER n } } — PKIStatus.
+			$tests[] = $this->assert( 'rfc3161.status_granted', 0 === $status->invoke( $prov, "\x30\x06\x30\x03\x02\x01\x00" ), 'Parses PKIStatus 0 (granted).' );
+			$tests[] = $this->assert( 'rfc3161.status_rejected', 2 === $status->invoke( $prov, "\x30\x06\x30\x03\x02\x01\x02" ), 'Parses PKIStatus 2 (rejection).' );
+			$tests[] = $this->assert( 'rfc3161.status_garbage_null', null === $status->invoke( $prov, 'xx' ), 'Garbage response yields null status.' );
+		} catch ( \Throwable $e ) {
+			$tests[] = $this->assert( 'rfc3161.reflection', false, 'Reflection check failed: ' . $e->getMessage() );
+		}
+
+		// Return the flat test array like every other suite — run() wraps it in
+		// { name, tests }. Returning the wrapped shape here double-wrapped it, so
+		// the JSON `tests` became an object and the Inspector's forEach threw.
+		return $tests;
+	}
+
 	private function assert( string $name, bool $condition, string $output ): array {
 		return array(
 			'name'   => $name,

@@ -1,0 +1,1463 @@
+# Copyright (C) 2026 WebWakeUp
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: WWU Withdrawal Button 1.0.0-alpha.17\n"
+"Report-Msgid-Bugs-To: https://github.com/An-Idea-For-Business/wwu-withdrawal-button\n"
+"POT-Creation-Date: 2026-06-13 23:58+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: WebWakeUp\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: WWU Workspace POT Generator\n"
+"X-Domain: wwu-withdrawal-button\n"
+
+#: src/Admin/AdminAssets.php:69
+#: src/Admin/InspectorPage.php:55
+msgid "Polling: on"
+msgstr ""
+
+#: src/Admin/AdminAssets.php:70
+msgid "Polling: off"
+msgstr ""
+
+#: src/Admin/AdminAssets.php:71
+#: src/Admin/InspectorPage.php:57
+msgid "Pause"
+msgstr ""
+
+#: src/Admin/AdminAssets.php:72
+msgid "Resume"
+msgstr ""
+
+#: src/Admin/AdminAssets.php:73
+msgid "Copied."
+msgstr ""
+
+#: src/Admin/AdminAssets.php:74
+msgid "Running…"
+msgstr ""
+
+#: src/Admin/AdminController.php:125
+msgid "WWU Withdrawal Button: the PDF library was not found, so the receipt is sent by email only (no PDF attachment). This is fine to go live, but to also attach a PDF copy, install the plugin using the official packaged ZIP (it bundles the library) instead of a plain source copy."
+msgstr ""
+
+#: src/Admin/AdminController.php:142
+msgid "WWU Withdrawal Button: a withdrawal acknowledgement email could not be sent. The consumer is legally entitled to receive it. Check your site's email/SMTP configuration and resend from the Requests page."
+msgstr ""
+
+#: src/Admin/AdminController.php:154
+#: src/Admin/AdminController.php:155
+msgid "Withdrawal Button"
+msgstr ""
+
+#: src/Admin/AdminController.php:165
+#: src/Admin/AdminController.php:166
+msgid "Dashboard"
+msgstr ""
+
+#: src/Admin/AdminController.php:174
+#: src/Admin/DashboardPage.php:194
+#: src/Admin/RequestsDashboard.php:69
+msgid "Withdrawal requests"
+msgstr ""
+
+#: src/Admin/AdminController.php:175
+msgid "Requests"
+msgstr ""
+
+#: src/Admin/AdminController.php:183
+#: src/Admin/AdminController.php:184
+#: src/Admin/ComplianceStatusPage.php:43
+msgid "Compliance"
+msgstr ""
+
+#: src/Admin/AdminController.php:192
+#: src/Admin/AdminController.php:193
+#: src/Admin/DashboardPage.php:192
+msgid "Settings"
+msgstr ""
+
+#: src/Admin/AdminController.php:201
+#: src/Admin/AdminController.php:202
+msgid "Debug Inspector"
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:114
+msgid "No published withdrawal form page is configured. Guests (and FluentCart customers) cannot withdraw. Create a page with the [wwu_wb_form] shortcode and set it in Settings."
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:118
+msgid "Complianz is active. The withdrawal flow is functional (consent-exempt); the plugin marks its scripts so they are not blocked. Verify on the front end after first activation."
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:121
+msgid "TranslatePress is active. Statutory button labels are marked data-no-translation so they are not machine-translated; confirm the per-language wording is correct."
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:124
+msgid "A page-cache plugin is active. Exclude the My Account / withdrawal form pages from full-page cache so the button reflects the live state."
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:130
+msgid "Environment notes"
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:146
+msgid "General terms clause"
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:148
+msgid "Privacy policy clause (withdrawal log)"
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:151
+msgid "Pre-contractual information clause"
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:49
+msgid "Documents to update (requirement 6)"
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:50
+msgid "The withdrawal button is additional to the Annex I-B model form, which stays mandatory. Update these documents and place the model form in your pre-contractual information."
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:52
+msgid "Annex I-B model form shortcode:"
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:53
+msgid "Pre-contractual info shortcode:"
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:75
+msgid "Legal go-live"
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:84
+msgid "The obligation applies from %1$s — %2$d days to go (for contracts concluded on/after that date)."
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:93
+msgid "The obligation has been in effect since %s."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:102
+msgid "E-commerce platform detected"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:103
+msgid "active."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:103
+msgid "Activate WooCommerce or FluentCart."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:111
+#: src/Admin/DashboardPage.php:118
+msgid "Withdrawal form page"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:112
+msgid "Published — this is the public page guests (buyers without an account) use to start a withdrawal."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:113
+msgid "View page"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:119
+msgid "No published form page yet. Guests without an account need one. Re-activate the plugin to create it automatically, or publish a page containing the [wwu_wb_form] shortcode."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:125
+msgid "Sending through %s. Use the test below to confirm it reaches your inbox."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:126
+msgid "No SMTP plugin detected. WordPress's built-in mail is often dropped or marked as spam by mail servers — the acknowledgement email may silently fail. Install an SMTP plugin (e.g. FluentSMTP, free) and send the test below."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:129
+msgid "Email delivery"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:137
+msgid "PDF receipts (optional)"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:139
+msgid "PDF library available — the receipt email also carries a PDF copy."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:140
+msgid "PDF library not found. The email receipt still works (it is the legal durable medium); to also attach a PDF, install the plugin from the official ZIP, which bundles the library."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:150
+msgid "How it works"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:152
+msgid "An eligible buyer opens their order and clicks the statutory withdrawal button (its wording is fixed by law for each language)."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:153
+msgid "A two-step form appears: they review what they are withdrawing from, then explicitly confirm. No dark patterns, no extra hurdles."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:154
+msgid "On confirmation the order is flagged \"withdrawal requested\", and the consumer immediately receives an acknowledgement of receipt by email (the legal durable medium) — plus a PDF and a permanent verifiable link when available."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:155
+msgid "Every step is written to a tamper-evident, append-only log so you can prove what happened and when. You then handle the refund as usual."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:159
+msgid "Where the button appears"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:161
+msgid "In the customer account, on each eligible order (order list + order detail) and in the \"Right of withdrawal\" account tab."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:162
+msgid "As a link inside the WooCommerce order emails, so guests without an account can reach it."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:163
+msgid "Anywhere you place a shortcode: %s."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:167
+msgid "Why the button might not show on an order"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:168
+msgid "The button only appears where a real withdrawal right exists. It is hidden when:"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:173
+msgid "The consumer is <strong>outside the scope of your applicability mode</strong> (currently: <strong>%s</strong>). For example, a Switzerland order is hidden in \"EU/EEA only\" mode — that is correct, Swiss law mandates no button."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:177
+msgid "The order is not in a contract state (failed, cancelled, refunded, awaiting payment)."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:178
+msgid "Every item is excluded from the right of withdrawal (e.g. delivered digital content), or it is a business (VAT) order."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:179
+msgid "The function is disabled in Settings."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:184
+msgid "Want it to show on <em>every</em> order regardless of country? Set the mode to \"Always show it\" in <a href=\"%s\">Settings → Where the button applies</a>."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:190
+msgid "Next steps"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:193
+msgid "Compliance & documents"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:200
+msgid "A free open-source compliance tool by %s, with mredodos and Matteo Alfieri (An Idea for Business)."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:222
+msgid "Test email delivery"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:226
+msgid "Sends a one-off test message to your address (%s). If it does not arrive (check spam too), outgoing email is not configured — install/configure an SMTP plugin. This does not depend on the PDF library."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:233
+msgid "Send test email"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:245
+msgid "Please wait a few seconds before sending another test email."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:259
+msgid "Test email handed to WordPress for %s. If it does not arrive within a minute (check spam), your mail transport is dropping it — configure an SMTP plugin."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:267
+msgid "WordPress could not send the test email to %s (wp_mail returned an error). Outgoing email is not working on this site — install and configure an SMTP plugin (e.g. FluentSMTP)."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:286
+#: src/Admin/RequestsDashboard.php:332
+#: src/Admin/SettingsPage.php:317
+#: src/Admin/SettingsPage.php:459
+#: src/REST/Authentication.php:55
+#: src/REST/Authentication.php:80
+msgid "Insufficient permissions."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:301
+msgid "WWU Withdrawal Button — test email"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:302
+msgid "This is a test message from the WWU Withdrawal Button plugin."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:303
+msgid "If you received it, outgoing email works and withdrawal acknowledgements will be delivered."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:403
+#: src/Admin/SettingsPage.php:79
+msgid "Mandatory for EU/EEA consumers on contracts concluded on or after %s."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:418
+msgid "Always show it"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:420
+msgid "Custom country list"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:423
+msgid "Only EU/EEA consumers"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:81
+msgid "WWU Withdrawal Button"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:82
+msgid "The EU online right-of-withdrawal function (Art. 11a / Art. 54-bis) for WooCommerce & FluentCart."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:88
+msgid "Setup checklist"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:93
+msgid "Withdrawal function enabled"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:95
+msgid "The button is live for eligible consumers."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:96
+msgid "Turn it on in Settings to start showing the button."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:97
+msgid "Enable now"
+msgstr ""
+
+#: src/Admin/InspectorPage.php:39
+msgid "WWU Withdrawal Button — Debug Inspector"
+msgstr ""
+
+#: src/Admin/InspectorPage.php:45
+msgid "Debug is not enabled for your account. Enable it under <a href=\"%s\">Settings → Debug</a>, then reload this page."
+msgstr ""
+
+#: src/Admin/InspectorPage.php:56
+msgid "entries"
+msgstr ""
+
+#: src/Admin/InspectorPage.php:58
+msgid "Clear view"
+msgstr ""
+
+#: src/Admin/InspectorPage.php:62
+msgid "Smoke tests"
+msgstr ""
+
+#: src/Admin/InspectorPage.php:64
+msgid "Run ALL"
+msgstr ""
+
+#: src/Admin/InspectorPage.php:72
+msgid "Live entries"
+msgstr ""
+
+#: src/Admin/InspectorPage.php:74
+msgid "Level"
+msgstr ""
+
+#: src/Admin/InspectorPage.php:75
+msgid "Channel"
+msgstr ""
+
+#: src/Admin/InspectorPage.php:76
+msgid "Event"
+msgstr ""
+
+#: src/Admin/InspectorPage.php:77
+msgid "Context"
+msgstr ""
+
+#: src/Admin/InspectorPage.php:81
+msgid "Snapshot"
+msgstr ""
+
+#: src/Admin/InspectorPage.php:82
+msgid "Fetch snapshot"
+msgstr ""
+
+#: src/Admin/InspectorPage.php:83
+msgid "Copy"
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:100
+msgid "Country"
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:101
+msgid "In time"
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:102
+msgid "Status"
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:103
+msgid "Evidence"
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:104
+msgid "Actions"
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:123
+#: templates/public/verify-receipt.php:73
+msgid "Yes"
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:124
+msgid "Flagged late"
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:129
+msgid "Verify"
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:166
+msgid "Check the request is in scope. The list hides orders outside the right of withdrawal; \"In time\" shows whether it was within the 14-day window. A late one is still recorded — verify its validity before refusing it."
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:167
+msgid "If the order is goods, the consumer must send them back within 14 days. You may withhold the refund until you receive the goods back, or until the consumer proves they have shipped them — whichever is earlier."
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:168
+msgid "Reimburse within 14 days of being informed of the withdrawal. Refund ALL payments received, including the standard delivery cost, using the same payment method the consumer used (unless they expressly agreed otherwise). Click \"Refund order\" to do it in WooCommerce — the refund is recorded automatically in the evidence log."
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:169
+msgid "Mark the request as processed once you have refunded (and received any returned goods). This closes it in this list; the immutable log keeps the full history."
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:173
+msgid "What to do after receiving a request"
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:179
+msgid "This is operational guidance, not legal advice. For services fully performed with the consumer's prior express consent, and other Art. 59 cases, the right of withdrawal does not apply."
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:208
+msgid "Refunded"
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:212
+msgid "Processed"
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:215
+msgid "Open"
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:232
+msgid "Mark processed"
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:236
+msgid "Resend email"
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:240
+msgid "Refund order"
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:376
+msgid "Request marked as processed."
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:377
+msgid "Could not mark the request as processed — the order could not be loaded."
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:378
+msgid "Acknowledgement email resent."
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:379
+msgid "Could not resend the email — check your email/SMTP configuration."
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:380
+msgid "Please wait a few seconds before resending again."
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:74
+msgid "A withdrawal is the consumer's unilateral right — there is nothing to approve. Once exercised within the period, reimburse the consumer within 14 days (same payment method). Use \"Refund order\" to issue the refund, then mark the request as processed."
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:80
+msgid "Evidence log: chain intact"
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:85
+msgid "Evidence log: integrity broken at row #%d — investigate."
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:92
+msgid "No withdrawal requests yet."
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:97
+msgid "Date/time (submitted)"
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:98
+#: templates/emails/admin-notification.php:30
+#: templates/emails/plain/wwu-wb-withdrawal-ack.php:27
+#: templates/emails/withdrawal-confirmation.php:36
+#: templates/emails/wwu-wb-withdrawal-ack.php:50
+#: templates/form/withdrawal-form.php:60
+#: templates/myaccount/withdrawal-list.php:72
+#: templates/pdf/receipt-pdf.php:48
+#: templates/public/verify-receipt.php:66
+msgid "Order"
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:99
+#: templates/emails/admin-notification.php:31
+#: templates/emails/plain/wwu-wb-withdrawal-ack.php:29
+#: templates/emails/withdrawal-confirmation.php:38
+#: templates/emails/wwu-wb-withdrawal-ack.php:58
+#: templates/pdf/receipt-pdf.php:50
+msgid "Consumer"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:100
+msgid "All admins"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:101
+msgid "Specific roles"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:102
+msgid "Specific users"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:103
+msgid "Current user only"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:111
+msgid "Console level"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:123
+msgid "Save settings"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:129
+msgid "WWU Withdrawal Button — a free open-source compliance tool by %s, with mredodos and Matteo Alfieri (An Idea for Business)."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:154
+msgid "Where the button applies"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:157
+msgid "Applicability"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:160
+msgid "Only EU/EEA consumers (legal minimum — recommended)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:161
+msgid "Always show it (to every consumer, also non-EU)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:162
+msgid "Only a custom list of countries"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:168
+msgid "The button is mandatory only for EU/EEA consumers. \"Always show it\" is a safe superset if you prefer one consistent flow (showing it to non-EU buyers is allowed and low-risk)."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:171
+msgid "Custom countries"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:173
+msgid "Two-letter country codes, comma-separated. Used only with the \"custom list\" mode."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:176
+msgid "Business (B2B) orders"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:178
+msgid "Hide the button when a VAT number was provided (treat as business / out of scope)."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:196
+msgid "Receipt & evidence"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:199
+msgid "Attach PDF receipt"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:201
+msgid "Attach a PDF copy to the acknowledgement email (the email itself is always the durable medium)."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:203
+msgid "PDF library not detected — PDF receipts are currently disabled (the email still works). Install the plugin from the official ZIP to enable PDFs."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:207
+msgid "Notification email"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:209
+msgid "Where to notify you of new withdrawal requests."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:212
+msgid "Evidence retention (years)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:214
+msgid "How long to keep the immutable log (default 10 — the contract limitation period)."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:226
+msgid "Trusted timestamp"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:229
+msgid "OpenTimestamps (free, Bitcoin-anchored — recommended)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:230
+msgid "RFC 3161 timestamp authority (immediate; eIDAS-qualified options)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:231
+msgid "None (the hash chain alone is the evidence)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:237
+msgid "Only a one-way hash leaves your site — never personal data. OpenTimestamps anchors to Bitcoin (free, ~hours). RFC 3161 gets an immediate signed token from a Time-Stamp Authority."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:241
+msgid "RFC 3161 — TSA endpoint"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:243
+msgid "Free, no account: <code>http://timestamp.sectigo.com/qualified</code> (eIDAS-qualified) or <code>http://timestamp.digicert.com</code>. For a national qualified provider (e.g. Aruba, InfoCert, D-Trust, Universign, FNMT, SwissSign) paste their RFC 3161 endpoint and fill in the credentials below."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:246
+msgid "RFC 3161 — credentials (optional)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:247
+msgid "Username (only for account-based QTSPs)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:248
+msgid "Password — leave blank to keep the saved one"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:249
+msgid "Basic-auth username/password, only required by paid qualified providers. Free TSAs need none. The password is stored on your server and never shown again."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:254
+msgid "My Account tab slug"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:256
+msgid "The URL slug of the \"Right of withdrawal\" tab in the customer account. Change only if it conflicts."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:261
+msgid "Email preview"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:262
+msgid "Preview the acknowledgement email"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:263
+msgid "Opens a sample of the email the consumer receives. On WooCommerce it uses your store's email branding (header, footer, colours) exactly as it will be sent."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:280
+msgid "Free, Bitcoin-anchored, no account — the default. Proof completes after a block (~hours)."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:281
+msgid "Free RFC 3161. Its /qualified endpoint is eIDAS-qualified and needs no account — recommended free option."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:282
+msgid "Free RFC 3161 timestamp authority, no account: http://timestamp.digicert.com"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:283
+msgid "Italian eIDAS-qualified timestamp (marca temporale). Paid account; widely accepted in Italy."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:284
+msgid "Italian eIDAS-qualified timestamp. Paid account."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:285
+msgid "German eIDAS-qualified timestamp (Bundesdruckerei). Account required."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:286
+msgid "French eIDAS-qualified timestamp. Account required."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:287
+msgid "Spanish eIDAS-qualified timestamp (national mint). Registration required."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:288
+msgid "Swiss ZertES-qualified timestamp. Account required."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:292
+msgid "Timestamp providers — which to choose"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:296
+msgid "site"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:299
+msgid "Any RFC 3161 authority works — paste its endpoint above and add credentials if it is account-based. Running OpenTimestamps and an RFC 3161 token together gives two independent proofs."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:353
+msgid "Sample Customer"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:355
+msgid "Sample product × 1"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:382
+msgid "Appearance — Custom CSS"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:383
+msgid "Paste CSS to restyle any element of the withdrawal flow on your site. It is loaded after the plugin styles, so it always wins. Tip: override the CSS variables below for quick color/shape changes, or target the classes for full control."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:384
+msgid "Compliance note:"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:384
+msgid "the withdrawal button must stay legible and prominent (Art. 11a). Do not hide it, shrink it, or reduce its contrast."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:390
+msgid "Button background color"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:391
+msgid "Button text color"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:392
+msgid "Button focus outline color"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:393
+msgid "Button corner radius"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:394
+msgid "Input/result corner radius"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:395
+msgid "Button padding"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:396
+msgid "Button font size"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:397
+msgid "Button font weight"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:398
+msgid "Button border"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:399
+msgid "Form max width"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:400
+msgid "Input border color"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:401
+msgid "Input padding"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:402
+msgid "Field label weight"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:403
+msgid "Helper/note text color"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:404
+msgid "Success message colors"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:405
+msgid "Error message colors"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:406
+msgid "Status-notice colors"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:407
+msgid "Vertical spacing rhythm"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:412
+msgid "Wrapper around the withdrawal button"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:413
+msgid "Every button/CTA (withdraw, continue, confirm)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:414
+msgid "The Step-1 \"Continue\" button"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:415
+msgid "The statutory \"Confirm withdrawal\" button"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:416
+msgid "The \"X days left\" note next to the button"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:417
+msgid "The withdrawal form container"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:418
+msgid "The form heading"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:419
+msgid "Each field row (label + input)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:420
+msgid "The actions row holding a button"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:421
+msgid "The Step-2 confirmation block + its intro text"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:422
+msgid "The result message (success / error states)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:423
+msgid "The \"request status\" notice on an order"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:424
+msgid "Generic inline notice"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:425
+msgid "The Annex I-B model form block"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:426
+msgid "The pre-contractual info block"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:429
+msgid "CSS reference — variables & classes"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:431
+msgid "CSS variables (quick overrides)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:432
+msgid "Variable"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:432
+msgid "Default"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:432
+msgid "Controls"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:438
+msgid "Classes (full control)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:439
+msgid "Class"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:439
+msgid "Targets"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:445
+msgid "Examples"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:61
+msgid "WWU Withdrawal Button — Settings"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:64
+msgid "Settings saved."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:71
+msgid "General"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:73
+msgid "Enable withdrawal function"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:75
+msgid "Show the withdrawal button to eligible consumers."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:89
+msgid "Debug"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:92
+msgid "Enable debug"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:94
+msgid "Collect runtime diagnostics and expose the /debug REST endpoints + Inspector."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:97
+msgid "Audience"
+msgstr ""
+
+#: src/Core/Install.php:253
+#: src/Frontend/WooMyAccount.php:92
+msgid "Right of withdrawal"
+msgstr ""
+
+#: src/Domain/WithdrawalService.php:125
+msgid "No pending withdrawal to confirm. Please start again."
+msgstr ""
+
+#: src/Domain/WithdrawalService.php:128
+msgid "This confirmation has expired. Please start the withdrawal again."
+msgstr ""
+
+#: src/Domain/WithdrawalService.php:131
+msgid "Invalid confirmation. Please start the withdrawal again."
+msgstr ""
+
+#: src/Domain/WithdrawalService.php:178
+msgid "Right of withdrawal exercised by the consumer (within the period)."
+msgstr ""
+
+#: src/Domain/WithdrawalService.php:179
+msgid "Right of withdrawal exercised by the consumer — flagged outside the computed period; please verify validity."
+msgstr ""
+
+#: src/DurableMedium/ConfirmationDispatcher.php:159
+msgid "New withdrawal request — order %s"
+msgstr ""
+
+#: src/DurableMedium/ConfirmationDispatcher.php:90
+msgid "Acknowledgement of your withdrawal — order %s"
+msgstr ""
+
+#: src/Frontend/Assets.php:80
+msgid "Submitting…"
+msgstr ""
+
+#: src/Frontend/Assets.php:81
+msgid "Confirming…"
+msgstr ""
+
+#: src/Frontend/Assets.php:82
+msgid "Something went wrong. Please try again."
+msgstr ""
+
+#: src/Frontend/Assets.php:83
+msgid "Your withdrawal has been registered. We have emailed you a confirmation."
+msgstr ""
+
+#: src/Frontend/Assets.php:84
+#: src/Frontend/NoScriptFlow.php:83
+#: templates/form/withdrawal-form.php:78
+msgid "Please confirm your withdrawal. This is the final step."
+msgstr ""
+
+#: src/Frontend/Assets.php:85
+#: templates/myaccount/withdrawal-list.php:54
+msgid "Find my order"
+msgstr ""
+
+#: src/Frontend/Assets.php:86
+msgid "If those details match an eligible order, you can continue. Please check your order number and email and try again."
+msgstr ""
+
+#: src/Frontend/NoScriptFlow.php:129
+msgid "Withdrawal registered"
+msgstr ""
+
+#: src/Frontend/NoScriptFlow.php:130
+msgid "Your withdrawal has been registered. We have emailed you a confirmation on a durable medium."
+msgstr ""
+
+#: src/Frontend/NoScriptFlow.php:141
+msgid "Security check failed. Please reload the form and try again."
+msgstr ""
+
+#: src/Frontend/NoScriptFlow.php:155
+#: src/REST/Routes/WithdrawalRoute.php:41
+msgid "Invalid request."
+msgstr ""
+
+#: src/Frontend/NoScriptFlow.php:199
+msgid "Back to the site"
+msgstr ""
+
+#: src/Frontend/NoScriptFlow.php:70
+#: src/Frontend/NoScriptFlow.php:125
+msgid "Withdrawal"
+msgstr ""
+
+#: src/Frontend/NoScriptFlow.php:71
+#: src/REST/Routes/WithdrawalRoute.php:170
+msgid "Please provide your name and a valid email address."
+msgstr ""
+
+#: src/Frontend/WooMyAccount.php:169
+#: src/Shortcodes/Shortcodes.php:142
+msgid "Withdrawal request status: %s"
+msgstr ""
+
+#: src/Mail/WooAckEmail.php:65
+msgid "Withdrawal acknowledgement"
+msgstr ""
+
+#: src/Mail/WooAckEmail.php:66
+msgid "Acknowledgement of receipt sent to the consumer when they withdraw from a contract. This email is legally required (Art. 11a / Art. 54-bis); disabling it here only reverts to a plain built-in template — the acknowledgement is still sent."
+msgstr ""
+
+#: src/Mail/WooAckEmail.php:86
+msgid "Acknowledgement of your withdrawal — order {order_number}"
+msgstr ""
+
+#: src/Mail/WooAckEmail.php:95
+#: templates/emails/withdrawal-confirmation.php:30
+msgid "Acknowledgement of receipt of your withdrawal"
+msgstr ""
+
+#: src/Platform/WooCommerce/OrderStatus.php:122
+msgid "Mark as withdrawal requested"
+msgstr ""
+
+#: src/Platform/WooCommerce/OrderStatus.php:142
+msgid "Marked as withdrawal requested (bulk)."
+msgstr ""
+
+#: src/Platform/WooCommerce/OrderStatus.php:76
+#: src/Platform/WooCommerce/OrderStatus.php:94
+#: src/Platform/WooCommerce/OrderStatus.php:106
+msgctxt "Order status"
+msgid "Withdrawal requested"
+msgstr ""
+
+#: src/Platform/WooCommerce/OrderStatus.php:82
+msgid "Withdrawal requested <span class=\"count\">(%s)</span>"
+msgid_plural "Withdrawal requested <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Platform/WooCommerceAdapter.php:122
+msgid "Withdrawal requested by the consumer."
+msgstr ""
+
+#: src/REST/Authentication.php:48
+#: src/REST/Authentication.php:73
+msgid "Authentication required."
+msgstr ""
+
+#: src/REST/Authentication.php:87
+msgid "Debug is not enabled for your account. Enable it under WWU Withdrawal Button → Settings → Debug."
+msgstr ""
+
+#: src/REST/Routes/ReceiptRoute.php:65
+#: src/REST/Routes/ReceiptRoute.php:96
+msgid "Too many attempts."
+msgstr ""
+
+#: src/REST/Routes/ReceiptRoute.php:70
+#: src/REST/Routes/ReceiptRoute.php:101
+#: src/REST/Routes/ReceiptRoute.php:107
+msgid "Not found."
+msgstr ""
+
+#: src/REST/Routes/ReceiptRoute.php:75
+msgid "Receipt not available."
+msgstr ""
+
+#: src/REST/Routes/WithdrawalRoute.php:121
+msgid "Too many attempts. Please try again in a few minutes."
+msgstr ""
+
+#: src/REST/Routes/WithdrawalRoute.php:194
+msgid "Missing confirmation token. Please start again."
+msgstr ""
+
+#: src/Shortcodes/Shortcodes.php:101
+msgid "Order not found or access could not be verified."
+msgstr ""
+
+#: src/Shortcodes/Shortcodes.php:137
+msgid "No withdrawal request for this order."
+msgstr ""
+
+#: templates/button/withdrawal-button.php:28
+msgid "%d day left to withdraw"
+msgid_plural "%d days left to withdraw"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/emails/admin-notification.php:23
+msgid "New withdrawal request"
+msgstr ""
+
+#: templates/emails/admin-notification.php:26
+msgid "Flagged outside the computed withdrawal period"
+msgstr ""
+
+#: templates/emails/admin-notification.php:26
+msgid "please verify whether the request is still valid."
+msgstr ""
+
+#: templates/emails/admin-notification.php:32
+#: templates/emails/plain/wwu-wb-withdrawal-ack.php:28
+#: templates/emails/withdrawal-confirmation.php:37
+#: templates/emails/wwu-wb-withdrawal-ack.php:54
+#: templates/pdf/receipt-pdf.php:49
+msgid "Goods / services"
+msgstr ""
+
+#: templates/emails/admin-notification.php:34
+msgid "Reason"
+msgstr ""
+
+#: templates/emails/admin-notification.php:36
+#: templates/public/verify-receipt.php:69
+msgid "Submitted"
+msgstr ""
+
+#: templates/emails/admin-notification.php:38
+msgid "The order has been marked \"Withdrawal requested\". Remember the refund obligation (within 14 days). This request is recorded in the immutable log."
+msgstr ""
+
+#: templates/emails/admin-notification.php:39
+msgid "View the evidence record"
+msgstr ""
+
+#: templates/emails/plain/wwu-wb-withdrawal-ack.php:24
+#: templates/emails/withdrawal-confirmation.php:32
+#: templates/emails/wwu-wb-withdrawal-ack.php:42
+msgid "Dear %s,"
+msgstr ""
+
+#: templates/emails/plain/wwu-wb-withdrawal-ack.php:25
+#: templates/emails/withdrawal-confirmation.php:33
+#: templates/emails/wwu-wb-withdrawal-ack.php:44
+msgid "We confirm that we have received your withdrawal from the following distance contract. This message is your acknowledgement of receipt on a durable medium."
+msgstr ""
+
+#: templates/emails/plain/wwu-wb-withdrawal-ack.php:31
+#: templates/emails/withdrawal-confirmation.php:40
+#: templates/emails/wwu-wb-withdrawal-ack.php:63
+#: templates/form/withdrawal-form.php:68
+#: templates/pdf/receipt-pdf.php:52
+msgid "Reason (optional)"
+msgstr ""
+
+#: templates/emails/plain/wwu-wb-withdrawal-ack.php:33
+#: templates/emails/withdrawal-confirmation.php:42
+#: templates/emails/wwu-wb-withdrawal-ack.php:68
+#: templates/pdf/receipt-pdf.php:54
+msgid "Date and time of submission"
+msgstr ""
+
+#: templates/emails/plain/wwu-wb-withdrawal-ack.php:35
+#: templates/emails/withdrawal-confirmation.php:46
+#: templates/emails/wwu-wb-withdrawal-ack.php:73
+msgid "Addressee (trader):"
+msgstr ""
+
+#: templates/emails/plain/wwu-wb-withdrawal-ack.php:42
+msgid "Download your receipt (PDF):"
+msgstr ""
+
+#: templates/emails/plain/wwu-wb-withdrawal-ack.php:45
+msgid "Verify this receipt:"
+msgstr ""
+
+#: templates/emails/withdrawal-confirmation.php:51
+#: templates/emails/wwu-wb-withdrawal-ack.php:78
+msgid "Download your receipt (PDF)"
+msgstr ""
+
+#: templates/emails/withdrawal-confirmation.php:55
+#: templates/emails/wwu-wb-withdrawal-ack.php:82
+msgid "Evidence reference:"
+msgstr ""
+
+#: templates/emails/withdrawal-confirmation.php:56
+#: templates/emails/wwu-wb-withdrawal-ack.php:84
+msgid "Verify this receipt"
+msgstr ""
+
+#: templates/emails/wwu-wb-withdrawal-ack.php:46
+msgid "Withdrawal details"
+msgstr ""
+
+#: templates/form/withdrawal-form.php:46
+msgid "JavaScript is required to use the withdrawal form. You may also use the model withdrawal form provided in our terms."
+msgstr ""
+
+#: templates/form/withdrawal-form.php:56
+msgid "Your name"
+msgstr ""
+
+#: templates/form/withdrawal-form.php:64
+msgid "Email for the confirmation"
+msgstr ""
+
+#: templates/form/withdrawal-form.php:69
+msgid "You are not required to give a reason."
+msgstr ""
+
+#: templates/form/withdrawal-form.php:73
+msgid "Continue"
+msgstr ""
+
+#: templates/myaccount/withdrawal-list.php:42
+msgid "Enter your order number and the email you used at checkout to start a withdrawal. You can also use the link in your order confirmation email, or log in to your account."
+msgstr ""
+
+#: templates/myaccount/withdrawal-list.php:46
+msgid "Order number"
+msgstr ""
+
+#: templates/myaccount/withdrawal-list.php:50
+msgid "Email used at checkout"
+msgstr ""
+
+#: templates/myaccount/withdrawal-list.php:61
+msgid "You have no orders that can be withdrawn right now. The button appears on eligible orders within the withdrawal period."
+msgstr ""
+
+#: templates/myaccount/withdrawal-list.php:63
+msgid "Go to my orders"
+msgstr ""
+
+#: templates/myaccount/withdrawal-list.php:68
+msgid "Choose an order to withdraw from:"
+msgstr ""
+
+#: templates/myaccount/withdrawal-list.php:73
+msgid "Date"
+msgstr ""
+
+#: templates/myaccount/withdrawal-list.php:74
+msgid "Action"
+msgstr ""
+
+#: templates/myaccount/withdrawal-list.php:84
+msgid "Request: %s"
+msgstr ""
+
+#: templates/partials/consumer-guidance.php:25
+msgid "You can withdraw from this contract within %d days, without giving any reason. It takes two short steps and we will email you a confirmation straight away."
+msgstr ""
+
+#: templates/partials/consumer-guidance.php:30
+msgid "How it works & what happens next"
+msgstr ""
+
+#: templates/partials/consumer-guidance.php:32
+msgid "You have %d days to withdraw — counted from when you (or someone you nominated) received the goods, or from the day the contract was concluded for a service."
+msgstr ""
+
+#: templates/partials/consumer-guidance.php:33
+msgid "You do not need to explain why. There are no hidden steps and no obligation to call us."
+msgstr ""
+
+#: templates/partials/consumer-guidance.php:34
+msgid "Fill in your name and email, then confirm. Right after confirming, we email you an acknowledgement of receipt — keep it as your proof."
+msgstr ""
+
+#: templates/partials/consumer-guidance.php:35
+msgid "We refund all payments you made for the order, including the standard delivery cost, within 14 days, using the same payment method you used."
+msgstr ""
+
+#: templates/partials/consumer-guidance.php:36
+msgid "If your order is physical goods, please send them back within 14 days of telling us. We may wait until we receive them (or your proof of return) before refunding; return shipping may be at your expense unless we stated otherwise."
+msgstr ""
+
+#: templates/partials/consumer-guidance.php:37
+msgid "Some items cannot be withdrawn by law (for example, sealed items unsealed after delivery, or digital content you agreed to start immediately). If that applies, we will let you know."
+msgstr ""
+
+#: templates/partials/consumer-guidance.php:39
+msgid "If anything is unclear, contact us before confirming — we are happy to help."
+msgstr ""
+
+#: templates/pdf/receipt-pdf.php:44
+msgid "Acknowledgement of receipt of withdrawal"
+msgstr ""
+
+#: templates/pdf/receipt-pdf.php:45
+msgid "durable medium (Art. 11a Dir. 2011/83/EU)"
+msgstr ""
+
+#: templates/pdf/receipt-pdf.php:55
+msgid "Addressee (trader)"
+msgstr ""
+
+#: templates/pdf/receipt-pdf.php:59
+msgid "Declaration"
+msgstr ""
+
+#: templates/pdf/receipt-pdf.php:60
+msgid "I, %1$s, hereby give notice that I withdraw from my contract of sale of the following goods/services: %2$s."
+msgstr ""
+
+#: templates/pdf/receipt-pdf.php:64
+msgid "Tamper-evidence reference (SHA-256 of the immutable-log record):"
+msgstr ""
+
+#: templates/pdf/receipt-pdf.php:66
+msgid "Request ID:"
+msgstr ""
+
+#: templates/pdf/receipt-pdf.php:67
+msgid "Verify:"
+msgstr ""
+
+#: templates/public/verify-receipt.php:38
+#: templates/public/verify-receipt.php:62
+msgid "Withdrawal receipt verification"
+msgstr ""
+
+#: templates/public/verify-receipt.php:56
+msgid "Verified — record intact"
+msgstr ""
+
+#: templates/public/verify-receipt.php:58
+msgid "Record could not be verified"
+msgstr ""
+
+#: templates/public/verify-receipt.php:72
+msgid "Within statutory window"
+msgstr ""
+
+#: templates/public/verify-receipt.php:73
+msgid "No (late — still recorded)"
+msgstr ""
+
+#: templates/public/verify-receipt.php:75
+msgid "Evidence hash"
+msgstr ""
+
+#: templates/public/verify-receipt.php:83
+msgid "This page confirms that the withdrawal record exists and matches its tamper-evident entry in the immutable log. The evidence hash above is the fingerprint of that entry."
+msgstr ""
+
+#: templates/public/verify-receipt.php:84
+msgid "The withdrawal record could not be matched against the immutable log. Please contact the trader."
+msgstr ""
+
+#: templates/public/verify-receipt.php:87
+msgid "Checked on %s."
+msgstr ""
+
+#: wwu-withdrawal-button.php:148
+msgid "WWU Withdrawal Button requires PHP %1$s or higher. You are running PHP %2$s."
+msgstr ""
+
+#: src/Frontend/EligibleOrders.php
+msgid "Withdrawal handled"
+msgstr ""
+
+#: src/Frontend/EligibleOrders.php
+msgid "Withdrawal requested"
+msgstr ""

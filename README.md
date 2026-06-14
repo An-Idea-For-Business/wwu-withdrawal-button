@@ -20,6 +20,8 @@
 
 > ⚠️ **The obligation applies to distance contracts concluded on or after 19 June 2026.** This is a technical aid to compliance, **not legal advice** — have your own counsel review your store's documents.
 
+🌐 **Product page & docs:** [webwakeup.it/wwu-withdrawal-button](https://webwakeup.it/wwu-withdrawal-button/)
+
 ---
 
 ## Why this exists
@@ -42,6 +44,15 @@ This plugin makes a WooCommerce or FluentCart store compliant **out of the box**
 ## Status
 
 🚧 **In active development.** This repository currently contains the full design + legal analysis (see [`docs/`](docs/)) and the **F0 foundation** (bootstrap, schema, debug stack, REST diagnostics). The withdrawal flow, durable medium, log chain and compliance documents are landing phase by phase — see the [roadmap](docs/plans/wwu-wb-roadmap-PLAN.md).
+
+## Known issues & limitations
+
+We document limitations openly. None of these block the legal compliance core — the withdrawal button, two-step flow, durable-medium acknowledgement, verifiable link and immutable log all work on both platforms.
+
+- **FluentCart native emails can't carry a withdrawal merge-tag (deferred enhancement).** We'd like to inject the withdrawal link into FluentCart's *own* transactional emails (e.g. the order receipt) via a merge tag like `{{wwu.recesso_url}}`. FluentCart (as of June 2026) exposes `fluent_cart/editor_shortcodes` to list a tag in the email editor, but **no documented hook to resolve the tag's value at send time** — so a tag would render literally. We removed the attempt rather than ship something broken. **This is not a broken feature:** the plugin sends **its own** acknowledgement email on withdrawal confirmation (it falls back to a standalone `wp_mail` sender when WooCommerce's email system isn't present), and the consumer reaches the withdrawal from the FluentCart account **"Right of withdrawal"** page and the standalone public page. Tracked to revisit if/when FluentCart documents a value-resolver hook. (See [`docs/analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md`](docs/analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md).)
+- **FluentCart customer portal is a Vue SPA.** In-portal styling of the order chooser is best-effort (the portal's shortcode tag isn't documented for asset detection); the chooser rows and the per-order button link to the standalone page where the plugin's CSS/JS always load, so the flow works regardless.
+- **PDF receipt needs Dompdf.** If you install from source without building the bundled `vendor/` (`composer install`), PDF generation is skipped and the durable medium is **email-only** — which still satisfies the obligation (the email carries the full textual acknowledgement). Build the vendor dir to enable the attached PDF.
+- **Digital products show the button by default.** Since `1.0.0-alpha.24` the Art. 59 digital auto-exclusion defaults **off** — the right of withdrawal is the default and the button shows on digital products too. The digital-content exemption (Art. 59 lett. o) is only legally valid when prior express consent + acknowledgement were captured; a future *Exemptions* feature ([SPEC](docs/specs/wwu-wb-withdrawal-exemptions-SPEC.md)) lets merchants configure that correctly. Until then, exclude specific products/categories via the `wwu_wb_excluded_product_ids` filter if needed.
 
 ## Documentation
 

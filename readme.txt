@@ -4,11 +4,13 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0-alpha.1
+Stable tag: 1.0.0-alpha.27
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 The EU online withdrawal button (Art. 11a / Art. 54-bis) for WooCommerce & FluentCart: statutory two-step withdrawal, durable-medium receipt, immutable log.
+
+Product page & documentation: https://webwakeup.it/wwu-withdrawal-button/
 
 == Description ==
 
@@ -44,12 +46,39 @@ No. The button is **additional** to the Annex I-B model form, which remains mand
 = Is the timestamp legally valid? =
 OpenTimestamps provides a free, independently-verifiable Bitcoin-anchored proof. A pluggable RFC 3161 / eIDAS qualified-timestamp provider is available for stronger "data certa".
 
+== External services ==
+
+This plugin connects to the **OpenTimestamps** public calendar servers to obtain a free, trusted timestamp (a "data certa") for the tamper-evident withdrawal log. This is the default timestamp provider; you can switch it to "none" in the settings to disable all external calls.
+
+- **What is sent:** only a SHA-256 hash (a one-way digest) of the immutable-log record, plus a random privacy nonce. No personal data, order content, names, emails or IP addresses are ever sent — only an opaque hash that cannot be reversed.
+- **When:** once when a withdrawal is confirmed (to submit the hash) and periodically via WP-Cron (to retrieve the Bitcoin-anchored proof).
+- **Where:** the OpenTimestamps public calendars (a.pool.opentimestamps.org, b.pool.opentimestamps.org, a.pool.eternitywall.com, ots.btc.catallaxy.com).
+- **Service info / privacy:** https://opentimestamps.org/
+
+No other external services are used. The plugin does not load remote scripts, fonts or trackers on your site.
+
+== Privacy ==
+
+The plugin records withdrawal declarations (name, identified contract, email, IP address, date and time) in an append-only, tamper-evident log on **your own server**, because Art. 54-bis requires this as legal evidence (GDPR Art. 6(1)(c)/(f)). It generates a ready-to-paste privacy clause for your policy. Data is retained for a configurable period (10 years by default), and the uninstaller keeps the evidence log by default (legal hold) unless you opt to erase it.
+
 == Changelog ==
 
+= 1.0.0-alpha.19 =
+* FluentCart customer portal: the "Right of withdrawal" account page, the sidebar entry, the per-order button and the dashboard banner now work. Every FluentCart hook was corrected to the official FluentCart developer contract (verified against dev.fluentcart.com), and the order chooser reads each order's data through the correct customer/address relations. Fixes the blank page and missing button seen in live testing.
+
+= 1.0.0-alpha.18 =
+* FluentCart: first cut of the customer-portal withdrawal surfaces, and a platform-agnostic order chooser that merges WooCommerce and FluentCart orders.
+
+= 1.0.0-alpha.17 =
+* Withdrawal flow (WooCommerce HPOS + FluentCart), statutory labels (IT/EN/DE/FR/ES), two-step + no-JS fallback, durable-medium acknowledgement (email + PDF + verifiable link), tamper-evident hash-chained log + OpenTimestamps, Annex I-B model form + legal clauses, shortcodes, admin dashboard + compliance page, Complianz/cache compatibility. Security audit: 0 findings.
+
 = 1.0.0-alpha.1 =
-* Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics. Withdrawal flow and durable medium land in the following alpha builds.
+* Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
 
-= 1.0.0-alpha.1 =
-First public foundation build. Not yet production-ready — track progress on GitHub.
+= 1.0.0-alpha.19 =
+Recommended for FluentCart stores: fixes the customer-account withdrawal page (was blank) and the per-order button. Test on staging before production; not yet a stable release.
+
+= 1.0.0-alpha.17 =
+Feature-complete alpha. Test thoroughly on staging before production; not yet a stable release.

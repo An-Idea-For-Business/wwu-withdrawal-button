@@ -111,12 +111,16 @@ final class Install {
 	public static function setup_site(): void {
 		self::seed_default_options();
 		self::ensure_secret();
+		self::ensure_form_page();
 
 		Migrator::migrate( (int) get_option( Migrator::OPTION_DB_VERSION, 0 ), (int) WWU_WB_SCHEMA_VERSION );
 
 		// Endpoint rewrite rules are registered in the frontend layer (F1+); flushing
 		// here is harmless and ensures they take effect as soon as they exist.
 		flush_rewrite_rules( false );
+
+		// Invalidate any Complianz blocked-scripts cache so our marker is honoured.
+		\WWU\WithdrawalButton\Compat\Complianz::bust_cache();
 	}
 
 	/**
@@ -156,6 +160,7 @@ final class Install {
 				'merchant_email'       => get_option( 'admin_email' ),
 				'retention_years'      => 10,
 				'go_live_date'         => WWU_WB_GO_LIVE_DATE,
+				'custom_css'           => '',
 			),
 			'',
 			'yes'
@@ -172,27 +177,39 @@ final class Install {
 			'yes'
 		);
 
-		add_option( 'wwu_wb_labels', array(), '', 'yes' );
+		// Read only inside the withdrawal flow → not autoloaded on every page.
+		add_option( 'wwu_wb_labels', array(), '', 'no' );
 
 		add_option(
 			'wwu_wb_exclusions',
 			array(
-				'excluded_category_ids' => array(),
-				'excluded_product_ids'  => array(),
-				'auto_detect_virtual'   => true,
+				// Per-reason exemption map: { '<59_x>': { products:[], categories:[] } }.
+				// The merchant tags products/categories under a specific statutory
+				// reason (Art. 59) via Settings → Exemptions. Empty = nothing exempt
+				// (the right of withdrawal is the default, including digital).
+				'by_reason'           => array(),
+				// Legacy crude digital auto-detect. Default OFF: the digital exemption
+				// (Art. 59 lett. o / Art. 16(m)) only applies with captured consent +
+				// acknowledgment — which the auto-detect does NOT verify. The proper
+				// path is tagging '59_o' with consent capture.
+				'auto_detect_virtual' => false,
 			),
 			'',
-			'yes'
+			'no'
 		);
 
 		add_option(
 			'wwu_wb_timestamp',
 			array(
-				'provider'    => 'opentimestamps',
-				'rfc3161_url' => '',
+				'provider' => 'opentimestamps',
+				'rfc3161'  => array(
+					'endpoint' => '',
+					'user'     => '',
+					'pass'     => '',
+				),
 			),
 			'',
-			'yes'
+			'no'
 		);
 
 		add_option(
@@ -224,21 +241,48 @@ final class Install {
 	}
 
 	/**
+	 * Ensure a published page with the [wwu_wb_form] shortcode exists, so guests
+	 * (and FluentCart customers) always have a reachable withdrawal surface. The
+	 * page id is stored in settings['public_form_page_id'].
+	 *
+	 * @return void
+	 */
+	private static function ensure_form_page(): void {
+		$settings = (array) get_option( 'wwu_wb_settings', array() );
+		$page_id  = (int) ( $settings['public_form_page_id'] ?? 0 );
+
+		if ( $page_id > 0 && 'page' === get_post_type( $page_id ) && 'trash' !== get_post_status( $page_id ) ) {
+			return; // still valid.
+		}
+
+		$new_id = wp_insert_post(
+			array(
+				'post_title'   => __( 'Right of withdrawal', 'wwu-withdrawal-button' ),
+				'post_name'    => 'right-of-withdrawal',
+				'post_content' => '[wwu_wb_form]',
+				'post_status'  => 'publish',
+				'post_type'    => 'page',
+			),
+			true
+		);
+
+		if ( ! is_wp_error( $new_id ) && $new_id > 0 ) {
+			$settings['public_form_page_id'] = (int) $new_id;
+			update_option( 'wwu_wb_settings', $settings );
+		}
+	}
+
+	/**
 	 * Ensure a per-site cryptographic secret exists (log genesis + token HMAC).
 	 * Generated once, never exposed, never regenerated unless missing.
 	 *
 	 * @return void
 	 */
 	private static function ensure_secret(): void {
-		if ( get_option( 'wwu_wb_secret' ) ) {
-			return;
-		}
-		try {
-			$secret = bin2hex( random_bytes( 32 ) );
-		} catch ( \Exception $e ) {
-			$secret = wp_generate_password( 64, true, true );
-		}
-		add_option( 'wwu_wb_secret', $secret, '', 'no' );
+		// Delegate to the central Secret accessor, which mints + persists the
+		// secret if it is missing (and is also the fail-safe used by every token
+		// gate at runtime, so the key is never an empty string).
+		\WWU\WithdrawalButton\Security\Secret::get();
 	}
 
 	/**
@@ -250,6 +294,7 @@ final class Install {
 	 */
 	public static function deactivate( bool $network_wide ): void {
 		wp_clear_scheduled_hook( self::CRON_COMPLETE_NETWORK );
+		\WWU\WithdrawalButton\Timestamp\TimestampService::clear_cron();
 		flush_rewrite_rules( false );
 	}
 }

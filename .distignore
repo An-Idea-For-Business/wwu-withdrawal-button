@@ -1,0 +1,24 @@
+# Files and folders excluded from the distributed plugin ZIP.
+# The build script (bin/build.sh) packages everything EXCEPT these.
+
+/_internal
+/docs
+/tests
+/.github
+/bin
+/node_modules
+/build
+/dist
+/.git
+.gitignore
+.gitattributes
+.distignore
+composer.json
+composer.lock
+phpcs.xml.dist
+*.dist
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+SECURITY.md
+MASTER-wwu-wb.md
+.editorconfig

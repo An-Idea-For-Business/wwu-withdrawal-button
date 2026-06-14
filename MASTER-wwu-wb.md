@@ -3,11 +3,12 @@
 > Single index for the **WWU Withdrawal Button** plugin: the EU online right-of-withdrawal function ("withdrawal button", Art. 11a / Art. 54-bis) for WooCommerce & FluentCart. One line per doc; never put content here.
 
 - **Slug:** `wwu-wb` · **Folder:** `wwu-withdrawal-button`
-- **Status:** Planning complete (SPEC + legal + plan written) — implementation pending (Phase F0 next)
+- **Status:** **MVP feature-complete** (F0–F8 + audit hardening) on branch `claude/mvp-implementation` ([PR #1](https://github.com/An-Idea-For-Business/wwu-withdrawal-button/pull/1)) — in live testing. Current build `1.0.0-alpha.27`.
 - **Target version:** `1.0.0` · **License:** GPL-3.0-or-later
 - **Credits:** mredodos · Matteo Alfieri (An Idea for Business) · WebWakeUp ([webwakeup.it](https://webwakeup.it))
+- **Product page (live):** [webwakeup.it/wwu-withdrawal-button](https://webwakeup.it/wwu-withdrawal-button/)
 - **Legal go-live:** **2026-06-19** (contracts concluded on/after)
-- **Last updated:** 2026-06-13
+- **Last updated:** 2026-06-14 (NA click-to-cancel SPEC added)
 
 ## What it is (one paragraph)
 A free, open-source WordPress plugin that makes a store compliant with Directive (EU) 2023/2673 (new Art. 11a of the Consumer Rights Directive 2011/83/EU; Italy: Art. 54-bis Codice del Consumo via D.Lgs. 209/2025): a prominently displayed, continuously available, statutory-labelled withdrawal button → two-step statement + confirmation → durable-medium acknowledgement (email + PDF + verifiable link) → tamper-evident immutable log anchored to OpenTimestamps. Dual platform (WooCommerce HPOS+legacy / FluentCart), multilingual (IT/EN/FR/ES/DE + extensible), Complianz/TranslatePress-compatible, shortcodes + blocks, plus generators for the Annex I-B model form and Privacy/Terms/pre-contractual clauses.
@@ -17,6 +18,8 @@ Namespace `WWU\WithdrawalButton` · constants `WWU_WB_*` · options `wwu_wb_*` �
 
 ## Specifications
 - [SPEC — EU withdrawal button](docs/specs/wwu-wb-eu-withdrawal-button-SPEC.md) — 12 canonical sections; the authoritative design (2026-06-13).
+- [SPEC — Withdrawal exemptions (Art. 59)](docs/specs/wwu-wb-withdrawal-exemptions-SPEC.md) — design (no code yet) for exempting products/services with the legal consent-capture conditions; admin UI + exception-type registry (2026-06-14).
+- [SPEC — North America subscription-cancellation ("click-to-cancel")](docs/specs/wwu-wb-subscription-cancellation-na-SPEC.md) — design (no code yet) for a DISTINCT click-to-cancel module in the same plugin, jurisdiction-toggled (Quebec Bill 10, BC Bill 4, Ontario/NB pending, US ROSCA + state ARLs incl. California AB 2863), with WooCommerce Subscriptions + FluentCart integration. Grounded in a 5-agent official-source sweep (2026-06-14).
 
 ## Legal reference
 - [Legal reference (verbatim)](docs/legal/wwu-wb-legal-reference.md) — Art. 11a EN+IT, Recital 37, Art. 54-bis, Annex I-B, per-country labels (DE §356a / FR D.221-5 / ES / CH), Rome I applicability, GDPR.
@@ -26,10 +29,11 @@ Namespace `WWU\WithdrawalButton` · constants `WWU_WB_*` · options `wwu_wb_*` �
 - [Implementation roadmap (PLAN)](docs/plans/wwu-wb-roadmap-PLAN.md) — phases F0–F9 + audits + queued HyperFrames video + post-MVP.
 
 ## Audits
-- _(none yet — A0…A8 added after each implementation phase per Standard #13)_
+- [Core F0–F6 audit (2026-06-13)](docs/audits/wwu-wb-core-2026-06-13-AUDIT.md) — security (0 findings) + performance + compliance; all critical/high gaps closed.
 
 ## Analysis
-- _(none yet)_
+- [Timestamp providers (RFC 3161 + eIDAS)](docs/analysis/wwu-wb-timestamp-providers-ANALYSIS.md) — which trusted-timestamp authorities to add to the pluggable provider (free Sectigo `/qualified`, per-country QTSPs) + PHP integration (2026-06-14).
+- [FluentCart customer-portal hooks (verified)](docs/analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md) — official-source verification of every FluentCart hook/API (custom_endpoints, menu items, dashboard data, order-details slots, Order/Customer models) + the corrections shipped in alpha.19 (2026-06-14).
 
 ## Changelog
 - [CHANGELOG](docs/changelog/wwu-wb-CHANGELOG.md)

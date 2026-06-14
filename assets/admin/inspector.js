@@ -45,6 +45,25 @@
 	}
 
 	/**
+	 * Coerce a value to an array: pass arrays through, map an object to its values
+	 * (PHP associative arrays serialize to JSON objects), else return empty.
+	 *
+	 * @param {*} value Value to coerce.
+	 * @return {Array}
+	 */
+	function toArray( value ) {
+		if ( Array.isArray( value ) ) {
+			return value;
+		}
+		if ( value && 'object' === typeof value ) {
+			return Object.keys( value ).map( function ( k ) {
+				return value[ k ];
+			} );
+		}
+		return [];
+	}
+
+	/**
 	 * Escape a string for safe HTML insertion.
 	 *
 	 * @param {*} value Value to escape.
@@ -110,9 +129,11 @@
 		var s = report.summary;
 		var html = '<p><strong>' + esc( s.pass ) + ' pass</strong>, ' +
 			esc( s.fail ) + ' fail, ' + esc( s.skip ) + ' skip (' + esc( s.total ) + ' total)</p>';
-		( report.suites || [] ).forEach( function ( suite ) {
+		// Normalize to arrays: a PHP associative array serializes to a JSON object,
+		// which has no .forEach — coerce objects to their values defensively.
+		toArray( report.suites ).forEach( function ( suite ) {
 			html += '<details open><summary>' + esc( suite.name ) + '</summary><ul>';
-			( suite.tests || [] ).forEach( function ( t ) {
+			toArray( suite.tests ).forEach( function ( t ) {
 				var icon = 'pass' === t.status ? '✓' : ( 'skip' === t.status ? '∅' : '✗' );
 				html += '<li class="wwu-wb-test-' + esc( t.status ) + '">' + icon + ' <code>' +
 					esc( t.name ) + '</code> — ' + esc( t.output ) + '</li>';

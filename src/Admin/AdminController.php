@@ -14,6 +14,8 @@ declare( strict_types=1 );
 namespace WWU\WithdrawalButton\Admin;
 
 use WWU\WithdrawalButton\REST\Authentication;
+use WWU\WithdrawalButton\Core\Settings;
+use WWU\WithdrawalButton\DurableMedium\PdfBuilder;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -24,9 +26,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 final class AdminController {
 
-	public const MENU_SLUG      = 'wwu-withdrawal-button';
-	public const SETTINGS_SLUG  = 'wwu-wb-settings';
-	public const INSPECTOR_SLUG = 'wwu-wb-inspector';
+	public const MENU_SLUG       = 'wwu-withdrawal-button';
+	public const REQUESTS_SLUG   = 'wwu-wb-requests';
+	public const COMPLIANCE_SLUG = 'wwu-wb-compliance';
+	public const SETTINGS_SLUG   = 'wwu-wb-settings';
+	public const INSPECTOR_SLUG  = 'wwu-wb-inspector';
 
 	/**
 	 * Settings page handler.
@@ -43,6 +47,27 @@ final class AdminController {
 	private $inspector;
 
 	/**
+	 * Requests dashboard handler.
+	 *
+	 * @var RequestsDashboard
+	 */
+	private $requests;
+
+	/**
+	 * Compliance status page handler.
+	 *
+	 * @var ComplianceStatusPage
+	 */
+	private $compliance;
+
+	/**
+	 * Dashboard / onboarding page handler.
+	 *
+	 * @var DashboardPage
+	 */
+	private $dashboard;
+
+	/**
 	 * Asset loader.
 	 *
 	 * @var AdminAssets
@@ -53,9 +78,12 @@ final class AdminController {
 	 * Constructor.
 	 */
 	public function __construct() {
-		$this->settings  = new SettingsPage();
-		$this->inspector = new InspectorPage();
-		$this->assets    = new AdminAssets();
+		$this->settings   = new SettingsPage();
+		$this->inspector  = new InspectorPage();
+		$this->requests   = new RequestsDashboard();
+		$this->compliance = new ComplianceStatusPage();
+		$this->dashboard  = new DashboardPage();
+		$this->assets     = new AdminAssets();
 	}
 
 	/**
@@ -66,7 +94,52 @@ final class AdminController {
 	public function register(): void {
 		add_action( 'admin_menu', array( $this, 'register_menu' ) );
 		add_action( 'admin_post_wwu_wb_save_settings', array( $this->settings, 'handle_save' ) );
+		add_action( 'admin_post_wwu_wb_send_test_email', array( $this->dashboard, 'handle_test_email' ) );
+		add_action( 'admin_post_wwu_wb_preview_email', array( $this->settings, 'handle_preview_email' ) );
+		add_action( 'admin_post_wwu_wb_mark_processed', array( $this->requests, 'handle_mark_processed' ) );
+		add_action( 'admin_post_wwu_wb_resend', array( $this->requests, 'handle_resend' ) );
+		add_action( 'admin_notices', array( $this, 'maybe_mail_failure_notice' ) );
+		add_action( 'admin_notices', array( $this, 'maybe_pdf_missing_notice' ) );
 		$this->assets->register();
+	}
+
+	/**
+	 * On the plugin's own screens, warn (in plain language) when the PDF library
+	 * is missing so the PDF copy of the receipt can't be attached. The email
+	 * receipt still works, so this is informational, not an error.
+	 *
+	 * @return void
+	 */
+	public function maybe_pdf_missing_notice(): void {
+		if ( ! current_user_can( Authentication::capability() ) ) {
+			return;
+		}
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( ! $screen || false === strpos( (string) $screen->id, self::MENU_SLUG ) ) {
+			return;
+		}
+		if ( PdfBuilder::is_available() || empty( Settings::main()['enabled'] ) ) {
+			return;
+		}
+		echo '<div class="notice notice-warning"><p>'
+			. esc_html__( 'WWU Withdrawal Button: the PDF library was not found, so the receipt is sent by email only (no PDF attachment). This is fine to go live, but to also attach a PDF copy, install the plugin using the official packaged ZIP (it bundles the library) instead of a plain source copy.', 'wwu-withdrawal-button' )
+			. '</p></div>';
+	}
+
+	/**
+	 * Show an admin notice if a durable-medium acknowledgement email failed to send.
+	 *
+	 * @return void
+	 */
+	public function maybe_mail_failure_notice(): void {
+		if ( ! current_user_can( \WWU\WithdrawalButton\REST\Authentication::capability() ) ) {
+			return;
+		}
+		$uid = get_transient( 'wwu_wb_mail_failed' );
+		if ( ! $uid ) {
+			return;
+		}
+		echo '<div class="notice notice-error is-dismissible"><p>' . esc_html__( 'WWU Withdrawal Button: a withdrawal acknowledgement email could not be sent. The consumer is legally entitled to receive it. Check your site\'s email/SMTP configuration and resend from the Requests page.', 'wwu-withdrawal-button' ) . '</p></div>';
 	}
 
 	/**
@@ -82,7 +155,7 @@ final class AdminController {
 			__( 'Withdrawal Button', 'wwu-withdrawal-button' ),
 			$capability,
 			self::MENU_SLUG,
-			array( $this, 'render_dashboard' ),
+			array( $this->dashboard, 'render' ),
 			'dashicons-undo',
 			56
 		);
@@ -93,7 +166,25 @@ final class AdminController {
 			__( 'Dashboard', 'wwu-withdrawal-button' ),
 			$capability,
 			self::MENU_SLUG,
-			array( $this, 'render_dashboard' )
+			array( $this->dashboard, 'render' )
+		);
+
+		add_submenu_page(
+			self::MENU_SLUG,
+			__( 'Withdrawal requests', 'wwu-withdrawal-button' ),
+			__( 'Requests', 'wwu-withdrawal-button' ),
+			$capability,
+			self::REQUESTS_SLUG,
+			array( $this->requests, 'render' )
+		);
+
+		add_submenu_page(
+			self::MENU_SLUG,
+			__( 'Compliance', 'wwu-withdrawal-button' ),
+			__( 'Compliance', 'wwu-withdrawal-button' ),
+			$capability,
+			self::COMPLIANCE_SLUG,
+			array( $this->compliance, 'render' )
 		);
 
 		add_submenu_page(
@@ -113,33 +204,5 @@ final class AdminController {
 			self::INSPECTOR_SLUG,
 			array( $this->inspector, 'render' )
 		);
-	}
-
-	/**
-	 * Render the dashboard placeholder (full dashboard ships in F8).
-	 *
-	 * @return void
-	 */
-	public function render_dashboard(): void {
-		$go_live = WWU_WB_GO_LIVE_DATE;
-		echo '<div class="wrap wwu-wb-wrap">';
-		echo '<h1>' . esc_html__( 'WWU Withdrawal Button', 'wwu-withdrawal-button' ) . '</h1>';
-		echo '<p>' . esc_html__( 'EU online right-of-withdrawal function (Art. 11a / Art. 54-bis) for WooCommerce & FluentCart.', 'wwu-withdrawal-button' ) . '</p>';
-		echo '<p><strong>' . esc_html(
-			sprintf(
-				/* translators: %s: go-live date. */
-				__( 'Legal go-live: %s — the obligation applies to contracts concluded on or after this date.', 'wwu-withdrawal-button' ),
-				$go_live
-			)
-		) . '</strong></p>';
-		echo '<p class="description">' . esc_html__( 'This is a foundation build (F0). The withdrawal flow, durable-medium receipt, immutable log and compliance documents are added in the following phases.', 'wwu-withdrawal-button' ) . '</p>';
-		echo '<p style="margin-top:2em;color:#666;">' . wp_kses_post(
-			sprintf(
-				/* translators: %s: WebWakeUp link. */
-				__( 'Made with care by %s.', 'wwu-withdrawal-button' ),
-				'<a href="https://webwakeup.it" target="_blank" rel="noopener">WebWakeUp</a>'
-			)
-		) . '</p>';
-		echo '</div>';
 	}
 }

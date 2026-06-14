@@ -15,7 +15,15 @@ declare( strict_types=1 );
 namespace WWU\WithdrawalButton\Core;
 
 use WWU\WithdrawalButton\Admin\AdminController;
+use WWU\WithdrawalButton\Compat\CacheExclusions;
+use WWU\WithdrawalButton\Compat\Complianz;
+use WWU\WithdrawalButton\DurableMedium\ConfirmationDispatcher;
+use WWU\WithdrawalButton\Frontend\Assets;
+use WWU\WithdrawalButton\Frontend\WooMyAccount;
+use WWU\WithdrawalButton\Platform\WooCommerce\OrderStatus;
 use WWU\WithdrawalButton\REST\RestApi;
+use WWU\WithdrawalButton\Shortcodes\Shortcodes;
+use WWU\WithdrawalButton\Timestamp\TimestampService;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -110,6 +118,58 @@ final class Plugin {
 	private function register_services(): void {
 		$this->rest_api = new RestApi();
 		$this->rest_api->register();
+
+		$services = \WWU\WithdrawalButton\Core\Services::instance();
+
+		// WooCommerce-specific surfaces (status + My Account) when WooCommerce is active.
+		if ( null !== $services->platforms->get( 'woocommerce' ) ) {
+			( new OrderStatus() )->register();
+			( new WooMyAccount() )->register();
+			( new \WWU\WithdrawalButton\Mail\OrderEmailLink() )->register();
+
+			// Register the acknowledgement as a first-class WC_Email so it appears
+			// under WooCommerce → Emails (branding + customiser + theme override).
+			// The callback instantiates WooAckEmail lazily, only when WooCommerce
+			// fires the filter — by which point \WC_Email is guaranteed loaded, so
+			// the class (which extends \WC_Email) is never autoloaded too early.
+			add_filter(
+				'woocommerce_email_classes',
+				static function ( $emails ) {
+					$emails[ \WWU\WithdrawalButton\Mail\WooAckEmail::CLASS_KEY ] = new \WWU\WithdrawalButton\Mail\WooAckEmail();
+					return $emails;
+				}
+			);
+
+			// Record reimbursements against a withdrawal in the evidence log.
+			( new \WWU\WithdrawalButton\Platform\WooRefundRecorder() )->register();
+		}
+
+		// FluentCart portal injection when FluentCart is active.
+		if ( null !== $services->platforms->get( 'fluentcart' ) ) {
+			( new \WWU\WithdrawalButton\Frontend\FluentCartPortal() )->register();
+		}
+
+		// Frontend assets (gated internally; the enqueue hook only fires on the front end).
+		( new Assets() )->register();
+
+		// No-JavaScript fallback flow (admin-post handlers).
+		( new \WWU\WithdrawalButton\Frontend\NoScriptFlow() )->register();
+
+		// Durable-medium acknowledgement: listens on wwu_wb_withdrawal_confirmed.
+		( new ConfirmationDispatcher() )->register();
+
+		// Trusted timestamping (OpenTimestamps) of the immutable-log hash.
+		( new TimestampService() )->register();
+
+		// Shortcodes (button / form / status / model form / info).
+		( new Shortcodes() )->register();
+
+		// Gutenberg block (server-rendered wrapper over the form shortcode).
+		( new \WWU\WithdrawalButton\Frontend\Blocks() )->register();
+
+		// Ecosystem compatibility (Complianz consent-block whitelist + cache exclusions).
+		( new Complianz() )->register();
+		( new CacheExclusions() )->register();
 
 		if ( is_admin() ) {
 			$this->admin = new AdminController();

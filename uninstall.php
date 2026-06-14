@@ -45,6 +45,10 @@ function wwu_wb_uninstall_cleanup_site(): void {
 		delete_option( $option );
 	}
 
+	// FluentCart per-order operational meta options (wwu_wb_fc_*).
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'wwu_wb_fc_%'" );
+
 	// Cron.
 	wp_clear_scheduled_hook( 'wwu_wb_complete_network_activation' );
 	wp_clear_scheduled_hook( 'wwu_wb_timestamp_upgrade' );

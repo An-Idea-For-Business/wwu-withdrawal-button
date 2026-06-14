@@ -2,7 +2,7 @@
 
 > Phased build plan for the EU withdrawal-button compliance plugin. Each large implementation phase is followed by a dedicated **audit phase** (Standard #13). "Done" for any phase requires the relevant rows of the [compliance matrix](../legal/wwu-wb-compliance-matrix.md) to be ✅ and the functional-completeness gate (Standard #14) to hold for the surfaces it ships.
 
-**Last updated:** 2026-06-13 · **SPEC:** [`../specs/wwu-wb-eu-withdrawal-button-SPEC.md`](../specs/wwu-wb-eu-withdrawal-button-SPEC.md)
+**Last updated:** 2026-06-14 (added P1+ public REST API for automations) · **SPEC:** [`../specs/wwu-wb-eu-withdrawal-button-SPEC.md`](../specs/wwu-wb-eu-withdrawal-button-SPEC.md)
 
 ---
 
@@ -30,7 +30,7 @@
 | **F8** | Admin polish + Requests Dashboard + Compliance Status | Settings, Dashboard (filters/export/chain badge), Compliance Status (go-live countdown, doc checklist, warnings), Standard #12 tooltips/help/onboarding | **A8** (UX completeness gate #14) |
 | **F9** | Release engineering | README/CONTRIBUTING/CODE_OF_CONDUCT/SECURITY/issue+PR templates, GitHub Actions (php-lint, phpcs, smoke), build script (Dompdf vendor → ZIP), `readme.txt`, GitHub Release `v1.0.0`, GitHub repo public | cumulative ship-readiness audit |
 | **P-video** | HyperFrames explanatory video (QUEUED) | `_internal/video/` script + HyperFrames composition + render — **triggered when F0–F9 done** | — |
-| **P1+** | Post-MVP | RFC 3161/eIDAS (Aruba/Namirial), full `.ots` PHP verifier, partial/line-item withdrawal, FluentCRM hook, wordpress.org submission, EEA labels, refund-draft workflow | — |
+| **P1+** | Post-MVP | RFC 3161/eIDAS (Aruba/Namirial), full `.ots` PHP verifier, partial/line-item withdrawal, FluentCRM hook, wordpress.org submission, EEA labels, refund-draft workflow, **Art. 59 exemptions feature incl. digital/service consent-capture** ([SPEC ready](../specs/wwu-wb-withdrawal-exemptions-SPEC.md)), **public REST API for automations** (see below) | — |
 
 ---
 
@@ -97,6 +97,17 @@
 ### P-video — HyperFrames explanatory video (QUEUED)
 - **Trigger:** F0–F9 complete (feature-complete + audits passed).
 - `_internal/video/` (gitignored): EN+IT script + storyboard, screen recordings/screenshots, HyperFrames composition, render. Topics: what the law requires, what the plugin does in 60–90s, install + 3-step setup, the consumer flow, the evidence log. Distributed on webwakeup.it + GitHub README embed link.
+
+### P1+ — Public REST API for automations (post-1.0)
+
+> User request (2026-06-14): expose a **public, authenticated REST API** so integrators can build automations on top of the withdrawal system. **After 1.0** (the internal `wwu-wb/v1` REST already exists for the flow + `/debug/*`; this is the *external, documented, stable* surface).
+
+- **Read:** list/get withdrawal requests + status (filter by date/status/platform), fetch a request's evidence (log entries, timestamp proof, receipt link) — for dashboards / external archiving.
+- **Write (capability-gated):** mark a request processed / refund-recorded; trigger the acknowledgement re-send; (optionally) create a withdrawal on a consumer's behalf via a trusted server-to-server call (strict auth + audit-logged).
+- **Events / webhooks:** fire on `wwu_wb_withdrawal_confirmed` / processed / refunded so external systems (CRM, helpdesk, accounting) react without polling. Reuse the existing `do_action` hooks as the internal source; add an outbound webhook dispatcher with signed payloads + retry (Action Scheduler).
+- **Auth:** WordPress Application Passwords / OAuth via standard WP REST auth; per-route capability checks; never expose secrets; rate-limited; every write append-only-logged in the evidence chain.
+- **Docs:** an OpenAPI/Swagger description + examples; versioned namespace (`wwu-wb/v1` stays stable, breaking changes → `v2`).
+- **Why post-1.0:** the 1.0 priority is legal compliance for merchants; a stable public API is an ecosystem feature that benefits from the data model settling first. Design SPEC to be written before build.
 
 ---
 

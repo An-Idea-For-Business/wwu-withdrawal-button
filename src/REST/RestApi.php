@@ -14,6 +14,8 @@ namespace WWU\WithdrawalButton\REST;
 
 use WWU\WithdrawalButton\REST\Routes\DebugRoute;
 use WWU\WithdrawalButton\REST\Routes\DebugTestsRoute;
+use WWU\WithdrawalButton\REST\Routes\WithdrawalRoute;
+use WWU\WithdrawalButton\REST\Routes\ReceiptRoute;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -53,7 +55,8 @@ final class RestApi {
 		return array(
 			new DebugRoute(),
 			new DebugTestsRoute(),
-			// Phase F1+: WithdrawalRoute, ReceiptRoute, VerifyRoute.
+			new WithdrawalRoute(),
+			new ReceiptRoute(),
 		);
 	}
 }

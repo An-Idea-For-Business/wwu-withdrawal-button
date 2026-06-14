@@ -62,7 +62,7 @@ final class InspectorPage {
 		echo '<h2>' . esc_html__( 'Smoke tests', 'wwu-withdrawal-button' ) . '</h2>';
 		echo '<p>';
 		echo '<button type="button" class="button button-primary" data-action="run-suite" data-suite="all">' . esc_html__( 'Run ALL', 'wwu-withdrawal-button' ) . '</button> ';
-		foreach ( array( 'foundation', 'tables', 'collector', 'audience' ) as $suite ) {
+		foreach ( \WWU\WithdrawalButton\Debug\SmokeTests::suite_names() as $suite ) {
 			echo '<button type="button" class="button" data-action="run-suite" data-suite="' . esc_attr( $suite ) . '">' . esc_html( $suite ) . '</button> ';
 		}
 		echo '</p>';
