@@ -48,7 +48,7 @@ final class EligibleOrders {
 		// WooCommerce AND FluentCart orders in one chooser.
 		$rows = array_merge( self::collect_woocommerce( $user_id ), self::collect_fluentcart( $user_id ) );
 
-		return Template::render(
+		$html = Template::render(
 			'myaccount/withdrawal-list.php',
 			array(
 				'rows'       => $rows,
@@ -56,6 +56,86 @@ final class EligibleOrders {
 				'orders_url' => function_exists( 'wc_get_account_endpoint_url' ) ? wc_get_account_endpoint_url( 'orders' ) : '',
 			)
 		);
+
+		// Opt-in admin diagnostic (?wwu_wb_diag=1): explains, per FluentCart order,
+		// what was found and why it is shown/hidden. Admin-only, read-only, never
+		// rendered for customers. Use it on the standalone public form page.
+		if ( isset( $_GET['wwu_wb_diag'] ) && current_user_can( 'manage_options' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only admin diagnostic, no state change.
+			$html .= self::render_diagnostic( $user_id );
+		}
+
+		return $html;
+	}
+
+	/**
+	 * Admin diagnostic block: why FluentCart orders are shown/hidden for a user.
+	 *
+	 * Re-runs the FluentCart customer/order lookup and reports, per order, the
+	 * normalized status, country, item count and the applicability decision +
+	 * reason — the exact information needed to tell which gate hides an order.
+	 *
+	 * @param int $user_id User id.
+	 * @return string Escaped HTML block.
+	 */
+	private static function render_diagnostic( int $user_id ): string {
+		$lines   = array();
+		$wp_user = get_userdata( $user_id );
+		$lines[] = 'WP user: #' . $user_id . ' <' . ( $wp_user ? $wp_user->user_email : '?' ) . '>';
+		$lines[] = 'WooCommerce rows shown: ' . count( self::collect_woocommerce( $user_id ) );
+
+		$adapter = Services::instance()->platforms->get( 'fluentcart' );
+		if ( ! $adapter ) {
+			$lines[] = 'FluentCart: adapter NOT active for this request.';
+		} else {
+			$customer_model = '\\FluentCart\\App\\Models\\Customer';
+			$order_model    = '\\FluentCart\\App\\Models\\Order';
+			if ( ! class_exists( $customer_model ) || ! class_exists( $order_model ) ) {
+				$lines[] = 'FluentCart: models NOT found.';
+			} else {
+				try {
+					$customer = $customer_model::where( 'user_id', $user_id )->first();
+					$matched  = $customer ? 'by user_id' : '';
+					if ( ! $customer && $wp_user ) {
+						$customer = $customer_model::where( 'email', (string) $wp_user->user_email )->first();
+						$matched  = $customer ? 'by email' : '';
+					}
+					if ( ! $customer || ! isset( $customer->id ) ) {
+						$lines[] = 'FluentCart: NO customer row for this user (neither user_id nor email). Orders cannot be matched.';
+					} else {
+						$lines[]  = 'FluentCart customer: #' . (int) $customer->id . ' (matched ' . $matched . ')';
+						$orders   = $order_model::where( 'customer_id', $customer->id )->orderBy( 'created_at', 'desc' )->take( self::SCAN_LIMIT )->get();
+						$count    = is_countable( $orders ) ? count( $orders ) : 0;
+						$lines[]  = 'FluentCart orders for customer: ' . $count;
+						$services = Services::instance();
+						foreach ( (array) $orders as $fc ) {
+							$ref = isset( $fc->id ) ? (string) $fc->id : '';
+							$no  = '' !== $ref ? $adapter->get_order( $ref ) : null;
+							if ( ! $no ) {
+								$lines[] = '  - order ' . $ref . ': get_order() returned null';
+								continue;
+							}
+							$d       = $services->applicability->decide( $no );
+							$lines[] = sprintf(
+								'  - #%s: status="%s" country="%s" items=%d enabled=%s -> show=%s reason=%s',
+								$no->number,
+								$no->status,
+								$no->country,
+								count( (array) $no->items ),
+								Settings::enabled() ? 'yes' : 'NO',
+								$d->show ? 'YES' : 'no',
+								$d->reason
+							);
+						}
+					}
+				} catch ( \Throwable $e ) {
+					$lines[] = 'FluentCart probe threw: ' . $e->getMessage();
+				}
+			}
+		}
+
+		$body = esc_html( implode( "\n", $lines ) );
+		return '<pre class="wwu-wb-diag" style="margin-top:24px;padding:12px;border:1px solid #ccd0d4;background:#fff;color:#1d2327;font:12px/1.5 monospace;white-space:pre-wrap;overflow:auto;">'
+			. "WWU Withdrawal — diagnostic (admin only)\n" . $body . '</pre>';
 	}
 
 	/**
@@ -81,6 +161,15 @@ final class EligibleOrders {
 		$rows = array();
 		try {
 			$customer = $customer_model::where( 'user_id', $user_id )->first();
+			// Some FluentCart customers are not linked to a WP user id (created via
+			// guest / manual checkout). Fall back to matching by the user's email.
+			if ( ! $customer || ! isset( $customer->id ) ) {
+				$wp_user = get_userdata( $user_id );
+				$wp_mail = $wp_user ? (string) $wp_user->user_email : '';
+				if ( '' !== $wp_mail ) {
+					$customer = $customer_model::where( 'email', $wp_mail )->first();
+				}
+			}
 			if ( ! $customer || ! isset( $customer->id ) ) {
 				return array();
 			}

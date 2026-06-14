@@ -5,6 +5,32 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### FluentCart applicability gates fixed — orders now show + button appears (1.0.0-alpha.20, 2026-06-14)
+After alpha.19 the FluentCart portal page rendered, but FluentCart orders still did
+not appear in the chooser and the per-order button was missing. Root cause: three
+applicability gates were silently filtering FluentCart orders out, each fixed against
+the official FluentCart model schema:
+- **Empty line items no longer hide the order.** `ArticleFiftyNineEvaluator` returned
+  *no withdrawal right* when an order had zero readable items — but the right of
+  withdrawal is the DEFAULT and Art. 59 exceptions are the exception. It now defaults
+  to "withdrawable" when items can't be read, so a platform whose item relation didn't
+  load never silently hides the function. Also: the adapter now reads items via the
+  official `order_items` relation and `OrderItem.post_id` / `fulfillment_type`.
+- **Status gate now understands FluentCart.** Eligibility presupposes a concluded
+  (paid) contract, which FluentCart signals via **`payment_status` = paid** — the
+  green "Paid" badge — not necessarily the fulfillment `status` (which may be
+  `pending`). The adapter surfaces `paid` so the normalized status reads as eligible.
+- **Country resolved from the right relation.** Billing country (ISO-2) is read from
+  the `billing_address` relation, then the `order_addresses` collection (type=billing),
+  then a flat fallback — previously an unresolved country made every order read as
+  out-of-scope (hidden) in the default EU-only mode.
+- **Customer match by email fallback.** When a FluentCart customer isn't linked to a
+  WP `user_id` (guest/manual checkout), the chooser now also matches by the user's email.
+- **New admin diagnostic** (`?wwu_wb_diag=1`, `manage_options` only, read-only): on the
+  standalone withdrawal page it prints, per FluentCart order, the status / country /
+  item count and the exact applicability decision + reason — so any residual gate is
+  visible in one look instead of guesswork.
+
 ### FluentCart integration corrected to official-doc-verified contract (1.0.0-alpha.19, 2026-06-14)
 Live testing showed the alpha.18 FluentCart surfaces did not work (the "Diritto di
 recesso" menu entry appeared but opened a blank page; no per-order button; no

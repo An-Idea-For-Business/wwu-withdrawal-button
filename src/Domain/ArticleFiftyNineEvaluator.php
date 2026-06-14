@@ -46,6 +46,14 @@ final class ArticleFiftyNineEvaluator {
 		 */
 		$excluded_prods = array_map( 'intval', (array) apply_filters( 'wwu_wb_excluded_product_ids', $excluded_prods, $order ) );
 
+		// The right of withdrawal is the DEFAULT; Art. 59 exceptions are the
+		// exception. If we cannot read the order's line items (e.g. a platform whose
+		// item relation did not load), we must NOT silently hide the function —
+		// default to "withdrawable" and let merchants exclude specific products.
+		if ( empty( $order->items ) ) {
+			return true;
+		}
+
 		foreach ( $order->items as $item ) {
 			if ( $this->item_is_withdrawable( $item, $excluded_cats, $excluded_prods, $auto_detect, $order ) ) {
 				return true;

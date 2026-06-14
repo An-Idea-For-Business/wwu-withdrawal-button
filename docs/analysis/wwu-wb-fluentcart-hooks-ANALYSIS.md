@@ -51,6 +51,29 @@ The alpha.18 FluentCart integration was written from inferred/paraphrased hook s
 - **Was wrong:** the adapter read `customer_email`/`billing_country` as flat columns (don't exist → empty), and took the WP user id from `$order->user_id ?? $order->customer_id` — so country/email came back empty (→ applicability `show=false` → **no button, empty chooser**) and ownership compared the customer PK to the WP user id.
 - **Fixed:** adapter reads through `customer` / `billing_address` relations (lazy-loaded via a guarded `rel()` helper, with flat fallbacks); WP user id from `customer->user_id`; `verify_owner()` compares the customer's `user_id`. The chooser query (`Customer::where('user_id', $wpUserId)->first()` then `Order::where('customer_id', $customer->id)`) was already correct.
 
+## Applicability gates (alpha.20) — why FluentCart orders were still hidden
+
+After the hooks were fixed (alpha.19) the portal page rendered, but FluentCart orders
+were still filtered out by three data-layer gates in `ApplicabilityResolver`/
+`ArticleFiftyNineEvaluator`. Verified against the official model schema and fixed:
+
+- **Items (Art. 59 gate).** `has_withdrawable_item()` looped `$order->items`; with zero
+  items it returned false → `no_withdrawal_right` → hidden. The withdrawal right is the
+  default, so empty/unreadable items now default to *withdrawable*. The adapter reads
+  items via the official `order_items` relation; `OrderItem.post_id` is the product ref
+  and `OrderItem.fulfillment_type` (physical|digital|service) the type.
+- **Status.** Eligibility presupposes a paid contract. FluentCart signals this via
+  **`payment_status` = paid** (the "Paid" badge), not the fulfillment `status` (which can
+  be `pending`). The adapter surfaces `paid` so the platform-agnostic eligible-status
+  allowlist matches.
+- **Country.** `fct_order_addresses.country` is ISO-2. It is read via `billing_address`
+  → `order_addresses` (type=billing) → flat fallback. An unresolved country had made the
+  order read as out-of-scope (hidden) in the default `eu_eea_only` mode.
+- **Customer match.** Added an email fallback (`Customer::where('email', …)`) for orders
+  whose customer is not linked to a WP `user_id`.
+- **Diagnostic.** `?wwu_wb_diag=1` (admin, read-only) prints each FluentCart order's
+  status/country/items + the applicability `show`/`reason` on the standalone page.
+
 ## Residual notes / open items
 - **Asset loading on the SPA portal:** the FluentCart portal shortcode tag is not documented, so `maybe_enqueue_on_portal()` uses a heuristic marker match. Not critical: chooser rows and the per-order button link to the standalone public form page, which always loads our CSS/JS.
 - **Email merge tag:** deferred (no official resolver hook found). If FluentCart confirms one, wire `{{wwu.recesso_url}}` then.

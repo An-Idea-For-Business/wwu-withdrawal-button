@@ -118,6 +118,50 @@ final class FluentCartAdapter implements OrderDataSource {
 	}
 
 	/**
+	 * Resolve the billing country (ISO-2) for a FluentCart order.
+	 *
+	 * Tries the convenience `billing_address` relation, then walks the
+	 * `order_addresses` collection picking the `type === 'billing'` row (falling
+	 * back to the first address), then any flat column. Per the official schema
+	 * (fct_order_addresses.country) the value is an ISO-2 code, e.g. "IT".
+	 *
+	 * @param object $order Order model.
+	 * @return string ISO-2 country code, or '' when undeterminable.
+	 */
+	private function billing_country( $order ): string {
+		$billing = $this->rel( $order, 'billing_address' );
+		if ( $billing ) {
+			$country = (string) ( $this->attr( $billing, 'country' ) ?? '' );
+			if ( '' !== $country ) {
+				return $country;
+			}
+		}
+
+		$addresses = $this->rel( $order, 'order_addresses' );
+		if ( is_iterable( $addresses ) ) {
+			$first = '';
+			foreach ( $addresses as $addr ) {
+				$type    = strtolower( (string) ( $this->attr( $addr, 'type' ) ?? '' ) );
+				$country = (string) ( $this->attr( $addr, 'country' ) ?? '' );
+				if ( '' === $country ) {
+					continue;
+				}
+				if ( 'billing' === $type ) {
+					return $country;
+				}
+				if ( '' === $first ) {
+					$first = $country;
+				}
+			}
+			if ( '' !== $first ) {
+				return $first;
+			}
+		}
+
+		return (string) ( $this->attr( $order, 'billing_country' ) ?? $this->attr( $order, 'country' ) ?? '' );
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public function get_order( string $order_ref ): ?NormalizedOrder {
@@ -127,7 +171,6 @@ final class FluentCartAdapter implements OrderDataSource {
 		}
 
 		$customer = $this->rel( $order, 'customer' );
-		$billing  = $this->rel( $order, 'billing_address' );
 
 		// Email: Customer relation first, then any flat fallback.
 		$email = $customer ? (string) ( $this->attr( $customer, 'email' ) ?? '' ) : '';
@@ -135,11 +178,9 @@ final class FluentCartAdapter implements OrderDataSource {
 			$email = (string) ( $this->attr( $order, 'customer_email' ) ?? $this->attr( $order, 'email' ) ?? '' );
 		}
 
-		// Billing country: OrderAddress relation first, then any flat fallback.
-		$country = $billing ? (string) ( $this->attr( $billing, 'country' ) ?? '' ) : '';
-		if ( '' === $country ) {
-			$country = (string) ( $this->attr( $order, 'billing_country' ) ?? $this->attr( $order, 'country' ) ?? '' );
-		}
+		// Billing country (ISO-2): billing_address relation → order_addresses
+		// collection (type=billing) → flat column. {@see self::billing_country()}.
+		$country = $this->billing_country( $order );
 
 		// WordPress user id: Customer::user_id (the order's customer_id is the
 		// FluentCart customer PK, never a WP user id — so do NOT fall back to it).
@@ -148,7 +189,19 @@ final class FluentCartAdapter implements OrderDataSource {
 			$user_id = (int) ( $this->attr( $order, 'user_id' ) ?? 0 );
 		}
 
-		$status = (string) ( $this->attr( $order, 'status' ) ?? '' );
+		// Withdrawal eligibility hinges on a concluded (PAID) contract, which
+		// FluentCart signals via payment_status — not necessarily the fulfillment
+		// status (which may still be 'pending'). The green "Paid" badge in the portal
+		// is the payment_status. Surface 'paid' when paid so the normalized status
+		// reads as eligible, while keeping completed/processing when already set.
+		$fulfillment = (string) ( $this->attr( $order, 'status' ) ?? '' );
+		$payment     = strtolower( (string) ( $this->attr( $order, 'payment_status' ) ?? '' ) );
+		$status      = $fulfillment;
+		if ( in_array( $payment, array( 'paid', 'partially_paid', 'partially-paid' ), true )
+			&& ! in_array( strtolower( $fulfillment ), array( 'completed', 'processing' ), true ) ) {
+			$status = 'paid';
+		}
+
 		$number = (string) ( $this->attr( $order, 'invoice_no' ) ?? $this->attr( $order, 'order_number' ) ?? $order_ref );
 
 		return new NormalizedOrder(
@@ -294,11 +347,13 @@ final class FluentCartAdapter implements OrderDataSource {
 		}
 		if ( is_iterable( $raw_items ) ) {
 			foreach ( $raw_items as $it ) {
-				$type   = (string) ( $this->attr( $it, 'product_type' ) ?? $this->attr( $it, 'fulfillment_type' ) ?? '' );
+				// Official OrderItem schema: fulfillment_type (physical|digital|service),
+				// product reference is post_id (WordPress post ID), title/post_title.
+				$type   = (string) ( $this->attr( $it, 'fulfillment_type' ) ?? $this->attr( $it, 'product_type' ) ?? '' );
 				$digital = in_array( strtolower( $type ), array( 'digital', 'downloadable', 'license', 'licensed' ), true );
 				$items[] = array(
-					'product_id'   => (int) ( $this->attr( $it, 'product_id' ) ?? 0 ),
-					'name'         => (string) ( $this->attr( $it, 'title' ) ?? $this->attr( $it, 'name' ) ?? '' ),
+					'product_id'   => (int) ( $this->attr( $it, 'post_id' ) ?? $this->attr( $it, 'product_id' ) ?? 0 ),
+					'name'         => (string) ( $this->attr( $it, 'title' ) ?? $this->attr( $it, 'post_title' ) ?? $this->attr( $it, 'name' ) ?? '' ),
 					'qty'          => (int) ( $this->attr( $it, 'quantity' ) ?? 1 ),
 					'virtual'      => $digital,
 					'downloadable' => $digital,
