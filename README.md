@@ -5,7 +5,7 @@
 <h1 align="center">WWU Withdrawal Button</h1>
 
 <p align="center">
-  <strong>The EU "withdrawal button" for WooCommerce &amp; FluentCart — free &amp; open source.</strong><br>
+  <strong>The EU "withdrawal button" for WooCommerce, FluentCart &amp; Easy Digital Downloads — free &amp; open source.</strong><br>
   Implements the online right-of-withdrawal function required by
   <a href="https://eur-lex.europa.eu/eli/dir/2023/2673/oj/eng">Directive (EU) 2023/2673</a>
   (Art. 11a of the Consumer Rights Directive 2011/83/EU) — in Italy
@@ -28,7 +28,7 @@
 
 From **19 June 2026**, any online store selling to consumers in the EU/EEA must let them **withdraw from a contract just as easily as they concluded it**: a prominently displayed, legible **"withdrawal button"**, a two-step confirmation, and an **acknowledgement of receipt on a durable medium** recording the exact date and time. Non-compliance in Italy can mean **AGCM fines up to €10,000,000 or 4% of turnover**, void clauses, and *ex officio* action.
 
-This plugin makes a WooCommerce or FluentCart store compliant **out of the box**.
+This plugin makes a WooCommerce, FluentCart or Easy Digital Downloads store compliant **out of the box**.
 
 ## What it does
 
@@ -36,7 +36,7 @@ This plugin makes a WooCommerce or FluentCart store compliant **out of the box**
 - ✅ **Two-step flow** (statement → `conferma recesso`) — no dark patterns, no mandatory reason, as easy as buying.
 - ✅ **Durable-medium acknowledgement**: immediate email + attached **PDF** + a permanent verifiable link, reproducing the statement content and the precise submission timestamp.
 - ✅ **Tamper-evident immutable log** (append-only, hash-chained, IP + contract data + timestamps) anchored to **OpenTimestamps** (free, Bitcoin-backed *data certa*), with a pluggable RFC 3161 / eIDAS provider.
-- ✅ **WooCommerce (HPOS + legacy) and FluentCart** via a common adapter.
+- ✅ **WooCommerce (HPOS + legacy), FluentCart and Easy Digital Downloads (3.0+)** via a common adapter.
 - ✅ **Multilingual** (IT/EN/FR/ES/DE, extensible) and **jurisdiction-aware** (DE §356a, FR D.221-5, ES direct-effect; Switzerland handled as voluntary; applicability follows the **consumer's country** per Rome I Art. 6).
 - ✅ **Compliance documents**: generates the **Annex I-B model withdrawal form** (multilingual) and ready clauses for Privacy Policy / Terms / pre-contractual info.
 - ✅ **Plays nicely** with **Complianz** and **TranslatePress**; excluded from page cache where needed; **shortcodes + blocks + hooks + template overrides** for customisation.
@@ -68,7 +68,7 @@ We document limitations openly. None of these block the legal compliance core �
 ## Requirements
 
 - WordPress 5.8+ · PHP 7.4+
-- WooCommerce 5.0+ **and/or** FluentCart
+- WooCommerce 5.0+, FluentCart **and/or** Easy Digital Downloads 3.0+
 - For contributors: Composer (to build the bundled Dompdf vendor) and Node (block editor build).
 
 ## Installation (from source, pre-release)
