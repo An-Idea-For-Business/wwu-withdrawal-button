@@ -2,9 +2,9 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WWU Withdrawal Button 1.0.0-alpha.31\n"
+"Project-Id-Version: WWU Withdrawal Button 1.0.0-alpha.34\n"
 "Report-Msgid-Bugs-To: https://webwakeup.it/wwu-withdrawal-button/\n"
-"POT-Creation-Date: 2026-06-14 13:32+0000\n"
+"POT-Creation-Date: 2026-06-14 23:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: WebWakeUp\n"
@@ -233,7 +233,7 @@ msgstr ""
 
 #: src/Admin/ConsentRecordsPage.php:200
 #: src/Admin/DashboardPage.php:287
-#: src/Admin/RequestsDashboard.php:365
+#: src/Admin/RequestsDashboard.php:373
 #: src/Admin/SettingsPage.php:346
 #: src/Admin/SettingsPage.php:789
 #: src/REST/Authentication.php:55
@@ -609,23 +609,23 @@ msgstr ""
 msgid "Open order (refund)"
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:409
+#: src/Admin/RequestsDashboard.php:417
 msgid "Request marked as processed."
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:410
+#: src/Admin/RequestsDashboard.php:418
 msgid "Could not mark the request as processed — the order could not be loaded."
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:411
+#: src/Admin/RequestsDashboard.php:419
 msgid "Acknowledgement email resent."
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:412
+#: src/Admin/RequestsDashboard.php:420
 msgid "Could not resend the email — check your email/SMTP configuration."
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:413
+#: src/Admin/RequestsDashboard.php:421
 msgid "Please wait a few seconds before resending again."
 msgstr ""
 
@@ -1564,17 +1564,18 @@ msgstr ""
 msgid "If those details match an eligible order, you can continue. Please check your order number and email and try again."
 msgstr ""
 
+#: src/Frontend/EddCheckoutConsent.php:114
+#: src/Frontend/FluentCartCheckoutConsent.php:143
+#: src/Frontend/WooCheckoutConsent.php:133
+msgid "Please confirm the required acknowledgement for: %s"
+msgstr ""
+
 #: src/Frontend/EligibleOrders.php:60
 msgid "Withdrawal handled"
 msgstr ""
 
 #: src/Frontend/EligibleOrders.php:64
 msgid "Withdrawal requested"
-msgstr ""
-
-#: src/Frontend/FluentCartCheckoutConsent.php:133
-#: src/Frontend/WooCheckoutConsent.php:133
-msgid "Please confirm the required acknowledgement for: %s"
 msgstr ""
 
 #: src/Frontend/FluentCartPortal.php:167
@@ -1614,6 +1615,10 @@ msgstr ""
 #: src/Frontend/NoScriptFlow.php:71
 #: src/REST/Routes/WithdrawalRoute.php:170
 msgid "Please provide your name and a valid email address."
+msgstr ""
+
+#: src/Frontend/WooBlockCheckoutConsent.php:127
+msgid "Please confirm the required acknowledgement to proceed."
 msgstr ""
 
 #: src/Frontend/WooCheckoutConsent.php:222
@@ -1663,6 +1668,10 @@ msgstr ""
 #: src/Mail/WooAckEmail.php:95
 #: templates/emails/withdrawal-confirmation.php:30
 msgid "Acknowledgement of receipt of your withdrawal"
+msgstr ""
+
+#: src/Platform/FluentCartAdapter.php:349
+msgid "Withdrawal evidence recorded"
 msgstr ""
 
 #: src/Platform/WooCommerce/OrderStatus.php:122
@@ -1992,8 +2001,4 @@ msgstr ""
 
 #: wwu-withdrawal-button.php:148
 msgid "WWU Withdrawal Button requires PHP %1$s or higher. You are running PHP %2$s."
-msgstr ""
-
-#: src/Frontend/WooBlockCheckoutConsent.php
-msgid "Please confirm the required acknowledgement to proceed."
 msgstr ""

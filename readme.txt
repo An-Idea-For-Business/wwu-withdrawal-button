@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0-alpha.33
+Stable tag: 1.0.0-alpha.34
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -71,6 +71,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 
 == Changelog ==
 
+= 1.0.0-alpha.34 =
+* FluentCart improvements, verified against a direct FluentCart-team reply: the consent checkbox now renders on `before_payment_methods` (covers the standard, modal **and** block checkout), FluentCart exemptions are now **category-aware** (via the `product-categories` taxonomy, matching WooCommerce and EDD), and withdrawal/refund notes appear in the FluentCart order **activity timeline** (`fluent_cart_add_log`). Also adds 3 shareable **live-test checklists** (WooCommerce block, FluentCart, EDD) under `docs/testing/`. No change to the consumer-facing button.
+
 = 1.0.0-alpha.33 =
 * Added **Easy Digital Downloads (EDD 3.0+)** as a third supported platform: the withdrawal button, evidence flow and exemption consent capture now work on EDD stores (with category-aware exemptions). Needs a live EDD test. Consent capture now spans WooCommerce (classic + block), FluentCart and EDD.
 
@@ -105,6 +108,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.0.0-alpha.34 =
+FluentCart: consent now renders on the block/modal checkout too and is category-aware; order notes appear in the FluentCart timeline. No change for WooCommerce/EDD stores. FluentCart users: re-test the checkout consent on staging (checklist included).
 
 = 1.0.0-alpha.33 =
 Adds Easy Digital Downloads (EDD 3.0+) support. No change for WooCommerce/FluentCart stores. If you run EDD, test the checkout + button on staging.

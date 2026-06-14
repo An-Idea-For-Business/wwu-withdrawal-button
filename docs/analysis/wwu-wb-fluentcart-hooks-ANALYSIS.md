@@ -126,3 +126,66 @@ only on the docs-confirmed names; treat the rest as support-claim-only until tes
   (reuse `Mail\ExemptionConfirmation`). `Frontend\ConsentReader` already reads it platform-agnostically.
 - **Admin order URL** = replace the best-effort guess in `RequestsDashboard`/`FluentCartAdapter` with
   `$order->getViewUrl('admin')`.
+
+## Second verification round — direct team reply (2026-06-15, build `1.0.0-alpha.34`)
+
+The FluentCart team (Sujoy) answered our follow-up against the current implementation. This
+**promotes several previously support-claim-only / undocumented items to confirmed**, and corrects
+one earlier doc-only conclusion. Items below are now safe to build on; each maps to a concrete code
+change shipped in alpha.34.
+
+### Confirmed + actioned
+1. **Custom checkout fields ARE submitted.** A field rendered inside the FluentCart checkout `<form>`
+   with a unique `name` is included because the checkout JS builds `FormData` from the form — so the
+   value reaches `fluent_cart/checkout/validate_before_process` and `$data['request_data']` in
+   `fluent_cart/checkout/prepare_other_data`. **Unchecked checkboxes are not submitted → treat absence
+   as "no".** Our `posted_consent()` already coerces absence to `false`, and `validate()` blocks when a
+   required reason is unticked → correct.
+2. **Render hook → `fluent_cart/before_payment_methods` (not `after_`).** The team's explicit
+   recommendation: `before_payment_methods` fires in the **standard, modal AND block** checkout
+   renderers; `after_payment_methods` only fires in the standard renderer. **Changed**
+   `FluentCartCheckoutConsent::register()` accordingly.
+3. **Block checkout uses FluentCart's own checkout-form flow, NOT the WooCommerce Store API.** Server
+   validation still goes through `validate_before_process` / `validate_data`. → **No separate Store-API
+   extension path is needed for FluentCart**; our existing hooks already cover the block checkout. (This
+   is unlike WooCommerce, where the block checkout *does* require the Additional Checkout Fields API —
+   see `WooBlockCheckoutConsent`.)
+4. **Product categories = `product-categories` taxonomy** on the FluentCart product post type. Given an
+   order-item `post_id`: `wp_get_object_terms($postId, 'product-categories', ['fields' => 'ids'])`. →
+   **FluentCart exemptions are now category-aware**: `FluentCartAdapter::category_ids_for_post()` (new,
+   `taxonomy_exists()`-guarded) resolves them; `map_items()` fills `category_ids`; the checkout
+   render/validate/capture all pass categories to `ExemptionResolver::reason_for()`. Parity with
+   WooCommerce (`product_cat`) and EDD (`download_category`) finally reached.
+5. **`$order->getViewUrl('admin')` confirmed** to return an absolute `admin_url()` to the SPA route
+   `wp-admin/admin.php?page=fluent-cart#/orders/{order_id}/view`. Our `RequestsDashboard::order_admin_url()`
+   FluentCart branch (getViewUrl + `…/view` fallback) matches — no change needed.
+6. **Admin timeline note → `fluent_cart_add_log()`.** Confirmed shape:
+   `fluent_cart_add_log($title, $message, $level, ['module_name'=>'order', 'module_type'=>FluentCart\App\Models\Order::class, 'module_id'=>$orderId, 'log_type'=>'activity'])`.
+   → `FluentCartAdapter::add_note()` now prefers this (guarded, falls back to `$order->addNote()` then
+   per-order meta) so withdrawal/refund notes appear in the order's activity timeline.
+
+### Confirmed (no code change needed yet)
+7. **`fluent_cart/order_paid` DOES exist and fires synchronously** — this **corrects** §"Discrepancies"
+   above, which had concluded it didn't exist (it is simply absent from the public hooks pages). For
+   third-party work the team still recommends **`fluent_cart/order_paid_done`** (async, after the order is
+   confirmed paid, avoids work in the payment request cycle), or `payment_status_changed_to_paid` for the
+   status transition. We do our capture in `prepare_other_data`, so no change — noted for any future
+   post-payment side-effects.
+8. **`fluent_cart/smartcode_fallback`** is the runtime resolver for editor shortcodes
+   (`fluent_cart/editor_shortcodes` registers the picker UI). Common call shape `($code, $data)`, but one
+   parser path can pass `($value, $code, $data, $conditions)` → **a defensive callback must accept 4 args
+   with defaults.** Keeps the email merge-tag (`{{wwu.recesso_url}}`) deferred, but now with a verified
+   resolver to wire when we build it. (Still undocumented on the public pages — the team noted the gap.)
+9. **Custom order statuses** via `fluent_cart/order_statuses` + `fluent_cart/editable_order_statuses`
+   (filters). Relevant if we later add a native "Withdrawal requested" status instead of our own meta
+   flag. Not done now — our meta + activity-log note is sufficient and version-independent.
+10. **`effective_from => 'immediately'` is supported but gateway-dependent** (Paddle passes it; Stripe
+    cancel is immediate via its API; others may differ; the customer-portal cancel path does not expose an
+    immediate-cancel choice). For the future NA click-to-cancel module — test per gateway.
+
+### Net result for alpha.34
+FluentCart consent capture is now **(a)** on the block-safe render hook, **(b)** category-aware, and
+**(c)** writing a real activity-log note — with the field-submission mechanism, the block-checkout flow,
+and the category taxonomy all **confirmed by the team** rather than inferred. The only remaining
+FluentCart-specific live check is the end-to-end "does the ticked box reach the order + send the durable
+medium" pass (see `docs/testing/wwu-wb-fluentcart-consent-CHECKLIST.md`); the fail-safe holds until then.

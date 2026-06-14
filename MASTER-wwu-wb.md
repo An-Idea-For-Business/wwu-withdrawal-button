@@ -3,12 +3,12 @@
 > Single index for the **WWU Withdrawal Button** plugin: the EU online right-of-withdrawal function ("withdrawal button", Art. 11a / Art. 54-bis) for WooCommerce & FluentCart. One line per doc; never put content here.
 
 - **Slug:** `wwu-wb` · **Folder:** `wwu-withdrawal-button`
-- **Status:** **MVP feature-complete** (F0–F8 + audit hardening), merged to `main`, **released** [`v1.0.0-alpha.27`](https://github.com/An-Idea-For-Business/wwu-withdrawal-button/releases/tag/v1.0.0-alpha.27) — in live testing. Current build `1.0.0-alpha.33` (Easy Digital Downloads adapter + checkout consent capture — third supported platform).
+- **Status:** **MVP feature-complete** (F0–F8 + audit hardening), merged to `main`, **released** [`v1.0.0-alpha.33`](https://github.com/An-Idea-For-Business/wwu-withdrawal-button/releases/tag/v1.0.0-alpha.33) — in live testing. Current build `1.0.0-alpha.34` (FluentCart team-verified improvements: block-safe render hook + category-aware exemptions + activity-log note; + 3 live-test checklists).
 - **Target version:** `1.0.0` · **License:** GPL-3.0-or-later
 - **Credits:** mredodos · Matteo Alfieri (An Idea for Business) · WebWakeUp ([webwakeup.it](https://webwakeup.it))
 - **Product page (live):** [webwakeup.it/wwu-withdrawal-button](https://webwakeup.it/wwu-withdrawal-button/)
 - **Legal go-live:** **2026-06-19** (contracts concluded on/after)
-- **Last updated:** 2026-06-14 (Easy Digital Downloads adapter + checkout consent capture shipped — alpha.33; three platforms now: WooCommerce, FluentCart, EDD)
+- **Last updated:** 2026-06-15 (alpha.34 — FluentCart improvements verified against a direct team reply: `before_payment_methods` render hook, `product-categories` category-aware exemptions, `fluent_cart_add_log` timeline note; + 3 live-test checklists under `docs/testing/`)
 
 ## What it is (one paragraph)
 A free, open-source WordPress plugin that makes a store compliant with Directive (EU) 2023/2673 (new Art. 11a of the Consumer Rights Directive 2011/83/EU; Italy: Art. 54-bis Codice del Consumo via D.Lgs. 209/2025): a prominently displayed, continuously available, statutory-labelled withdrawal button → two-step statement + confirmation → durable-medium acknowledgement (email + PDF + verifiable link) → tamper-evident immutable log anchored to OpenTimestamps. Dual platform (WooCommerce HPOS+legacy / FluentCart), multilingual (IT/EN/FR/ES/DE + extensible), Complianz/TranslatePress-compatible, shortcodes + blocks, plus generators for the Annex I-B model form and Privacy/Terms/pre-contractual clauses.
@@ -36,7 +36,13 @@ Namespace `WWU\WithdrawalButton` · constants `WWU_WB_*` · options `wwu_wb_*` �
 
 ## Analysis
 - [Timestamp providers (RFC 3161 + eIDAS)](docs/analysis/wwu-wb-timestamp-providers-ANALYSIS.md) — which trusted-timestamp authorities to add to the pluggable provider (free Sectigo `/qualified`, per-country QTSPs) + PHP integration (2026-06-14).
-- [FluentCart customer-portal hooks (verified)](docs/analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md) — official-source verification of every FluentCart hook/API (custom_endpoints, menu items, dashboard data, order-details slots, Order/Customer models) + the corrections shipped in alpha.19 (2026-06-14).
+- [FluentCart hooks (verified)](docs/analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md) — official-source verification of every FluentCart hook/API (custom_endpoints, menu items, dashboard data, order-details slots, Order/Customer models) + the corrections shipped in alpha.19; **+ §"Second verification round" (2026-06-15)** = a direct FluentCart-team reply confirming custom-field submission, the `before_payment_methods` render hook, block-checkout flow, the `product-categories` taxonomy, `getViewUrl('admin')`, `order_paid`, `smartcode_fallback`, `fluent_cart_add_log` — all actioned in alpha.34.
+
+## Testing (live-test checklists)
+- [WooCommerce **block** Checkout consent](docs/testing/wwu-wb-woocommerce-block-consent-CHECKLIST.md) — Additional Checkout Fields API (WC 9.9+).
+- [**FluentCart** Checkout consent](docs/testing/wwu-wb-fluentcart-consent-CHECKLIST.md) — `before_payment_methods`, category-aware, activity-log note.
+- [**EDD** Checkout consent](docs/testing/wwu-wb-edd-consent-CHECKLIST.md) — `edd_purchase_form_before_submit` + `edd_built_order`, `download_category`-aware.
+- Each: setup, happy-path (consent required + captured), category-aware, and fail-safe (button stays). Anyone can run them on a staging store.
 
 ## Changelog
 - [CHANGELOG](docs/changelog/wwu-wb-CHANGELOG.md)

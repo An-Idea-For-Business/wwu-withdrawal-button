@@ -33,6 +33,13 @@ final class FluentCartAdapter implements OrderDataSource {
 	private $cache = array();
 
 	/**
+	 * Per-request product-category cache (post_id => term-id list).
+	 *
+	 * @var array<int,int[]>
+	 */
+	private $cat_cache = array();
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public function key(): string {
@@ -324,6 +331,32 @@ final class FluentCartAdapter implements OrderDataSource {
 	 * {@inheritDoc}
 	 */
 	public function add_note( string $order_ref, string $note ): void {
+		// Preferred: FluentCart's own activity log → visible in the admin order
+		// timeline. Signature confirmed by the FluentCart team (2026-06-15):
+		// fluent_cart_add_log( $title, $message, $level, $context ). See
+		// docs/analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md.
+		if ( function_exists( 'fluent_cart_add_log' ) ) {
+			try {
+				$context = array(
+					'module_name' => 'order',
+					'module_id'   => (int) $order_ref,
+					'log_type'    => 'activity',
+				);
+				if ( class_exists( '\\FluentCart\\App\\Models\\Order' ) ) {
+					$context['module_type'] = 'FluentCart\\App\\Models\\Order';
+				}
+				fluent_cart_add_log(
+					__( 'Withdrawal evidence recorded', 'wwu-withdrawal-button' ),
+					$note,
+					'info',
+					$context
+				);
+				return;
+			} catch ( \Throwable $e ) {
+				// fall through to the model method, then meta log.
+			}
+		}
+
 		$order = $this->load( $order_ref );
 		if ( $order && method_exists( $order, 'addNote' ) ) {
 			try {
@@ -408,20 +441,69 @@ final class FluentCartAdapter implements OrderDataSource {
 			foreach ( $raw_items as $it ) {
 				// Official OrderItem schema: fulfillment_type (physical|digital|service),
 				// product reference is post_id (WordPress post ID), title/post_title.
-				$type   = (string) ( $this->attr( $it, 'fulfillment_type' ) ?? $this->attr( $it, 'product_type' ) ?? '' );
+				$type    = (string) ( $this->attr( $it, 'fulfillment_type' ) ?? $this->attr( $it, 'product_type' ) ?? '' );
 				$digital = in_array( strtolower( $type ), array( 'digital', 'downloadable', 'license', 'licensed' ), true );
+				$pid     = (int) ( $this->attr( $it, 'post_id' ) ?? $this->attr( $it, 'product_id' ) ?? 0 );
 				$items[] = array(
-					'product_id'   => (int) ( $this->attr( $it, 'post_id' ) ?? $this->attr( $it, 'product_id' ) ?? 0 ),
+					'product_id'   => $pid,
 					'name'         => (string) ( $this->attr( $it, 'title' ) ?? $this->attr( $it, 'post_title' ) ?? $this->attr( $it, 'name' ) ?? '' ),
 					'qty'          => (int) ( $this->attr( $it, 'quantity' ) ?? 1 ),
 					'virtual'      => $digital,
 					'downloadable' => $digital,
 					'type'         => $type,
-					'category_ids' => array(),
+					'category_ids' => $this->product_category_ids( $pid ),
 				);
 			}
 		}
 		return $items;
+	}
+
+	/**
+	 * Resolve the WordPress term ids of a FluentCart product's categories.
+	 *
+	 * FluentCart products are a WordPress post type; their categories live in the
+	 * `product-categories` taxonomy — confirmed by the FluentCart team (2026-06-15,
+	 * see docs/analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md). Resolving them here is
+	 * what makes FluentCart exemptions category-aware, in parity with WooCommerce
+	 * (`product_cat`) and EDD (`download_category`). Cached per request.
+	 *
+	 * @param int $post_id Product post id.
+	 * @return int[]
+	 */
+	private function product_category_ids( int $post_id ): array {
+		if ( $post_id <= 0 ) {
+			return array();
+		}
+		if ( ! isset( $this->cat_cache[ $post_id ] ) ) {
+			$this->cat_cache[ $post_id ] = self::category_ids_for_post( $post_id );
+		}
+		return $this->cat_cache[ $post_id ];
+	}
+
+	/**
+	 * Stateless taxonomy lookup of a FluentCart product's category term ids.
+	 *
+	 * Shared by the adapter (order-items path) and the checkout-consent renderer
+	 * (cart path) so both resolve categories identically. Guarded: returns [] when
+	 * the taxonomy is not registered (older FluentCart / product type without
+	 * categories) instead of letting wp_get_object_terms() emit a WP_Error.
+	 *
+	 * @param int $post_id Product post id.
+	 * @return int[]
+	 */
+	public static function category_ids_for_post( int $post_id ): array {
+		if ( $post_id <= 0 || ! function_exists( 'wp_get_object_terms' ) || ! taxonomy_exists( 'product-categories' ) ) {
+			return array();
+		}
+		$terms = wp_get_object_terms( $post_id, 'product-categories', array( 'fields' => 'ids' ) );
+		$ids   = is_array( $terms ) ? array_map( 'intval', $terms ) : array();
+		/**
+		 * Filter the resolved FluentCart product category term ids.
+		 *
+		 * @param int[] $ids     Category term ids.
+		 * @param int   $post_id Product post id.
+		 */
+		return (array) apply_filters( 'wwu_wb_fluentcart_product_category_ids', $ids, $post_id );
 	}
 
 	/**
