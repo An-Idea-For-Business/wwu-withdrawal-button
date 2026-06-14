@@ -8,7 +8,7 @@ only under strict legal conditions** — so the right design is not "hide the bu
 > **Status: P1 + P2 + P3 shipped, FluentCart capture shipped** (1.0.0-alpha.27 → alpha.30).
 > Per-reason tagging, evaluator, **WooCommerce + FluentCart** checkout consent capture, the
 > durable-medium confirmation e-mail, retention/purge, the GDPR clause and a Consent-records
-> view are live. Only the WooCommerce **block** Checkout (Store API) capture remains — see §12.
+> view are live. The WooCommerce **block** Checkout (Store API) capture shipped in alpha.32 (Additional Checkout Fields API) — **all WooCommerce + FluentCart capture surfaces are now live**; EDD is the next platform ([SPEC](wwu-wb-edd-integration-SPEC.md)).
 > The legal basis is documented in [the evidence note](../legal/wwu-wb-exemption-consent-evidence-NOTE.md);
 > the verified FluentCart hooks in [the FluentCart analysis](../analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md).
 

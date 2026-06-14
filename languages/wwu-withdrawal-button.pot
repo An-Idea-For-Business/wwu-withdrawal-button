@@ -1993,3 +1993,7 @@ msgstr ""
 #: wwu-withdrawal-button.php:148
 msgid "WWU Withdrawal Button requires PHP %1$s or higher. You are running PHP %2$s."
 msgstr ""
+
+#: src/Frontend/WooBlockCheckoutConsent.php
+msgid "Please confirm the required acknowledgement to proceed."
+msgstr ""

@@ -5,6 +5,31 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### Exemptions — WooCommerce block Checkout consent capture + EDD integration SPEC (1.0.0-alpha.32, 2026-06-14)
+Closes the last consent-capture gap (WooCommerce **block** Checkout) and plans the next
+platform (Easy Digital Downloads). Built on a verified official-docs research pass.
+- **`Frontend\WooBlockCheckoutConsent`** — captures consent on the block-based Checkout via the
+  official **Additional Checkout Fields API** (pure PHP, no JS build; WooCommerce **9.9.0+**).
+  Registers a required `checkbox` (location `order`) per conditional reason, gated by a
+  JSON-Schema `required`/`hidden` on `cart.items` so it only appears/requires when the cart
+  contains a tagged product (product-ID gating). WooCommerce validates it **server-side** on the
+  Store API request and persists it to order meta automatically; on
+  `woocommerce_store_api_checkout_order_processed` we read the value, re-derive the order's
+  conditional items via the verified order path (which **does** resolve categories), and run the
+  same capture as classic checkout (`build_consent_entries` + durable-medium e-mail + PII-free
+  log). Classic and block paths share the `_wwu_wb_consent` / `consent_logged` meta + idempotency
+  guard — never a double capture. No-op (fail-safe) on WC < 9.9 or the shortcode checkout.
+  Conditional product-id gating is cached in a transient, refreshed on settings save.
+- **Cross-platform parity reached** — exemption consent capture now works on **WooCommerce
+  (classic + block) and FluentCart**. No remaining WooCommerce capture gap.
+- **EDD integration SPEC** ([docs/specs/wwu-wb-edd-integration-SPEC.md](../specs/wwu-wb-edd-integration-SPEC.md))
+  — design for a third platform adapter (Easy Digital Downloads 3.0+), with the integration
+  surface verified against official EDD sources (`edd_get_order`/`EDD\Orders\*`, `edd_*_order_meta`,
+  `edd_purchase_form_*` + `edd_checkout_error_checks` + `edd_complete_purchase`, `download_category`,
+  `edd_get_admin_url`). EDD exemptions will be **category-aware** (unlike FluentCart). Not yet
+  implemented — awaiting confirmation.
+- **Needs a live block-checkout test.** The classic-checkout path is unchanged.
+
 ### Exemptions management UX + full i18n (1.0.0-alpha.31, 2026-06-14)
 Merchant-experience pass on the Art. 59 exemptions ([SPEC](../specs/wwu-wb-exemptions-ux-SPEC.md)).
 The core withdrawal button is untouched; this only makes the *exemption* setup legible and

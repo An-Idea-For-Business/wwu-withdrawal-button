@@ -840,6 +840,8 @@ final class SettingsPage {
 		$exclusions['auto_detect_virtual'] = Sanitizer::bool( $_POST['exempt_auto_detect'] ?? '' );
 		unset( $exclusions['excluded_product_ids'], $exclusions['excluded_category_ids'] );
 		update_option( 'wwu_wb_exclusions', $exclusions );
+		// The block-checkout field gating caches the conditional product ids; refresh it.
+		\WWU\WithdrawalButton\Frontend\WooBlockCheckoutConsent::flush_cache();
 
 		// Timestamp provider.
 		$timestamp = (array) get_option( 'wwu_wb_timestamp', array() );

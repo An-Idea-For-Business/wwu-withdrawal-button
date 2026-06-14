@@ -2675,3 +2675,7 @@ msgstr ""
 
 #~ msgid "Request: %s"
 #~ msgstr "Antrag: %s"
+
+#: src/Frontend/WooBlockCheckoutConsent.php
+msgid "Please confirm the required acknowledgement to proceed."
+msgstr "Bitte bestätige die erforderliche Kenntnisnahme, um fortzufahren."

@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0-alpha.31
+Stable tag: 1.0.0-alpha.32
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -71,6 +71,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 
 == Changelog ==
 
+= 1.0.0-alpha.32 =
+* Exemption consent capture now also works on the WooCommerce **block-based Checkout** (via the official Additional Checkout Fields API, WooCommerce 9.9+), reaching full parity with the classic checkout and FluentCart. Pure PHP, no build step. Also adds the design SPEC for a future Easy Digital Downloads (EDD) integration. Needs a live block-checkout test; fail-safe until verified.
+
 = 1.0.0-alpha.31 =
 * Exemptions settings redesigned: the reasons are grouped (conditional / unconditional / seal-based) with tooltips, examples, a "What do you sell?" guided helper, a preview of what the consumer sees (checkbox + confirmation e-mail), and a status panel — all using the WWU UI Kit. Completed the Italian (and FR/ES/DE) translations, including the exemption labels that previously showed in English. The withdrawal button itself is unchanged.
 
@@ -99,6 +102,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.0.0-alpha.32 =
+Adds consent capture on the WooCommerce block Checkout (requires WooCommerce 9.9+ for the conditional field). No change to the classic checkout. Test on staging if you use the block checkout.
 
 = 1.0.0-alpha.31 =
 Settings/exemptions UI overhaul + completed Italian/FR/ES/DE translations (the exemption section was partly in English). No change to the withdrawal flow. Safe to update.

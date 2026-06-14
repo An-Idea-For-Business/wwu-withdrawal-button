@@ -145,8 +145,10 @@ final class Plugin {
 
 			// Capture the consumer's consent + acknowledgement at checkout for the two
 			// conditional exemptions (digital immediate / service performed). Classic
-			// checkout only; the block Checkout needs a separate Store API integration.
+			// checkout (shortcode) + block Checkout (Store API, Additional Checkout
+			// Fields API) — mutually exclusive per order, sharing the same order meta.
 			( new \WWU\WithdrawalButton\Frontend\WooCheckoutConsent() )->register();
+			( new \WWU\WithdrawalButton\Frontend\WooBlockCheckoutConsent() )->register();
 		}
 
 		// FluentCart portal injection + checkout consent capture when FluentCart is active.
