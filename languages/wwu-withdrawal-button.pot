@@ -2,9 +2,9 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WWU Withdrawal Button 1.0.0-alpha.15\n"
+"Project-Id-Version: WWU Withdrawal Button 1.0.0-alpha.17\n"
 "Report-Msgid-Bugs-To: https://github.com/An-Idea-For-Business/wwu-withdrawal-button\n"
-"POT-Creation-Date: 2026-06-13 23:06+0000\n"
+"POT-Creation-Date: 2026-06-13 23:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: WebWakeUp\n"
@@ -302,8 +302,8 @@ msgstr ""
 
 #: src/Admin/DashboardPage.php:286
 #: src/Admin/RequestsDashboard.php:332
-#: src/Admin/SettingsPage.php:258
-#: src/Admin/SettingsPage.php:400
+#: src/Admin/SettingsPage.php:317
+#: src/Admin/SettingsPage.php:459
 #: src/REST/Authentication.php:55
 #: src/REST/Authentication.php:80
 msgid "Insufficient permissions."
@@ -548,8 +548,8 @@ msgstr ""
 #: templates/emails/plain/wwu-wb-withdrawal-ack.php:27
 #: templates/emails/withdrawal-confirmation.php:36
 #: templates/emails/wwu-wb-withdrawal-ack.php:50
-#: templates/form/withdrawal-form.php:55
-#: templates/myaccount/withdrawal-list.php:67
+#: templates/form/withdrawal-form.php:60
+#: templates/myaccount/withdrawal-list.php:72
 #: templates/pdf/receipt-pdf.php:48
 #: templates/public/verify-receipt.php:66
 msgid "Order"
@@ -664,231 +664,307 @@ msgstr ""
 msgid "How long to keep the immutable log (default 10 — the contract limitation period)."
 msgstr ""
 
-#: src/Admin/SettingsPage.php:217
+#: src/Admin/SettingsPage.php:226
 msgid "Trusted timestamp"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:220
+#: src/Admin/SettingsPage.php:229
 msgid "OpenTimestamps (free, Bitcoin-anchored — recommended)"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:221
+#: src/Admin/SettingsPage.php:230
+msgid "RFC 3161 timestamp authority (immediate; eIDAS-qualified options)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:231
 msgid "None (the hash chain alone is the evidence)"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:227
-msgid "OpenTimestamps sends only a one-way hash to public calendar servers — never personal data."
+#: src/Admin/SettingsPage.php:237
+msgid "Only a one-way hash leaves your site — never personal data. OpenTimestamps anchors to Bitcoin (free, ~hours). RFC 3161 gets an immediate signed token from a Time-Stamp Authority."
 msgstr ""
 
-#: src/Admin/SettingsPage.php:230
+#: src/Admin/SettingsPage.php:241
+msgid "RFC 3161 — TSA endpoint"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:243
+msgid "Free, no account: <code>http://timestamp.sectigo.com/qualified</code> (eIDAS-qualified) or <code>http://timestamp.digicert.com</code>. For a national qualified provider (e.g. Aruba, InfoCert, D-Trust, Universign, FNMT, SwissSign) paste their RFC 3161 endpoint and fill in the credentials below."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:246
+msgid "RFC 3161 — credentials (optional)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:247
+msgid "Username (only for account-based QTSPs)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:248
+msgid "Password — leave blank to keep the saved one"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:249
+msgid "Basic-auth username/password, only required by paid qualified providers. Free TSAs need none. The password is stored on your server and never shown again."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:254
 msgid "My Account tab slug"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:232
+#: src/Admin/SettingsPage.php:256
 msgid "The URL slug of the \"Right of withdrawal\" tab in the customer account. Change only if it conflicts."
 msgstr ""
 
-#: src/Admin/SettingsPage.php:237
+#: src/Admin/SettingsPage.php:261
 msgid "Email preview"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:238
+#: src/Admin/SettingsPage.php:262
 msgid "Preview the acknowledgement email"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:239
+#: src/Admin/SettingsPage.php:263
 msgid "Opens a sample of the email the consumer receives. On WooCommerce it uses your store's email branding (header, footer, colours) exactly as it will be sent."
 msgstr ""
 
-#: src/Admin/SettingsPage.php:294
-msgid "Sample Customer"
+#: src/Admin/SettingsPage.php:280
+msgid "Free, Bitcoin-anchored, no account — the default. Proof completes after a block (~hours)."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:281
+msgid "Free RFC 3161. Its /qualified endpoint is eIDAS-qualified and needs no account — recommended free option."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:282
+msgid "Free RFC 3161 timestamp authority, no account: http://timestamp.digicert.com"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:283
+msgid "Italian eIDAS-qualified timestamp (marca temporale). Paid account; widely accepted in Italy."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:284
+msgid "Italian eIDAS-qualified timestamp. Paid account."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:285
+msgid "German eIDAS-qualified timestamp (Bundesdruckerei). Account required."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:286
+msgid "French eIDAS-qualified timestamp. Account required."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:287
+msgid "Spanish eIDAS-qualified timestamp (national mint). Registration required."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:288
+msgid "Swiss ZertES-qualified timestamp. Account required."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:292
+msgid "Timestamp providers — which to choose"
 msgstr ""
 
 #: src/Admin/SettingsPage.php:296
-msgid "Sample product × 1"
+msgid "site"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:323
-msgid "Appearance — Custom CSS"
-msgstr ""
-
-#: src/Admin/SettingsPage.php:324
-msgid "Paste CSS to restyle any element of the withdrawal flow on your site. It is loaded after the plugin styles, so it always wins. Tip: override the CSS variables below for quick color/shape changes, or target the classes for full control."
-msgstr ""
-
-#: src/Admin/SettingsPage.php:325
-msgid "Compliance note:"
-msgstr ""
-
-#: src/Admin/SettingsPage.php:325
-msgid "the withdrawal button must stay legible and prominent (Art. 11a). Do not hide it, shrink it, or reduce its contrast."
-msgstr ""
-
-#: src/Admin/SettingsPage.php:331
-msgid "Button background color"
-msgstr ""
-
-#: src/Admin/SettingsPage.php:332
-msgid "Button text color"
-msgstr ""
-
-#: src/Admin/SettingsPage.php:333
-msgid "Button focus outline color"
-msgstr ""
-
-#: src/Admin/SettingsPage.php:334
-msgid "Button corner radius"
-msgstr ""
-
-#: src/Admin/SettingsPage.php:335
-msgid "Input/result corner radius"
-msgstr ""
-
-#: src/Admin/SettingsPage.php:336
-msgid "Button padding"
-msgstr ""
-
-#: src/Admin/SettingsPage.php:337
-msgid "Button font size"
-msgstr ""
-
-#: src/Admin/SettingsPage.php:338
-msgid "Button font weight"
-msgstr ""
-
-#: src/Admin/SettingsPage.php:339
-msgid "Button border"
-msgstr ""
-
-#: src/Admin/SettingsPage.php:340
-msgid "Form max width"
-msgstr ""
-
-#: src/Admin/SettingsPage.php:341
-msgid "Input border color"
-msgstr ""
-
-#: src/Admin/SettingsPage.php:342
-msgid "Input padding"
-msgstr ""
-
-#: src/Admin/SettingsPage.php:343
-msgid "Field label weight"
-msgstr ""
-
-#: src/Admin/SettingsPage.php:344
-msgid "Helper/note text color"
-msgstr ""
-
-#: src/Admin/SettingsPage.php:345
-msgid "Success message colors"
-msgstr ""
-
-#: src/Admin/SettingsPage.php:346
-msgid "Error message colors"
-msgstr ""
-
-#: src/Admin/SettingsPage.php:347
-msgid "Status-notice colors"
-msgstr ""
-
-#: src/Admin/SettingsPage.php:348
-msgid "Vertical spacing rhythm"
+#: src/Admin/SettingsPage.php:299
+msgid "Any RFC 3161 authority works — paste its endpoint above and add credentials if it is account-based. Running OpenTimestamps and an RFC 3161 token together gives two independent proofs."
 msgstr ""
 
 #: src/Admin/SettingsPage.php:353
-msgid "Wrapper around the withdrawal button"
-msgstr ""
-
-#: src/Admin/SettingsPage.php:354
-msgid "Every button/CTA (withdraw, continue, confirm)"
+msgid "Sample Customer"
 msgstr ""
 
 #: src/Admin/SettingsPage.php:355
+msgid "Sample product × 1"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:382
+msgid "Appearance — Custom CSS"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:383
+msgid "Paste CSS to restyle any element of the withdrawal flow on your site. It is loaded after the plugin styles, so it always wins. Tip: override the CSS variables below for quick color/shape changes, or target the classes for full control."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:384
+msgid "Compliance note:"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:384
+msgid "the withdrawal button must stay legible and prominent (Art. 11a). Do not hide it, shrink it, or reduce its contrast."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:390
+msgid "Button background color"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:391
+msgid "Button text color"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:392
+msgid "Button focus outline color"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:393
+msgid "Button corner radius"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:394
+msgid "Input/result corner radius"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:395
+msgid "Button padding"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:396
+msgid "Button font size"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:397
+msgid "Button font weight"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:398
+msgid "Button border"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:399
+msgid "Form max width"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:400
+msgid "Input border color"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:401
+msgid "Input padding"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:402
+msgid "Field label weight"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:403
+msgid "Helper/note text color"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:404
+msgid "Success message colors"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:405
+msgid "Error message colors"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:406
+msgid "Status-notice colors"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:407
+msgid "Vertical spacing rhythm"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:412
+msgid "Wrapper around the withdrawal button"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:413
+msgid "Every button/CTA (withdraw, continue, confirm)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:414
 msgid "The Step-1 \"Continue\" button"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:356
+#: src/Admin/SettingsPage.php:415
 msgid "The statutory \"Confirm withdrawal\" button"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:357
+#: src/Admin/SettingsPage.php:416
 msgid "The \"X days left\" note next to the button"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:358
+#: src/Admin/SettingsPage.php:417
 msgid "The withdrawal form container"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:359
+#: src/Admin/SettingsPage.php:418
 msgid "The form heading"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:360
+#: src/Admin/SettingsPage.php:419
 msgid "Each field row (label + input)"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:361
+#: src/Admin/SettingsPage.php:420
 msgid "The actions row holding a button"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:362
+#: src/Admin/SettingsPage.php:421
 msgid "The Step-2 confirmation block + its intro text"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:363
+#: src/Admin/SettingsPage.php:422
 msgid "The result message (success / error states)"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:364
+#: src/Admin/SettingsPage.php:423
 msgid "The \"request status\" notice on an order"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:365
+#: src/Admin/SettingsPage.php:424
 msgid "Generic inline notice"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:366
+#: src/Admin/SettingsPage.php:425
 msgid "The Annex I-B model form block"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:367
+#: src/Admin/SettingsPage.php:426
 msgid "The pre-contractual info block"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:370
+#: src/Admin/SettingsPage.php:429
 msgid "CSS reference — variables & classes"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:372
+#: src/Admin/SettingsPage.php:431
 msgid "CSS variables (quick overrides)"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:373
+#: src/Admin/SettingsPage.php:432
 msgid "Variable"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:373
+#: src/Admin/SettingsPage.php:432
 msgid "Default"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:373
+#: src/Admin/SettingsPage.php:432
 msgid "Controls"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:379
+#: src/Admin/SettingsPage.php:438
 msgid "Classes (full control)"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:380
+#: src/Admin/SettingsPage.php:439
 msgid "Class"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:380
+#: src/Admin/SettingsPage.php:439
 msgid "Targets"
 msgstr ""
 
-#: src/Admin/SettingsPage.php:386
+#: src/Admin/SettingsPage.php:445
 msgid "Examples"
 msgstr ""
 
@@ -928,7 +1004,7 @@ msgstr ""
 msgid "Audience"
 msgstr ""
 
-#: src/Core/Install.php:249
+#: src/Core/Install.php:253
 #: src/Frontend/WooMyAccount.php:92
 msgid "Right of withdrawal"
 msgstr ""
@@ -979,12 +1055,12 @@ msgstr ""
 
 #: src/Frontend/Assets.php:84
 #: src/Frontend/NoScriptFlow.php:83
-#: templates/form/withdrawal-form.php:73
+#: templates/form/withdrawal-form.php:78
 msgid "Please confirm your withdrawal. This is the final step."
 msgstr ""
 
 #: src/Frontend/Assets.php:85
-#: templates/myaccount/withdrawal-list.php:49
+#: templates/myaccount/withdrawal-list.php:54
 msgid "Find my order"
 msgstr ""
 
@@ -1168,7 +1244,7 @@ msgstr ""
 #: templates/emails/plain/wwu-wb-withdrawal-ack.php:31
 #: templates/emails/withdrawal-confirmation.php:40
 #: templates/emails/wwu-wb-withdrawal-ack.php:63
-#: templates/form/withdrawal-form.php:63
+#: templates/form/withdrawal-form.php:68
 #: templates/pdf/receipt-pdf.php:52
 msgid "Reason (optional)"
 msgstr ""
@@ -1213,60 +1289,96 @@ msgstr ""
 msgid "Withdrawal details"
 msgstr ""
 
-#: templates/form/withdrawal-form.php:41
+#: templates/form/withdrawal-form.php:46
 msgid "JavaScript is required to use the withdrawal form. You may also use the model withdrawal form provided in our terms."
 msgstr ""
 
-#: templates/form/withdrawal-form.php:51
+#: templates/form/withdrawal-form.php:56
 msgid "Your name"
 msgstr ""
 
-#: templates/form/withdrawal-form.php:59
+#: templates/form/withdrawal-form.php:64
 msgid "Email for the confirmation"
 msgstr ""
 
-#: templates/form/withdrawal-form.php:64
+#: templates/form/withdrawal-form.php:69
 msgid "You are not required to give a reason."
 msgstr ""
 
-#: templates/form/withdrawal-form.php:68
+#: templates/form/withdrawal-form.php:73
 msgid "Continue"
 msgstr ""
 
-#: templates/myaccount/withdrawal-list.php:37
+#: templates/myaccount/withdrawal-list.php:42
 msgid "Enter your order number and the email you used at checkout to start a withdrawal. You can also use the link in your order confirmation email, or log in to your account."
 msgstr ""
 
-#: templates/myaccount/withdrawal-list.php:41
+#: templates/myaccount/withdrawal-list.php:46
 msgid "Order number"
 msgstr ""
 
-#: templates/myaccount/withdrawal-list.php:45
+#: templates/myaccount/withdrawal-list.php:50
 msgid "Email used at checkout"
 msgstr ""
 
-#: templates/myaccount/withdrawal-list.php:56
+#: templates/myaccount/withdrawal-list.php:61
 msgid "You have no orders that can be withdrawn right now. The button appears on eligible orders within the withdrawal period."
 msgstr ""
 
-#: templates/myaccount/withdrawal-list.php:58
+#: templates/myaccount/withdrawal-list.php:63
 msgid "Go to my orders"
 msgstr ""
 
-#: templates/myaccount/withdrawal-list.php:63
+#: templates/myaccount/withdrawal-list.php:68
 msgid "Choose an order to withdraw from:"
 msgstr ""
 
-#: templates/myaccount/withdrawal-list.php:68
+#: templates/myaccount/withdrawal-list.php:73
 msgid "Date"
 msgstr ""
 
-#: templates/myaccount/withdrawal-list.php:69
+#: templates/myaccount/withdrawal-list.php:74
 msgid "Action"
 msgstr ""
 
-#: templates/myaccount/withdrawal-list.php:79
+#: templates/myaccount/withdrawal-list.php:84
 msgid "Request: %s"
+msgstr ""
+
+#: templates/partials/consumer-guidance.php:25
+msgid "You can withdraw from this contract within 14 days, without giving any reason. It takes two short steps and we will email you a confirmation straight away."
+msgstr ""
+
+#: templates/partials/consumer-guidance.php:30
+msgid "How it works & what happens next"
+msgstr ""
+
+#: templates/partials/consumer-guidance.php:32
+msgid "You have 14 days to withdraw — counted from when you (or someone you nominated) received the goods, or from the day the contract was concluded for a service."
+msgstr ""
+
+#: templates/partials/consumer-guidance.php:33
+msgid "You do not need to explain why. There are no hidden steps and no obligation to call us."
+msgstr ""
+
+#: templates/partials/consumer-guidance.php:34
+msgid "Fill in your name and email, then confirm. Right after confirming, we email you an acknowledgement of receipt — keep it as your proof."
+msgstr ""
+
+#: templates/partials/consumer-guidance.php:35
+msgid "We refund all payments you made for the order, including the standard delivery cost, within 14 days, using the same payment method you used."
+msgstr ""
+
+#: templates/partials/consumer-guidance.php:36
+msgid "If your order is physical goods, please send them back within 14 days of telling us. We may wait until we receive them (or your proof of return) before refunding; return shipping may be at your expense unless we stated otherwise."
+msgstr ""
+
+#: templates/partials/consumer-guidance.php:37
+msgid "Some items cannot be withdrawn by law (for example, sealed items unsealed after delivery, or digital content you agreed to start immediately). If that applies, we will let you know."
+msgstr ""
+
+#: templates/partials/consumer-guidance.php:39
+msgid "If anything is unclear, contact us before confirming — we are happy to help."
 msgstr ""
 
 #: templates/pdf/receipt-pdf.php:44
