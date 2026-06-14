@@ -91,6 +91,33 @@ final class FluentCartAdapter implements OrderDataSource {
 	}
 
 	/**
+	 * Read a related model from a FluentCart Eloquent model defensively.
+	 *
+	 * Per the official schema (dev.fluentcart.com/database/models/order) FluentCart
+	 * does NOT keep email, billing country or the WordPress user id as flat columns
+	 * on the order: email lives on the `customer` relation, billing country on the
+	 * `billing_address` (OrderAddress) relation, and the WP user id on
+	 * `customer->user_id` (fct_orders.customer_id is the FluentCart customer PK, not
+	 * a WP user). Accessing the magic relation property triggers the ORM lazy-load;
+	 * every access is guarded so a non-Eloquent or detached model returns null.
+	 *
+	 * @param object $model    Model.
+	 * @param string $relation Relationship accessor (e.g. 'customer', 'billing_address').
+	 * @return object|null
+	 */
+	private function rel( $model, string $relation ) {
+		if ( ! is_object( $model ) ) {
+			return null;
+		}
+		try {
+			$value = $model->{$relation};
+		} catch ( \Throwable $e ) {
+			return null;
+		}
+		return is_object( $value ) ? $value : null;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public function get_order( string $order_ref ): ?NormalizedOrder {
@@ -99,11 +126,30 @@ final class FluentCartAdapter implements OrderDataSource {
 			return null;
 		}
 
-		$email   = (string) ( $this->attr( $order, 'customer_email' ) ?? $this->attr( $order, 'email' ) ?? '' );
-		$country = (string) ( $this->attr( $order, 'billing_country' ) ?? $this->attr( $order, 'country' ) ?? '' );
-		$status  = (string) ( $this->attr( $order, 'status' ) ?? '' );
-		$user_id = (int) ( $this->attr( $order, 'user_id' ) ?? $this->attr( $order, 'customer_id' ) ?? 0 );
-		$number  = (string) ( $this->attr( $order, 'invoice_no' ) ?? $this->attr( $order, 'order_number' ) ?? $order_ref );
+		$customer = $this->rel( $order, 'customer' );
+		$billing  = $this->rel( $order, 'billing_address' );
+
+		// Email: Customer relation first, then any flat fallback.
+		$email = $customer ? (string) ( $this->attr( $customer, 'email' ) ?? '' ) : '';
+		if ( '' === $email ) {
+			$email = (string) ( $this->attr( $order, 'customer_email' ) ?? $this->attr( $order, 'email' ) ?? '' );
+		}
+
+		// Billing country: OrderAddress relation first, then any flat fallback.
+		$country = $billing ? (string) ( $this->attr( $billing, 'country' ) ?? '' ) : '';
+		if ( '' === $country ) {
+			$country = (string) ( $this->attr( $order, 'billing_country' ) ?? $this->attr( $order, 'country' ) ?? '' );
+		}
+
+		// WordPress user id: Customer::user_id (the order's customer_id is the
+		// FluentCart customer PK, never a WP user id — so do NOT fall back to it).
+		$user_id = $customer ? (int) ( $this->attr( $customer, 'user_id' ) ?? 0 ) : 0;
+		if ( $user_id <= 0 ) {
+			$user_id = (int) ( $this->attr( $order, 'user_id' ) ?? 0 );
+		}
+
+		$status = (string) ( $this->attr( $order, 'status' ) ?? '' );
+		$number = (string) ( $this->attr( $order, 'invoice_no' ) ?? $this->attr( $order, 'order_number' ) ?? $order_ref );
 
 		return new NormalizedOrder(
 			$this->key(),
@@ -130,8 +176,14 @@ final class FluentCartAdapter implements OrderDataSource {
 		if ( ! $order || $user_id <= 0 ) {
 			return false;
 		}
-		$owner = (int) ( $this->attr( $order, 'user_id' ) ?? $this->attr( $order, 'customer_id' ) ?? 0 );
-		return $owner === $user_id;
+		// Ownership is the WordPress user id on the Customer relation, never the
+		// order's customer_id (which is the FluentCart customer PK).
+		$customer = $this->rel( $order, 'customer' );
+		$owner    = $customer ? (int) ( $this->attr( $customer, 'user_id' ) ?? 0 ) : 0;
+		if ( $owner <= 0 ) {
+			$owner = (int) ( $this->attr( $order, 'user_id' ) ?? 0 );
+		}
+		return $owner > 0 && $owner === $user_id;
 	}
 
 	/**
@@ -230,8 +282,16 @@ final class FluentCartAdapter implements OrderDataSource {
 	 * @return array<int,array<string,mixed>>
 	 */
 	private function map_items( $order ): array {
-		$items     = array();
-		$raw_items = $this->attr( $order, 'items' ) ?? $this->attr( $order, 'order_items' ) ?? array();
+		$items = array();
+		// Line items are a HasMany relation; lazy-load via rel(), fall back to a
+		// flat attribute for non-Eloquent shapes.
+		$raw_items = $this->rel( $order, 'order_items' );
+		if ( ! is_object( $raw_items ) ) {
+			$raw_items = $this->rel( $order, 'items' );
+		}
+		if ( ! is_object( $raw_items ) ) {
+			$raw_items = $this->attr( $order, 'items' ) ?? $this->attr( $order, 'order_items' ) ?? array();
+		}
 		if ( is_iterable( $raw_items ) ) {
 			foreach ( $raw_items as $it ) {
 				$type   = (string) ( $this->attr( $it, 'product_type' ) ?? $this->attr( $it, 'fulfillment_type' ) ?? '' );

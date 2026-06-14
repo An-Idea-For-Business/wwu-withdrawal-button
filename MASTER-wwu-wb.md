@@ -3,7 +3,7 @@
 > Single index for the **WWU Withdrawal Button** plugin: the EU online right-of-withdrawal function ("withdrawal button", Art. 11a / Art. 54-bis) for WooCommerce & FluentCart. One line per doc; never put content here.
 
 - **Slug:** `wwu-wb` · **Folder:** `wwu-withdrawal-button`
-- **Status:** **MVP feature-complete** (F0–F8 + audit hardening) on branch `claude/mvp-implementation` ([PR #1](https://github.com/An-Idea-For-Business/wwu-withdrawal-button/pull/1)) — in live testing. Current build `1.0.0-alpha.18`.
+- **Status:** **MVP feature-complete** (F0–F8 + audit hardening) on branch `claude/mvp-implementation` ([PR #1](https://github.com/An-Idea-For-Business/wwu-withdrawal-button/pull/1)) — in live testing. Current build `1.0.0-alpha.19`.
 - **Target version:** `1.0.0` · **License:** GPL-3.0-or-later
 - **Credits:** mredodos · Matteo Alfieri (An Idea for Business) · WebWakeUp ([webwakeup.it](https://webwakeup.it))
 - **Legal go-live:** **2026-06-19** (contracts concluded on/after)
@@ -31,6 +31,7 @@ Namespace `WWU\WithdrawalButton` · constants `WWU_WB_*` · options `wwu_wb_*` �
 
 ## Analysis
 - [Timestamp providers (RFC 3161 + eIDAS)](docs/analysis/wwu-wb-timestamp-providers-ANALYSIS.md) — which trusted-timestamp authorities to add to the pluggable provider (free Sectigo `/qualified`, per-country QTSPs) + PHP integration (2026-06-14).
+- [FluentCart customer-portal hooks (verified)](docs/analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md) — official-source verification of every FluentCart hook/API (custom_endpoints, menu items, dashboard data, order-details slots, Order/Customer models) + the corrections shipped in alpha.19 (2026-06-14).
 
 ## Changelog
 - [CHANGELOG](docs/changelog/wwu-wb-CHANGELOG.md)

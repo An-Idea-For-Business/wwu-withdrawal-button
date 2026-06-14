@@ -127,7 +127,7 @@ final class EligibleOrders {
 				'date'     => $order->created ? wp_date( (string) get_option( 'date_format', 'Y-m-d' ), $order->created->getTimestamp() ) : '',
 				'status'   => $status_label,
 				'eligible' => $eligible,
-				'url'      => self::form_url( $order->order_ref ),
+				'url'      => self::fluentcart_form_url( $order->order_ref ),
 				'label'    => $services->labels->withdraw_label( $order->country, $locale ),
 			);
 		}
@@ -211,6 +211,29 @@ final class EligibleOrders {
 		}
 
 		return $rows;
+	}
+
+	/**
+	 * URL of the withdrawal form for a FluentCart order.
+	 *
+	 * Prefers the standalone public form page (a normal WordPress page that always
+	 * renders the two-step form with our CSS/JS enqueued) so the link works on
+	 * FluentCart-only stores too — where the WooCommerce account endpoint that
+	 * {@see self::form_url()} relies on does not exist. Falls back to form_url().
+	 *
+	 * @param string $order_ref Order reference.
+	 * @return string
+	 */
+	private static function fluentcart_form_url( string $order_ref ): string {
+		$settings = (array) get_option( 'wwu_wb_settings', array() );
+		$page_id  = (int) ( $settings['public_form_page_id'] ?? 0 );
+		if ( $page_id > 0 ) {
+			$permalink = get_permalink( $page_id );
+			if ( is_string( $permalink ) && '' !== $permalink ) {
+				return add_query_arg( 'wwu_wb_order', rawurlencode( $order_ref ), $permalink );
+			}
+		}
+		return self::form_url( $order_ref );
 	}
 
 	/**

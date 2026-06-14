@@ -5,6 +5,42 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### FluentCart integration corrected to official-doc-verified contract (1.0.0-alpha.19, 2026-06-14)
+Live testing showed the alpha.18 FluentCart surfaces did not work (the "Diritto di
+recesso" menu entry appeared but opened a blank page; no per-order button; no
+banner). Each hook/API was re-verified against the **official** docs
+(dev.fluentcart.com, traced to FluentCart source files) and corrected:
+- **Blank portal page → fixed.** `fluent_cart/customer_portal/custom_endpoints`:
+  the endpoint slug must be the array KEY (`$endpoints['wwu-withdrawal'] = [...]`)
+  and the only documented key is `render_callback`, which must **`echo`** its HTML
+  (FluentCart ignores the return value). Our callback returned a string → blank.
+  Now echoes; the wrong `key`/`slug`/`label`/`title`/`callback` keys were removed.
+- **Menu item → correct shape.** `fluent_cart/global_customer_menu_items`: items
+  are keyed by slug with exactly `label`, `css_class` (**`fct_route`** — required so
+  the SPA routes client-side), `link` (not `url`), `icon_svg` (raw SVG, not `icon`).
+  Removed the unsupported `key`/`title`/`route`/`priority`/`url`/`icon` keys.
+- **Dashboard banner → 2 args.** `fluent_cart/customer_dashboard_data` passes
+  `($data, $context)`; the registration was `,10,1` (dropping `$context`). Now
+  `,10,2`. The `sections_parts.before_orders_table` slot was already correct.
+- **Per-order button data → fixed (the real reason it never showed).** The
+  `order_details_section_parts` hook usage was already correct, but the button is
+  gated by applicability, which needs the order's **country** — and the FluentCart
+  adapter read flat columns that don't exist. Per the official Order model schema,
+  email is on `$order->customer->email`, billing country on
+  `$order->billing_address->country` (OrderAddress), and the **WordPress user id on
+  `$order->customer->user_id`** (the order's `customer_id` is the FluentCart customer
+  PK, never a WP user). The adapter now reads through these relations (with flat
+  fallbacks); `verify_owner()` compares the customer's `user_id`. This also fixes an
+  ownership-check bug that compared the FluentCart customer PK to the WP user id.
+- **Email merge tag removed (honestly).** `fluent_cart/email_notification_merge_tags`
+  does **not exist** in the official docs; the real `fluent_cart/editor_shortcodes`
+  only populates the editor picker with no documented value-resolver, so a tag would
+  render literally in sent mail. Pulled rather than ship a guessed API; deferred
+  pending an official resolver hook.
+- FluentCart order chooser rows now link to the standalone public form page (which
+  always loads our CSS/JS), so the link works on FluentCart-only stores too.
+- Verification recorded in `docs/analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md`.
+
 ### FluentCart customer-portal integration (1.0.0-alpha.18, 2026-06-14)
 - **Fix: FluentCart customers now see the withdrawal flow.** Previously the
   FluentCart side wired only a single, unverified order-details filter and the
