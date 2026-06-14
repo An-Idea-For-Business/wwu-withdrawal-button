@@ -4,11 +4,11 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0-alpha.32
+Stable tag: 1.0.0-alpha.33
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-The EU online withdrawal button (Art. 11a / Art. 54-bis) for WooCommerce & FluentCart: statutory two-step withdrawal, durable-medium receipt, immutable log.
+The EU online withdrawal button (Art. 11a / Art. 54-bis) for WooCommerce, FluentCart & Easy Digital Downloads: statutory two-step withdrawal, durable-medium receipt, immutable log.
 
 Product page & documentation: https://webwakeup.it/wwu-withdrawal-button/
 
@@ -22,7 +22,7 @@ WWU Withdrawal Button makes a WooCommerce or FluentCart store compliant out of t
 * A **two-step flow**: withdrawal statement, then a confirmation labelled only with the statutory words. No dark patterns, no mandatory reason.
 * An **acknowledgement of receipt on a durable medium**: immediate email + attached PDF + a permanent verifiable link, with the exact submission date and time.
 * A **tamper-evident immutable log** (append-only, hash-chained, with IP and contract data) anchored to OpenTimestamps for free trusted timestamping, with a pluggable RFC 3161 / eIDAS provider.
-* **WooCommerce (HPOS + legacy) and FluentCart** support via a common adapter.
+* **WooCommerce (HPOS + legacy), FluentCart and Easy Digital Downloads (3.0+)** support via a common adapter.
 * **Compliance documents**: generates the Annex I-B model withdrawal form and ready clauses for Privacy / Terms / pre-contractual information.
 * Compatible with **Complianz** and **TranslatePress**; **shortcodes**, **blocks**, hooks and template overrides for customisation.
 
@@ -71,6 +71,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 
 == Changelog ==
 
+= 1.0.0-alpha.33 =
+* Added **Easy Digital Downloads (EDD 3.0+)** as a third supported platform: the withdrawal button, evidence flow and exemption consent capture now work on EDD stores (with category-aware exemptions). Needs a live EDD test. Consent capture now spans WooCommerce (classic + block), FluentCart and EDD.
+
 = 1.0.0-alpha.32 =
 * Exemption consent capture now also works on the WooCommerce **block-based Checkout** (via the official Additional Checkout Fields API, WooCommerce 9.9+), reaching full parity with the classic checkout and FluentCart. Pure PHP, no build step. Also adds the design SPEC for a future Easy Digital Downloads (EDD) integration. Needs a live block-checkout test; fail-safe until verified.
 
@@ -102,6 +105,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.0.0-alpha.33 =
+Adds Easy Digital Downloads (EDD 3.0+) support. No change for WooCommerce/FluentCart stores. If you run EDD, test the checkout + button on staging.
 
 = 1.0.0-alpha.32 =
 Adds consent capture on the WooCommerce block Checkout (requires WooCommerce 9.9+ for the conditional field). No change to the classic checkout. Test on staging if you use the block checkout.

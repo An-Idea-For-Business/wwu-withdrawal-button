@@ -157,6 +157,11 @@ final class Plugin {
 			( new \WWU\WithdrawalButton\Frontend\FluentCartCheckoutConsent() )->register();
 		}
 
+		// EDD checkout consent capture when Easy Digital Downloads is active.
+		if ( null !== $services->platforms->get( 'edd' ) ) {
+			( new \WWU\WithdrawalButton\Frontend\EddCheckoutConsent() )->register();
+		}
+
 		// Feed captured exemption consent (any platform's order meta) back to the
 		// evaluator so conditional exemptions hide the button only once consent exists.
 		( new \WWU\WithdrawalButton\Frontend\ConsentReader() )->register();

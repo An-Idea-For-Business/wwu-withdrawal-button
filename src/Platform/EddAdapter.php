@@ -1,0 +1,359 @@
+<?php
+/**
+ * Easy Digital Downloads (EDD 3.0+) order data source.
+ *
+ * EDD 3.0 stores orders in custom tables via the EDD\Orders\* API (NOT the legacy
+ * edd_payment CPT). This adapter reads through that API defensively (every call is
+ * guarded) and keeps its plugin meta in first-class EDD order meta
+ * (edd_*_order_meta), so the withdrawal flow + evidence log + durable medium + the
+ * platform-agnostic ConsentReader all work unchanged.
+ *
+ * A "download" is the `download` CPT; its categories live in the `download_category`
+ * taxonomy, so EDD exemptions are BOTH product-id and category aware.
+ *
+ * Verified against official EDD sources — see docs/specs/wwu-wb-edd-integration-SPEC.md.
+ *
+ * @package WWU\WithdrawalButton
+ */
+
+declare( strict_types=1 );
+
+namespace WWU\WithdrawalButton\Platform;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * EDD adapter.
+ */
+final class EddAdapter implements OrderDataSource {
+
+	/**
+	 * Per-request order cache.
+	 *
+	 * @var array<string,object|null>
+	 */
+	private $cache = array();
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function key(): string {
+		return 'edd';
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function is_active(): bool {
+		return function_exists( 'edd_get_order' ); // EDD 3.0+ custom-table API.
+	}
+
+	/**
+	 * Map an EDD order status to the normalized status used for eligibility.
+	 *
+	 * Eligibility presupposes a concluded (paid) contract; EDD signals this with the
+	 * 'complete' status. Pure + static so it is unit-testable without EDD active.
+	 *
+	 * @param string $status EDD order status.
+	 * @return string
+	 */
+	public static function eligible_status( string $status ): string {
+		$status = strtolower( $status );
+		if ( 'complete' === $status || 'completed' === $status ) {
+			return 'completed';
+		}
+		return $status;
+	}
+
+	/**
+	 * Load an EDD order model (guarded), cached per request.
+	 *
+	 * @param string $order_ref Order id.
+	 * @return object|null
+	 */
+	private function load( string $order_ref ) {
+		if ( array_key_exists( $order_ref, $this->cache ) ) {
+			return $this->cache[ $order_ref ];
+		}
+		$order = null;
+		if ( $this->is_active() ) {
+			try {
+				$order = edd_get_order( (int) $order_ref );
+			} catch ( \Throwable $e ) {
+				$order = null;
+			}
+		}
+		$this->cache[ $order_ref ] = is_object( $order ) ? $order : null;
+		return $this->cache[ $order_ref ];
+	}
+
+	/**
+	 * Read a property/attribute from an EDD model defensively.
+	 *
+	 * @param object $obj  Model.
+	 * @param string $name Attribute name.
+	 * @return mixed
+	 */
+	private function attr( $obj, string $name ) {
+		if ( is_object( $obj ) && isset( $obj->{$name} ) ) {
+			return $obj->{$name};
+		}
+		if ( is_object( $obj ) && method_exists( $obj, 'getAttribute' ) ) {
+			try {
+				return $obj->getAttribute( $name );
+			} catch ( \Throwable $e ) {
+				return null;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function get_order( string $order_ref ): ?NormalizedOrder {
+		$order = $this->load( $order_ref );
+		if ( ! $order ) {
+			return null;
+		}
+
+		$email   = (string) ( $this->attr( $order, 'email' ) ?? '' );
+		$user_id = (int) ( $this->attr( $order, 'user_id' ) ?? 0 );
+		$number  = (string) ( $this->attr( $order, 'order_number' ) ?? $this->attr( $order, 'number' ) ?? $order_ref );
+		$status  = self::eligible_status( (string) ( $this->attr( $order, 'status' ) ?? '' ) );
+
+		$created   = $this->to_immutable( $this->attr( $order, 'date_created' ) );
+		$completed = $this->to_immutable( $this->attr( $order, 'date_completed' ) );
+
+		return new NormalizedOrder(
+			$this->key(),
+			$order_ref,
+			$number,
+			$email,
+			$user_id,
+			strtoupper( $this->billing_country( $order, $order_ref ) ),
+			$status,
+			(string) $this->get_meta( $order_ref, 'locale' ),
+			$created,
+			$completed ?? $created,
+			$completed,
+			$this->map_items( $order ),
+			$this->has_vat_number( $order_ref )
+		);
+	}
+
+	/**
+	 * Resolve the billing country (ISO-2) for an EDD order.
+	 *
+	 * @param object $order     Order model.
+	 * @param string $order_ref Order id.
+	 * @return string
+	 */
+	private function billing_country( $order, string $order_ref ): string {
+		// Prefer the order's address relation/method, then the function helper.
+		if ( is_object( $order ) && method_exists( $order, 'get_address' ) ) {
+			try {
+				$addr    = $order->get_address();
+				$country = is_object( $addr ) ? (string) ( $this->attr( $addr, 'country' ) ?? '' ) : '';
+				if ( '' !== $country ) {
+					return $country;
+				}
+			} catch ( \Throwable $e ) {
+				$country = '';
+			}
+		}
+		if ( function_exists( 'edd_get_order_address' ) ) {
+			try {
+				$addr    = edd_get_order_address( (int) $order_ref );
+				$country = is_object( $addr ) ? (string) ( $this->attr( $addr, 'country' ) ?? '' ) : '';
+				if ( '' !== $country ) {
+					return $country;
+				}
+			} catch ( \Throwable $e ) {
+				$country = '';
+			}
+		}
+		return '';
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function is_refunded( string $order_ref ): bool {
+		$order  = $this->load( $order_ref );
+		$status = $order ? strtolower( (string) ( $this->attr( $order, 'status' ) ?? '' ) ) : '';
+		return in_array( $status, array( 'refunded', 'partially_refunded' ), true );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function verify_owner( string $order_ref, int $user_id ): bool {
+		$order = $this->load( $order_ref );
+		if ( ! $order || $user_id <= 0 ) {
+			return false;
+		}
+		return (int) ( $this->attr( $order, 'user_id' ) ?? 0 ) === $user_id;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function verify_guest_key( string $order_ref, string $key ): bool {
+		$order = $this->load( $order_ref );
+		if ( ! $order || '' === $key ) {
+			return false;
+		}
+		$hash = (string) ( $this->attr( $order, 'payment_key' ) ?? '' );
+		return '' !== $hash && hash_equals( $hash, $key );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function mark_withdrawal_requested( string $order_ref ): bool {
+		// EDD status transitions are merchant-driven; record our own state + a note.
+		$this->set_meta( $order_ref, 'native_status_note', 'withdrawal_requested' );
+		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function add_note( string $order_ref, string $note ): void {
+		if ( function_exists( 'edd_add_note' ) ) {
+			try {
+				edd_add_note(
+					array(
+						'object_id'   => (int) $order_ref,
+						'object_type' => 'order',
+						'content'     => $note,
+					)
+				);
+				return;
+			} catch ( \Throwable $e ) {
+				// fall through to meta log.
+			}
+		}
+		$notes   = (array) $this->get_meta( $order_ref, 'notes' );
+		$notes[] = array(
+			'at'   => gmdate( 'c' ),
+			'note' => $note,
+		);
+		$this->set_meta( $order_ref, 'notes', $notes );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function get_meta( string $order_ref, string $key ) {
+		if ( ! function_exists( 'edd_get_order_meta' ) ) {
+			return '';
+		}
+		$value = edd_get_order_meta( (int) $order_ref, 'wwu_wb_' . $key, true );
+		return ( null === $value || false === $value ) ? '' : $value;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function set_meta( string $order_ref, string $key, $value ): void {
+		if ( function_exists( 'edd_update_order_meta' ) ) {
+			edd_update_order_meta( (int) $order_ref, 'wwu_wb_' . $key, $value );
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function batch_meta( string $order_ref, array $pairs ): void {
+		foreach ( $pairs as $key => $value ) {
+			$this->set_meta( $order_ref, (string) $key, $value );
+		}
+	}
+
+	/**
+	 * Map EDD order items to the normalized shape (category-aware).
+	 *
+	 * @param object $order Model.
+	 * @return array<int,array<string,mixed>>
+	 */
+	private function map_items( $order ): array {
+		$items = array();
+
+		$raw_items = array();
+		if ( is_object( $order ) && method_exists( $order, 'get_items' ) ) {
+			try {
+				$raw_items = $order->get_items();
+			} catch ( \Throwable $e ) {
+				$raw_items = array();
+			}
+		}
+		if ( empty( $raw_items ) ) {
+			$raw_items = (array) ( $this->attr( $order, 'items' ) ?? array() );
+		}
+
+		if ( is_iterable( $raw_items ) ) {
+			foreach ( $raw_items as $it ) {
+				$pid  = (int) ( $this->attr( $it, 'product_id' ) ?? $this->attr( $it, 'download_id' ) ?? 0 );
+				$cats = array();
+				if ( $pid > 0 && function_exists( 'wp_get_post_terms' ) ) {
+					$terms = wp_get_post_terms( $pid, 'download_category', array( 'fields' => 'ids' ) );
+					if ( is_array( $terms ) ) {
+						$cats = array_map( 'intval', $terms );
+					}
+				}
+				$items[] = array(
+					'product_id'   => $pid,
+					'name'         => (string) ( $this->attr( $it, 'product_name' ) ?? $this->attr( $it, 'name' ) ?? '' ),
+					'qty'          => (int) ( $this->attr( $it, 'quantity' ) ?? 1 ),
+					'virtual'      => true,  // EDD sells digital downloads.
+					'downloadable' => true,
+					'type'         => 'digital',
+					'category_ids' => $cats,
+				);
+			}
+		}
+
+		return $items;
+	}
+
+	/**
+	 * VAT/business detection via our own order meta (set by integrators if needed).
+	 *
+	 * @param string $order_ref Order id.
+	 * @return bool
+	 */
+	private function has_vat_number( string $order_ref ): bool {
+		$vat = (string) $this->get_meta( $order_ref, 'vat_number' );
+		/**
+		 * Override B2B (VAT-number) detection for an EDD order.
+		 *
+		 * @param bool   $found     Whether a VAT number was detected.
+		 * @param string $order_ref Order id.
+		 */
+		return (bool) apply_filters( 'wwu_wb_edd_order_has_vat_number', '' !== $vat, $order_ref );
+	}
+
+	/**
+	 * Convert a date-ish value to DateTimeImmutable (UTC), or null.
+	 *
+	 * @param mixed $value Date value (EDD stores GMT 'Y-m-d H:i:s' strings).
+	 * @return \DateTimeImmutable|null
+	 */
+	private function to_immutable( $value ): ?\DateTimeImmutable {
+		if ( empty( $value ) ) {
+			return null;
+		}
+		try {
+			if ( is_numeric( $value ) ) {
+				return new \DateTimeImmutable( '@' . (int) $value );
+			}
+			return new \DateTimeImmutable( (string) $value, new \DateTimeZone( 'UTC' ) );
+		} catch ( \Throwable $e ) {
+			return null;
+		}
+	}
+}

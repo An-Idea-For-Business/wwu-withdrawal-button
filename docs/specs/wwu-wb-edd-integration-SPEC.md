@@ -5,9 +5,11 @@
 > 3.0+** stores. EDD is digital-goods-first, so the **digital-immediate exemption
 > (Art. 59(1)(o))** is its most common case — the consent-capture feature matters here.
 >
-> **Status: design (not implemented).** Integration surface verified against official
-> EDD sources (2026-06-14, see References). Awaiting confirmation before coding.
-> Target: a new `1.0.x` minor once shipped.
+> **Status: SHIPPED in 1.0.0-alpha.33** (`Platform\EddAdapter` + `Frontend\EddCheckoutConsent`,
+> registered in `PlatformRegistry`, "Open order" link in `RequestsDashboard`). Integration
+> surface verified against official EDD sources (2026-06-14, see References). **A live EDD test
+> is still pending** (whether the custom checkout field survives the EDD submission). Open
+> Questions §12 (EDD block checkout, EDD retention purge) remain follow-ups.
 
 ## 1. Overview
 

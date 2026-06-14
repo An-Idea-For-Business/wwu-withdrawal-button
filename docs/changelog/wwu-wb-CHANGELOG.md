@@ -5,6 +5,29 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### Third platform — Easy Digital Downloads (EDD) adapter + checkout consent capture (1.0.0-alpha.33, 2026-06-14)
+Adds **Easy Digital Downloads 3.0+** as a third supported platform (after WooCommerce +
+FluentCart), implementing the [EDD SPEC](../specs/wwu-wb-edd-integration-SPEC.md) on the
+official-source-verified surface.
+- **`Platform\EddAdapter`** (`OrderDataSource`) — loads orders via `edd_get_order()` →
+  `EDD\Orders\Order`, normalises email / WP user id / status (`complete` → eligible) /
+  refund (`refunded`/`partially_refunded`) / line items (downloads, **category-aware** via
+  `download_category`) / billing country; ownership via `user_id`, guest via `payment_key`;
+  notes via `edd_add_note`; plugin meta in first-class EDD order meta (`edd_*_order_meta`,
+  prefix `wwu_wb_`). All calls guarded (version-tolerant), per-request cache.
+- **`Frontend\EddCheckoutConsent`** — renders the required conditional acknowledgement on
+  `edd_purchase_form_before_submit`, blocks via `edd_checkout_error_checks` (`edd_set_error`),
+  and captures on `edd_built_order` ($order_id + $_POST both available at checkout time, unlike
+  `edd_complete_purchase`). Reuses `WooCheckoutConsent::build_consent_entries` +
+  `ExemptionConfirmation` (durable-medium e-mail) + the PII-free immutable-log event;
+  `ConsentReader` reads the consent through the adapter, unchanged. **EDD exemptions are
+  category-aware** (better than FluentCart's product-ID-only).
+- **`PlatformRegistry`** registers `EddAdapter` (active when `edd_get_order` exists);
+  **`RequestsDashboard`** "Open order" link uses `edd_get_admin_url(...)` for EDD.
+- Smoke: `EddAdapter::eligible_status('complete') → 'completed'`. No new i18n strings (reuses
+  existing). **Needs a live EDD test.** Consent capture now spans **WooCommerce (classic +
+  block), FluentCart and EDD**.
+
 ### Exemptions — WooCommerce block Checkout consent capture + EDD integration SPEC (1.0.0-alpha.32, 2026-06-14)
 Closes the last consent-capture gap (WooCommerce **block** Checkout) and plans the next
 platform (Easy Digital Downloads). Built on a verified official-docs research pass.

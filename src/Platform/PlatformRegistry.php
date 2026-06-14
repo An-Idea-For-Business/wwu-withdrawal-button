@@ -47,6 +47,9 @@ final class PlatformRegistry {
 		if ( class_exists( '\\WWU\\WithdrawalButton\\Platform\\FluentCartAdapter' ) ) {
 			$adapters[] = new FluentCartAdapter();
 		}
+		if ( class_exists( '\\WWU\\WithdrawalButton\\Platform\\EddAdapter' ) ) {
+			$adapters[] = new EddAdapter();
+		}
 		/**
 		 * Filter the registered platform adapters.
 		 *

@@ -657,6 +657,9 @@ final class SmokeTests {
 		$tests[] = $this->assert( 'consent.preview_digital_present', '' !== (string) $ec::preview_html( '59_o' ), 'Digital reason has a consumer preview.' );
 		$tests[] = $this->assert( 'consent.preview_unconditional_empty', '' === (string) $ec::preview_html( '59_c' ), 'Unconditional reason has no preview.' );
 
+		// EDD adapter status mapping (pure, no EDD needed).
+		$tests[] = $this->assert( 'consent.edd_eligible_status', 'completed' === \WWU\WithdrawalButton\Platform\EddAdapter::eligible_status( 'complete' ), 'EDD "complete" maps to the eligible "completed" status.' );
+
 		// Restore.
 		update_option( 'wwu_wb_exclusions', is_array( $saved ) ? $saved : array() );
 		\WWU\WithdrawalButton\Core\Settings::flush();

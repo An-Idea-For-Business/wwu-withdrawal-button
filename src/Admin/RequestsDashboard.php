@@ -281,6 +281,14 @@ final class RequestsDashboard {
 			if ( '' === $url ) {
 				$url = admin_url( 'admin.php?page=fluent-cart#/orders/' . rawurlencode( $order_ref ) . '/view' );
 			}
+		} elseif ( 'edd' === $platform && function_exists( 'edd_get_admin_url' ) ) {
+			$url = (string) edd_get_admin_url(
+				array(
+					'page' => 'edd-payment-history',
+					'view' => 'view-order-details',
+					'id'   => (int) $order_ref,
+				)
+			);
 		}
 
 		/**
