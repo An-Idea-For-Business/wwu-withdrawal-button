@@ -198,6 +198,12 @@ never looks like a denied right.
 3. FluentCart consent-capture hook parity — confirm the equivalent checkout hook + meta.
 4. Phasing: P1 admin UI + reason tagging (uses existing evaluator); P2 checkout consent
    + gate; P3 email confirmation + log event + consumer transparency. Each with an audit.
+   **Status: P1 SHIPPED (1.0.0-alpha.27, 2026-06-14)** — `ExceptionTypes` registry +
+   `ExemptionResolver` (by_reason map + back-compat fold) + upgraded
+   `ArticleFiftyNineEvaluator` (unconditional exempt / conditional gated on the
+   `wwu_wb_exemption_consent` filter / seal-based never auto-hidden) + Settings UI +
+   smoke suite `exemptions`. P2 (checkout consent capture writing that filter's data) +
+   P3 remain — tracked as task #41.
 
 ## References
 
