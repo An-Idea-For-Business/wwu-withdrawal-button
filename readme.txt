@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0-alpha.30
+Stable tag: 1.0.0-alpha.31
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -71,6 +71,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 
 == Changelog ==
 
+= 1.0.0-alpha.31 =
+* Exemptions settings redesigned: the reasons are grouped (conditional / unconditional / seal-based) with tooltips, examples, a "What do you sell?" guided helper, a preview of what the consumer sees (checkbox + confirmation e-mail), and a status panel — all using the WWU UI Kit. Completed the Italian (and FR/ES/DE) translations, including the exemption labels that previously showed in English. The withdrawal button itself is unchanged.
+
 = 1.0.0-alpha.30 =
 * Exemptions consent capture now works on **FluentCart** too (checkout acknowledgement + durable-medium confirmation), reaching parity with WooCommerce. Built on FluentCart hooks re-verified against the official docs. FluentCart exemptions match by product ID. The "Open order" admin link now uses FluentCart's own order URL. Needs a live FluentCart test; fail-safe until verified.
 
@@ -96,6 +99,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.0.0-alpha.31 =
+Settings/exemptions UI overhaul + completed Italian/FR/ES/DE translations (the exemption section was partly in English). No change to the withdrawal flow. Safe to update.
 
 = 1.0.0-alpha.30 =
 Adds FluentCart checkout consent capture for the conditional exemptions (parity with WooCommerce). Test on a staging FluentCart store before production; fail-safe (the button stays) until the field is verified on your setup.

@@ -639,6 +639,24 @@ final class SmokeTests {
 		$tests[] = $this->assert( 'consent.confirmation_guard_no_email', false === $ec::send_for_order( 'woocommerce', '1', '', '#1', array( array( 'reason_id' => '59_o' ) ) ), 'Confirmation is not sent without a valid e-mail.' );
 		$tests[] = $this->assert( 'consent.confirmation_guard_no_entries', false === $ec::send_for_order( 'woocommerce', '1', 'buyer@example.com', '#1', array() ), 'Confirmation is not sent without entries.' );
 
+		// Grouping derivation + per-reason examples (exemptions-UX bundle).
+		$et      = '\\WWU\\WithdrawalButton\\Domain\\ExceptionTypes';
+		$tests[] = $this->assert( 'consent.group_conditional', 'conditional' === $et::group( '59_o' ) && 'conditional' === $et::group( '59_a' ), 'Digital/service reasons group as conditional.' );
+		$tests[] = $this->assert( 'consent.group_seal', 'seal_based' === $et::group( '59_e' ) && 'seal_based' === $et::group( '59_i' ), 'Sealed reasons group as seal_based.' );
+		$tests[] = $this->assert( 'consent.group_unconditional', 'unconditional' === $et::group( '59_c' ) && 'unconditional' === $et::group( 'manual' ), 'Custom-made / manual group as unconditional.' );
+		$all_have_example = true;
+		foreach ( $et::all() as $rdef ) {
+			if ( empty( $rdef['example'] ) ) {
+				$all_have_example = false;
+				break;
+			}
+		}
+		$tests[] = $this->assert( 'consent.every_reason_has_example', $all_have_example, 'Every registered reason ships a Standard #12 example.' );
+
+		// Consumer preview reuses the real e-mail builder.
+		$tests[] = $this->assert( 'consent.preview_digital_present', '' !== (string) $ec::preview_html( '59_o' ), 'Digital reason has a consumer preview.' );
+		$tests[] = $this->assert( 'consent.preview_unconditional_empty', '' === (string) $ec::preview_html( '59_c' ), 'Unconditional reason has no preview.' );
+
 		// Restore.
 		update_option( 'wwu_wb_exclusions', is_array( $saved ) ? $saved : array() );
 		\WWU\WithdrawalButton\Core\Settings::flush();

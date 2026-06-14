@@ -5,6 +5,31 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### Exemptions management UX + full i18n (1.0.0-alpha.31, 2026-06-14)
+Merchant-experience pass on the Art. 59 exemptions ([SPEC](../specs/wwu-wb-exemptions-ux-SPEC.md)).
+The core withdrawal button is untouched; this only makes the *exemption* setup legible and
+fixes the Italian (and FR/ES/DE) translations the merchant saw in English.
+- **Grouped, kit-based settings** — the ~13 reasons are now organised into three WWU UI Kit
+  accordions (**Conditional — need consent / Unconditional — exempt by nature / Seal-based —
+  assess on return**), each reason with a `?` tooltip (the hint), a collapsible **example**
+  (Standard #12, input→outcome), and the existing product/category-ID inputs. `ExceptionTypes::group()`
+  derives the bucket from the existing flags; each reason ships an `example`.
+- **Guided "What do you sell?" helper** — five cards (event tickets / digital downloads &
+  recordings / live sessions like Zoom / immediate services / physical goods) explain the correct
+  Art. 59 reason and link to the matching group. Suggest-only — it never writes IDs (stays fail-safe).
+- **"What the consumer sees" preview** — under each conditional reason, a preview of the exact
+  checkbox wording + the durable-medium confirmation e-mail, built by the same code the consumer
+  e-mail uses (`ExemptionConfirmation::preview_html()`), so the preview can't drift.
+- **Exemptions status panel** — a UI Kit notice with badges: reasons configured, product/category
+  ID counts, IP-capture on/off, retention years, and when the IP-purge last ran
+  (`wwu_wb_consent_last_purge`).
+- **Landing** — a dedicated "Vendi biglietti, corsi o contenuti digitali?" section with the three
+  worked examples (events / recordings / Zoom) + the fail-safe line.
+- **Full i18n** — completed all previously-untranslated IT strings (incl. the exemption-reason
+  catalogue) + the new UX strings, in IT/EN/FR/ES/DE; `.mo` recompiled (target 0 untranslated).
+- Smoke suite `consent` extended (group derivation, every reason has an example, preview present
+  for conditional / empty for unconditional).
+
 ### Exemptions — FluentCart checkout consent capture + canonical admin order URL (1.0.0-alpha.30, 2026-06-14)
 Brings the exemption consent capture to **FluentCart**, reaching cross-platform parity
 with WooCommerce, after FluentCart support answered our integration questions and each hook

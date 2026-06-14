@@ -83,8 +83,64 @@ final class ExceptionTypes {
 		 */
 		$types = (array) apply_filters( 'wwu_wb_exception_types', $types );
 
+		// Inject a plain-language input→outcome example per reason (Standard #12),
+		// unless an integrator already supplied one via the filter.
+		$examples = self::examples();
+		foreach ( $types as $id => $def_row ) {
+			if ( empty( $def_row['example'] ) ) {
+				$types[ $id ]['example'] = $examples[ $id ] ?? '';
+			}
+		}
+
 		self::$cache = $types;
 		return $types;
+	}
+
+	/**
+	 * The behavioural group a reason belongs to, derived from its flags:
+	 *  - `conditional`     → needs captured consent to remove the right (59_a/59_o);
+	 *  - `seal_based`      → depends on unsealing, never auto-hidden (59_e/59_i);
+	 *  - `unconditional`   → exempt by nature (everything else, incl. custom types).
+	 *
+	 * @param string $id Reason id.
+	 * @return string One of 'conditional' | 'seal_based' | 'unconditional'.
+	 */
+	public static function group( string $id ): string {
+		$def = self::get( $id );
+		if ( null === $def ) {
+			return 'unconditional';
+		}
+		if ( ! empty( $def['seal_based'] ) ) {
+			return 'seal_based';
+		}
+		if ( ! empty( $def['conditional'] ) ) {
+			return 'conditional';
+		}
+		return 'unconditional';
+	}
+
+	/**
+	 * Plain-language input→outcome example per reason (Standard #12).
+	 *
+	 * @return array<string,string>
+	 */
+	private static function examples(): array {
+		return array(
+			'manual' => __( 'e.g. a product you have assessed individually → tag it here and the button is hidden for it.', 'wwu-withdrawal-button' ),
+			'59_a'   => __( 'e.g. a one-off consulting call performed during the order → button hidden after the buyer consents AND the service is fully performed.', 'wwu-withdrawal-button' ),
+			'59_o'   => __( 'e.g. an ebook or video the buyer downloads immediately → button hidden only after the buyer ticks the consent box at checkout.', 'wwu-withdrawal-button' ),
+			'59_c'   => __( 'e.g. a necklace engraved with the buyer\'s text → no withdrawal, button hidden.', 'wwu-withdrawal-button' ),
+			'59_d'   => __( 'e.g. a fresh-food box → no withdrawal, button hidden.', 'wwu-withdrawal-button' ),
+			'59_e'   => __( 'e.g. sealed cosmetics → button stays; if returned unsealed you may refuse the refund.', 'wwu-withdrawal-button' ),
+			'59_i'   => __( 'e.g. shrink-wrapped software or a DVD → button stays; assess on return whether the seal was broken.', 'wwu-withdrawal-button' ),
+			'59_f'   => __( 'e.g. heating oil poured into the buyer\'s tank → no withdrawal, button hidden.', 'wwu-withdrawal-button' ),
+			'59_l'   => __( 'e.g. a concert ticket for 20 June, or a dated live webinar → no withdrawal, button hidden.', 'wwu-withdrawal-button' ),
+			'59_b'   => __( 'e.g. a gold coin priced to the spot market → no withdrawal, button hidden.', 'wwu-withdrawal-button' ),
+			'59_g'   => __( 'e.g. en-primeur wine delivered after 30 days → no withdrawal, button hidden.', 'wwu-withdrawal-button' ),
+			'59_h'   => __( 'e.g. an urgent plumber visit the buyer specifically requested → no withdrawal for that visit.', 'wwu-withdrawal-button' ),
+			'59_j'   => __( 'e.g. a single magazine issue (NOT a subscription) → no withdrawal, button hidden.', 'wwu-withdrawal-button' ),
+			'59_k'   => __( 'e.g. a lot won at a public auction → no withdrawal, button hidden.', 'wwu-withdrawal-button' ),
+		);
 	}
 
 	/**

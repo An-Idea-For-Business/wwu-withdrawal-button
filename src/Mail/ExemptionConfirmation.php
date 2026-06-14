@@ -28,6 +28,7 @@ declare( strict_types=1 );
 
 namespace WWU\WithdrawalButton\Mail;
 
+use WWU\WithdrawalButton\Domain\ConsentText;
 use WWU\WithdrawalButton\Domain\ExceptionTypes;
 use WWU\WithdrawalButton\Storage\LogRepository;
 
@@ -92,6 +93,31 @@ final class ExemptionConfirmation {
 		);
 
 		return $sent;
+	}
+
+	/**
+	 * Build a PREVIEW of the durable-medium confirmation for one reason, for the
+	 * admin "what the consumer sees" panel. Same builder the consumer e-mail uses, so
+	 * the preview can never drift from the real message. Returns '' for a reason that
+	 * has no acknowledgement wording (i.e. a non-conditional reason).
+	 *
+	 * @param string $reason Reason id (e.g. '59_o', '59_a').
+	 * @return string HTML, or '' when the reason needs no confirmation.
+	 */
+	public static function preview_html( string $reason ): string {
+		$text = ConsentText::for_reason( $reason );
+		if ( '' === $text ) {
+			return '';
+		}
+		$entries = array(
+			array(
+				'product_id'   => 0,
+				'reason_id'    => $reason,
+				'text'         => $text,
+				'consented_at' => gmdate( 'c' ),
+			),
+		);
+		return self::build_html( '#' . __( 'EXAMPLE', 'wwu-withdrawal-button' ), $entries );
 	}
 
 	/**

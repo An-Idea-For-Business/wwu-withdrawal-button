@@ -91,6 +91,9 @@ final class ConsentRetention {
 			return; // Consent is captured on WooCommerce only (today).
 		}
 
+		// Record that the sweep ran (for the exemptions status panel).
+		update_option( 'wwu_wb_consent_last_purge', gmdate( 'c' ), false );
+
 		$years  = (int) ( Settings::main()['retention_years'] ?? 10 );
 		$years  = max( 1, min( 30, $years ) );
 		$cutoff = time() - ( $years * YEAR_IN_SECONDS );

@@ -4,7 +4,7 @@
 > The plugin's CORE function — the compliant withdrawal button for everything that
 > *does* carry the right — is untouched. This only makes the *exemption* configuration
 > easier to set up correctly, verify, and maintain, and completes the Italian (and FR/ES/DE)
-> translations. Target version **1.0.0-alpha.30**.
+> translations. **Status: SHIPPED in 1.0.0-alpha.31** (WWU UI Kit accordions/badges/notices; guided "what do you sell?" helper; consumer preview; status panel; landing section; full it/fr/es/de i18n).
 >
 > **Decided in interview (2026-06-14):** Settings UI = grouping + tooltips **+ guided
 > "what do you sell?" helper**; management tools = **consumer preview** + **status/health
