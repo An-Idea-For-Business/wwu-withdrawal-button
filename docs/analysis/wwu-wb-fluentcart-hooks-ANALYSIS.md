@@ -78,3 +78,51 @@ were still filtered out by three data-layer gates in `ApplicabilityResolver`/
 - **Asset loading on the SPA portal:** the FluentCart portal shortcode tag is not documented, so `maybe_enqueue_on_portal()` uses a heuristic marker match. Not critical: chooser rows and the per-order button link to the standalone public form page, which always loads our CSS/JS.
 - **Email merge tag:** deferred (no official resolver hook found). If FluentCart confirms one, wire `{{wwu.recesso_url}}` then.
 - **Line items / VAT** for Art. 59 exemptions: items are read via the `order_items` relation now, but exemptions are design-only (not enforced yet).
+
+## Verified — checkout consent capture + lifecycle (2026-06-14, FluentCart support reply + docs re-check)
+
+FluentCart support answered our integration questions; every hook was re-verified against the
+official docs (`dev.fluentcart.com/hooks/...` + the Order/Subscription model pages). **Build
+only on the docs-confirmed names; treat the rest as support-claim-only until tested live.**
+
+### Confirmed in docs (safe to build on)
+- **Checkout render** (ACTION, payload `$data['cart']`): `fluent_cart/checkout_form_opening`,
+  `fluent_cart/before_payment_methods`, `fluent_cart/after_payment_methods`,
+  `fluent_cart/after_order_notes`, `fluent_cart/after_checkout_button`.
+- **Checkout validation** (FILTER): `fluent_cart/checkout/validate_before_process`
+  (`($validation=true, $data)` → return `true` or a `WP_Error` to block);
+  `fluent_cart/checkout/validate_data` (`($errors, $data)` → return the errors array).
+- **Capture to order meta** (ACTION — **not** a filter): `fluent_cart/checkout/prepare_other_data`
+  — `$data` has `cart`, `order` (draft, already created), `prev_order`, `request_data`,
+  `validated_data`. Write with `$data['order']->updateMeta($key, $value)`; return nothing.
+- **Order meta API** (`FluentCart\App\Models\Order`): `getMeta($key, $default=false)`,
+  `updateMeta($key, $value)`, `deleteMeta($key)`.
+- **Admin order URL:** `$order->getViewUrl('admin')` (method confirmed; the exact URL string is
+  unverified — test it; canonical route `admin.php?page=fluent-cart#/orders/{id}/view`).
+- **Refund/status** (ACTION): `fluent_cart/order_refunded` + `_fully_refunded` / `_partially_refunded`
+  (payload `order, refunded_items, new_refunded_items, refunded_amount, manage_stock, transaction,
+  customer, type`); `fluent_cart/order_status_changed(_to_{status})` + `fluent_cart/payment_status_changed(_to_{status})`
+  (payload `order, old_status, new_status, manageStock, activity`).
+
+### Discrepancies vs the support reply (do NOT trust the reply blindly)
+- **`subscription_canceled` real name = `fluent_cart/payments/subscription_canceled`** (the
+  `/payments/` sub-namespace; the reply omitted it). Subscription status: `fluent_cart/payments/subscription_{status}`.
+- **`fluent_cart/order_paid` does NOT exist in docs** → use **`fluent_cart/order_paid_done`** (async,
+  via Action Scheduler; payload `order, transaction, customer, subscription?`) or `payment_status_changed_to_paid`.
+
+### Support-claim-only (NOT in docs — TEST before relying)
+- **`fluent_cart/smartcode_fallback`** + **`fluent_cart/editor_shortcodes`** (the email merge-tag
+  resolver) — the `/hooks/actions/emails.html` page 404s. Keep the `{{wwu.recesso_url}}` merge-tag
+  **deferred** until verified on a dev install.
+- **`cancelRemoteSubscription(['effective_from' => 'immediately'])`** — `effective_from` undocumented
+  (docs list only `reason, fire_hooks, note`). For the future NA click-to-cancel module, test that
+  `'immediately'` forces instant cancel vs end-of-term.
+
+### Implementation mapping
+- **FluentCart consent capture** = mirror of `Frontend\WooCheckoutConsent` → a new
+  `Frontend\FluentCartCheckoutConsent`: render the per-reason checkbox on a render hook, block via
+  `validate_before_process`, store the entries in `prepare_other_data` (`$order->updateMeta('consent', …)`,
+  which the adapter's `set_meta` already wraps), send the durable-medium confirmation + log the dispatch
+  (reuse `Mail\ExemptionConfirmation`). `Frontend\ConsentReader` already reads it platform-agnostically.
+- **Admin order URL** = replace the best-effort guess in `RequestsDashboard`/`FluentCartAdapter` with
+  `$order->getViewUrl('admin')`.

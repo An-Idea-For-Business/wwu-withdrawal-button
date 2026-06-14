@@ -5,6 +5,37 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### Exemptions — FluentCart checkout consent capture + canonical admin order URL (1.0.0-alpha.30, 2026-06-14)
+Brings the exemption consent capture to **FluentCart**, reaching cross-platform parity
+with WooCommerce, after FluentCart support answered our integration questions and each hook
+was **re-verified against the official docs**
+([analysis](../analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md) — the verification caught real
+discrepancies vs the support reply).
+- **`Frontend\FluentCartCheckoutConsent`** — mirrors `WooCheckoutConsent` on the verified
+  FluentCart hooks: render on `fluent_cart/after_payment_methods` (action), block on
+  `fluent_cart/checkout/validate_before_process` (filter → `WP_Error`), capture on
+  `fluent_cart/checkout/prepare_other_data` (action). The **authoritative capture** reads the
+  order's line items via the adapter's already-verified `order_items` path (never the
+  unverified Cart shape); render/validate read the cart **best-effort + guarded**, so if the
+  cart can't be read no checkbox is shown and checkout is not blocked — **fail-safe** (the
+  button stays; no path wrongly hides it). Reuses `WooCheckoutConsent::build_consent_entries`
+  + `Mail\ExemptionConfirmation` (durable-medium e-mail + dispatch log) + the PII-free
+  immutable-log event; `Frontend\ConsentReader` already reads it platform-agnostically.
+- **Note:** FluentCart line items don't resolve product categories, so FluentCart exemptions
+  match by **product ID only** (category tagging is a no-op there until categories are resolved).
+- **Canonical admin order URL** — `RequestsDashboard`'s "Open order (refund)" link now uses
+  the FluentCart Order model's `getViewUrl('admin')` (verified), falling back to the canonical
+  SPA route `admin.php?page=fluent-cart#/orders/{id}/view` (with the `/view` suffix). Still
+  filterable via `wwu_wb_order_admin_url`.
+- **Verified-hooks reference** recorded in the FluentCart analysis doc (confirmed vs docs:
+  checkout render/validate/prepare hooks, Order meta API, `getViewUrl`; discrepancies flagged:
+  `subscription_canceled` is `fluent_cart/payments/subscription_canceled`, `order_paid` does
+  not exist → use `order_paid_done`; `smartcode_fallback`/`editor_shortcodes` + `cancelRemoteSubscription`
+  `effective_from` are support-claim-only, deferred until live-tested).
+- **Needs a live FluentCart test** (whether a custom checkout field survives the FluentCart
+  submission is version-dependent). Until verified, the fail-safe holds. Remaining capture gap:
+  WooCommerce **block** Checkout (Store API).
+
 ### Exemptions feature — P3: durable-medium confirmation + evidence, retention, GDPR (1.0.0-alpha.29, 2026-06-14)
 Closes the gaps an official-source legal review surfaced
 ([legal note](../legal/wwu-wb-exemption-consent-evidence-NOTE.md), verified against EUR-Lex /

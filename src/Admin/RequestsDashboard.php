@@ -247,10 +247,11 @@ final class RequestsDashboard {
 	/**
 	 * Admin URL where the merchant opens the order to issue the refund.
 	 *
-	 * WooCommerce: the order edit screen (verified API). FluentCart: a best-effort
-	 * deep-link into the FluentCart admin SPA — the exact order route is not in the
-	 * official docs (June 2026), so it is filterable via `wwu_wb_order_admin_url`
-	 * for correction. Returns '' when no URL can be built.
+	 * WooCommerce: the order edit screen (verified API). FluentCart: the Order
+	 * model's own `getViewUrl('admin')` (confirmed against the official docs
+	 * 2026-06-14), with the canonical SPA route
+	 * `admin.php?page=fluent-cart#/orders/{id}/view` as a fallback. Still filterable
+	 * via `wwu_wb_order_admin_url`. Returns '' when no URL can be built.
 	 *
 	 * @param string $platform  Platform key.
 	 * @param string $order_ref Order reference.
@@ -265,8 +266,21 @@ final class RequestsDashboard {
 				$url = (string) $order->get_edit_order_url();
 			}
 		} elseif ( 'fluentcart' === $platform ) {
-			// Best-effort SPA deep-link; override with the exact route via the filter.
-			$url = admin_url( 'admin.php?page=fluent-cart#/orders/' . rawurlencode( $order_ref ) );
+			// Prefer the model's own admin view URL; fall back to the canonical route.
+			$model = '\\FluentCart\\App\\Models\\Order';
+			if ( class_exists( $model ) ) {
+				try {
+					$fc = $model::find( (int) $order_ref );
+					if ( is_object( $fc ) && method_exists( $fc, 'getViewUrl' ) ) {
+						$url = (string) $fc->getViewUrl( 'admin' );
+					}
+				} catch ( \Throwable $e ) {
+					$url = '';
+				}
+			}
+			if ( '' === $url ) {
+				$url = admin_url( 'admin.php?page=fluent-cart#/orders/' . rawurlencode( $order_ref ) . '/view' );
+			}
 		}
 
 		/**

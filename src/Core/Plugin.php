@@ -149,9 +149,10 @@ final class Plugin {
 			( new \WWU\WithdrawalButton\Frontend\WooCheckoutConsent() )->register();
 		}
 
-		// FluentCart portal injection when FluentCart is active.
+		// FluentCart portal injection + checkout consent capture when FluentCart is active.
 		if ( null !== $services->platforms->get( 'fluentcart' ) ) {
 			( new \WWU\WithdrawalButton\Frontend\FluentCartPortal() )->register();
+			( new \WWU\WithdrawalButton\Frontend\FluentCartCheckoutConsent() )->register();
 		}
 
 		// Feed captured exemption consent (any platform's order meta) back to the

@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0-alpha.29
+Stable tag: 1.0.0-alpha.30
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -71,6 +71,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 
 == Changelog ==
 
+= 1.0.0-alpha.30 =
+* Exemptions consent capture now works on **FluentCart** too (checkout acknowledgement + durable-medium confirmation), reaching parity with WooCommerce. Built on FluentCart hooks re-verified against the official docs. FluentCart exemptions match by product ID. The "Open order" admin link now uses FluentCart's own order URL. Needs a live FluentCart test; fail-safe until verified.
+
 = 1.0.0-alpha.29 =
 * Exemptions (Art. 59) — durable-medium confirmation + evidence, retention, GDPR. For the conditional exemptions the plugin now e-mails the consumer a durable-medium confirmation reproducing the agreed consent wording (constitutive for digital content, Art. 59(1)(o)) and logs the dispatch separately. Stored consents have a configurable retention (default 10 years) with a daily routine that anonymises the IP afterwards; the IP is configurable and never written to the immutable log. Adds a ready-to-paste GDPR privacy clause (legitimate interest) and a "Consent records" admin page with CSV export. Clearer wording everywhere: physical products never need consent; the button is hidden only after consent is captured (fail-safe).
 
@@ -93,6 +96,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.0.0-alpha.30 =
+Adds FluentCart checkout consent capture for the conditional exemptions (parity with WooCommerce). Test on a staging FluentCart store before production; fail-safe (the button stays) until the field is verified on your setup.
 
 = 1.0.0-alpha.29 =
 Completes the digital/service exemptions: durable-medium confirmation e-mail (required for the digital exemption), configurable consent retention with automatic IP anonymisation, a GDPR privacy clause and a Consent records page. Review the new clause and your retention setting. Test on staging; not yet a stable release.

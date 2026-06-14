@@ -3,12 +3,12 @@
 > Single index for the **WWU Withdrawal Button** plugin: the EU online right-of-withdrawal function ("withdrawal button", Art. 11a / Art. 54-bis) for WooCommerce & FluentCart. One line per doc; never put content here.
 
 - **Slug:** `wwu-wb` · **Folder:** `wwu-withdrawal-button`
-- **Status:** **MVP feature-complete** (F0–F8 + audit hardening), merged to `main`, **released** [`v1.0.0-alpha.27`](https://github.com/An-Idea-For-Business/wwu-withdrawal-button/releases/tag/v1.0.0-alpha.27) — in live testing. Current build `1.0.0-alpha.29` (exemptions P3: durable-medium confirmation + retention/purge + GDPR clause + Consent records view).
+- **Status:** **MVP feature-complete** (F0–F8 + audit hardening), merged to `main`, **released** [`v1.0.0-alpha.27`](https://github.com/An-Idea-For-Business/wwu-withdrawal-button/releases/tag/v1.0.0-alpha.27) — in live testing. Current build `1.0.0-alpha.30` (FluentCart checkout consent capture + canonical admin order URL — cross-platform exemptions parity).
 - **Target version:** `1.0.0` · **License:** GPL-3.0-or-later
 - **Credits:** mredodos · Matteo Alfieri (An Idea for Business) · WebWakeUp ([webwakeup.it](https://webwakeup.it))
 - **Product page (live):** [webwakeup.it/wwu-withdrawal-button](https://webwakeup.it/wwu-withdrawal-button/)
 - **Legal go-live:** **2026-06-19** (contracts concluded on/after)
-- **Last updated:** 2026-06-14 (exemptions P3 — durable-medium confirmation, retention/purge, GDPR clause, Consent records view + legal note)
+- **Last updated:** 2026-06-14 (FluentCart checkout consent capture + verified-hooks analysis; alpha.31 exemptions-UX SPEC queued)
 
 ## What it is (one paragraph)
 A free, open-source WordPress plugin that makes a store compliant with Directive (EU) 2023/2673 (new Art. 11a of the Consumer Rights Directive 2011/83/EU; Italy: Art. 54-bis Codice del Consumo via D.Lgs. 209/2025): a prominently displayed, continuously available, statutory-labelled withdrawal button → two-step statement + confirmation → durable-medium acknowledgement (email + PDF + verifiable link) → tamper-evident immutable log anchored to OpenTimestamps. Dual platform (WooCommerce HPOS+legacy / FluentCart), multilingual (IT/EN/FR/ES/DE + extensible), Complianz/TranslatePress-compatible, shortcodes + blocks, plus generators for the Annex I-B model form and Privacy/Terms/pre-contractual clauses.
@@ -18,7 +18,7 @@ Namespace `WWU\WithdrawalButton` · constants `WWU_WB_*` · options `wwu_wb_*` �
 
 ## Specifications
 - [SPEC — EU withdrawal button](docs/specs/wwu-wb-eu-withdrawal-button-SPEC.md) — 12 canonical sections; the authoritative design (2026-06-13).
-- [SPEC — Withdrawal exemptions (Art. 59)](docs/specs/wwu-wb-withdrawal-exemptions-SPEC.md) — exempting products/services with the legal consent-capture conditions; exception-type registry + admin UI + **P1–P3 shipped** (alpha.27→alpha.29: tagging, checkout consent capture, durable-medium confirmation, retention/purge, GDPR clause, consent-records view). FluentCart + block-Checkout capture remain (2026-06-14).
+- [SPEC — Withdrawal exemptions (Art. 59)](docs/specs/wwu-wb-withdrawal-exemptions-SPEC.md) — exempting products/services with the legal consent-capture conditions; exception-type registry + admin UI + **P1–P3 + FluentCart shipped** (alpha.27→alpha.30: tagging, WooCommerce + FluentCart checkout consent capture, durable-medium confirmation, retention/purge, GDPR clause, consent-records view). Only the WooCommerce block-Checkout capture remains (2026-06-14).
 - [SPEC — Exemptions management UX](docs/specs/wwu-wb-exemptions-ux-SPEC.md) — merchant-experience bundle (target alpha.30): grouped + tooltip'd exemptions settings, a guided "what do you sell?" helper, consumer-preview of the checkbox + durable-medium e-mail, an exemptions status/health panel, full it/fr/es/de i18n, and a landing section with worked examples (events/recordings/Zoom). Core button untouched (2026-06-14).
 - [SPEC — North America subscription-cancellation ("click-to-cancel")](docs/specs/wwu-wb-subscription-cancellation-na-SPEC.md) — design (no code yet) for a DISTINCT click-to-cancel module in the same plugin, jurisdiction-toggled (Quebec Bill 10, BC Bill 4, Ontario/NB pending, US ROSCA + state ARLs incl. California AB 2863), with WooCommerce Subscriptions + FluentCart integration. Grounded in a 5-agent official-source sweep (2026-06-14).
 
