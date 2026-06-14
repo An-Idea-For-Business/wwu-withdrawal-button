@@ -106,6 +106,9 @@ final class EligibleOrders {
 						$orders   = $order_model::where( 'customer_id', $customer->id )->orderBy( 'created_at', 'desc' )->take( self::SCAN_LIMIT )->get();
 						$count    = is_countable( $orders ) ? count( $orders ) : 0;
 						$lines[]  = 'FluentCart orders for customer: ' . $count;
+						if ( is_object( $orders ) && method_exists( $orders, 'all' ) ) {
+							$orders = $orders->all();
+						}
 						$services = Services::instance();
 						foreach ( (array) $orders as $fc ) {
 							$ref = isset( $fc->id ) ? (string) $fc->id : '';
@@ -181,10 +184,21 @@ final class EligibleOrders {
 			return array();
 		}
 
+		// Unwrap the Eloquent collection to its models with ->all(). Casting a
+		// collection with (array) iterates the collection object's INTERNALS, not
+		// the orders — the bug that produced empty refs and hid every FluentCart
+		// order. Fall back to an iterable, else bail.
+		if ( is_object( $orders ) && method_exists( $orders, 'all' ) ) {
+			$orders = $orders->all();
+		}
+		if ( ! is_iterable( $orders ) ) {
+			return array();
+		}
+
 		$services = Services::instance();
 		$enabled  = Settings::enabled();
 
-		foreach ( (array) $orders as $fc_order ) {
+		foreach ( $orders as $fc_order ) {
 			$order_id = isset( $fc_order->id ) ? (string) $fc_order->id : '';
 			if ( '' === $order_id ) {
 				continue;

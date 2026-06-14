@@ -5,6 +5,16 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### FluentCart orders now appear — Eloquent collection iteration fix (1.0.0-alpha.21, 2026-06-14)
+The admin diagnostic (alpha.20) pinpointed the real reason FluentCart orders never
+reached the chooser: `collect_fluentcart()` iterated the orders with `foreach
+( (array) $orders )`. Casting an Eloquent **collection** with `(array)` iterates the
+collection object's internal properties, not its models — so every order ref came out
+empty and `get_order('')` returned null. Fixed by unwrapping with `->all()` before the
+loop (same fix in the diagnostic). This sits in front of the alpha.20 applicability
+gates: with the orders now actually iterated, the country/status/items fixes take
+effect and eligible FluentCart orders show with the per-order button.
+
 ### FluentCart applicability gates fixed — orders now show + button appears (1.0.0-alpha.20, 2026-06-14)
 After alpha.19 the FluentCart portal page rendered, but FluentCart orders still did
 not appear in the chooser and the per-order button was missing. Root cause: three
