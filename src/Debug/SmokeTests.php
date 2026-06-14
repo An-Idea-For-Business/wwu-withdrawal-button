@@ -307,7 +307,23 @@ final class SmokeTests {
 		$tests[] = $this->assert( 'applicability.it_mandatory', $d_it->show && $d_it->mandatory, 'IT consumer: shown + mandatory.' );
 		$tests[] = $this->assert( 'applicability.ch_not_mandatory', ! $d_ch->mandatory, 'CH consumer: not mandatory (reason: ' . $d_ch->reason . ').' );
 		$tests[] = $this->assert( 'applicability.b2b_excluded', ! $d_b2b->show, 'B2B (VAT) excluded (reason: ' . $d_b2b->reason . ').' );
-		$tests[] = $this->assert( 'applicability.art59_digital_excluded', ! $d_dig->show, 'Completed digital-only order excluded (reason: ' . $d_dig->reason . ').' );
+
+		// Digital auto-exclusion now defaults OFF (the right is the default; the
+		// digital exemption needs captured consent). A completed digital order is
+		// shown UNLESS the merchant has opted in. Invariant: shown iff auto-detect off.
+		$exclusions = (array) \WWU\WithdrawalButton\Core\Settings::get( 'wwu_wb_exclusions' );
+		$auto_on    = ! empty( $exclusions['auto_detect_virtual'] );
+		$tests[]    = $this->assert( 'applicability.digital_matches_auto_detect', $d_dig->show === ! $auto_on, 'Completed digital order shown iff auto-detect off (auto_detect=' . ( $auto_on ? 'on' : 'off' ) . ', show=' . ( $d_dig->show ? 'yes' : 'no' ) . ').' );
+
+		// Deterministic exclusion via the wwu_wb_excluded_product_ids filter.
+		$excl_filter = static function ( $ids ) {
+			$ids[] = 123;
+			return $ids;
+		};
+		add_filter( 'wwu_wb_excluded_product_ids', $excl_filter );
+		$d_excl = $resolver->decide( $this->fake_order( 'IT', 'completed', false, array( $this->fake_item( false ) ) ) );
+		remove_filter( 'wwu_wb_excluded_product_ids', $excl_filter );
+		$tests[] = $this->assert( 'applicability.excluded_product_hidden', ! $d_excl->show && 'no_withdrawal_right' === $d_excl->reason, 'Product in the excluded list is hidden (reason: ' . $d_excl->reason . ').' );
 
 		// Regression (alpha.20): an order with NO readable items must still be
 		// withdrawable by default — the right is the default, Art.59 is the exception.

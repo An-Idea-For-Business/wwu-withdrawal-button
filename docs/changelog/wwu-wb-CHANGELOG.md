@@ -5,6 +5,26 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### Digital auto-exclusion now defaults OFF — the right is the default (1.0.0-alpha.24, 2026-06-14)
+The admin diagnostic confirmed why a FluentCart digital test order was hidden:
+`status="completed" … reason=no_withdrawal_right`. Not a bug — the Art. 59 *digital
+auto-detect* (`wwu_wb_exclusions.auto_detect_virtual`) was seeded **ON**, so any
+completed digital order was auto-excluded. But that flag was legally over-broad: the
+digital-content exemption (Art. 59 lett. o / Art. 16(m)) only applies when prior express
+consent + an acknowledgment of losing the right were captured — which the auto-detect
+does **not** verify — so it risked hiding the button from consumers who still have the
+right (under-compliance), and it contradicted the page's own admin copy ("do not simply
+hide the button without the legal conditions").
+- **Default flipped to OFF** (`Install` seed). The withdrawal right is the default;
+  merchants opt in, exclude specific products/categories, or use the proper (consent-
+  capturing) exemptions feature.
+- **Migration 2** flips existing installs from `true` → `false`. There is no UI for this
+  flag, so any stored `true` is the old seed (never a deliberate choice) — no intent is
+  overwritten. Schema version bumped 1 → 2.
+- **Smoke tests updated**: replaced the now-wrong `art59_digital_excluded` assertion with
+  `digital_matches_auto_detect` (shown iff auto-detect off — robust to the setting) and a
+  deterministic `excluded_product_hidden` via the `wwu_wb_excluded_product_ids` filter.
+
 ### FluentCart get_order() returned null — Eloquent magic-method guard removed (1.0.0-alpha.23, 2026-06-14)
 The admin diagnostic showed the final layer: with the collection now iterated
 (alpha.21), `get_order(1)` still returned null. Root cause in `FluentCartAdapter::load()`:
