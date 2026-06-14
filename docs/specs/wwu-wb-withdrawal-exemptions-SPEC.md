@@ -188,7 +188,13 @@ never looks like a denied right.
 1. Per-line-item consent vs per-order — line-item is more correct for mixed carts but
    heavier UX. Default: per-item, fall back to per-order when the whole cart is exempt.
 2. Should `auto_detect_virtual` be **off by default** until consent capture is enabled
-   (to avoid hiding the button without valid consent)? Leaning yes.
+   (to avoid hiding the button without valid consent)? **RESOLVED (1.0.0-alpha.24,
+   2026-06-14): YES.** The seed was flipped OFF and Migration 2 flips existing installs.
+   The withdrawal right is now the shipped default — digital products are covered (the
+   button shows) unless a legally-valid exemption is configured here. This SPEC's job is
+   exactly that: read the EXACT Art. 16/59 list (§3), let the merchant assign their
+   products to a specific legal reason (§7), capture consent for the conditional ones,
+   and otherwise apply the button to everything.
 3. FluentCart consent-capture hook parity — confirm the equivalent checkout hook + meta.
 4. Phasing: P1 admin UI + reason tagging (uses existing evaluator); P2 checkout consent
    + gate; P3 email confirmation + log event + consumer transparency. Each with an audit.
