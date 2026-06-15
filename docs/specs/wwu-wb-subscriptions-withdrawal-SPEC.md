@@ -50,7 +50,9 @@ This feature teaches the plugin to:
 
 ## 4. Architecture
 
-**Single source of truth: a data flag on the value object, one gate in the resolver.** Recon confirmed all 8 button surfaces (WooMyAccount ×3, FluentCartPortal, EddCustomerOrders ×4, EligibleOrders, Shortcodes, OrderEmailLink, FluentCartWithdrawalTag, NoScriptFlow) converge on `Services::instance()->applicability->decide($order)->show`. So suppression belongs in `ApplicabilityResolver`, fed by a flag the adapters set.
+**Single source of truth: a data flag on the value object, one gate in the resolver.** Every surface that *displays* a withdrawal button/link/form converges on `Services::instance()->applicability->decide($order)->show` — verified post-implementation (alpha.38 inline audit): WooMyAccount, FluentCartPortal, EddCustomerOrders, EligibleOrders, Shortcodes (`[wwu_wb_button]` + `[wwu_wb_form]`), OrderEmailLink, FluentCartWithdrawalTag. So suppression belongs in `ApplicabilityResolver`, fed by a flag the adapters set.
+
+> **Correction to the recon (alpha.38 audit):** `NoScriptFlow` (and the REST `WithdrawalRoute`) are **action handlers**, not display surfaces — they process the POST of a form that a *display* surface already rendered (and therefore already gated). They are intentionally **NOT** applicability-gated: gating an action would introduce a place where a consumer could be wrongly *blocked* from exercising the right — the unsafe direction. This mirrors how the plugin already handles *late* withdrawals (recorded + flagged for merchant review, never hard-blocked). A renewal can only reach these handlers via a deliberately hand-crafted request by the order owner; it is then recorded and surfaced in the Requests dashboard with the **Subscription** badge for the merchant to assess. See §9.
 
 ```
 adapter->get_order($ref)                         (per platform: detect renewal)
@@ -156,6 +158,7 @@ Each adapter implements it **only** when its subscription plugin is active (guar
 - Guard every platform call with `function_exists`/`class_exists`/`method_exists` (recon-specified) — no fatal on a store without the subscription plugin.
 - The `subscription_cancelled` evidence event is PII-free (no email/IP), consistent with the immutable-log policy.
 - Filters (`wwu_wb_order_is_renewal`, `wwu_wb_subscription_cancel_result`) are server-side, not user-reachable.
+- **Action-path fail-open (deliberate, do NOT "fix"):** the renewal gate suppresses every *display* surface, but the *action* handlers (`NoScriptFlow`, `WithdrawalRoute`) do not re-check `decide()->show`. This is by design — fail-open toward the consumer. Both still require proven ownership (logged-in `verify_owner`, guest `verify_guest_key`, or `GuestAccess` access-token) + a valid nonce/token, so a third party cannot withdraw on someone else's behalf. The worst case is the order's own owner hand-crafting a request to withdraw from a *renewal* (no fresh right): it is recorded and shown in the Requests dashboard with the Subscription badge + the existing "verify validity" guidance — identical to a flagged late withdrawal. Adding a hard applicability gate on the action would risk wrongly blocking a legitimate withdrawal, which the whole design forbids. (Audit verdict: LOW / by-design, not a bug.)
 
 ---
 
