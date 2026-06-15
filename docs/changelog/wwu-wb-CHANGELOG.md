@@ -12,7 +12,7 @@ FluentCart (`FluentCartPortal`). Previously EDD was a data-adapter + checkout-co
 EDD customers could reach the form only via the standalone public page. Hooks verified against the official
 EDD source first — see [EDD customer surfaces analysis](../analysis/wwu-wb-edd-customer-surfaces-ANALYSIS.md).
 - **`Frontend\EddCustomerOrders`** (new) — injects the withdrawal button on the **purchase receipt**
-  (`edd_order_receipt_after`) and at the end of each **purchase-history** order row
+  (`edd_order_receipt_after_table`) and at the end of each **purchase-history** order row
   (`edd_order_history_row_end`), and appends the withdrawal **link to the receipt e-mail** body
   (`edd_order_receipt` filter, EDD 3.2.0+, with the legacy `edd_purchase_receipt` filter wired for 3.0–3.1
   and de-duplicated so 3.2+ never appends twice). All EDD 3.x hooks (the legacy 2.x `edd_payment_receipt_*`
@@ -26,6 +26,21 @@ EDD source first — see [EDD customer surfaces analysis](../analysis/wwu-wb-edd
   receipt/history pages don't load the plugin stylesheet). No new i18n strings (reuses the statutory label).
 - Wired in `Plugin.php` in the EDD-active block. Lint: PHP 0 errors. **Needs a live EDD test** — see the EDD
   evaluator checklist.
+
+### Docs — end-to-end "try the plugin" evaluator checklists (docs-only, 2026-06-15)
+Adds a full `docs/testing/` suite so anyone can evaluate the plugin on a staging store, plus an index
+([docs/testing/README.md](../testing/README.md)). Grounded in a code-recon pass (accurate shortcodes,
+blocks, hooks, admin slugs).
+- **3 end-to-end evaluator checklists** — one per platform — covering install → withdrawal button/entry
+  points → two-step statement→confirmation (incl. the no-JS `admin-post.php` fallback) → durable medium
+  (acknowledgement e-mail + PDF + verifiable `/verify/{uid}` link) → evidence-log chain-integrity →
+  merchant processing (refund + "Mark processed" + resend) → exemptions → Compliance helpers → uninstall
+  (legal-hold default): `wwu-wb-try-the-plugin-{woocommerce,fluentcart,edd}-CHECKLIST.md`.
+- Documents the real per-platform entry surfaces: **WooCommerce** 3 (My Account orders action / order
+  detail / "Right of withdrawal" tab), **FluentCart** 4 (portal endpoint / sidebar / dashboard banner /
+  per-order button), **EDD** receipt + purchase-history button + receipt-e-mail link (added in alpha.35),
+  with the standalone public page / payment-key link / guest lookup as alternative entry points.
+- No code change; the 3 exemption consent-capture checklists from alpha.34 are cross-linked.
 
 ### FluentCart — team-verified improvements + 3 live-test checklists (1.0.0-alpha.34, 2026-06-15)
 Acts on a direct FluentCart team reply (2026-06-15) confirming the integration mechanics; see
