@@ -3,13 +3,21 @@
  * FluentCart checkout capture of the exemption consent + acknowledgement.
  *
  * The FluentCart counterpart of {@see WooCheckoutConsent}. It uses the FluentCart
- * checkout hooks verified against the official docs
- * (docs/analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md):
- *   - render  → `fluent_cart/after_payment_methods` (ACTION, $data['cart']);
+ * checkout hooks verified against the official docs + a direct confirmation from
+ * the FluentCart team (2026-06-15, docs/analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md):
+ *   - render  → `fluent_cart/before_payment_methods` (ACTION, $data['cart']) — the
+ *                team's recommended hook; it fires in the standard, modal AND block
+ *                checkout renderers (the block checkout still runs FluentCart's own
+ *                checkout-form flow, NOT the WooCommerce Store API);
  *   - validate → `fluent_cart/checkout/validate_before_process` (FILTER, return
  *                true or a WP_Error to block);
  *   - capture  → `fluent_cart/checkout/prepare_other_data` (ACTION, $data['order']
  *                is the just-created draft order).
+ *
+ * A custom field rendered inside the FluentCart checkout `<form>` IS submitted
+ * (the checkout JS builds FormData from the form) and is therefore available in
+ * validate + capture — confirmed by the team. Unchecked checkboxes are NOT
+ * submitted, so an absent consent is correctly treated as "no".
  *
  * Design = defensive + fail-safe, matching the rest of the FluentCart adapter:
  *  - The AUTHORITATIVE capture reads the order's line items via the adapter's
@@ -23,12 +31,10 @@
  *    (`set_meta`), which {@see ConsentReader} already reads platform-agnostically;
  *    no dependency on FluentCart's native order-meta API.
  *
- * Note: FluentCart line items expose a product id (post_id) but the adapter does
- * not resolve product categories, so FluentCart exemptions are matched by
- * PRODUCT ID only (category tagging is a no-op here until categories are resolved).
- *
- * Needs a live FluentCart test: whether a custom checkout field survives the
- * FluentCart submission is version-dependent; until verified, the fail-safe holds.
+ * Category-aware: product categories live in the `product-categories` taxonomy
+ * (team-confirmed), resolved via {@see FluentCartAdapter::category_ids_for_post()},
+ * so FluentCart exemptions match by PRODUCT ID and by CATEGORY — in parity with
+ * WooCommerce (`product_cat`) and EDD (`download_category`).
  *
  * @package WWU\WithdrawalButton
  */
@@ -69,7 +75,11 @@ final class FluentCartCheckoutConsent {
 	 * @return void
 	 */
 	public function register(): void {
-		add_action( 'fluent_cart/after_payment_methods', array( $this, 'render_fields' ), 10, 1 );
+		// `before_payment_methods` is the safer render hook: it fires in the standard,
+		// modal AND block checkout renderers (the FluentCart team's explicit
+		// recommendation, 2026-06-15). `after_payment_methods` only fires in the
+		// standard renderer. See docs/analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md.
+		add_action( 'fluent_cart/before_payment_methods', array( $this, 'render_fields' ), 10, 1 );
 		add_filter( 'fluent_cart/checkout/validate_before_process', array( $this, 'validate' ), 10, 2 );
 		add_action( 'fluent_cart/checkout/prepare_other_data', array( $this, 'capture' ), 10, 1 );
 	}
@@ -172,8 +182,10 @@ final class FluentCartCheckoutConsent {
 
 		$map = array();
 		foreach ( (array) $normalized->items as $item ) {
-			$pid    = (int) ( ( (array) $item )['product_id'] ?? 0 );
-			$reason = ExemptionResolver::reason_for( $pid, array() ); // FluentCart: product-id only.
+			$item   = (array) $item;
+			$pid    = (int) ( $item['product_id'] ?? 0 );
+			$cats   = array_map( 'intval', (array) ( $item['category_ids'] ?? array() ) );
+			$reason = ExemptionResolver::reason_for( $pid, $cats ); // Product-id + category aware.
 			if ( null !== $reason && ExceptionTypes::is_conditional( $reason ) ) {
 				$map[ $reason ][] = $pid;
 			}
@@ -245,7 +257,11 @@ final class FluentCartCheckoutConsent {
 	private function cart_conditional_map( $cart ): array {
 		$map = array();
 		foreach ( $this->cart_product_ids( $cart ) as $pid ) {
-			$reason = ExemptionResolver::reason_for( (int) $pid, array() );
+			// Category-aware: resolve the product's `product-categories` terms so a
+			// category-tagged exemption matches in the cart, in parity with the
+			// authoritative order-items capture below.
+			$cats   = FluentCartAdapter::category_ids_for_post( (int) $pid );
+			$reason = ExemptionResolver::reason_for( (int) $pid, $cats );
 			if ( null !== $reason && ExceptionTypes::is_conditional( $reason ) ) {
 				$map[ $reason ][ (int) $pid ] = (int) $pid;
 			}

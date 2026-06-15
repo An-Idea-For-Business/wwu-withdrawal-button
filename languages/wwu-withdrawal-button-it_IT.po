@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WWU Withdrawal Button\n"
 "Report-Msgid-Bugs-To: https://webwakeup.it/wwu-withdrawal-button/\n"
-"POT-Creation-Date: 2026-06-14 13:32+0000\n"
+"POT-Creation-Date: 2026-06-14 23:37+0000\n"
 "PO-Revision-Date: 2026-06-14 00:00+0000\n"
 "Last-Translator: WebWakeUp <info@webwakeup.it>\n"
 "Language-Team: WebWakeUp\n"
@@ -269,7 +269,7 @@ msgid "Next"
 msgstr "Successivo"
 
 #: src/Admin/ConsentRecordsPage.php:200 src/Admin/DashboardPage.php:287
-#: src/Admin/RequestsDashboard.php:365 src/Admin/SettingsPage.php:346
+#: src/Admin/RequestsDashboard.php:373 src/Admin/SettingsPage.php:346
 #: src/Admin/SettingsPage.php:789 src/REST/Authentication.php:55
 #: src/REST/Authentication.php:80
 msgid "Insufficient permissions."
@@ -825,28 +825,28 @@ msgstr "Invia di nuovo l'e-mail"
 msgid "Open order (refund)"
 msgstr "Ordine aperto (rimborso)"
 
-#: src/Admin/RequestsDashboard.php:409
+#: src/Admin/RequestsDashboard.php:417
 msgid "Request marked as processed."
 msgstr "Richiesta contrassegnata come elaborata."
 
-#: src/Admin/RequestsDashboard.php:410
+#: src/Admin/RequestsDashboard.php:418
 msgid ""
 "Could not mark the request as processed — the order could not be loaded."
 msgstr ""
 "Impossibile contrassegnare la richiesta come elaborata — l'ordine non ha "
 "potuto essere caricato."
 
-#: src/Admin/RequestsDashboard.php:411
+#: src/Admin/RequestsDashboard.php:419
 msgid "Acknowledgement email resent."
 msgstr "E-mail di conferma inviata nuovamente."
 
-#: src/Admin/RequestsDashboard.php:412
+#: src/Admin/RequestsDashboard.php:420
 msgid "Could not resend the email — check your email/SMTP configuration."
 msgstr ""
 "Impossibile inviare nuovamente l'e-mail — verifica la configurazione e-mail/"
 "SMTP."
 
-#: src/Admin/RequestsDashboard.php:413
+#: src/Admin/RequestsDashboard.php:421
 msgid "Please wait a few seconds before resending again."
 msgstr "Attendi alcuni secondi prima di inviare di nuovo."
 
@@ -986,7 +986,10 @@ msgid ""
 "The legal minimum is 14. You may grant MORE (e.g. 30) as a voluntary "
 "extension — the figure shown to customers updates accordingly. You cannot "
 "set less than 14."
-msgstr "Il minimo legale è 14. Puoi concedere DI PIÙ (es. 30) come estensione volontaria — il valore mostrato ai clienti si aggiorna di conseguenza. Non puoi impostare meno di 14."
+msgstr ""
+"Il minimo legale è 14. Puoi concedere DI PIÙ (es. 30) come estensione "
+"volontaria — il valore mostrato ai clienti si aggiorna di conseguenza. Non "
+"puoi impostare meno di 14."
 
 #: src/Admin/SettingsPage.php:204
 msgid "Custom guidance text"
@@ -997,14 +1000,20 @@ msgid ""
 "Leave empty to use the built-in explanation. Paste your own to fully replace "
 "it — e.g. to spell out exemptions for event tickets or services started "
 "immediately."
-msgstr "Lascia vuoto per usare la spiegazione integrata. Incolla la tua per sostituirla completamente — es. per descrivere le esenzioni per biglietti di eventi o servizi avviati immediatamente."
+msgstr ""
+"Lascia vuoto per usare la spiegazione integrata. Incolla la tua per "
+"sostituirla completamente — es. per descrivere le esenzioni per biglietti di "
+"eventi o servizi avviati immediatamente."
 
 #: src/Admin/SettingsPage.php:206
 msgid ""
 "When set, this replaces the default \"how withdrawal works\" block shown to "
 "customers. Basic HTML is allowed. You are responsible for its legal accuracy "
 "— keep it truthful and do not discourage withdrawal."
-msgstr "Quando impostato, sostituisce il blocco predefinito “come funziona il recesso” mostrato ai clienti. È consentito HTML di base. Sei responsabile della correttezza legale — mantienilo veritiero e non scoraggiare il recesso."
+msgstr ""
+"Quando impostato, sostituisce il blocco predefinito “come funziona il "
+"recesso” mostrato ai clienti. È consentito HTML di base. Sei responsabile "
+"della correttezza legale — mantienilo veritiero e non scoraggiare il recesso."
 
 #: src/Admin/SettingsPage.php:207
 msgid ""
@@ -1012,7 +1021,11 @@ msgid ""
 "immediate-access digital content), the proper fix is to exempt them per Art. "
 "59 — see the upcoming Exemptions feature. Do not simply hide the button "
 "without the legal conditions."
-msgstr "Per i prodotti senza diritto di recesso (es. biglietti per eventi datati, contenuti digitali ad accesso immediato), la soluzione corretta è esentarli ai sensi dell'Art. 59 — vedi la funzione Esenzioni in arrivo. Non nascondere semplicemente il pulsante senza le condizioni legali."
+msgstr ""
+"Per i prodotti senza diritto di recesso (es. biglietti per eventi datati, "
+"contenuti digitali ad accesso immediato), la soluzione corretta è esentarli "
+"ai sensi dell'Art. 59 — vedi la funzione Esenzioni in arrivo. Non nascondere "
+"semplicemente il pulsante senza le condizioni legali."
 
 #: src/Admin/SettingsPage.php:225
 msgid "Receipt & evidence"
@@ -1517,7 +1530,10 @@ msgid ""
 "Tag here only digital content with immediate access and services fully "
 "performed. The button is hidden ONLY after the consumer consents at "
 "checkout; otherwise it stays (fail-safe)."
-msgstr "Tagga qui solo i contenuti digitali ad accesso immediato e i servizi completamente eseguiti. Il pulsante è nascosto SOLO dopo che il consumatore ha prestato il consenso al checkout; altrimenti resta visibile (fail-safe)."
+msgstr ""
+"Tagga qui solo i contenuti digitali ad accesso immediato e i servizi "
+"completamente eseguiti. Il pulsante è nascosto SOLO dopo che il consumatore "
+"ha prestato il consenso al checkout; altrimenti resta visibile (fail-safe)."
 
 #: src/Admin/SettingsPage.php:532
 msgid "Unconditional — exempt by nature (no consent)"
@@ -1527,7 +1543,9 @@ msgstr "Incondizionale — esente per natura (senza consenso)"
 msgid ""
 "These have no right of withdrawal by law (custom-made, perishable, dated "
 "events, …). Tagged products hide the button with no checkbox."
-msgstr "Questi non hanno diritto di recesso per legge (su misura, deperibili, eventi datati, …). I prodotti taggati nascondono il pulsante senza checkbox."
+msgstr ""
+"Questi non hanno diritto di recesso per legge (su misura, deperibili, eventi "
+"datati, …). I prodotti taggati nascondono il pulsante senza checkbox."
 
 #: src/Admin/SettingsPage.php:537
 msgid "Seal-based — assess on return (never auto-hidden)"
@@ -1537,7 +1555,10 @@ msgstr "Basato sul sigillo — valutare al reso (mai nascosto automaticamente)"
 msgid ""
 "These depend on the consumer unsealing after delivery, which cannot be known "
 "at order time. Tag them, but the button stays; assess on return."
-msgstr "Dipendono dall'apertura della sigillatura da parte del consumatore dopo la consegna, cosa non verificabile al momento dell'ordine. Taggali, ma il pulsante resta; valuta al reso."
+msgstr ""
+"Dipendono dall'apertura della sigillatura da parte del consumatore dopo la "
+"consegna, cosa non verificabile al momento dell'ordine. Taggali, ma il "
+"pulsante resta; valuta al reso."
 
 #: src/Admin/SettingsPage.php:559
 msgid "%d configured"
@@ -1588,7 +1609,13 @@ msgid ""
 "it; only then is it hidden for this item. On other checkouts/platforms the "
 "button stays (fail-safe). For the digital reason you must also deliver a "
 "durable-medium (e-mail) confirmation to the consumer before access begins."
-msgstr "nel checkout WooCommerce / FluentCart viene aggiunta automaticamente una casella di presa d'atto obbligatoria per questo motivo. Il pulsante rimane visibile finché il consumatore non la spunta; solo allora viene nascosto per questo articolo. Su altri checkout/piattaforme il pulsante resta visibile (fail-safe). Per il motivo digitale è necessario inviare al consumatore anche una conferma su supporto durevole (e-mail) prima che inizi l'accesso."
+msgstr ""
+"nel checkout WooCommerce / FluentCart viene aggiunta automaticamente una "
+"casella di presa d'atto obbligatoria per questo motivo. Il pulsante rimane "
+"visibile finché il consumatore non la spunta; solo allora viene nascosto per "
+"questo articolo. Su altri checkout/piattaforme il pulsante resta visibile "
+"(fail-safe). Per il motivo digitale è necessario inviare al consumatore "
+"anche una conferma su supporto durevole (e-mail) prima che inizi l'accesso."
 
 #: src/Admin/SettingsPage.php:627
 msgid "Preview what the consumer sees"
@@ -1654,7 +1681,11 @@ msgid ""
 "(Art. 59(1)(n)). Tag it under \"Accommodation / transport / leisure on a "
 "specific date\" in the Unconditional group — the button is hidden, no "
 "checkbox."
-msgstr "Un biglietto per un evento legato a una data specifica NON ha diritto di recesso (Art. 59(1)(n)). Taggalo in “Alloggio / trasporto / tempo libero in una data specifica” nel gruppo Incondizionale — il pulsante viene nascosto, nessuna checkbox."
+msgstr ""
+"Un biglietto per un evento legato a una data specifica NON ha diritto di "
+"recesso (Art. 59(1)(n)). Taggalo in “Alloggio / trasporto / tempo libero in "
+"una data specifica” nel gruppo Incondizionale — il pulsante viene nascosto, "
+"nessuna checkbox."
 
 #: src/Admin/SettingsPage.php:728
 msgid "Digital downloads & recordings"
@@ -1668,7 +1699,14 @@ msgid ""
 "receives a durable-medium e-mail; only then is the button hidden. (A "
 "subscription/membership: the initial order keeps the right; the digital "
 "access is the 59(1)(o) part.)"
-msgstr "Il contenuto che l'acquirente scarica o trasmette in streaming immediatamente è un'esenzione CONDIZIONALE (Art. 59(1)(o)): taggalo sotto \"Contenuto digitale ad accesso immediato\" nel gruppo Condizionale. L'acquirente vede una casella di consenso e riceve un'e-mail su supporto durevole; solo allora il pulsante viene nascosto. (Un abbonamento/membership: l'ordine iniziale conserva il diritto; l'accesso digitale è la parte 59(1)(o).)"
+msgstr ""
+"Il contenuto che l'acquirente scarica o trasmette in streaming "
+"immediatamente è un'esenzione CONDIZIONALE (Art. 59(1)(o)): taggalo sotto "
+"\"Contenuto digitale ad accesso immediato\" nel gruppo Condizionale. "
+"L'acquirente vede una casella di consenso e riceve un'e-mail su supporto "
+"durevole; solo allora il pulsante viene nascosto. (Un abbonamento/"
+"membership: l'ordine iniziale conserva il diritto; l'accesso digitale è la "
+"parte 59(1)(o).)"
 
 #: src/Admin/SettingsPage.php:73
 msgid "Enable withdrawal function"
@@ -1684,7 +1722,11 @@ msgid ""
 "ticket: \"leisure on a specific date\" (Unconditional). A session that "
 "simply starts immediately, with no fixed event date → \"Service fully "
 "performed\" (Conditional, needs consent)."
-msgstr "Una sessione live con data fissa (es. un webinar su una data fissa) → trattala come un biglietto evento: “tempo libero in una data specifica” (Incondizionale). Una sessione che inizia immediatamente, senza data fissa → “Servizio completamente eseguito” (Condizionale, richiede consenso)."
+msgstr ""
+"Una sessione live con data fissa (es. un webinar su una data fissa) → "
+"trattala come un biglietto evento: “tempo libero in una data specifica” "
+"(Incondizionale). Una sessione che inizia immediatamente, senza data fissa → "
+"“Servizio completamente eseguito” (Condizionale, richiede consenso)."
 
 #: src/Admin/SettingsPage.php:738
 msgid "Services performed immediately"
@@ -1696,7 +1738,11 @@ msgid ""
 "performed\" (Art. 59(1)(a), Conditional). The buyer consents at checkout; "
 "the exemption applies only once the service is fully performed (partial → "
 "pro-rata, the right survives)."
-msgstr "Un servizio che inizia subito e viene completamente eseguito → “Servizio completamente eseguito” (Art. 59(1)(a), Condizionale). L'acquirente acconsente al checkout; l'esenzione si applica solo a servizio completamente eseguito (parziale → pro-rata, il diritto sopravvive)."
+msgstr ""
+"Un servizio che inizia subito e viene completamente eseguito → “Servizio "
+"completamente eseguito” (Art. 59(1)(a), Condizionale). L'acquirente "
+"acconsente al checkout; l'esenzione si applica solo a servizio completamente "
+"eseguito (parziale → pro-rata, il diritto sopravvive)."
 
 #: src/Admin/SettingsPage.php:743
 msgid "Physical goods"
@@ -1707,7 +1753,10 @@ msgid ""
 "Nothing to do — physical products always keep the 14-day right and always "
 "show the button. Only tag the specific exceptions (custom-made, perishable, "
 "sealed hygiene) under the matching reason."
-msgstr "Niente da fare — i prodotti fisici mantengono sempre il diritto di 14 giorni e mostrano sempre il pulsante. Tagga solo le eccezioni specifiche (su misura, deperibili, igiene sigillata) sotto il motivo corrispondente."
+msgstr ""
+"Niente da fare — i prodotti fisici mantengono sempre il diritto di 14 giorni "
+"e mostrano sempre il pulsante. Tagga solo le eccezioni specifiche (su "
+"misura, deperibili, igiene sigillata) sotto il motivo corrispondente."
 
 #: src/Admin/SettingsPage.php:749
 msgid "What do you sell? (quick guide)"
@@ -1734,7 +1783,10 @@ msgid ""
 "Treat virtual/downloadable items on completed orders as exempt. OFF by "
 "default — the proper path is the \"Digital content with immediate access\" "
 "reason with consent capture."
-msgstr "Tratta gli articoli virtuali/scaricabili negli ordini completati come esenti. OFF per impostazione predefinita — la strada corretta è il motivo “Contenuto digitale con accesso immediato” con acquisizione del consenso."
+msgstr ""
+"Tratta gli articoli virtuali/scaricabili negli ordini completati come "
+"esenti. OFF per impostazione predefinita — la strada corretta è il motivo "
+"“Contenuto digitale con accesso immediato” con acquisizione del consenso."
 
 #: src/Admin/SettingsPage.php:777
 msgid "Store consumer IP with the consent"
@@ -1798,25 +1850,34 @@ msgstr ""
 msgid ""
 "e.g. a product you have assessed individually → tag it here and the button "
 "is hidden for it."
-msgstr "es. un prodotto valutato individualmente → taggalo qui e il pulsante verrà nascosto."
+msgstr ""
+"es. un prodotto valutato individualmente → taggalo qui e il pulsante verrà "
+"nascosto."
 
 #: src/Domain/ExceptionTypes.php:130
 msgid ""
 "e.g. a one-off consulting call performed during the order → button hidden "
 "after the buyer consents AND the service is fully performed."
-msgstr "es. una consulenza unica eseguita durante l'ordine → pulsante nascosto dopo che l'acquirente acconsente E il servizio è completamente eseguito."
+msgstr ""
+"es. una consulenza unica eseguita durante l'ordine → pulsante nascosto dopo "
+"che l'acquirente acconsente E il servizio è completamente eseguito."
 
 #: src/Domain/ExceptionTypes.php:131
 msgid ""
 "e.g. an ebook or video the buyer downloads immediately → button hidden only "
 "after the buyer ticks the consent box at checkout."
-msgstr "es. un ebook o video che l'acquirente scarica immediatamente → pulsante nascosto solo dopo che l'acquirente seleziona la casella di consenso al checkout."
+msgstr ""
+"es. un ebook o video che l'acquirente scarica immediatamente → pulsante "
+"nascosto solo dopo che l'acquirente seleziona la casella di consenso al "
+"checkout."
 
 #: src/Domain/ExceptionTypes.php:132
 msgid ""
 "e.g. a necklace engraved with the buyer's text → no withdrawal, button "
 "hidden."
-msgstr "es. una collana incisa con il testo dell'acquirente → nessun recesso, pulsante nascosto."
+msgstr ""
+"es. una collana incisa con il testo dell'acquirente → nessun recesso, "
+"pulsante nascosto."
 
 #: src/Domain/ExceptionTypes.php:133
 msgid "e.g. a fresh-food box → no withdrawal, button hidden."
@@ -1826,50 +1887,67 @@ msgstr "es. una box di prodotti freschi → nessun recesso, pulsante nascosto."
 msgid ""
 "e.g. sealed cosmetics → button stays; if returned unsealed you may refuse "
 "the refund."
-msgstr "es. cosmetici sigillati → il pulsante rimane; se restituiti senza sigillo puoi rifiutare il rimborso."
+msgstr ""
+"es. cosmetici sigillati → il pulsante rimane; se restituiti senza sigillo "
+"puoi rifiutare il rimborso."
 
 #: src/Domain/ExceptionTypes.php:135
 msgid ""
 "e.g. shrink-wrapped software or a DVD → button stays; assess on return "
 "whether the seal was broken."
-msgstr "es. software o DVD in confezione sigillata → il pulsante rimane; valuta al reso se il sigillo era intatto."
+msgstr ""
+"es. software o DVD in confezione sigillata → il pulsante rimane; valuta al "
+"reso se il sigillo era intatto."
 
 #: src/Domain/ExceptionTypes.php:136
 msgid ""
 "e.g. heating oil poured into the buyer's tank → no withdrawal, button hidden."
-msgstr "es. gasolio versato nel serbatoio dell'acquirente → nessun recesso, pulsante nascosto."
+msgstr ""
+"es. gasolio versato nel serbatoio dell'acquirente → nessun recesso, pulsante "
+"nascosto."
 
 #: src/Domain/ExceptionTypes.php:137
 msgid ""
 "e.g. a concert ticket for 20 June, or a dated live webinar → no withdrawal, "
 "button hidden."
-msgstr "es. un biglietto per un concerto del 20 giugno, o un webinar live con data → nessun recesso, pulsante nascosto."
+msgstr ""
+"es. un biglietto per un concerto del 20 giugno, o un webinar live con data → "
+"nessun recesso, pulsante nascosto."
 
 #: src/Domain/ExceptionTypes.php:138
 msgid ""
 "e.g. a gold coin priced to the spot market → no withdrawal, button hidden."
-msgstr "es. una moneta d'oro prezzata al mercato spot → nessun recesso, pulsante nascosto."
+msgstr ""
+"es. una moneta d'oro prezzata al mercato spot → nessun recesso, pulsante "
+"nascosto."
 
 #: src/Domain/ExceptionTypes.php:139
 msgid ""
 "e.g. en-primeur wine delivered after 30 days → no withdrawal, button hidden."
-msgstr "es. vino en-primeur consegnato dopo 30 giorni → nessun recesso, pulsante nascosto."
+msgstr ""
+"es. vino en-primeur consegnato dopo 30 giorni → nessun recesso, pulsante "
+"nascosto."
 
 #: src/Domain/ExceptionTypes.php:140
 msgid ""
 "e.g. an urgent plumber visit the buyer specifically requested → no "
 "withdrawal for that visit."
-msgstr "es. un intervento urgente di un idraulico richiesto specificamente dall'acquirente → nessun recesso per quella visita."
+msgstr ""
+"es. un intervento urgente di un idraulico richiesto specificamente "
+"dall'acquirente → nessun recesso per quella visita."
 
 #: src/Domain/ExceptionTypes.php:141
 msgid ""
 "e.g. a single magazine issue (NOT a subscription) → no withdrawal, button "
 "hidden."
-msgstr "es. un singolo numero di rivista (NON un abbonamento) → nessun recesso, pulsante nascosto."
+msgstr ""
+"es. un singolo numero di rivista (NON un abbonamento) → nessun recesso, "
+"pulsante nascosto."
 
 #: src/Domain/ExceptionTypes.php:142
 msgid "e.g. a lot won at a public auction → no withdrawal, button hidden."
-msgstr "es. un lotto vinto a un'asta pubblica → nessun recesso, pulsante nascosto."
+msgstr ""
+"es. un lotto vinto a un'asta pubblica → nessun recesso, pulsante nascosto."
 
 #: src/Domain/ExceptionTypes.php:63
 msgid "Manually excluded (no specific reason)"
@@ -1879,7 +1957,9 @@ msgstr "Escluso manualmente (nessun motivo specifico)"
 msgid ""
 "Legacy / catch-all. Prefer a specific reason below so the exemption is "
 "auditable."
-msgstr "Legacy / generico. Preferisci un motivo specifico di seguito affinché l'esenzione sia verificabile."
+msgstr ""
+"Legacy / generico. Preferisci un motivo specifico di seguito affinché "
+"l'esenzione sia verificabile."
 
 #: src/Domain/ExceptionTypes.php:64
 msgid "Service fully performed"
@@ -1890,7 +1970,10 @@ msgid ""
 "Only once the service is FULLY performed AND the consumer gave prior express "
 "consent and acknowledged losing the right. Partial performance → the right "
 "still applies (pro-rata payment)."
-msgstr "Solo quando il servizio è COMPLETAMENTE eseguito E il consumatore ha dato consenso espresso anticipato e ha riconosciuto di perdere il diritto. Esecuzione parziale → il diritto si applica ancora (pagamento pro-rata)."
+msgstr ""
+"Solo quando il servizio è COMPLETAMENTE eseguito E il consumatore ha dato "
+"consenso espresso anticipato e ha riconosciuto di perdere il diritto. "
+"Esecuzione parziale → il diritto si applica ancora (pagamento pro-rata)."
 
 #: src/Domain/ExceptionTypes.php:65
 msgid "Digital content with immediate access"
@@ -1902,7 +1985,11 @@ msgid ""
 "with prior express consent, acknowledgement of losing the right, AND the "
 "trader's confirmation on a durable medium. If any condition fails, the right "
 "survives and the consumer owes nothing."
-msgstr "Contenuto digitale non su supporto tangibile (download/streaming). Esente solo con consenso espresso preventivo, riconoscimento della perdita del diritto E conferma del commerciante su supporto durevole. Se una condizione non è soddisfatta, il diritto sopravvive e il consumatore non deve nulla."
+msgstr ""
+"Contenuto digitale non su supporto tangibile (download/streaming). Esente "
+"solo con consenso espresso preventivo, riconoscimento della perdita del "
+"diritto E conferma del commerciante su supporto durevole. Se una condizione "
+"non è soddisfatta, il diritto sopravvive e il consumatore non deve nulla."
 
 #: src/Domain/ExceptionTypes.php:66
 msgid "Custom-made / clearly personalised"
@@ -1910,7 +1997,9 @@ msgstr "Fatto su misura / chiaramente personalizzato"
 
 #: src/Domain/ExceptionTypes.php:66
 msgid "Goods made to the consumer's specifications or clearly personalised."
-msgstr "Beni realizzati secondo le specifiche del consumatore o chiaramente personalizzati."
+msgstr ""
+"Beni realizzati secondo le specifiche del consumatore o chiaramente "
+"personalizzati."
 
 #: src/Domain/ExceptionTypes.php:67
 msgid "Perishable / rapidly expiring goods"
@@ -1918,7 +2007,8 @@ msgstr "Beni deperibili / a rapida scadenza"
 
 #: src/Domain/ExceptionTypes.php:67
 msgid "Goods liable to deteriorate or expire rapidly (e.g. fresh food)."
-msgstr "Beni soggetti a deterioramento o a rapida scadenza (es. alimenti freschi)."
+msgstr ""
+"Beni soggetti a deterioramento o a rapida scadenza (es. alimenti freschi)."
 
 #: src/Domain/ExceptionTypes.php:68
 msgid "Sealed health/hygiene goods (unsealed after delivery)"
@@ -1928,7 +2018,10 @@ msgstr "Beni sanitari/igienici sigillati (aperti dopo la consegna)"
 msgid ""
 "Only once the consumer breaks the seal — which cannot be known at order "
 "time. Tag the product, but the button is NOT auto-hidden; assess on return."
-msgstr "Solo quando il consumatore rompe il sigillo — il che non può essere noto al momento dell'ordine. Tagga il prodotto, ma il pulsante NON viene nascosto automaticamente; valuta al reso."
+msgstr ""
+"Solo quando il consumatore rompe il sigillo — il che non può essere noto al "
+"momento dell'ordine. Tagga il prodotto, ma il pulsante NON viene nascosto "
+"automaticamente; valuta al reso."
 
 #: src/Domain/ExceptionTypes.php:69
 msgid "Sealed audio/video/software (unsealed after delivery)"
@@ -1938,7 +2031,9 @@ msgstr "Audio/video/software sigillati (aperti dopo la consegna)"
 msgid ""
 "Sealed recordings or computer software once unsealed. Seal-based — not auto-"
 "hidden; assess on return."
-msgstr "Registrazioni sigillate o software per computer una volta aperti. Basato sul sigillo — non nascosto automaticamente; valuta al reso."
+msgstr ""
+"Registrazioni sigillate o software per computer una volta aperti. Basato sul "
+"sigillo — non nascosto automaticamente; valuta al reso."
 
 #: src/Domain/ExceptionTypes.php:70
 msgid "Inseparably mixed after delivery"
@@ -1946,7 +2041,9 @@ msgstr "Mescolato in modo inseparabile dopo la consegna"
 
 #: src/Domain/ExceptionTypes.php:70
 msgid "Goods that, after delivery, are inseparably mixed with other items."
-msgstr "Beni che, dopo la consegna, si mescolano in modo inseparabile con altri articoli."
+msgstr ""
+"Beni che, dopo la consegna, si mescolano in modo inseparabile con altri "
+"articoli."
 
 #: src/Domain/ExceptionTypes.php:71
 msgid "Accommodation / transport / leisure on a specific date"
@@ -1956,7 +2053,10 @@ msgstr "Alloggio / trasporto / leisure in una data specifica"
 msgid ""
 "Accommodation, transport of goods, car rental, catering or leisure services "
 "tied to a specific date/period (e.g. dated event tickets, hotel bookings)."
-msgstr "Alloggio, trasporto di merci, noleggio auto, catering o servizi di svago legati a una data/periodo specifici (es. biglietti per eventi con data, prenotazioni alberghiere)."
+msgstr ""
+"Alloggio, trasporto di merci, noleggio auto, catering o servizi di svago "
+"legati a una data/periodo specifici (es. biglietti per eventi con data, "
+"prenotazioni alberghiere)."
 
 #: src/Domain/ExceptionTypes.php:72
 msgid "Price tied to financial-market fluctuations"
@@ -1966,7 +2066,9 @@ msgstr "Prezzo legato alle fluttuazioni del mercato finanziario"
 msgid ""
 "Goods/services whose price depends on market fluctuations the trader cannot "
 "control."
-msgstr "Beni/servizi il cui prezzo dipende da fluttuazioni di mercato che il commerciante non può controllare."
+msgstr ""
+"Beni/servizi il cui prezzo dipende da fluttuazioni di mercato che il "
+"commerciante non può controllare."
 
 #: src/Domain/ExceptionTypes.php:73
 msgid "Alcoholic beverages with delayed, market-linked delivery"
@@ -1976,7 +2078,9 @@ msgstr "Bevande alcoliche con consegna differita e prezzo legato al mercato"
 msgid ""
 "Alcohol whose price was agreed at conclusion, delivered after 30 days, value "
 "market-dependent (e.g. en primeur wine)."
-msgstr "Alcolici il cui prezzo è stato concordato alla conclusione, consegnati dopo 30 giorni, con valore dipendente dal mercato (es. vino en primeur)."
+msgstr ""
+"Alcolici il cui prezzo è stato concordato alla conclusione, consegnati dopo "
+"30 giorni, con valore dipendente dal mercato (es. vino en primeur)."
 
 #: src/Domain/ExceptionTypes.php:74
 msgid "Urgent repairs/maintenance requested by the consumer"
@@ -1986,7 +2090,9 @@ msgstr "Riparazioni/manutenzione urgente richiesta dal consumatore"
 msgid ""
 "Where the consumer specifically requested an urgent visit for repair or "
 "maintenance."
-msgstr "Laddove il consumatore ha specificamente richiesto una visita urgente per riparazione o manutenzione."
+msgstr ""
+"Laddove il consumatore ha specificamente richiesto una visita urgente per "
+"riparazione o manutenzione."
 
 #: src/Domain/ExceptionTypes.php:75
 msgid "Newspapers / periodicals (except subscriptions)"
@@ -2072,6 +2178,12 @@ msgstr ""
 "Se i dati corrispondono a un ordine idoneo, puoi continuare. Verifica il "
 "numero d'ordine e l'e-mail e riprova."
 
+#: src/Frontend/EddCheckoutConsent.php:114
+#: src/Frontend/FluentCartCheckoutConsent.php:143
+#: src/Frontend/WooCheckoutConsent.php:133
+msgid "Please confirm the required acknowledgement for: %s"
+msgstr "Conferma il consenso richiesto per: %s"
+
 #: src/Frontend/EligibleOrders.php:60
 msgid "Withdrawal handled"
 msgstr "Recesso gestito"
@@ -2080,16 +2192,13 @@ msgstr "Recesso gestito"
 msgid "Withdrawal requested"
 msgstr "Recesso richiesto"
 
-#: src/Frontend/FluentCartCheckoutConsent.php:133
-#: src/Frontend/WooCheckoutConsent.php:133
-msgid "Please confirm the required acknowledgement for: %s"
-msgstr "Conferma il consenso richiesto per: %s"
-
 #: src/Frontend/FluentCartPortal.php:167
 msgid ""
 "Changed your mind? You can exercise your right of withdrawal on eligible "
 "orders."
-msgstr "Hai cambiato idea? Puoi esercitare il tuo diritto di recesso sugli ordini idonei."
+msgstr ""
+"Hai cambiato idea? Puoi esercitare il tuo diritto di recesso sugli ordini "
+"idonei."
 
 #: src/Frontend/FluentCartPortal.php:168
 msgid "Open the withdrawal page"
@@ -2126,6 +2235,10 @@ msgstr "Recesso"
 #: src/Frontend/NoScriptFlow.php:71 src/REST/Routes/WithdrawalRoute.php:170
 msgid "Please provide your name and a valid email address."
 msgstr "Fornisci il tuo nome e un indirizzo e-mail valido."
+
+#: src/Frontend/WooBlockCheckoutConsent.php:127
+msgid "Please confirm the required acknowledgement to proceed."
+msgstr "Conferma la presa d'atto richiesta per proseguire."
 
 #: src/Frontend/WooCheckoutConsent.php:222
 msgid "Withdrawal-exemption consent captured at checkout for: %s"
@@ -2204,6 +2317,10 @@ msgstr "Conferma del tuo recesso — ordine {order_number}"
 #: src/Mail/WooAckEmail.php:95 templates/emails/withdrawal-confirmation.php:30
 msgid "Acknowledgement of receipt of your withdrawal"
 msgstr "Attestazione di ricevimento del tuo recesso"
+
+#: src/Platform/FluentCartAdapter.php:349
+msgid "Withdrawal evidence recorded"
+msgstr "Prova di recesso registrata"
 
 #: src/Platform/WooCommerce/OrderStatus.php:122
 msgid "Mark as withdrawal requested"
@@ -2517,7 +2634,11 @@ msgid ""
 "Some items cannot be withdrawn by law (for example, sealed items unsealed "
 "after delivery, event tickets for a specific date, or digital content you "
 "agreed to start immediately). If that applies, we will let you know."
-msgstr "Alcuni articoli non possono essere oggetto di recesso per legge (ad esempio, beni sigillati aperti dopo la consegna, biglietti per eventi in una data specifica o contenuti digitali di cui hai accettato l'avvio immediato). Se applicabile, te lo comunicheremo."
+msgstr ""
+"Alcuni articoli non possono essere oggetto di recesso per legge (ad esempio, "
+"beni sigillati aperti dopo la consegna, biglietti per eventi in una data "
+"specifica o contenuti digitali di cui hai accettato l'avvio immediato). Se "
+"applicabile, te lo comunicheremo."
 
 #: templates/partials/consumer-guidance.php:63
 msgid ""
@@ -2639,7 +2760,3 @@ msgstr ""
 
 #~ msgid "Request: %s"
 #~ msgstr "Richiesta: %s"
-
-#: src/Frontend/WooBlockCheckoutConsent.php
-msgid "Please confirm the required acknowledgement to proceed."
-msgstr "Conferma la presa d'atto richiesta per proseguire."

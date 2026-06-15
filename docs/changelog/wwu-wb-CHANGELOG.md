@@ -5,6 +5,33 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### FluentCart — team-verified improvements + 3 live-test checklists (1.0.0-alpha.34, 2026-06-15)
+Acts on a direct FluentCart team reply (2026-06-15) confirming the integration mechanics; see
+[FluentCart hooks analysis](../analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md) §"Second verification round".
+- **Render hook → `fluent_cart/before_payment_methods`** (was `after_payment_methods`). The team's
+  recommended slot fires in the **standard, modal AND block** checkout renderers. The FluentCart block
+  checkout runs FluentCart's own checkout-form flow (not the WooCommerce Store API), so these hooks
+  already cover it — no separate block path needed (unlike WooCommerce).
+- **FluentCart exemptions are now category-aware.** New `FluentCartAdapter::category_ids_for_post()`
+  (`taxonomy_exists()`-guarded) resolves the **`product-categories`** taxonomy (team-confirmed);
+  `map_items()` fills `category_ids`; checkout render/validate/capture pass categories to
+  `ExemptionResolver::reason_for()`. Closes the "product-ID only" gap noted in alpha.30–33 — parity
+  with WooCommerce (`product_cat`) and EDD (`download_category`).
+- **Admin order-timeline note via `fluent_cart_add_log()`** (confirmed signature), with a guarded
+  fallback to `$order->addNote()` then per-order meta — withdrawal/refund notes now show in the
+  FluentCart order activity timeline.
+- **Confirmed, no code change:** custom fields ARE submitted inside the checkout `<form>` (unchecked
+  checkboxes absent → treated as "no"); `$order->getViewUrl('admin')` route; `fluent_cart/order_paid`
+  exists (use `order_paid_done` for async side-effects); `smartcode_fallback` 4-arg resolver signature
+  (team-confirmed via reply but still absent from FluentCart's public hooks pages — support-claim-only
+  until publicly documented or live-tested; for the still-deferred email merge-tag); custom-status +
+  `effective_from` notes for future work.
+- **3 live-test checklists** under `docs/testing/` so anyone can run the remaining live tests —
+  WooCommerce **block** Checkout, **FluentCart**, **EDD** — each with setup, happy-path, category-aware
+  and fail-safe sections.
+- Lint: PHP 0 errors (2 files changed). One new admin-facing string ("Withdrawal evidence recorded")
+  added to the catalogue and translated (IT/FR/ES/DE).
+
 ### Third platform — Easy Digital Downloads (EDD) adapter + checkout consent capture (1.0.0-alpha.33, 2026-06-14)
 Adds **Easy Digital Downloads 3.0+** as a third supported platform (after WooCommerce +
 FluentCart), implementing the [EDD SPEC](../specs/wwu-wb-edd-integration-SPEC.md) on the
