@@ -13,13 +13,14 @@ A merchant or reviewer who wants to confirm the **whole compliance flow** works 
 withdrawal form, the two-step statement→confirmation, the durable-medium receipt (e-mail + PDF +
 verifiable link), the tamper-evident evidence log, and the admin side.
 
-> **Read this first — EDD has no native withdrawal button (by design, for now).** Unlike WooCommerce
-> (3 surfaces) and FluentCart (4 portal surfaces), the EDD integration is a **data-source + checkout
-> consent** integration. The plugin does **not** inject a withdrawal button into the EDD purchase
-> receipt or purchase-history pages. An EDD customer reaches the withdrawal form via the **standalone
-> public page**, a **direct link with the EDD payment key**, or the **guest lookup**. The whole legal
-> flow (two-step, durable medium, evidence log, admin) works fully — only the *EDD-page button* is
-> absent. Don't hunt for a button on the EDD receipt; use §3 below.
+> **EDD has a native withdrawal button since `1.0.0-alpha.35`.** The button now appears on the EDD
+> customer's own pages — the **purchase receipt** and each **purchase-history** order row — and the
+> withdrawal link is added to the EDD **purchase-receipt e-mail**, reaching parity with WooCommerce
+> (3 surfaces) and FluentCart (4). EDD has no routable "My Account" endpoint, so the button links to the
+> **standalone public form page** (which hosts the two-step form), pre-authenticated with the order +
+> EDD payment key. The guest lookup and the payment-key link still work as alternative entry points
+> (§3). **You must set a public withdrawal page (§1.4)** — without it the buttons have nowhere to send
+> the customer (fail-safe: they're simply not shown).
 
 ## 0. Environment
 
@@ -43,9 +44,17 @@ verifiable link), the tamper-evident evidence log, and the admin side.
 - [ ] Complete a normal EDD purchase for a **non-exempt** download (status **complete**), as a **test
   customer** (note the customer e-mail and, if you can, the **payment key**).
 
-## 3. Reach the withdrawal form (EDD — three ways, pick one)
+## 3. Reach the withdrawal form (EDD)
 
 As the **customer**:
+- [ ] **(native button — primary, since alpha.35):** open your **purchase receipt** (the post-purchase
+  confirmation / `[edd_receipt]` page) → the **withdrawal button** appears after the receipt table. Open
+  **Purchase history** (`[purchase_history]`) → each eligible order row shows a withdrawal button. Open the
+  **EDD purchase-receipt e-mail** → it carries the withdrawal **link**. Each goes to the public form,
+  pre-authenticated (no lookup needed). A button shows only on eligible orders; if a request already
+  exists you'll see a status notice instead.
+
+Alternative entry points (still supported):
 - [ ] **(a) Guest lookup (most realistic):** open the **public page** with no order context → the **guest
   lookup form** shows (order number + e-mail). Enter the EDD **order number** + the **purchase e-mail** →
   it verifies and grants a short-lived access token → the form opens for that order.
@@ -116,21 +125,27 @@ As the **customer**:
 
 ## Pass criteria
 
-- [ ] The customer can reach the form via guest lookup **or** payment-key link **or** logged-in chooser.
+- [ ] The native withdrawal button shows on the EDD **receipt** + **purchase-history** rows for an
+  eligible order, and the withdrawal **link** is in the receipt e-mail; hidden for ineligible/already-requested.
+- [ ] The customer can also reach the form via guest lookup **or** payment-key link **or** logged-in chooser.
 - [ ] Two-step flow completes with the statutory confirmation label (and works with JS disabled).
 - [ ] Acknowledgement e-mail + (optional) PDF + verify link delivered; verify shows **record intact**.
 - [ ] Requests shows the request, **chain intact**, and reflects refund + processed status.
 - [ ] Smoke tests 0 fail; uninstall respects the legal-hold default.
 
-## Known limitation (worth noting in your evaluation)
+## Notes
 
-- **No EDD-page button yet.** Withdrawal entry on EDD relies on the standalone public page / payment-key
-  link / guest lookup. Injecting a button into the EDD purchase receipt + purchase-history is a sensible
-  future enhancement (the data layer + consent already work); until then, **link the public page from your
-  EDD receipt/account area and order e-mails** so customers can find it.
+- **Native button added in `1.0.0-alpha.35`** on the EDD receipt (`edd_order_receipt_after_table`),
+  purchase-history rows (`edd_order_history_row_end`) and receipt e-mail (`edd_order_receipt`), reaching
+  parity with WooCommerce/FluentCart. EDD has no routable My Account endpoint, so the **public form page
+  remains the form host** — set it in Settings (§1.4) or the buttons have nowhere to send the customer.
+- A possible future opt-in is the EDD email-tag (`{withdrawal_info}`) for inline placement instead of the
+  automatic append; not needed for the default flow.
 
 ## Troubleshooting
 
+- **No button on the receipt / history** → no public page set (§1.4), order ineligible/already-requested,
+  or `enabled` off. `?wwu_wb_diag=1` (admin) prints the applicability decision.
 - **Order not found in lookup** → wrong e-mail / order not complete / exempt / rate-limited (10 / 5 min).
   `?wwu_wb_diag=1` (admin) prints the decision.
 - **No e-mail** → check your SMTP/mail plugin (EDD uses the plain `wp_mail()` fallback).

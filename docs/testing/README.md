@@ -13,7 +13,7 @@ evidence-log integrity → merchant processing (refund + mark processed) → exe
 |---|---|---|
 | **WooCommerce** | [try-the-plugin-woocommerce](wwu-wb-try-the-plugin-woocommerce-CHECKLIST.md) | 3 (My Account orders action, order detail, "Right of withdrawal" tab) |
 | **FluentCart** | [try-the-plugin-fluentcart](wwu-wb-try-the-plugin-fluentcart-CHECKLIST.md) | 4 (portal endpoint, sidebar item, dashboard banner, per-order button) |
-| **Easy Digital Downloads** | [try-the-plugin-edd](wwu-wb-try-the-plugin-edd-CHECKLIST.md) | none native — standalone public page / payment-key link / guest lookup |
+| **Easy Digital Downloads** | [try-the-plugin-edd](wwu-wb-try-the-plugin-edd-CHECKLIST.md) | 3 since alpha.35 (purchase receipt / purchase-history rows / receipt e-mail link) + standalone page / payment-key / guest lookup |
 
 ## 2. Exemptions consent capture — focused feature checklists (Art. 59)
 

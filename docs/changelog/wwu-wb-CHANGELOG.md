@@ -16,8 +16,8 @@ blocks, hooks, admin slugs).
   (legal-hold default): `wwu-wb-try-the-plugin-{woocommerce,fluentcart,edd}-CHECKLIST.md`.
 - Documents the real per-platform entry surfaces: **WooCommerce** 3 (My Account orders action / order
   detail / "Right of withdrawal" tab), **FluentCart** 4 (portal endpoint / sidebar / dashboard banner /
-  per-order button), **EDD** none native — standalone public page / payment-key link / guest lookup (a
-  known limitation, flagged in the EDD checklist).
+  per-order button), **EDD** receipt + purchase-history button + receipt-e-mail link (added in alpha.35),
+  with the standalone public page / payment-key link / guest lookup as alternative entry points.
 - No code change; the 3 exemption consent-capture checklists from alpha.34 are cross-linked.
 
 ### FluentCart — team-verified improvements + 3 live-test checklists (1.0.0-alpha.34, 2026-06-15)
