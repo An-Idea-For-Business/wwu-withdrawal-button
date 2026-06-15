@@ -8,7 +8,7 @@
 - **Credits:** mredodos · Matteo Alfieri (An Idea for Business) · WebWakeUp ([webwakeup.it](https://webwakeup.it))
 - **Product page (live):** [webwakeup.it/wwu-withdrawal-button](https://webwakeup.it/wwu-withdrawal-button/)
 - **Legal go-live:** **2026-06-19** (contracts concluded on/after)
-- **Last updated:** 2026-06-15 (alpha.34 — FluentCart improvements verified against a direct team reply: `before_payment_methods` render hook, `product-categories` category-aware exemptions, `fluent_cart_add_log` timeline note; + 3 live-test checklists under `docs/testing/`)
+- **Last updated:** 2026-06-15 (alpha.34 — FluentCart improvements verified against a direct team reply; + a full `docs/testing/` suite: 3 end-to-end "try the plugin" evaluator checklists (WooCommerce / FluentCart / EDD) alongside the 3 exemption consent-capture checklists, with an index. Recon-grounded; EDD has no native button surface — documented.)
 
 ## What it is (one paragraph)
 A free, open-source WordPress plugin that makes a store compliant with Directive (EU) 2023/2673 (new Art. 11a of the Consumer Rights Directive 2011/83/EU; Italy: Art. 54-bis Codice del Consumo via D.Lgs. 209/2025): a prominently displayed, continuously available, statutory-labelled withdrawal button → two-step statement + confirmation → durable-medium acknowledgement (email + PDF + verifiable link) → tamper-evident immutable log anchored to OpenTimestamps. Dual platform (WooCommerce HPOS+legacy / FluentCart), multilingual (IT/EN/FR/ES/DE + extensible), Complianz/TranslatePress-compatible, shortcodes + blocks, plus generators for the Annex I-B model form and Privacy/Terms/pre-contractual clauses.
@@ -38,11 +38,17 @@ Namespace `WWU\WithdrawalButton` · constants `WWU_WB_*` · options `wwu_wb_*` �
 - [Timestamp providers (RFC 3161 + eIDAS)](docs/analysis/wwu-wb-timestamp-providers-ANALYSIS.md) — which trusted-timestamp authorities to add to the pluggable provider (free Sectigo `/qualified`, per-country QTSPs) + PHP integration (2026-06-14).
 - [FluentCart hooks (verified)](docs/analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md) — official-source verification of every FluentCart hook/API (custom_endpoints, menu items, dashboard data, order-details slots, Order/Customer models) + the corrections shipped in alpha.19; **+ §"Second verification round" (2026-06-15)** = a direct FluentCart-team reply confirming custom-field submission, the `before_payment_methods` render hook, block-checkout flow, the `product-categories` taxonomy, `getViewUrl('admin')`, `order_paid`, `smartcode_fallback`, `fluent_cart_add_log` — all actioned in alpha.34.
 
-## Testing (live-test checklists)
+## Testing ([docs/testing/](docs/testing/README.md) — index)
+**End-to-end "try the plugin" evaluator guides** (install → button/entry points → two-step flow + no-JS → durable medium e-mail/PDF/verify link → evidence-log integrity → merchant refund + processing → exemptions → uninstall):
+- [Try the plugin — WooCommerce](docs/testing/wwu-wb-try-the-plugin-woocommerce-CHECKLIST.md) — 3 button surfaces (My Account orders action / order detail / "Right of withdrawal" tab).
+- [Try the plugin — FluentCart](docs/testing/wwu-wb-try-the-plugin-fluentcart-CHECKLIST.md) — 4 portal surfaces (endpoint / sidebar / dashboard banner / per-order button).
+- [Try the plugin — EDD](docs/testing/wwu-wb-try-the-plugin-edd-CHECKLIST.md) — **no native EDD button** (by design, for now): standalone public page / payment-key link / guest lookup.
+
+**Exemptions consent-capture (Art. 59) focused checklists:**
 - [WooCommerce **block** Checkout consent](docs/testing/wwu-wb-woocommerce-block-consent-CHECKLIST.md) — Additional Checkout Fields API (WC 9.9+).
 - [**FluentCart** Checkout consent](docs/testing/wwu-wb-fluentcart-consent-CHECKLIST.md) — `before_payment_methods`, category-aware, activity-log note.
 - [**EDD** Checkout consent](docs/testing/wwu-wb-edd-consent-CHECKLIST.md) — `edd_purchase_form_before_submit` + `edd_built_order`, `download_category`-aware.
-- Each: setup, happy-path (consent required + captured), category-aware, and fail-safe (button stays). Anyone can run them on a staging store.
+- All are runnable on a staging store by anyone; everything is fail-safe (button stays whenever a surface/capture is unavailable).
 
 ## Changelog
 - [CHANGELOG](docs/changelog/wwu-wb-CHANGELOG.md)

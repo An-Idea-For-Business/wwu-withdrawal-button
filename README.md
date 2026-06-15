@@ -63,6 +63,7 @@ We document limitations openly. None of these block the legal compliance core �
 | [Compliance matrix](docs/legal/wwu-wb-compliance-matrix.md) | Every legal obligation → feature → test |
 | [Exemption-consent evidence note](docs/legal/wwu-wb-exemption-consent-evidence-NOTE.md) | What the law requires for recording the Art. 59 exemption consents (burden of proof, durable-medium confirmation, retention, GDPR basis) — verified against official sources |
 | [Roadmap](docs/plans/wwu-wb-roadmap-PLAN.md) | Phased implementation plan |
+| [Test checklists](docs/testing/README.md) | End-to-end "try the plugin" evaluator guides (WooCommerce / FluentCart / EDD) + exemption consent-capture checklists — runnable on a staging store by anyone |
 | [MASTER index](MASTER-wwu-wb.md) | One-page project index |
 
 ## Requirements

@@ -5,6 +5,21 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### Docs — end-to-end "try the plugin" evaluator checklists (docs-only, 2026-06-15)
+Adds a full `docs/testing/` suite so anyone can evaluate the plugin on a staging store, plus an index
+([docs/testing/README.md](../testing/README.md)). Grounded in a code-recon pass (accurate shortcodes,
+blocks, hooks, admin slugs).
+- **3 end-to-end evaluator checklists** — one per platform — covering install → withdrawal button/entry
+  points → two-step statement→confirmation (incl. the no-JS `admin-post.php` fallback) → durable medium
+  (acknowledgement e-mail + PDF + verifiable `/verify/{uid}` link) → evidence-log chain-integrity →
+  merchant processing (refund + "Mark processed" + resend) → exemptions → Compliance helpers → uninstall
+  (legal-hold default): `wwu-wb-try-the-plugin-{woocommerce,fluentcart,edd}-CHECKLIST.md`.
+- Documents the real per-platform entry surfaces: **WooCommerce** 3 (My Account orders action / order
+  detail / "Right of withdrawal" tab), **FluentCart** 4 (portal endpoint / sidebar / dashboard banner /
+  per-order button), **EDD** receipt + purchase-history button + receipt-e-mail link (added in alpha.35),
+  with the standalone public page / payment-key link / guest lookup as alternative entry points.
+- No code change; the 3 exemption consent-capture checklists from alpha.34 are cross-linked.
+
 ### FluentCart — team-verified improvements + 3 live-test checklists (1.0.0-alpha.34, 2026-06-15)
 Acts on a direct FluentCart team reply (2026-06-15) confirming the integration mechanics; see
 [FluentCart hooks analysis](../analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md) §"Second verification round".
