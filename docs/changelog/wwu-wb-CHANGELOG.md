@@ -5,6 +5,24 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### WooCommerce + conflict audit; mail-filter leak fix (2026-06-15)
+Inline WooCommerce-surface + cross-plugin **conflict** audit (the multi-agent workflow was blocked
+3× by an Anthropic server-side rate limit, so it was done file-by-file) —
+[report](../audits/wwu-wb-woocommerce-2026-06-15-AUDIT.md). **0 critical / 0 high.**
+- **Fix (Low, conflict-safety):** `Mail\Mailer::send_html` now removes the `wp_mail_content_type`
+  filter in a `try/finally`. Previously a throw from `wp_mail()` (or a third-party hook inside it)
+  could leave the filter forced to `text/html`, turning other plugins' plain-text emails into HTML
+  for the rest of the request.
+- **Clean:** HPOS purity (all order I/O via `wc_get_order`/`WC_Order` + `update_meta_data()+save()`),
+  classic + block consent capture (fail-safe, PII-free log, shared idempotency), refund recorder,
+  My Account (owner-bound, no IDOR), and the whole conflict surface — every handle/shortcode/
+  admin-post/block/REST/option/meta is namespaced; `ob_start` is template-scoped; `script_loader_tag`
+  is handle-scoped; `flush_rewrite_rules` runs only on activation + slug change.
+- **Documented for the live test (no code change):** the withdrawal order-status transition fires
+  other plugins' `woocommerce_order_status_changed` listeners (by design); the button also renders
+  on the order-received/thank-you page; the block-checkout Store API field-schema + `_wc_other/`
+  meta key want a real WC 9.9+ verification (fail-safe either way).
+
 ### Subscription-aware withdrawal (1.0.0-alpha.38, 2026-06-15)
 Implements the [subscriptions × withdrawal SPEC](../specs/wwu-wb-subscriptions-withdrawal-SPEC.md).
 EU law gives **one** 14-day right of withdrawal **per contract**, starting at conclusion (Art. 9 CRD /
