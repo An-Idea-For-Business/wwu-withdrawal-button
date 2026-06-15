@@ -5,6 +5,28 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### EDD integration completed — customer-facing withdrawal button + e-mail link (1.0.0-alpha.35, 2026-06-15)
+Closes the EDD gap: the statutory withdrawal button — the plugin's single most important surface — now
+appears on the EDD customer's own pages, reaching full parity with WooCommerce (`WooMyAccount`) and
+FluentCart (`FluentCartPortal`). Previously EDD was a data-adapter + checkout-consent integration only, and
+EDD customers could reach the form only via the standalone public page. Hooks verified against the official
+EDD source first — see [EDD customer surfaces analysis](../analysis/wwu-wb-edd-customer-surfaces-ANALYSIS.md).
+- **`Frontend\EddCustomerOrders`** (new) — injects the withdrawal button on the **purchase receipt**
+  (`edd_order_receipt_after`) and at the end of each **purchase-history** order row
+  (`edd_order_history_row_end`), and appends the withdrawal **link to the receipt e-mail** body
+  (`edd_order_receipt` filter, EDD 3.2.0+, with the legacy `edd_purchase_receipt` filter wired for 3.0–3.1
+  and de-duplicated so 3.2+ never appends twice). All EDD 3.x hooks (the legacy 2.x `edd_payment_receipt_*`
+  / `edd_purchase_history_row_*` hooks were **removed** from the 3.x templates — using them would have been a
+  silent dead button).
+- The button links to the standalone public form page pre-authenticated with the EDD **payment key**
+  (`?wwu_wb_order=&key=`), exactly like the WooCommerce order-email link; EDD has no routable My Account
+  endpoint, so the public page remains the form host.
+- **Fail-safe everywhere:** renders nothing on ineligible orders, shows the localized status notice when a
+  request already exists, and skips when no public page is configured. Inline button styles (EDD
+  receipt/history pages don't load the plugin stylesheet). No new i18n strings (reuses the statutory label).
+- Wired in `Plugin.php` in the EDD-active block. Lint: PHP 0 errors. **Needs a live EDD test** — see the EDD
+  evaluator checklist.
+
 ### FluentCart — team-verified improvements + 3 live-test checklists (1.0.0-alpha.34, 2026-06-15)
 Acts on a direct FluentCart team reply (2026-06-15) confirming the integration mechanics; see
 [FluentCart hooks analysis](../analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md) §"Second verification round".

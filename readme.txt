@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0-alpha.34
+Stable tag: 1.0.0-alpha.35
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -71,6 +71,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 
 == Changelog ==
 
+= 1.0.0-alpha.35 =
+* **EDD integration completed — the withdrawal button now appears on the EDD customer's own pages.** Easy Digital Downloads customers see the statutory withdrawal button on the **purchase receipt** and in **purchase history**, and the withdrawal link is added to the EDD **purchase-receipt e-mail** — reaching full parity with WooCommerce and FluentCart (previously EDD relied only on the standalone public page). Built on EDD 3.x hooks verified against the official EDD source. Fail-safe as everywhere: the button only shows on eligible orders and links to your withdrawal page pre-authenticated. Needs a live EDD test.
+
 = 1.0.0-alpha.34 =
 * FluentCart improvements, verified against a direct FluentCart-team reply: the consent checkbox now renders on `before_payment_methods` (covers the standard, modal **and** block checkout), FluentCart exemptions are now **category-aware** (via the `product-categories` taxonomy, matching WooCommerce and EDD), and withdrawal/refund notes appear in the FluentCart order **activity timeline** (`fluent_cart_add_log`). Also adds 3 shareable **live-test checklists** (WooCommerce block, FluentCart, EDD) under `docs/testing/`. No change to the consumer-facing button.
 
@@ -108,6 +111,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.0.0-alpha.35 =
+EDD stores now show the withdrawal button on the purchase receipt + purchase history, and add the withdrawal link to the EDD receipt e-mail (parity with WooCommerce/FluentCart). Set a public withdrawal page in Settings and re-test the EDD customer flow on staging.
 
 = 1.0.0-alpha.34 =
 FluentCart: consent now renders on the block/modal checkout too and is category-aware; order notes appear in the FluentCart timeline. No change for WooCommerce/EDD stores. FluentCart users: re-test the checkout consent on staging (checklist included).

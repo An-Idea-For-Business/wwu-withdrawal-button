@@ -157,8 +157,10 @@ final class Plugin {
 			( new \WWU\WithdrawalButton\Frontend\FluentCartCheckoutConsent() )->register();
 		}
 
-		// EDD checkout consent capture when Easy Digital Downloads is active.
+		// EDD customer-facing surfaces (receipt + purchase-history button, e-mail link)
+		// and checkout consent capture when Easy Digital Downloads is active.
 		if ( null !== $services->platforms->get( 'edd' ) ) {
+			( new \WWU\WithdrawalButton\Frontend\EddCustomerOrders() )->register();
 			( new \WWU\WithdrawalButton\Frontend\EddCheckoutConsent() )->register();
 		}
 
