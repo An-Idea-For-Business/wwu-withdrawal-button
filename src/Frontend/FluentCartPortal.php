@@ -191,6 +191,12 @@ final class FluentCartPortal {
 	public function inject( $sections, $context = null ): array {
 		$sections = (array) $sections;
 
+		// FluentCart handling can be off, or auto-deferred to FluentCart's own
+		// withdrawal add-on — then render no portal button (avoid a duplicate).
+		if ( ! \WWU\WithdrawalButton\Platform\FluentCartAdapter::should_render() ) {
+			return $sections;
+		}
+
 		$order_ref = $this->order_ref_from_context( $context );
 		if ( '' === $order_ref ) {
 			return $sections;

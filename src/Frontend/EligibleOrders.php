@@ -178,6 +178,11 @@ final class EligibleOrders {
 		if ( $user_id <= 0 ) {
 			return array();
 		}
+		// Respect the FluentCart handling mode (off / auto-defer to a native add-on):
+		// list no FluentCart orders on the public form when our handling is suppressed.
+		if ( ! \WWU\WithdrawalButton\Platform\FluentCartAdapter::should_render() ) {
+			return array();
+		}
 		$adapter = Services::instance()->platforms->get( 'fluentcart' );
 		if ( ! $adapter ) {
 			return array();

@@ -172,6 +172,11 @@ final class Install {
 				// default (the merchant handles the refund + any pro-rata manually).
 				'treat_renewals_as_withdrawable'   => false,
 				'cancel_subscription_on_withdrawal' => false,
+				// FluentCart handling: 'auto' shows our button on FluentCart orders but
+				// steps aside automatically if FluentCart's own withdrawal add-on is
+				// detected (no duplicate); 'always' keeps ours; 'off' disables our
+				// FluentCart surfaces. Default 'auto'. {@see FluentCartAdapter::should_render()}.
+				'fluentcart_mode'                  => 'auto',
 			),
 			'',
 			'yes'

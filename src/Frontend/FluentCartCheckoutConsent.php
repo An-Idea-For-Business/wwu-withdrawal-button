@@ -169,6 +169,11 @@ final class FluentCartCheckoutConsent {
 			return;
 		}
 
+		// Respect the FluentCart handling mode (off / auto-defer to a native add-on).
+		if ( ! \WWU\WithdrawalButton\Platform\FluentCartAdapter::should_render() ) {
+			return;
+		}
+
 		$adapter = Services::instance()->platforms->get( 'fluentcart' );
 		if ( null === $adapter ) {
 			return;

@@ -54,6 +54,70 @@ final class FluentCartAdapter implements OrderDataSource, SubscriptionAware {
 	}
 
 	/**
+	 * The merchant's withdrawal-handling mode for FluentCart orders.
+	 *
+	 * - 'auto'   — render our FluentCart withdrawal surfaces UNLESS FluentCart's own
+	 *              native withdrawal add-on is detected (then step aside, no duplicate).
+	 * - 'always' — always render ours, even alongside a native add-on.
+	 * - 'off'    — never render ours (the merchant handles withdrawal another way).
+	 *
+	 * Pure read of the cached option; safe to call when FluentCart is inactive.
+	 *
+	 * @return string One of 'auto'|'always'|'off'.
+	 */
+	public static function mode(): string {
+		$mode = (string) ( \WWU\WithdrawalButton\Core\Settings::main()['fluentcart_mode'] ?? 'auto' );
+		return in_array( $mode, array( 'auto', 'always', 'off' ), true ) ? $mode : 'auto';
+	}
+
+	/**
+	 * Whether FluentCart's own native right-of-withdrawal add-on is active.
+	 *
+	 * FluentCart confirmed (2026-06-15) it will ship a dedicated withdrawal add-on.
+	 * Its exact detection signal (class / constant) is pending from their team, so the
+	 * built-in check is conservative (false — nothing to defer to) and the result is
+	 * filterable: the moment the add-on ships, wire it through
+	 * `wwu_wb_fluentcart_native_active` without waiting for a plugin update.
+	 *
+	 * @return bool
+	 */
+	public static function native_addon_active(): bool {
+		// No published detection signal yet → default false. Update this guard (or use
+		// the filter) once FluentCart's add-on class / constant is known.
+		$detected = false;
+		/**
+		 * Filter whether FluentCart's native withdrawal add-on is active.
+		 *
+		 * Return true to make Auto mode step aside on FluentCart orders.
+		 *
+		 * @param bool $detected Whether the native add-on was detected.
+		 */
+		return (bool) apply_filters( 'wwu_wb_fluentcart_native_active', $detected );
+	}
+
+	/**
+	 * Whether THIS plugin should render its consumer-facing FluentCart withdrawal
+	 * surfaces (portal button, checkout-consent capture, e-mail link, public form).
+	 *
+	 * Gates ONLY consumer entry points — the admin Requests dashboard and any
+	 * in-flight durable-medium confirmation keep working, so a FluentCart withdrawal
+	 * already recorded is never stranded when handling is later turned off.
+	 *
+	 * @return bool
+	 */
+	public static function should_render(): bool {
+		$mode = self::mode();
+		if ( 'off' === $mode ) {
+			return false;
+		}
+		if ( 'always' === $mode ) {
+			return true;
+		}
+		// 'auto': defer to FluentCart's native add-on when present.
+		return ! self::native_addon_active();
+	}
+
+	/**
 	 * Map a FluentCart order's fulfillment + payment status to the normalized
 	 * status used for withdrawal eligibility.
 	 *

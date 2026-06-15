@@ -381,6 +381,49 @@ final class SmokeTests {
 		$tests[] = $this->assert( 'fluentcart.status_keep_completed', 'completed' === $adapter::eligible_status( 'completed', 'paid' ), 'completed fulfillment preserved.' );
 		$tests[] = $this->assert( 'fluentcart.status_unpaid', 'pending' === $adapter::eligible_status( 'pending', 'unpaid' ), 'unpaid order keeps its non-eligible status.' );
 
+		// Handling mode (Auto / Always / Off) + native-add-on auto-defer. Mutates the
+		// settings option then restores it, so the live site is unchanged afterwards.
+		$saved    = get_option( 'wwu_wb_settings', array() );
+		$set_mode = static function ( $mode ) {
+			$s                    = (array) get_option( 'wwu_wb_settings', array() );
+			$s['fluentcart_mode'] = $mode;
+			update_option( 'wwu_wb_settings', $s );
+			\WWU\WithdrawalButton\Core\Settings::flush( 'wwu_wb_settings' );
+		};
+
+		$tests[] = $this->assert( 'fluentcart.mode_whitelisted', in_array( $adapter::mode(), array( 'auto', 'always', 'off' ), true ), 'mode() is one of auto/always/off (got "' . $adapter::mode() . '").' );
+
+		// native_addon_active(): false by default, forced true via the filter.
+		$native_default = $adapter::native_addon_active();
+		add_filter( 'wwu_wb_fluentcart_native_active', '__return_true' );
+		$native_filtered = $adapter::native_addon_active();
+		remove_filter( 'wwu_wb_fluentcart_native_active', '__return_true' );
+		$tests[] = $this->assert( 'fluentcart.native_default_false', false === $native_default, 'No native add-on signal by default → false.' );
+		$tests[] = $this->assert( 'fluentcart.native_filterable', true === $native_filtered, 'wwu_wb_fluentcart_native_active filter forces detection true.' );
+
+		// should_render(): off → never; always → always (even with native present);
+		// auto → defers to the native add-on.
+		$set_mode( 'off' );
+		$off = $adapter::should_render();
+		$set_mode( 'always' );
+		add_filter( 'wwu_wb_fluentcart_native_active', '__return_true' );
+		$always_native = $adapter::should_render();
+		remove_filter( 'wwu_wb_fluentcart_native_active', '__return_true' );
+		$set_mode( 'auto' );
+		$auto_plain = $adapter::should_render();
+		add_filter( 'wwu_wb_fluentcart_native_active', '__return_true' );
+		$auto_native = $adapter::should_render();
+		remove_filter( 'wwu_wb_fluentcart_native_active', '__return_true' );
+
+		$tests[] = $this->assert( 'fluentcart.render_off', false === $off, 'Off mode → never render our FluentCart surfaces.' );
+		$tests[] = $this->assert( 'fluentcart.render_always_overrides_native', true === $always_native, 'Always mode renders even when a native add-on is detected.' );
+		$tests[] = $this->assert( 'fluentcart.render_auto_plain', true === $auto_plain, 'Auto mode renders when no native add-on is present.' );
+		$tests[] = $this->assert( 'fluentcart.render_auto_defers', false === $auto_native, 'Auto mode steps aside when the native add-on is detected.' );
+
+		// Restore the option exactly as it was before this suite ran.
+		update_option( 'wwu_wb_settings', $saved );
+		\WWU\WithdrawalButton\Core\Settings::flush( 'wwu_wb_settings' );
+
 		return $tests;
 	}
 

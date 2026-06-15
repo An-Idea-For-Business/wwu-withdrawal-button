@@ -86,6 +86,7 @@ final class SettingsPage {
 
 		$this->render_applicability_section( $settings );
 		$this->render_subscriptions_section( $settings );
+		$this->render_platforms_section( $settings );
 		$this->render_guidance_section( $settings );
 		$this->render_exemptions_section();
 		$this->render_receipt_section( $settings );
@@ -241,6 +242,60 @@ final class SettingsPage {
 		echo '</details>';
 		echo '</td></tr>';
 
+		echo '</tbody></table>';
+	}
+
+	/**
+	 * Render the "FluentCart" section — withdrawal-handling mode (Auto / Always / Off).
+	 *
+	 * Auto-defers to FluentCart's own withdrawal add-on when present so consumers never
+	 * see two buttons. Gates only our consumer-facing FluentCart surfaces; the admin
+	 * Requests dashboard + in-flight confirmations always keep working.
+	 * {@see \WWU\WithdrawalButton\Platform\FluentCartAdapter::should_render()}.
+	 *
+	 * @param array $settings Current settings.
+	 * @return void
+	 */
+	private function render_platforms_section( array $settings ): void {
+		$mode = (string) ( $settings['fluentcart_mode'] ?? 'auto' );
+		if ( ! in_array( $mode, array( 'auto', 'always', 'off' ), true ) ) {
+			$mode = 'auto';
+		}
+		$fc_active = class_exists( '\\FluentCart\\App\\Models\\Order' ) || function_exists( 'fluent_cart_api' );
+		$fc_native = \WWU\WithdrawalButton\Platform\FluentCartAdapter::native_addon_active();
+
+		echo '<h2>' . esc_html__( 'FluentCart', 'wwu-withdrawal-button' ) . '</h2>';
+
+		if ( ! $fc_active ) {
+			echo '<p class="description" style="max-width:860px;">' . esc_html__( 'FluentCart is not active. This setting takes effect only once FluentCart is installed.', 'wwu-withdrawal-button' ) . '</p>';
+		} elseif ( $fc_native ) {
+			echo '<div class="wwu-ui-notice info" style="margin:12px 0;max-width:860px;"><p style="margin:0;">' . esc_html__( "FluentCart's own withdrawal add-on was detected. In Auto mode this plugin steps aside on FluentCart orders, so customers see a single withdrawal button.", 'wwu-withdrawal-button' ) . '</p></div>';
+		} else {
+			echo '<div class="wwu-ui-notice info" style="margin:12px 0;max-width:860px;"><p style="margin:0;">' . esc_html__( 'FluentCart is active and this plugin handles its withdrawal button. If FluentCart later ships its own withdrawal add-on, Auto mode steps aside automatically.', 'wwu-withdrawal-button' ) . '</p></div>';
+		}
+
+		echo '<table class="form-table" role="presentation"><tbody>';
+		echo '<tr><th scope="row"><label for="wwu-wb-fluentcart-mode">' . esc_html__( 'Withdrawal handling', 'wwu-withdrawal-button' ) . '</label>'
+			. ' <span class="wwu-wb-help" tabindex="0" title="' . esc_attr__( "Auto (recommended): show our button on FluentCart orders, but step aside automatically if FluentCart's own withdrawal add-on is installed, so consumers never see two buttons.", 'wwu-withdrawal-button' ) . '" style="display:inline-block;width:16px;height:16px;line-height:16px;text-align:center;border-radius:50%;background:#e0e0e0;color:#333;font-size:11px;cursor:help;">?</span></th><td>';
+
+		$options = array(
+			'auto'   => __( "Auto — defer to FluentCart's native add-on when present (recommended)", 'wwu-withdrawal-button' ),
+			'always' => __( 'Always — keep our button on FluentCart orders regardless', 'wwu-withdrawal-button' ),
+			'off'    => __( 'Off — never handle FluentCart orders', 'wwu-withdrawal-button' ),
+		);
+		echo '<select id="wwu-wb-fluentcart-mode" name="fluentcart_mode">';
+		foreach ( $options as $value => $label ) {
+			echo '<option value="' . esc_attr( $value ) . '" ' . selected( $mode, $value, false ) . '>' . esc_html( $label ) . '</option>';
+		}
+		echo '</select>';
+
+		echo '<p class="description" style="max-width:760px;">' . esc_html__( 'Controls our consumer-facing FluentCart surfaces only: the portal button, the checkout consent capture, the withdrawal e-mail link, and the public form. The admin Requests dashboard and any in-flight confirmation always keep working, so existing requests are never stranded.', 'wwu-withdrawal-button' ) . '</p>';
+
+		echo '<details class="wwu-wb-clause"><summary><strong>' . esc_html__( 'Show example', 'wwu-withdrawal-button' ) . '</strong></summary>';
+		echo '<p class="description" style="max-width:760px;margin-top:8px;">' . esc_html__( 'FluentCart announced a dedicated withdrawal add-on. When you install it, leave this on Auto: this plugin detects it and hides its own FluentCart button so customers see only one. Pick Off to disable our FluentCart handling now, or Always to keep ours regardless of any add-on.', 'wwu-withdrawal-button' ) . '</p>';
+		echo '</details>';
+
+		echo '</td></tr>';
 		echo '</tbody></table>';
 	}
 
@@ -888,6 +943,8 @@ final class SettingsPage {
 		// subscription on a withdrawal is opt-in (refund/pro-rata stay manual).
 		$settings['treat_renewals_as_withdrawable']    = Sanitizer::bool( $_POST['treat_renewals_as_withdrawable'] ?? '' );
 		$settings['cancel_subscription_on_withdrawal'] = Sanitizer::bool( $_POST['cancel_subscription_on_withdrawal'] ?? '' );
+		// FluentCart handling: auto (defer to a native add-on when present) / always / off.
+		$settings['fluentcart_mode'] = Sanitizer::enum( $_POST['fluentcart_mode'] ?? '', array( 'auto', 'always', 'off' ), 'auto' );
 		$new_slug                    = sanitize_title( (string) ( $_POST['endpoint_slug'] ?? 'wwu-withdrawal' ) );
 		$settings['endpoint_slug']   = '' !== $new_slug ? $new_slug : 'wwu-withdrawal';
 		update_option( 'wwu_wb_settings', $settings );
