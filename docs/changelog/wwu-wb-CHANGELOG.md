@@ -15,12 +15,15 @@ All notable changes to this project are documented here. Format loosely follows
 - **Swedish (sv_SE)** added. `LabelResolver` gains the statutory `sv` entry — button **"ångra avtalet här"**,
   confirm **"bekräfta frånträde"**, authority **"Distansavtalslagen (2005:59)"** — sourced from the official
   Swedish EUR-Lex text of Art. 11a (Dir. 2011/83/EU as amended by 2023/2673). `Countries::COUNTRY_LOCALE`
-  maps `SE → sv`. A **partial** `sv_SE.po`/`.mo` (147/476 UI strings) ships as a draft; the remaining UI
-  strings + a native-speaker review (Daniel) are **pending** — untranslated strings fall back to English.
-  See [Swedish draft note](../analysis/wwu-wb-swedish-sv_SE-NOTE.md).
+  maps `SE → sv`. The **complete** `sv_SE.po`/`.mo` (495/495 UI strings, 0 fuzzy) ships; a native-speaker
+  review (Daniel) is still **pending** but every string is translated. The two former fuzzy guesses were
+  corrected — notably *durable medium* → **"varaktigt medium"** (the Distansavtalslagen legal term, not the
+  mistranslation "hållbart medium"). See [Swedish note](../analysis/wwu-wb-swedish-sv_SE-NOTE.md).
 - New workspace dev tools (NOT shipped — live in `wwu-tools/`, outside the plugin repo + zip):
-  `wwu-class-scan.php` (catches the bare-class fatal that `php -l` misses — the alpha.38/39 bug class) and
-  `wwu-phpstan.php` (PHPStan + WP/WC stubs, parametrized per slug). The plugin is clean on both.
+  `wwu-class-scan.php` (catches the bare-class fatal that `php -l` misses — the alpha.38/39 bug class),
+  `wwu-phpstan.php` (PHPStan + WP/WC stubs, parametrized per slug), and `wwu-po-fill.php` (extract/inject
+  `.po` translations without loading the full catalogue into an agent context — used to complete sv_SE).
+  The plugin is clean on PHPStan + the class scan.
 
 ### Critical fix — Settings page fatal "class not found" (1.0.0-alpha.39, 2026-06-15)
 A merchant reported a **fatal error** (`Uncaught Error: Class "WWU\WithdrawalButton\Admin\Settings"
