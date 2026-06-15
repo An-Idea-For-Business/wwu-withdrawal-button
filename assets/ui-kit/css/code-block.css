@@ -1,0 +1,203 @@
+/**
+ * WWU UI Kit — Code block with syntax tokens
+ *
+ * Static code display with semantic syntax token classes. NO parser —
+ * the consumer emits markup with `.tok-*` classes via PHP/JS when
+ * rendering known examples (KPI formulas, hook examples, dynamic tags,
+ * shortcode signatures).
+ *
+ * Markup (static example):
+ *   <pre class="wwu-ui-code-block">
+ *   <code class="wwu-ui-code-block__src"><span class="tok-sel">.wwu-ui-btn</span> <span class="tok-brace">{</span>
+ *     <span class="tok-prop">color</span><span class="tok-punct">:</span> <span class="tok-val">red</span><span class="tok-punct">;</span>
+ *   <span class="tok-brace">}</span></code>
+ *   </pre>
+ *
+ * Optional header with language label + copy button:
+ *   <div class="wwu-ui-code-block">
+ *     <div class="wwu-ui-code-block__head">
+ *       <span class="wwu-ui-code-block__lang">CSS</span>
+ *       <button class="wwu-ui-code-block__copy" data-action="copy">Copia</button>
+ *     </div>
+ *     <pre><code class="wwu-ui-code-block__src">…</code></pre>
+ *   </div>
+ *
+ * Tokens (CSS-only — class semantics):
+ *   .tok-sel    selector
+ *   .tok-prop   property name
+ *   .tok-val    value
+ *   .tok-punct  punctuation (`:`, `;`)
+ *   .tok-brace  braces `{ }`
+ *   .tok-key    JS keyword (`var`, `function`)
+ *   .tok-str    string literal
+ *   .tok-num    numeric literal
+ *   .tok-com    comment
+ *   .tok-fn     function name
+ *   .tok-tag    HTML/XML tag name
+ *   .tok-attr   attribute name
+ *
+ * Variants:
+ *   --dark    dark theme (default uses kit muted bg)
+ *   --inline  single-line, no scroll, no padding
+ *
+ * @since 0.9.0
+ */
+
+/* ── Container ──────────────────────────────────────────────── */
+.wwu-ui-code-block {
+    background: var(--wwu-ui-bg-subtle, #f6f7f7);
+    border: 1px solid var(--wwu-ui-border, #dcdcde);
+    border-radius: var(--wwu-ui-radius-md, 6px);
+    overflow: hidden;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Cascadia Mono", monospace;
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--wwu-ui-text, #1d2327);
+    margin: 0 0 var(--wwu-ui-space-3, 12px);
+}
+
+/* ── Header (optional) ──────────────────────────────────────── */
+.wwu-ui-code-block__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--wwu-ui-border, #dcdcde);
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.wwu-ui-code-block__lang {
+    font-family: inherit;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--wwu-ui-text-muted, #6b7280);
+}
+
+.wwu-ui-code-block__copy {
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    border: 1px solid var(--wwu-ui-border, #c3c4c7);
+    color: var(--wwu-ui-text-muted, #50575e);
+    font-family: inherit;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.wwu-ui-code-block__copy:hover {
+    background: var(--wwu-ui-bg, #fff);
+    color: var(--wwu-ui-text, #1d2327);
+}
+
+.wwu-ui-code-block__copy.is-copied {
+    background: var(--wwu-ui-success, #2ea155);
+    border-color: var(--wwu-ui-success, #2ea155);
+    color: #fff;
+}
+
+.wwu-ui-code-block__copy.is-copied::after {
+    content: ' ✓';
+}
+
+/* ── Source body ────────────────────────────────────────────── */
+.wwu-ui-code-block pre {
+    margin: 0;
+    padding: 12px 14px;
+    overflow-x: auto;
+    background: transparent;
+}
+
+.wwu-ui-code-block__src {
+    display: block;
+    white-space: pre;
+    color: inherit;
+    background: transparent;
+    padding: 0;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.wwu-ui-code-block code {
+    font-family: inherit;
+}
+
+/* ── Syntax tokens (CSS-like default palette) ──────────────── */
+.wwu-ui-code-block .tok-sel    { color: #6f42c1; } /* purple */
+.wwu-ui-code-block .tok-prop   { color: #005cc5; } /* blue */
+.wwu-ui-code-block .tok-val    { color: #032f62; } /* deep blue */
+.wwu-ui-code-block .tok-punct  { color: #586069; } /* gray */
+.wwu-ui-code-block .tok-brace  { color: #586069; }
+.wwu-ui-code-block .tok-key    { color: #d73a49; font-weight: 600; } /* red */
+.wwu-ui-code-block .tok-str    { color: #032f62; } /* deep blue */
+.wwu-ui-code-block .tok-num    { color: #005cc5; }
+.wwu-ui-code-block .tok-com    { color: #6a737d; font-style: italic; } /* gray italic */
+.wwu-ui-code-block .tok-fn     { color: #6f42c1; }
+.wwu-ui-code-block .tok-tag    { color: #22863a; } /* green */
+.wwu-ui-code-block .tok-attr   { color: #6f42c1; }
+
+/* ── Variant: --dark ───────────────────────────────────────── */
+.wwu-ui-code-block--dark {
+    background: #1d2327;
+    border-color: #1d2327;
+    color: #dcdcde;
+}
+
+.wwu-ui-code-block--dark .wwu-ui-code-block__head {
+    background: rgba(255, 255, 255, 0.04);
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.wwu-ui-code-block--dark .wwu-ui-code-block__lang {
+    color: #abb2bf;
+}
+
+.wwu-ui-code-block--dark .wwu-ui-code-block__copy {
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #abb2bf;
+}
+
+.wwu-ui-code-block--dark .wwu-ui-code-block__copy:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+.wwu-ui-code-block--dark .tok-sel    { color: #c678dd; }
+.wwu-ui-code-block--dark .tok-prop   { color: #61afef; }
+.wwu-ui-code-block--dark .tok-val    { color: #98c379; }
+.wwu-ui-code-block--dark .tok-punct  { color: #abb2bf; }
+.wwu-ui-code-block--dark .tok-brace  { color: #abb2bf; }
+.wwu-ui-code-block--dark .tok-key    { color: #c678dd; font-weight: 600; }
+.wwu-ui-code-block--dark .tok-str    { color: #98c379; }
+.wwu-ui-code-block--dark .tok-num    { color: #d19a66; }
+.wwu-ui-code-block--dark .tok-com    { color: #5c6370; font-style: italic; }
+.wwu-ui-code-block--dark .tok-fn     { color: #61afef; }
+.wwu-ui-code-block--dark .tok-tag    { color: #e06c75; }
+.wwu-ui-code-block--dark .tok-attr   { color: #d19a66; }
+
+/* ── Variant: --inline (single line, no scroll) ────────────── */
+.wwu-ui-code-block--inline {
+    display: inline-block;
+    margin: 0;
+    padding: 1px 6px;
+    line-height: 1.4;
+    border-radius: 4px;
+}
+
+.wwu-ui-code-block--inline pre {
+    padding: 0;
+    overflow: visible;
+    white-space: nowrap;
+}
+
+/* ── Indent helper (alternative to whitespace in source) ──── */
+.wwu-ui-code-block .indent { display: inline-block; width: 2ch; }
+
+/* ── Trap #19 paired rule ───────────────────────────────────── */
+.wwu-ui-code-block[hidden] {
+    display: none !important;
+}

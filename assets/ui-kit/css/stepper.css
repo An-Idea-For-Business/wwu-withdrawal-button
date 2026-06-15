@@ -1,0 +1,174 @@
+/**
+ * WWU UI Kit — Stepper (progress indicator N of M)
+ *
+ * Horizontal list of numbered steps with connector lines. Each step has
+ * three states: upcoming (default), active (current), complete (done).
+ *
+ * Used for onboarding flows, multi-step wizards (planned for Code & Visual
+ * Builder, Pixel Manager setup, AM Pro AI Advisor config).
+ *
+ * @since 0.6.0
+ */
+
+.wwu-ui-stepper {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    padding: var(--wwu-ui-space-4) 0;
+    list-style: none;
+    margin: 0;
+    counter-reset: wwu-ui-stepper-counter;
+}
+
+.wwu-ui-stepper-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1 1 0;
+    min-width: 0;
+    position: relative;
+    text-align: center;
+    counter-increment: wwu-ui-stepper-counter;
+}
+
+/* Connector line between steps (pseudo-element on each step except first). */
+.wwu-ui-stepper-step::before {
+    content: '';
+    position: absolute;
+    top: 14px; /* vertically aligned to center of 28px marker */
+    left: calc(-50% + 18px);
+    right: calc(50% + 18px);
+    height: 2px;
+    background: var(--wwu-ui-border-strong);
+    z-index: 0;
+}
+
+.wwu-ui-stepper-step:first-child::before {
+    display: none;
+}
+
+/* Completed step → solid colored connector to the LEFT. */
+.wwu-ui-stepper-step.is-complete::before,
+.wwu-ui-stepper-step.is-active::before {
+    background: var(--wwu-ui-primary);
+}
+
+/* Marker — the numbered circle. */
+.wwu-ui-stepper-marker {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--wwu-ui-bg);
+    border: 2px solid var(--wwu-ui-border-strong);
+    color: var(--wwu-ui-text-muted);
+    font-size: var(--wwu-ui-font-sm);
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+    transition: background var(--wwu-ui-transition-base),
+                border-color var(--wwu-ui-transition-base),
+                color var(--wwu-ui-transition-base);
+}
+
+/* Show the counter number by default. */
+.wwu-ui-stepper-marker::before {
+    content: counter(wwu-ui-stepper-counter);
+}
+
+/* Active step — filled, primary, ring. */
+.wwu-ui-stepper-step.is-active .wwu-ui-stepper-marker {
+    background: var(--wwu-ui-primary);
+    border-color: var(--wwu-ui-primary);
+    color: #fff;
+    box-shadow: 0 0 0 4px rgba(34, 113, 177, .15);
+}
+
+/* Complete step — filled, show checkmark instead of number. */
+.wwu-ui-stepper-step.is-complete .wwu-ui-stepper-marker {
+    background: var(--wwu-ui-primary);
+    border-color: var(--wwu-ui-primary);
+    color: #fff;
+}
+
+.wwu-ui-stepper-step.is-complete .wwu-ui-stepper-marker::before {
+    content: '\2713'; /* ✓ */
+    font-size: 14px;
+}
+
+/* Step label. */
+.wwu-ui-stepper-label {
+    margin-top: var(--wwu-ui-space-2);
+    font-size: var(--wwu-ui-font-sm);
+    color: var(--wwu-ui-text-muted);
+    line-height: 1.3;
+    max-width: 100%;
+    overflow-wrap: break-word;
+}
+
+.wwu-ui-stepper-step.is-active .wwu-ui-stepper-label {
+    color: var(--wwu-ui-text);
+    font-weight: 600;
+}
+
+.wwu-ui-stepper-step.is-complete .wwu-ui-stepper-label {
+    color: var(--wwu-ui-text);
+}
+
+/* Optional sublabel (hint under main label). */
+.wwu-ui-stepper-sublabel {
+    display: block;
+    font-size: var(--wwu-ui-font-xs);
+    color: var(--wwu-ui-text-subtle);
+    margin-top: 2px;
+    font-weight: 400;
+}
+
+/* Clickable variant — steps are buttons for jumping back to earlier steps. */
+.wwu-ui-stepper-step.is-clickable {
+    cursor: pointer;
+}
+
+.wwu-ui-stepper-step.is-clickable:hover .wwu-ui-stepper-marker {
+    border-color: var(--wwu-ui-primary);
+    color: var(--wwu-ui-primary);
+}
+
+.wwu-ui-stepper-step.is-clickable.is-complete:hover .wwu-ui-stepper-marker {
+    background: var(--wwu-ui-primary-hover);
+}
+
+/* Responsive: on narrow screens stack vertically. */
+@media (max-width: 600px) {
+    .wwu-ui-stepper {
+        flex-direction: column;
+        align-items: flex-start;
+        padding-left: var(--wwu-ui-space-3);
+    }
+
+    .wwu-ui-stepper-step {
+        flex-direction: row;
+        align-items: center;
+        flex: 0 0 auto;
+        width: 100%;
+        text-align: left;
+        gap: var(--wwu-ui-space-3);
+        padding: var(--wwu-ui-space-2) 0;
+    }
+
+    .wwu-ui-stepper-step::before {
+        top: auto;
+        left: 13px;
+        right: auto;
+        bottom: calc(100% - 10px);
+        width: 2px;
+        height: calc(100% - 28px);
+    }
+
+    .wwu-ui-stepper-label {
+        margin-top: 0;
+        flex: 1;
+    }
+}

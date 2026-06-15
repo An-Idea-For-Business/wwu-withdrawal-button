@@ -1,0 +1,107 @@
+/**
+ * WWU UI Kit — Modal (confirm dialog)
+ *
+ * Centered dialog with backdrop overlay. Promise-based API in JS —
+ * `wwuUIKit.modal.confirm()` returns a Promise that resolves true/false.
+ *
+ * Replaces native `window.confirm()` with a brand-consistent UI and
+ * supports custom button labels, destructive styling, and double-confirm
+ * flows for destructive actions (trap pattern from AM Pro reset-all).
+ *
+ * @since 0.3.0
+ */
+
+.wwu-ui-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: var(--wwu-ui-z-modal);
+    background: rgba(0, 0, 0, .45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--wwu-ui-space-4);
+    animation: wwu-ui-fade-in .15s ease-out;
+}
+
+.wwu-ui-modal-overlay[hidden] {
+    display: none !important;
+}
+
+.wwu-ui-modal {
+    background: var(--wwu-ui-bg);
+    border-radius: var(--wwu-ui-radius-lg);
+    box-shadow: var(--wwu-ui-shadow-lg);
+    max-width: 480px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    animation: wwu-ui-modal-pop .2s ease-out;
+}
+
+@keyframes wwu-ui-modal-pop {
+    from { transform: scale(.92); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}
+
+.wwu-ui-modal-head {
+    padding: var(--wwu-ui-space-4) var(--wwu-ui-space-5);
+    border-bottom: 1px solid var(--wwu-ui-border);
+    flex: 0 0 auto;
+}
+
+.wwu-ui-modal-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--wwu-ui-text);
+    display: flex;
+    align-items: center;
+    gap: var(--wwu-ui-space-2);
+}
+
+.wwu-ui-modal-title .dashicons {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: var(--wwu-ui-primary);
+}
+
+/* Destructive modal — warning icon + red accent on title. */
+.wwu-ui-modal.danger .wwu-ui-modal-title .dashicons {
+    color: var(--wwu-ui-danger);
+}
+
+.wwu-ui-modal-body {
+    padding: var(--wwu-ui-space-4) var(--wwu-ui-space-5);
+    flex: 1 1 auto;
+    font-size: var(--wwu-ui-font-md);
+    line-height: 1.5;
+    color: var(--wwu-ui-text);
+}
+
+.wwu-ui-modal-body p {
+    margin: 0 0 var(--wwu-ui-space-3);
+}
+
+.wwu-ui-modal-body p:last-child {
+    margin-bottom: 0;
+}
+
+.wwu-ui-modal-body code {
+    background: var(--wwu-ui-border-soft);
+    padding: 1px 5px;
+    border-radius: var(--wwu-ui-radius-sm);
+    font-size: var(--wwu-ui-font-sm);
+}
+
+.wwu-ui-modal-foot {
+    padding: var(--wwu-ui-space-3) var(--wwu-ui-space-5);
+    border-top: 1px solid var(--wwu-ui-border);
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--wwu-ui-space-2);
+    background: #fafafa;
+}

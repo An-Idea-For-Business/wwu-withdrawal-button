@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0-alpha.39
+Stable tag: 1.0.0-alpha.40
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -71,6 +71,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 
 == Changelog ==
 
+= 1.0.0-alpha.40 =
+* **Admin UI styling restored + Swedish added.** The bundled WWU UI Kit is now shipped with the plugin (it was referenced but never packaged), so the Settings → Exemptions section (accordions, badges, notices) renders styled instead of plain. Added **Swedish (sv_SE)**: the statutory withdrawal-button label ("ångra avtalet här") and confirmation ("bekräfta frånträde") per the official EUR-Lex Art. 11a wording (Distansavtalslagen 2005:59), plus a partial UI translation draft (the rest falls back to English) — pending a native Swedish review before it's marked final.
+
 = 1.0.0-alpha.39 =
 * **Critical fix — the Settings page no longer fatals.** A merchant reported "Class WWU\WithdrawalButton\Admin\Settings not found", which crashed the whole settings screen. A missing `use` import made an unqualified `Settings::main()` resolve to the wrong namespace. Fixed, and a scan of all 91 source files confirmed there were no other cases. This release also carries a small mail-safety fix (the HTML mailer now always removes its `wp_mail_content_type` filter, so a third-party email error can't turn other plugins' plain-text emails into HTML) and a WooCommerce-surface + plugin-conflict audit (0 critical / 0 high). **Recommended for all installs.**
 
@@ -123,6 +126,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.0.0-alpha.40 =
+Restores the admin UI styling (the UI Kit is now bundled) and adds Swedish (statutory button label + partial UI draft pending native review). No breaking changes.
 
 = 1.0.0-alpha.39 =
 Critical fix: the Settings page no longer crashes with a "Class … Settings not found" fatal. Update recommended for everyone. Also includes a mail-safety fix and a WooCommerce/conflict audit.

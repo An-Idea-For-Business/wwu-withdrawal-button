@@ -1,0 +1,181 @@
+/**
+ * WWU UI Kit — Drawer (slide-in panel from the right)
+ *
+ * Fixed-position panel anchored to the right edge of the viewport.
+ * Pairs with `.wwu-ui-overlay` for click-to-dismiss backdrop.
+ * Controlled via `element.hidden = true|false` in JS (the kit provides
+ * `.wwu-ui-drawer[hidden] { display: none !important }` rule to make
+ * that work correctly — see trap #19 in main CLAUDE.md).
+ *
+ * Extracted from AM Pro admin.css:2116-2196 (Pro 1.3.1+, AI Advisor).
+ *
+ * @since 0.2.0
+ */
+
+/* ── Overlay ───────────────────────────────────── */
+
+.wwu-ui-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: calc(var(--wwu-ui-z-drawer) - 1);
+    background: rgba(0, 0, 0, .35);
+    animation: wwu-ui-fade-in .18s ease-out;
+}
+
+@keyframes wwu-ui-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* ── Drawer ────────────────────────────────────── */
+
+.wwu-ui-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 420px;
+    max-width: 95vw;
+    z-index: var(--wwu-ui-z-drawer);
+    background: var(--wwu-ui-bg);
+    border-left: 1px solid var(--wwu-ui-border-strong);
+    box-shadow: -8px 0 30px rgba(0, 0, 0, .15);
+    display: flex;
+    flex-direction: column;
+    animation: wwu-ui-slide-in .22s ease-out;
+}
+
+@keyframes wwu-ui-slide-in {
+    from { transform: translateX(100%); }
+    to   { transform: translateX(0); }
+}
+
+/**
+ * Explicit hidden-state overrides. Required because the drawer/overlay
+ * declare `display: flex` / `display: block` which out-specifies the
+ * user-agent `[hidden] { display: none }` default. Without this, setting
+ * `element.hidden = true` in JS does NOT hide the element. See trap #19
+ * in main CLAUDE.md for the history.
+ */
+.wwu-ui-drawer[hidden],
+.wwu-ui-overlay[hidden] {
+    display: none !important;
+}
+
+/* Internal state sections inside the drawer — same treatment. */
+.wwu-ui-drawer-state[hidden] {
+    display: none !important;
+}
+
+/* ── Drawer structure ──────────────────────────── */
+
+.wwu-ui-drawer-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--wwu-ui-space-3) var(--wwu-ui-space-4);
+    border-bottom: 1px solid var(--wwu-ui-border);
+    flex: 0 0 auto;
+    background: #fafafa;
+}
+
+.wwu-ui-drawer-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: var(--wwu-ui-space-2);
+}
+
+.wwu-ui-drawer-title-wrap h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--wwu-ui-text);
+}
+
+.wwu-ui-drawer-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--wwu-ui-space-1);
+}
+
+.wwu-ui-drawer-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: var(--wwu-ui-space-4);
+}
+
+.wwu-ui-drawer-foot {
+    flex: 0 0 auto;
+    padding: var(--wwu-ui-space-3) var(--wwu-ui-space-4);
+    border-top: 1px solid var(--wwu-ui-border);
+    background: #fafafa;
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--wwu-ui-space-2);
+}
+
+/* Body scroll lock when drawer is open — JS toggles this class on <body>. */
+body.wwu-ui-drawer-open {
+    overflow: hidden;
+}
+
+/* Mobile: drawer full-width. */
+@media (max-width: 600px) {
+    .wwu-ui-drawer {
+        width: 100vw;
+        max-width: 100vw;
+        border-left: none;
+    }
+}
+
+/* ── Variant: --inline (push content, not overlay) ────────────────────────
+   Added in 0.9.1.
+   The default drawer is an overlay (modal-ish). The --inline variant sits
+   inline in the page flow, pushing adjacent content. Use it for editor
+   side panels where the surface is contextual but non-modal (e.g. CVB
+   library / inspector rail).
+
+   Markup difference: when used inline, DO NOT wrap with a fixed-position
+   ancestor and DO NOT enqueue an overlay. The drawer is just a sibling.
+
+     <div class="my-editor-grid">
+       <main>…canvas…</main>
+       <aside class="wwu-ui-drawer wwu-ui-drawer--inline" hidden>…panel…</aside>
+     </div>
+
+   Open via wwuUIKit.drawer.create({ trapFocus: false, ... }) — focus trap
+   is OFF by default for inline drawers (they're not modal).
+─────────────────────────────────────────────────────────────────────── */
+
+.wwu-ui-drawer--inline {
+    position: relative;
+    top: auto;
+    right: auto;
+    height: auto;
+    max-height: none;
+    width: 320px;
+    box-shadow: none;
+    border-left: 1px solid var(--wwu-ui-border);
+    border-radius: 0;
+    transform: none;
+    flex: 0 0 auto;
+}
+
+.wwu-ui-drawer--inline.wwu-ui-drawer-open,
+.wwu-ui-drawer--inline:not([hidden]) {
+    transform: none;
+}
+
+/* Variant size overrides for inline mode */
+.wwu-ui-drawer--inline.wwu-ui-drawer--narrow { width: 248px; }
+.wwu-ui-drawer--inline.wwu-ui-drawer--wide   { width: 420px; }
+
+/* Mobile: inline drawer collapses to full width below 768px */
+@media (max-width: 768px) {
+    .wwu-ui-drawer--inline {
+        width: 100% !important;
+        border-left: none;
+        border-top: 1px solid var(--wwu-ui-border);
+    }
+}
+

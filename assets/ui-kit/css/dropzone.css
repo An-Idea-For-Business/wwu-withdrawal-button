@@ -1,0 +1,71 @@
+/**
+ * WWU UI Kit — Dropzone (drag & drop file upload)
+ *
+ * Dashed-border drop target with hover + dragover states. Accepts a
+ * file via click-to-browse (hidden input) OR drag & drop.
+ *
+ * Extracted from AM Pro admin.css:234-251 (Lighthouse upload, Pro 1.1.0+).
+ *
+ * @since 0.3.0
+ */
+
+.wwu-ui-dropzone {
+    position: relative;
+    border: 2px dashed var(--wwu-ui-border-strong);
+    border-radius: var(--wwu-ui-radius-lg);
+    padding: 40px var(--wwu-ui-space-5);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color var(--wwu-ui-transition-fast),
+                background var(--wwu-ui-transition-fast);
+    background: var(--wwu-ui-bg);
+}
+
+.wwu-ui-dropzone:hover {
+    border-color: var(--wwu-ui-primary);
+    background: #f0f6fc;
+}
+
+.wwu-ui-dropzone.dragover {
+    border-color: var(--wwu-ui-primary);
+    background: var(--wwu-ui-bg-active);
+}
+
+.wwu-ui-dropzone-icon .dashicons {
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
+    color: var(--wwu-ui-text-subtle);
+    margin-bottom: var(--wwu-ui-space-2);
+}
+
+.wwu-ui-dropzone-title {
+    display: block;
+    font-size: var(--wwu-ui-font-lg);
+    font-weight: 600;
+    color: var(--wwu-ui-text);
+    margin-bottom: var(--wwu-ui-space-1);
+}
+
+.wwu-ui-dropzone-hint {
+    display: block;
+    font-size: var(--wwu-ui-font-sm);
+    color: var(--wwu-ui-text-muted);
+}
+
+/* Hidden native file input — positioned to catch browser clicks. */
+.wwu-ui-dropzone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Disabled variant — during upload in progress. */
+.wwu-ui-dropzone.is-uploading,
+.wwu-ui-dropzone[aria-busy="true"] {
+    pointer-events: none;
+    opacity: .6;
+}

@@ -41,6 +41,10 @@ final class LabelResolver {
 		'de' => array( 'Vertrag widerrufen', 'Widerruf bestätigen', '§356a BGB' ),
 		'fr' => array( 'renoncer au contrat ici', 'confirmer la rétractation', 'Art. D.221-5 Code conso' ),
 		'es' => array( 'desistir del contrato aquí', 'confirmar desistimiento', 'Dir. (RDL 1/2007 pending)' ),
+		// Swedish: official EUR-Lex wording of Art. 11a (Dir. 2011/83/EU as amended by
+		// Dir. (EU) 2023/2673), transposed in Distansavtalslagen (2005:59). DRAFT —
+		// pending native + legal review (see docs/analysis sv_SE note).
+		'sv' => array( 'ångra avtalet här', 'bekräfta frånträde', 'Distansavtalslagen (2005:59)' ),
 	);
 
 	/**

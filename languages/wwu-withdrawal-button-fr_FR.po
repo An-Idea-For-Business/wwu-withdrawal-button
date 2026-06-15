@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WWU Withdrawal Button\n"
 "Report-Msgid-Bugs-To: https://webwakeup.it/wwu-withdrawal-button/\n"
-"POT-Creation-Date: 2026-06-14 23:37+0000\n"
+"POT-Creation-Date: 2026-06-15 18:14+0000\n"
 "PO-Revision-Date: 2026-06-14 00:00+0000\n"
 "Last-Translator: WWU translate workflow <info@webwakeup.it>\n"
 "Language-Team: WebWakeUp\n"
@@ -273,8 +273,8 @@ msgid "Next"
 msgstr "Suivant"
 
 #: src/Admin/ConsentRecordsPage.php:200 src/Admin/DashboardPage.php:287
-#: src/Admin/RequestsDashboard.php:373 src/Admin/SettingsPage.php:346
-#: src/Admin/SettingsPage.php:789 src/REST/Authentication.php:55
+#: src/Admin/RequestsDashboard.php:397 src/Admin/SettingsPage.php:425
+#: src/Admin/SettingsPage.php:868 src/REST/Authentication.php:55
 #: src/REST/Authentication.php:80
 msgid "Insufficient permissions."
 msgstr "Permissions insuffisantes."
@@ -605,7 +605,7 @@ msgstr ""
 "Si vous l'avez reçu, l'envoi d'e-mails fonctionne et les accusés de "
 "réception de rétractation seront bien délivrés."
 
-#: src/Admin/DashboardPage.php:404 src/Admin/SettingsPage.php:79
+#: src/Admin/DashboardPage.php:404 src/Admin/SettingsPage.php:80
 msgid "Mandatory for EU/EEA consumers on contracts concluded on or after %s."
 msgstr ""
 "Obligatoire pour les consommateurs UE/EEE pour les contrats conclus le %s ou "
@@ -809,51 +809,62 @@ msgstr ""
 "consommateur, et pour les autres cas visés à l'art. 59, le droit de "
 "rétractation ne s'applique pas."
 
-#: src/Admin/RequestsDashboard.php:208 src/Frontend/EligibleOrders.php:56
+#: src/Admin/RequestsDashboard.php:203
+msgid ""
+"Subscription order. The 14-day right covers the initial contract — stop "
+"future renewals and apply any pro-rata for service already used, then "
+"refund. None of this is automatic unless you enabled auto-cancel."
+
+msgstr "Commande d'abonnement. Le droit de 14 jours couvre le contrat initial — arrêtez les renouvellements futurs, appliquez le cas échéant un prorata pour le service déjà utilisé, puis remboursez. Rien de tout cela n'est automatique sauf si vous avez activé l'annulation automatique."
+#: src/Admin/RequestsDashboard.php:204
+msgid "Subscription"
+
+msgstr "Abonnement"
+#: src/Admin/RequestsDashboard.php:232 src/Frontend/EligibleOrders.php:56
 msgid "Refunded"
 msgstr "Remboursée"
 
-#: src/Admin/RequestsDashboard.php:212
+#: src/Admin/RequestsDashboard.php:236
 msgid "Processed"
 msgstr "Traitée"
 
-#: src/Admin/RequestsDashboard.php:215
+#: src/Admin/RequestsDashboard.php:239
 msgid "Open"
 msgstr "Ouverte"
 
-#: src/Admin/RequestsDashboard.php:233
+#: src/Admin/RequestsDashboard.php:257
 msgid "Mark processed"
 msgstr "Marquer comme traitée"
 
-#: src/Admin/RequestsDashboard.php:237
+#: src/Admin/RequestsDashboard.php:261
 msgid "Resend email"
 msgstr "Renvoyer l'e-mail"
 
-#: src/Admin/RequestsDashboard.php:241
+#: src/Admin/RequestsDashboard.php:265
 msgid "Open order (refund)"
 msgstr "Commande ouverte (remboursement)"
 
-#: src/Admin/RequestsDashboard.php:417
+#: src/Admin/RequestsDashboard.php:441
 msgid "Request marked as processed."
 msgstr "Demande marquée comme traitée."
 
-#: src/Admin/RequestsDashboard.php:418
+#: src/Admin/RequestsDashboard.php:442
 msgid ""
 "Could not mark the request as processed — the order could not be loaded."
 msgstr ""
 "Impossible de marquer la demande comme traitée — la commande n'a pas pu être "
 "chargée."
 
-#: src/Admin/RequestsDashboard.php:419
+#: src/Admin/RequestsDashboard.php:443
 msgid "Acknowledgement email resent."
 msgstr "E-mail d'accusé de réception renvoyé."
 
-#: src/Admin/RequestsDashboard.php:420
+#: src/Admin/RequestsDashboard.php:444
 msgid "Could not resend the email — check your email/SMTP configuration."
 msgstr ""
 "Impossible de renvoyer l'e-mail — vérifiez votre configuration e-mail/SMTP."
 
-#: src/Admin/RequestsDashboard.php:421
+#: src/Admin/RequestsDashboard.php:445
 msgid "Please wait a few seconds before resending again."
 msgstr "Veuillez patienter quelques secondes avant de renvoyer à nouveau."
 
@@ -896,31 +907,35 @@ msgstr "Date/heure (soumise)"
 msgid "Consumer"
 msgstr "Consommateur"
 
-#: src/Admin/SettingsPage.php:102
+#: src/Admin/SettingsPage.php:101
+msgid "Audience"
+msgstr "Audience"
+
+#: src/Admin/SettingsPage.php:104
 msgid "All admins"
 msgstr "Tous les administrateurs"
 
-#: src/Admin/SettingsPage.php:103
+#: src/Admin/SettingsPage.php:105
 msgid "Specific roles"
 msgstr "Rôles spécifiques"
 
-#: src/Admin/SettingsPage.php:104
+#: src/Admin/SettingsPage.php:106
 msgid "Specific users"
 msgstr "Utilisateurs spécifiques"
 
-#: src/Admin/SettingsPage.php:105
+#: src/Admin/SettingsPage.php:107
 msgid "Current user only"
 msgstr "Utilisateur actuel uniquement"
 
-#: src/Admin/SettingsPage.php:113
+#: src/Admin/SettingsPage.php:115
 msgid "Console level"
 msgstr "Niveau de console"
 
-#: src/Admin/SettingsPage.php:125
+#: src/Admin/SettingsPage.php:127
 msgid "Save settings"
 msgstr "Enregistrer les paramètres"
 
-#: src/Admin/SettingsPage.php:131
+#: src/Admin/SettingsPage.php:133
 msgid ""
 "WWU Withdrawal Button — a free open-source compliance tool by %s, with "
 "mredodos and Matteo Alfieri (An Idea for Business)."
@@ -928,27 +943,27 @@ msgstr ""
 "WWU Withdrawal Button — un outil de conformité gratuit et open source par "
 "%s, avec mredodos et Matteo Alfieri (An Idea for Business)."
 
-#: src/Admin/SettingsPage.php:156
+#: src/Admin/SettingsPage.php:158
 msgid "Where the button applies"
 msgstr "Où le bouton s'applique"
 
-#: src/Admin/SettingsPage.php:159
+#: src/Admin/SettingsPage.php:161
 msgid "Applicability"
 msgstr "Applicabilité"
 
-#: src/Admin/SettingsPage.php:162
+#: src/Admin/SettingsPage.php:164
 msgid "Only EU/EEA consumers (legal minimum — recommended)"
 msgstr "Uniquement les consommateurs UE/EEE (minimum légal — recommandé)"
 
-#: src/Admin/SettingsPage.php:163
+#: src/Admin/SettingsPage.php:165
 msgid "Always show it (to every consumer, also non-EU)"
 msgstr "Toujours l'afficher (à tous les consommateurs, y compris hors UE)"
 
-#: src/Admin/SettingsPage.php:164
+#: src/Admin/SettingsPage.php:166
 msgid "Only a custom list of countries"
 msgstr "Uniquement une liste de pays personnalisée"
 
-#: src/Admin/SettingsPage.php:170
+#: src/Admin/SettingsPage.php:172
 msgid ""
 "The button is mandatory only for EU/EEA consumers. \"Always show it\" is a "
 "safe superset if you prefer one consistent flow (showing it to non-EU buyers "
@@ -959,11 +974,11 @@ msgstr ""
 "uniforme (l'afficher aux acheteurs hors UE est autorisé et présente peu de "
 "risques)."
 
-#: src/Admin/SettingsPage.php:173
+#: src/Admin/SettingsPage.php:175
 msgid "Custom countries"
 msgstr "Pays personnalisés"
 
-#: src/Admin/SettingsPage.php:175
+#: src/Admin/SettingsPage.php:177
 msgid ""
 "Two-letter country codes, comma-separated. Used only with the \"custom "
 "list\" mode."
@@ -971,11 +986,11 @@ msgstr ""
 "Codes pays à deux lettres, séparés par des virgules. Utilisé uniquement avec "
 "le mode « liste personnalisée »."
 
-#: src/Admin/SettingsPage.php:178
+#: src/Admin/SettingsPage.php:180
 msgid "Business (B2B) orders"
 msgstr "Commandes professionnelles (B2B)"
 
-#: src/Admin/SettingsPage.php:180
+#: src/Admin/SettingsPage.php:182
 msgid ""
 "Hide the button when a VAT number was provided (treat as business / out of "
 "scope)."
@@ -983,15 +998,100 @@ msgstr ""
 "Masquer le bouton lorsqu'un numéro de TVA a été fourni (considéré comme "
 "professionnel / hors périmètre)."
 
-#: src/Admin/SettingsPage.php:196
+#: src/Admin/SettingsPage.php:206
+msgid "Subscriptions"
+
+msgstr "Abonnements"
+#: src/Admin/SettingsPage.php:212
+msgid ""
+"Detected subscription plugin: %s. These settings take effect for its orders."
+
+msgstr "Extension d'abonnement détectée : %s. Ces réglages s'appliquent à ses commandes."
+#: src/Admin/SettingsPage.php:217
+msgid ""
+"No subscription plugin detected (WooCommerce Subscriptions, FluentCart "
+"subscriptions, EDD Recurring). These settings are harmless until one is "
+"active."
+
+msgstr "Aucune extension d'abonnement détectée (WooCommerce Subscriptions, abonnements FluentCart, EDD Recurring). Ces réglages sont sans effet tant qu'aucune n'est active."
+#: src/Admin/SettingsPage.php:220
+msgid ""
+"EU law gives <strong>one 14-day right of withdrawal per contract</strong>, "
+"starting when the contract is concluded (Art. 9 CRD / art. 52 Cod. Consumo). "
+"A <strong>renewal does not restart it</strong>. So the button appears on the "
+"<strong>initial order only</strong> and is hidden on renewals. Withdrawal is "
+"<strong>not</strong> the same as cancelling: a consumer can always stop "
+"future renewals from their account; the withdrawal button is the statutory "
+"14-day right that also entitles them to a refund."
+
+msgstr "Le droit de l'UE accorde <strong>un seul droit de rétractation de 14 jours par contrat</strong>, qui court à compter de la conclusion du contrat (art. 9 DDC / art. L221-18 Code conso). Un <strong>renouvellement ne le fait pas repartir</strong>. Le bouton apparaît donc <strong>uniquement sur la commande initiale</strong> et est masqué sur les renouvellements. La rétractation n'est <strong>pas</strong> la même chose qu'une résiliation : le consommateur peut toujours arrêter les renouvellements futurs depuis son compte ; le bouton de rétractation est le droit légal de 14 jours qui ouvre aussi droit à un remboursement."
+#: src/Admin/SettingsPage.php:224
+msgid "Renewal orders"
+
+msgstr "Commandes de renouvellement"
+#: src/Admin/SettingsPage.php:225
+msgid ""
+"Leave OFF in almost all cases. A renewal continues the same contract — it "
+"has no fresh 14-day right."
+
+msgstr "Laissez DÉSACTIVÉ dans la quasi-totalité des cas. Un renouvellement poursuit le même contrat — il n'ouvre pas de nouveau droit de 14 jours."
+#: src/Admin/SettingsPage.php:227
+msgid "Also show the withdrawal button on renewal orders."
+
+msgstr "Afficher aussi le bouton de rétractation sur les commandes de renouvellement."
+#: src/Admin/SettingsPage.php:228
+msgid ""
+"Off (recommended): renewals continue the same contract and have no new 14-"
+"day right. Turn on only if your legal advice says a specific renewal "
+"restarts the right."
+
+msgstr "Désactivé (recommandé) : les renouvellements poursuivent le même contrat et n'ouvrent pas de nouveau droit de 14 jours. N'activez que si votre conseil juridique indique qu'un renouvellement précis fait repartir le droit."
+#: src/Admin/SettingsPage.php:231
+msgid "On withdrawal"
+
+msgstr "Lors de la rétractation"
+#: src/Admin/SettingsPage.php:232
+msgid ""
+"When a consumer withdraws from the initial order, optionally stop future "
+"renewals automatically."
+
+msgstr "Lorsqu'un consommateur se rétracte de la commande initiale, arrêter éventuellement les renouvellements futurs automatiquement."
+#: src/Admin/SettingsPage.php:234
+msgid ""
+"Automatically cancel the subscription when the consumer withdraws from its "
+"initial order."
+
+msgstr "Résilier automatiquement l'abonnement lorsque le consommateur se rétracte de sa commande initiale."
+#: src/Admin/SettingsPage.php:235
+msgid ""
+"Off by default. The refund and any pro-rata deduction (for service already "
+"used) always stay manual — only the future renewals are stopped. The "
+"Requests dashboard reminds you either way."
+
+msgstr "Désactivé par défaut. Le remboursement et l'éventuelle déduction au prorata (pour le service déjà utilisé) restent toujours manuels — seuls les renouvellements futurs sont arrêtés. Le tableau de bord des demandes vous le rappelle dans tous les cas."
+#: src/Admin/SettingsPage.php:239 src/Admin/SettingsPage.php:697
+msgid "Show example"
+msgstr "Afficher l'exemple"
+
+#: src/Admin/SettingsPage.php:240
+msgid ""
+"A customer subscribes on 1 March (initial order). They get 14 days to "
+"withdraw → the button shows on that order until 15 March. On 1 April the "
+"subscription renews (renewal order) → no button, because the right was "
+"already exercised-or-expired on the original contract. If they no longer "
+"want the service they cancel future renewals from their account; that is "
+"separate from the 14-day withdrawal."
+
+msgstr "Un client s'abonne le 1er mars (commande initiale). Il dispose de 14 jours pour se rétracter → le bouton s'affiche sur cette commande jusqu'au 15 mars. Le 1er avril, l'abonnement se renouvelle (commande de renouvellement) → pas de bouton, car le droit a déjà été exercé ou a expiré sur le contrat d'origine. S'il ne veut plus le service, il arrête les renouvellements futurs depuis son compte ; c'est distinct de la rétractation de 14 jours."
+#: src/Admin/SettingsPage.php:275
 msgid "Consumer guidance"
 msgstr "Informations consommateur"
 
-#: src/Admin/SettingsPage.php:199
+#: src/Admin/SettingsPage.php:278
 msgid "Withdrawal period (days)"
 msgstr "Délai de rétractation (jours)"
 
-#: src/Admin/SettingsPage.php:201
+#: src/Admin/SettingsPage.php:280
 msgid ""
 "The legal minimum is 14. You may grant MORE (e.g. 30) as a voluntary "
 "extension — the figure shown to customers updates accordingly. You cannot "
@@ -1001,11 +1101,11 @@ msgstr ""
 "qu’extension volontaire — le chiffre affiché aux clients se met à jour en "
 "conséquence. Vous ne pouvez pas définir moins de 14."
 
-#: src/Admin/SettingsPage.php:204
+#: src/Admin/SettingsPage.php:283
 msgid "Custom guidance text"
 msgstr "Texte d'information personnalisé"
 
-#: src/Admin/SettingsPage.php:205
+#: src/Admin/SettingsPage.php:284
 msgid ""
 "Leave empty to use the built-in explanation. Paste your own to fully replace "
 "it — e.g. to spell out exemptions for event tickets or services started "
@@ -1015,7 +1115,7 @@ msgstr ""
 "remplacer complètement — ex. pour détailler les exemptions pour les billets "
 "d’événements ou les services commencés immédiatement."
 
-#: src/Admin/SettingsPage.php:206
+#: src/Admin/SettingsPage.php:285
 msgid ""
 "When set, this replaces the default \"how withdrawal works\" block shown to "
 "customers. Basic HTML is allowed. You are responsible for its legal accuracy "
@@ -1026,7 +1126,7 @@ msgstr ""
 "êtes responsable de son exactitude juridique — gardez-le véridique et ne "
 "décoursagez pas la rétractation."
 
-#: src/Admin/SettingsPage.php:207
+#: src/Admin/SettingsPage.php:286
 msgid ""
 "For products with no right of withdrawal (e.g. dated event tickets, "
 "immediate-access digital content), the proper fix is to exempt them per Art. "
@@ -1038,15 +1138,15 @@ msgstr ""
 "exempter selon l’Art. 59 — voir la fonctionnalité Exemptions à venir. Ne "
 "vous contentez pas de masquer le bouton sans les conditions légales."
 
-#: src/Admin/SettingsPage.php:225
+#: src/Admin/SettingsPage.php:304
 msgid "Receipt & evidence"
 msgstr "Reçu et preuves"
 
-#: src/Admin/SettingsPage.php:228
+#: src/Admin/SettingsPage.php:307
 msgid "Attach PDF receipt"
 msgstr "Joindre le reçu PDF"
 
-#: src/Admin/SettingsPage.php:230
+#: src/Admin/SettingsPage.php:309
 msgid ""
 "Attach a PDF copy to the acknowledgement email (the email itself is always "
 "the durable medium)."
@@ -1054,7 +1154,7 @@ msgstr ""
 "Joindre une copie PDF à l'e-mail d'accusé de réception (l'e-mail lui-même "
 "constitue toujours le support durable)."
 
-#: src/Admin/SettingsPage.php:232
+#: src/Admin/SettingsPage.php:311
 msgid ""
 "PDF library not detected — PDF receipts are currently disabled (the email "
 "still works). Install the plugin from the official ZIP to enable PDFs."
@@ -1063,20 +1163,20 @@ msgstr ""
 "(l'e-mail fonctionne toujours). Installez le plugin depuis le ZIP officiel "
 "pour activer les PDF."
 
-#: src/Admin/SettingsPage.php:236
+#: src/Admin/SettingsPage.php:315
 msgid "Notification email"
 msgstr "E-mail de notification"
 
-#: src/Admin/SettingsPage.php:238
+#: src/Admin/SettingsPage.php:317
 msgid "Where to notify you of new withdrawal requests."
 msgstr ""
 "Adresse à laquelle vous serez notifié des nouvelles demandes de rétractation."
 
-#: src/Admin/SettingsPage.php:241
+#: src/Admin/SettingsPage.php:320
 msgid "Evidence retention (years)"
 msgstr "Conservation des preuves (années)"
 
-#: src/Admin/SettingsPage.php:243
+#: src/Admin/SettingsPage.php:322
 msgid ""
 "How long to keep the immutable log (default 10 — the contract limitation "
 "period)."
@@ -1084,23 +1184,23 @@ msgstr ""
 "Durée de conservation du journal immuable (par défaut 10 — le délai de "
 "prescription contractuel)."
 
-#: src/Admin/SettingsPage.php:255
+#: src/Admin/SettingsPage.php:334
 msgid "Trusted timestamp"
 msgstr "Horodatage de confiance"
 
-#: src/Admin/SettingsPage.php:258
+#: src/Admin/SettingsPage.php:337
 msgid "OpenTimestamps (free, Bitcoin-anchored — recommended)"
 msgstr "OpenTimestamps (gratuit, ancré sur Bitcoin — recommandé)"
 
-#: src/Admin/SettingsPage.php:259
+#: src/Admin/SettingsPage.php:338
 msgid "RFC 3161 timestamp authority (immediate; eIDAS-qualified options)"
 msgstr "Autorité d'horodatage RFC 3161 (immédiat ; options qualifiées eIDAS)"
 
-#: src/Admin/SettingsPage.php:260
+#: src/Admin/SettingsPage.php:339
 msgid "None (the hash chain alone is the evidence)"
 msgstr "Aucun (la chaîne de hachage seule constitue la preuve)"
 
-#: src/Admin/SettingsPage.php:266
+#: src/Admin/SettingsPage.php:345
 msgid ""
 "Only a one-way hash leaves your site — never personal data. OpenTimestamps "
 "anchors to Bitcoin (free, ~hours). RFC 3161 gets an immediate signed token "
@@ -1110,11 +1210,11 @@ msgstr ""
 "personnelles. OpenTimestamps ancre sur Bitcoin (gratuit, ~quelques heures). "
 "RFC 3161 obtient un jeton signé immédiat auprès d'une autorité d'horodatage."
 
-#: src/Admin/SettingsPage.php:270
+#: src/Admin/SettingsPage.php:349
 msgid "RFC 3161 — TSA endpoint"
 msgstr "RFC 3161 — Point de terminaison TSA"
 
-#: src/Admin/SettingsPage.php:272
+#: src/Admin/SettingsPage.php:351
 msgid ""
 "Free, no account: <code>http://timestamp.sectigo.com/qualified</code> (eIDAS-"
 "qualified) or <code>http://timestamp.digicert.com</code>. For a national "
@@ -1127,19 +1227,19 @@ msgstr ""
 "FNMT, SwissSign), collez leur point de terminaison RFC 3161 et remplissez "
 "les identifiants ci-dessous."
 
-#: src/Admin/SettingsPage.php:275
+#: src/Admin/SettingsPage.php:354
 msgid "RFC 3161 — credentials (optional)"
 msgstr "RFC 3161 — Identifiants (optionnel)"
 
-#: src/Admin/SettingsPage.php:276
+#: src/Admin/SettingsPage.php:355
 msgid "Username (only for account-based QTSPs)"
 msgstr "Nom d'utilisateur (uniquement pour les PSQC à compte)"
 
-#: src/Admin/SettingsPage.php:277
+#: src/Admin/SettingsPage.php:356
 msgid "Password — leave blank to keep the saved one"
 msgstr "Mot de passe — laisser vide pour conserver celui enregistré"
 
-#: src/Admin/SettingsPage.php:278
+#: src/Admin/SettingsPage.php:357
 msgid ""
 "Basic-auth username/password, only required by paid qualified providers. "
 "Free TSAs need none. The password is stored on your server and never shown "
@@ -1149,11 +1249,11 @@ msgstr ""
 "prestataires qualifiés payants. Les TSA gratuites n'en ont pas besoin. Le "
 "mot de passe est stocké sur votre serveur et ne sera plus affiché."
 
-#: src/Admin/SettingsPage.php:283
+#: src/Admin/SettingsPage.php:362
 msgid "My Account tab slug"
 msgstr "Slug de l'onglet Mon compte"
 
-#: src/Admin/SettingsPage.php:285
+#: src/Admin/SettingsPage.php:364
 msgid ""
 "The URL slug of the \"Right of withdrawal\" tab in the customer account. "
 "Change only if it conflicts."
@@ -1161,15 +1261,15 @@ msgstr ""
 "Le slug URL de l'onglet « Droit de rétractation » dans l'espace client. À "
 "modifier uniquement en cas de conflit."
 
-#: src/Admin/SettingsPage.php:290
+#: src/Admin/SettingsPage.php:369
 msgid "Email preview"
 msgstr "Aperçu de l'e-mail"
 
-#: src/Admin/SettingsPage.php:291
+#: src/Admin/SettingsPage.php:370
 msgid "Preview the acknowledgement email"
 msgstr "Prévisualiser l'e-mail d'accusé de réception"
 
-#: src/Admin/SettingsPage.php:292
+#: src/Admin/SettingsPage.php:371
 msgid ""
 "Opens a sample of the email the consumer receives. On WooCommerce it uses "
 "your store's email branding (header, footer, colours) exactly as it will be "
@@ -1179,7 +1279,7 @@ msgstr ""
 "il utilise l'image de marque e-mail de votre boutique (en-tête, pied de "
 "page, couleurs) exactement tel qu'il sera envoyé."
 
-#: src/Admin/SettingsPage.php:309
+#: src/Admin/SettingsPage.php:388
 msgid ""
 "Free, Bitcoin-anchored, no account — the default. Proof completes after a "
 "block (~hours)."
@@ -1187,7 +1287,7 @@ msgstr ""
 "Gratuit, ancré sur Bitcoin, sans compte — valeur par défaut. La preuve est "
 "complète après un bloc (~quelques heures)."
 
-#: src/Admin/SettingsPage.php:310
+#: src/Admin/SettingsPage.php:389
 msgid ""
 "Free RFC 3161. Its /qualified endpoint is eIDAS-qualified and needs no "
 "account — recommended free option."
@@ -1195,14 +1295,14 @@ msgstr ""
 "RFC 3161 gratuit. Son point de terminaison /qualified est qualifié eIDAS et "
 "ne nécessite pas de compte — option gratuite recommandée."
 
-#: src/Admin/SettingsPage.php:311
+#: src/Admin/SettingsPage.php:390
 msgid ""
 "Free RFC 3161 timestamp authority, no account: http://timestamp.digicert.com"
 msgstr ""
 "Autorité d'horodatage RFC 3161 gratuite, sans compte : http://"
 "timestamp.digicert.com"
 
-#: src/Admin/SettingsPage.php:312
+#: src/Admin/SettingsPage.php:391
 msgid ""
 "Italian eIDAS-qualified timestamp (marca temporale). Paid account; widely "
 "accepted in Italy."
@@ -1210,37 +1310,37 @@ msgstr ""
 "Horodatage qualifié eIDAS italien (marca temporale). Compte payant ; "
 "largement accepté en Italie."
 
-#: src/Admin/SettingsPage.php:313
+#: src/Admin/SettingsPage.php:392
 msgid "Italian eIDAS-qualified timestamp. Paid account."
 msgstr "Horodatage qualifié eIDAS italien. Compte payant."
 
-#: src/Admin/SettingsPage.php:314
+#: src/Admin/SettingsPage.php:393
 msgid "German eIDAS-qualified timestamp (Bundesdruckerei). Account required."
 msgstr "Horodatage qualifié eIDAS allemand (Bundesdruckerei). Compte requis."
 
-#: src/Admin/SettingsPage.php:315
+#: src/Admin/SettingsPage.php:394
 msgid "French eIDAS-qualified timestamp. Account required."
 msgstr "Horodatage qualifié eIDAS français. Compte requis."
 
-#: src/Admin/SettingsPage.php:316
+#: src/Admin/SettingsPage.php:395
 msgid ""
 "Spanish eIDAS-qualified timestamp (national mint). Registration required."
 msgstr ""
 "Horodatage qualifié eIDAS espagnol (monnaie nationale). Inscription requise."
 
-#: src/Admin/SettingsPage.php:317
+#: src/Admin/SettingsPage.php:396
 msgid "Swiss ZertES-qualified timestamp. Account required."
 msgstr "Horodatage qualifié ZertES suisse. Compte requis."
 
-#: src/Admin/SettingsPage.php:321
+#: src/Admin/SettingsPage.php:400
 msgid "Timestamp providers — which to choose"
 msgstr "Prestataires d'horodatage — lequel choisir"
 
-#: src/Admin/SettingsPage.php:325
+#: src/Admin/SettingsPage.php:404
 msgid "site"
 msgstr "site"
 
-#: src/Admin/SettingsPage.php:328
+#: src/Admin/SettingsPage.php:407
 msgid ""
 "Any RFC 3161 authority works — paste its endpoint above and add credentials "
 "if it is account-based. Running OpenTimestamps and an RFC 3161 token "
@@ -1251,19 +1351,19 @@ msgstr ""
 "Utiliser simultanément OpenTimestamps et un jeton RFC 3161 offre deux "
 "preuves indépendantes."
 
-#: src/Admin/SettingsPage.php:382
+#: src/Admin/SettingsPage.php:461
 msgid "Sample Customer"
 msgstr "Client exemple"
 
-#: src/Admin/SettingsPage.php:384
+#: src/Admin/SettingsPage.php:463
 msgid "Sample product × 1"
 msgstr "Produit exemple × 1"
 
-#: src/Admin/SettingsPage.php:411
+#: src/Admin/SettingsPage.php:490
 msgid "Appearance — Custom CSS"
 msgstr "Apparence — CSS personnalisé"
 
-#: src/Admin/SettingsPage.php:412
+#: src/Admin/SettingsPage.php:491
 msgid ""
 "Paste CSS to restyle any element of the withdrawal flow on your site. It is "
 "loaded after the plugin styles, so it always wins. Tip: override the CSS "
@@ -1276,11 +1376,11 @@ msgstr ""
 "dessous pour des changements rapides de couleur/forme, ou ciblez les classes "
 "pour un contrôle total."
 
-#: src/Admin/SettingsPage.php:413
+#: src/Admin/SettingsPage.php:492
 msgid "Compliance note:"
 msgstr "Note de conformité :"
 
-#: src/Admin/SettingsPage.php:413
+#: src/Admin/SettingsPage.php:492
 msgid ""
 "the withdrawal button must stay legible and prominent (Art. 11a). Do not "
 "hide it, shrink it, or reduce its contrast."
@@ -1288,179 +1388,179 @@ msgstr ""
 "le bouton de rétractation doit rester lisible et visible (art. 11 bis). Ne "
 "le masquez pas, ne le réduisez pas et ne diminuez pas son contraste."
 
-#: src/Admin/SettingsPage.php:419
+#: src/Admin/SettingsPage.php:498
 msgid "Button background color"
 msgstr "Couleur d'arrière-plan du bouton"
 
-#: src/Admin/SettingsPage.php:420
+#: src/Admin/SettingsPage.php:499
 msgid "Button text color"
 msgstr "Couleur du texte du bouton"
 
-#: src/Admin/SettingsPage.php:421
+#: src/Admin/SettingsPage.php:500
 msgid "Button focus outline color"
 msgstr "Couleur du contour de focus du bouton"
 
-#: src/Admin/SettingsPage.php:422
+#: src/Admin/SettingsPage.php:501
 msgid "Button corner radius"
 msgstr "Rayon des coins du bouton"
 
-#: src/Admin/SettingsPage.php:423
+#: src/Admin/SettingsPage.php:502
 msgid "Input/result corner radius"
 msgstr "Rayon des coins des champs/résultats"
 
-#: src/Admin/SettingsPage.php:424
+#: src/Admin/SettingsPage.php:503
 msgid "Button padding"
 msgstr "Rembourrage du bouton"
 
-#: src/Admin/SettingsPage.php:425
+#: src/Admin/SettingsPage.php:504
 msgid "Button font size"
 msgstr "Taille de police du bouton"
 
-#: src/Admin/SettingsPage.php:426
+#: src/Admin/SettingsPage.php:505
 msgid "Button font weight"
 msgstr "Graisse de police du bouton"
 
-#: src/Admin/SettingsPage.php:427
+#: src/Admin/SettingsPage.php:506
 msgid "Button border"
 msgstr "Bordure du bouton"
 
-#: src/Admin/SettingsPage.php:428
+#: src/Admin/SettingsPage.php:507
 msgid "Form max width"
 msgstr "Largeur maximale du formulaire"
 
-#: src/Admin/SettingsPage.php:429
+#: src/Admin/SettingsPage.php:508
 msgid "Input border color"
 msgstr "Couleur de bordure des champs"
 
-#: src/Admin/SettingsPage.php:430
+#: src/Admin/SettingsPage.php:509
 msgid "Input padding"
 msgstr "Rembourrage des champs"
 
-#: src/Admin/SettingsPage.php:431
+#: src/Admin/SettingsPage.php:510
 msgid "Field label weight"
 msgstr "Graisse des étiquettes de champ"
 
-#: src/Admin/SettingsPage.php:432
+#: src/Admin/SettingsPage.php:511
 msgid "Helper/note text color"
 msgstr "Couleur du texte d'aide/note"
 
-#: src/Admin/SettingsPage.php:433
+#: src/Admin/SettingsPage.php:512
 msgid "Success message colors"
 msgstr "Couleurs du message de succès"
 
-#: src/Admin/SettingsPage.php:434
+#: src/Admin/SettingsPage.php:513
 msgid "Error message colors"
 msgstr "Couleurs du message d'erreur"
 
-#: src/Admin/SettingsPage.php:435
+#: src/Admin/SettingsPage.php:514
 msgid "Status-notice colors"
 msgstr "Couleurs de l'avis de statut"
 
-#: src/Admin/SettingsPage.php:436
+#: src/Admin/SettingsPage.php:515
 msgid "Vertical spacing rhythm"
 msgstr "Rythme d'espacement vertical"
 
-#: src/Admin/SettingsPage.php:441
+#: src/Admin/SettingsPage.php:520
 msgid "Wrapper around the withdrawal button"
 msgstr "Conteneur autour du bouton de rétractation"
 
-#: src/Admin/SettingsPage.php:442
+#: src/Admin/SettingsPage.php:521
 msgid "Every button/CTA (withdraw, continue, confirm)"
 msgstr "Chaque bouton/CTA (se rétracter, continuer, confirmer)"
 
-#: src/Admin/SettingsPage.php:443
+#: src/Admin/SettingsPage.php:522
 msgid "The Step-1 \"Continue\" button"
 msgstr "Le bouton « Continuer » de l'étape 1"
 
-#: src/Admin/SettingsPage.php:444
+#: src/Admin/SettingsPage.php:523
 msgid "The statutory \"Confirm withdrawal\" button"
 msgstr "Le bouton réglementaire « Confirmer la rétractation »"
 
-#: src/Admin/SettingsPage.php:445
+#: src/Admin/SettingsPage.php:524
 msgid "The \"X days left\" note next to the button"
 msgstr "La note « X jours restants » à côté du bouton"
 
-#: src/Admin/SettingsPage.php:446
+#: src/Admin/SettingsPage.php:525
 msgid "The withdrawal form container"
 msgstr "Le conteneur du formulaire de rétractation"
 
-#: src/Admin/SettingsPage.php:447
+#: src/Admin/SettingsPage.php:526
 msgid "The form heading"
 msgstr "L'en-tête du formulaire"
 
-#: src/Admin/SettingsPage.php:448
+#: src/Admin/SettingsPage.php:527
 msgid "Each field row (label + input)"
 msgstr "Chaque ligne de champ (étiquette + saisie)"
 
-#: src/Admin/SettingsPage.php:449
+#: src/Admin/SettingsPage.php:528
 msgid "The actions row holding a button"
 msgstr "La ligne d'actions contenant un bouton"
 
-#: src/Admin/SettingsPage.php:450
+#: src/Admin/SettingsPage.php:529
 msgid "The Step-2 confirmation block + its intro text"
 msgstr "Le bloc de confirmation de l'étape 2 + son texte d'introduction"
 
-#: src/Admin/SettingsPage.php:451
+#: src/Admin/SettingsPage.php:530
 msgid "The result message (success / error states)"
 msgstr "Le message de résultat (états succès / erreur)"
 
-#: src/Admin/SettingsPage.php:452
+#: src/Admin/SettingsPage.php:531
 msgid "The \"request status\" notice on an order"
 msgstr "L'avis de « statut de la demande » sur une commande"
 
-#: src/Admin/SettingsPage.php:453
+#: src/Admin/SettingsPage.php:532
 msgid "Generic inline notice"
 msgstr "Avis générique en ligne"
 
-#: src/Admin/SettingsPage.php:454
+#: src/Admin/SettingsPage.php:533
 msgid "The Annex I-B model form block"
 msgstr "Le bloc du formulaire type de l'annexe I-B"
 
-#: src/Admin/SettingsPage.php:455
+#: src/Admin/SettingsPage.php:534
 msgid "The pre-contractual info block"
 msgstr "Le bloc des informations précontractuelles"
 
-#: src/Admin/SettingsPage.php:458
+#: src/Admin/SettingsPage.php:537
 msgid "CSS reference — variables & classes"
 msgstr "Référence CSS — variables et classes"
 
-#: src/Admin/SettingsPage.php:460
+#: src/Admin/SettingsPage.php:539
 msgid "CSS variables (quick overrides)"
 msgstr "Variables CSS (remplacements rapides)"
 
-#: src/Admin/SettingsPage.php:461
+#: src/Admin/SettingsPage.php:540
 msgid "Variable"
 msgstr "Variable"
 
-#: src/Admin/SettingsPage.php:461
+#: src/Admin/SettingsPage.php:540
 msgid "Default"
 msgstr "Défaut"
 
-#: src/Admin/SettingsPage.php:461
+#: src/Admin/SettingsPage.php:540
 msgid "Controls"
 msgstr "Contrôles"
 
-#: src/Admin/SettingsPage.php:467
+#: src/Admin/SettingsPage.php:546
 msgid "Classes (full control)"
 msgstr "Classes (contrôle total)"
 
-#: src/Admin/SettingsPage.php:468
+#: src/Admin/SettingsPage.php:547
 msgid "Class"
 msgstr "Classe"
 
-#: src/Admin/SettingsPage.php:468
+#: src/Admin/SettingsPage.php:547
 msgid "Targets"
 msgstr "Cibles"
 
-#: src/Admin/SettingsPage.php:474
+#: src/Admin/SettingsPage.php:553
 msgid "Examples"
 msgstr "Exemples"
 
-#: src/Admin/SettingsPage.php:501
+#: src/Admin/SettingsPage.php:580
 msgid "Exemptions (Art. 59)"
 msgstr "Exemptions (Art. 59)"
 
-#: src/Admin/SettingsPage.php:502
+#: src/Admin/SettingsPage.php:581
 msgid ""
 "The right of withdrawal applies <strong>by default to every product</"
 "strong>, including digital goods and services. <strong>Physical products "
@@ -1484,7 +1584,7 @@ msgstr ""
 "spécifique ci-dessous en saisissant les ID de produit et/ou de catégorie "
 "(séparés par des virgules)."
 
-#: src/Admin/SettingsPage.php:504
+#: src/Admin/SettingsPage.php:583
 msgid ""
 "For the two conditional reasons the plugin <strong>captures the consent "
 "first, then hides the button</strong>: on the <strong>WooCommerce checkout</"
@@ -1510,7 +1610,7 @@ msgstr ""
 "scellé par le consommateur après la livraison et ne sont donc jamais masqués "
 "automatiquement."
 
-#: src/Admin/SettingsPage.php:506
+#: src/Admin/SettingsPage.php:585
 msgid ""
 "The stored consent is <strong>evidence to discharge your burden of proof</"
 "strong> (Art. 6(9) Dir. 2011/83/EU; GDPR accountability Art. 5(2)) — not a "
@@ -1527,11 +1627,11 @@ msgstr ""
 "mail) avant le début de l'accès, faute de quoi l'exemption ne tient pas. "
 "Consultez la note juridique du plugin pour le fondement complet."
 
-#: src/Admin/SettingsPage.php:527
+#: src/Admin/SettingsPage.php:606
 msgid "Conditional — these need the consumer's consent"
 msgstr "Conditionnel — ils nécessitent le consentement du consommateur"
 
-#: src/Admin/SettingsPage.php:528
+#: src/Admin/SettingsPage.php:607
 msgid ""
 "Tag here only digital content with immediate access and services fully "
 "performed. The button is hidden ONLY after the consumer consents at "
@@ -1542,11 +1642,11 @@ msgstr ""
 "consommateur a consenti lors du paiement ; sinon il reste visible (fail-"
 "safe)."
 
-#: src/Admin/SettingsPage.php:532
+#: src/Admin/SettingsPage.php:611
 msgid "Unconditional — exempt by nature (no consent)"
 msgstr "Inconditionnel — exempt par nature (sans consentement)"
 
-#: src/Admin/SettingsPage.php:533
+#: src/Admin/SettingsPage.php:612
 msgid ""
 "These have no right of withdrawal by law (custom-made, perishable, dated "
 "events, …). Tagged products hide the button with no checkbox."
@@ -1555,11 +1655,11 @@ msgstr ""
 "périssables, événements datés, …). Les produits balisés masquent le bouton "
 "sans case à cocher."
 
-#: src/Admin/SettingsPage.php:537
+#: src/Admin/SettingsPage.php:616
 msgid "Seal-based — assess on return (never auto-hidden)"
 msgstr "Basé sur le sceau — évaluer au retour (jamais masqué automatiquement)"
 
-#: src/Admin/SettingsPage.php:538
+#: src/Admin/SettingsPage.php:617
 msgid ""
 "These depend on the consumer unsealing after delivery, which cannot be known "
 "at order time. Tag them, but the button stays; assess on return."
@@ -1568,49 +1668,49 @@ msgstr ""
 "qui est inconnu au moment de la commande. Taguez-les, mais le bouton reste ; "
 "évaluez au retour."
 
-#: src/Admin/SettingsPage.php:559
+#: src/Admin/SettingsPage.php:62
+msgid "WWU Withdrawal Button — Settings"
+msgstr "WWU Withdrawal Button — Paramètres"
+
+#: src/Admin/SettingsPage.php:638
 msgid "%d configured"
 msgid_plural "%d configured"
 msgstr[0] "%d configuré"
 msgstr[1] "%d configurés"
 
-#: src/Admin/SettingsPage.php:600
+#: src/Admin/SettingsPage.php:65
+msgid "Settings saved."
+msgstr "Paramètres enregistrés."
+
+#: src/Admin/SettingsPage.php:679
 msgid "needs consent"
 msgstr "consentement requis"
 
-#: src/Admin/SettingsPage.php:602
+#: src/Admin/SettingsPage.php:681
 msgid "not auto-hidden"
 msgstr "pas masqué automatiquement"
 
-#: src/Admin/SettingsPage.php:61
-msgid "WWU Withdrawal Button — Settings"
-msgstr "WWU Withdrawal Button — Paramètres"
-
-#: src/Admin/SettingsPage.php:614
+#: src/Admin/SettingsPage.php:693
 msgid "Product IDs"
 msgstr "ID produits"
 
-#: src/Admin/SettingsPage.php:614
+#: src/Admin/SettingsPage.php:693
 msgid "e.g. 12, 84"
 msgstr "ex. 12, 84"
 
-#: src/Admin/SettingsPage.php:615
+#: src/Admin/SettingsPage.php:694
 msgid "Category IDs"
 msgstr "ID catégories"
 
-#: src/Admin/SettingsPage.php:615
+#: src/Admin/SettingsPage.php:694
 msgid "e.g. 5"
 msgstr "ex. 5"
 
-#: src/Admin/SettingsPage.php:618
-msgid "Show example"
-msgstr "Afficher l'exemple"
-
-#: src/Admin/SettingsPage.php:622
+#: src/Admin/SettingsPage.php:701
 msgid "How the plugin enforces this:"
 msgstr "Comment le plugin applique cela :"
 
-#: src/Admin/SettingsPage.php:622
+#: src/Admin/SettingsPage.php:701
 msgid ""
 "on the WooCommerce / FluentCart checkout a required acknowledgement tick-box "
 "is added automatically. The button stays visible until the consumer ticks "
@@ -1626,65 +1726,69 @@ msgstr ""
 "confirmation sur support durable (e-mail) au consommateur avant que l'accès "
 "commence."
 
-#: src/Admin/SettingsPage.php:627
+#: src/Admin/SettingsPage.php:706
 msgid "Preview what the consumer sees"
 msgstr "Aperçu de ce que voit le consommateur"
 
-#: src/Admin/SettingsPage.php:629
+#: src/Admin/SettingsPage.php:708
 msgid "At checkout, the buyer must tick:"
 msgstr "Lors du paiement, l'acheteur doit cocher :"
 
-#: src/Admin/SettingsPage.php:632
+#: src/Admin/SettingsPage.php:711
 msgid "And receives this confirmation e-mail:"
 msgstr "Et reçoit cet e-mail de confirmation :"
 
-#: src/Admin/SettingsPage.php:64
-msgid "Settings saved."
-msgstr "Paramètres enregistrés."
+#: src/Admin/SettingsPage.php:72
+msgid "General"
+msgstr "Général"
 
-#: src/Admin/SettingsPage.php:673
+#: src/Admin/SettingsPage.php:74
+msgid "Enable withdrawal function"
+msgstr "Activer la fonction de rétractation"
+
+#: src/Admin/SettingsPage.php:752
 msgid "Exemptions status"
 msgstr "Statut des exemptions"
 
-#: src/Admin/SettingsPage.php:679
+#: src/Admin/SettingsPage.php:758
 msgid "%d reason configured"
 msgid_plural "%d reasons configured"
 msgstr[0] "%d motif configuré"
 msgstr[1] "%d motifs configurés"
 
-#: src/Admin/SettingsPage.php:687
+#: src/Admin/SettingsPage.php:76
+msgid "Show the withdrawal button to eligible consumers."
+msgstr "Afficher le bouton de rétractation aux consommateurs éligibles."
+
+#: src/Admin/SettingsPage.php:766
 msgid "%1$d product IDs, %2$d category IDs"
 msgstr "%1$d ID produits, %2$d ID catégories"
 
-#: src/Admin/SettingsPage.php:694
+#: src/Admin/SettingsPage.php:773
 msgid "IP capture: on"
 msgstr "Capture IP : activée"
 
-#: src/Admin/SettingsPage.php:694
+#: src/Admin/SettingsPage.php:773
 msgid "IP capture: off"
 msgstr "Capture IP : désactivée"
 
-#: src/Admin/SettingsPage.php:700
+#: src/Admin/SettingsPage.php:779
 msgid "Retention: %d years"
 msgstr "Conservation : %d ans"
 
-#: src/Admin/SettingsPage.php:706
+#: src/Admin/SettingsPage.php:785
 msgid "IP purge last ran %s ago"
 msgstr "Dernière purge IP il y a %s"
 
-#: src/Admin/SettingsPage.php:707
+#: src/Admin/SettingsPage.php:786
 msgid "IP purge: not run yet (runs daily)"
 msgstr "Purge IP : pas encore exécutée (quotidienne)"
 
-#: src/Admin/SettingsPage.php:71
-msgid "General"
-msgstr "Général"
-
-#: src/Admin/SettingsPage.php:723
+#: src/Admin/SettingsPage.php:802
 msgid "Event tickets (a specific date)"
 msgstr "Billets d'événements (une date précise)"
 
-#: src/Admin/SettingsPage.php:724
+#: src/Admin/SettingsPage.php:803
 msgid ""
 "A ticket for an event tied to a specific date has NO right of withdrawal "
 "(Art. 59(1)(n)). Tag it under \"Accommodation / transport / leisure on a "
@@ -1696,11 +1800,11 @@ msgstr ""
 "loisirs à une date spécifique” dans le groupe Inconditionnel — le bouton est "
 "masqué, pas de case à cocher."
 
-#: src/Admin/SettingsPage.php:728
+#: src/Admin/SettingsPage.php:807
 msgid "Digital downloads & recordings"
 msgstr "Téléchargements numériques et enregistrements"
 
-#: src/Admin/SettingsPage.php:729
+#: src/Admin/SettingsPage.php:808
 msgid ""
 "Content the buyer downloads or streams immediately is a CONDITIONAL "
 "exemption (Art. 59(1)(o)): tag it under \"Digital content with immediate "
@@ -1717,15 +1821,11 @@ msgstr ""
 "commande initiale conserve le droit ; l'accès numérique est la partie 59(1)"
 "(o).)"
 
-#: src/Admin/SettingsPage.php:73
-msgid "Enable withdrawal function"
-msgstr "Activer la fonction de rétractation"
-
-#: src/Admin/SettingsPage.php:733
+#: src/Admin/SettingsPage.php:812
 msgid "Live sessions (e.g. Zoom)"
 msgstr "Sessions en direct (ex. Zoom)"
 
-#: src/Admin/SettingsPage.php:734
+#: src/Admin/SettingsPage.php:813
 msgid ""
 "A dated live session (e.g. a webinar on a fixed date) → treat like an event "
 "ticket: \"leisure on a specific date\" (Unconditional). A session that "
@@ -1737,11 +1837,11 @@ msgstr ""
 "session qui commence simplement immédiatement, sans date d’événement fixe → "
 "“Service entièrement exécuté” (Conditionnel, nécessite un consentement)."
 
-#: src/Admin/SettingsPage.php:738
+#: src/Admin/SettingsPage.php:817
 msgid "Services performed immediately"
 msgstr "Services exécutés immédiatement"
 
-#: src/Admin/SettingsPage.php:739
+#: src/Admin/SettingsPage.php:818
 msgid ""
 "A service that begins at once and is fully performed → \"Service fully "
 "performed\" (Art. 59(1)(a), Conditional). The buyer consents at checkout; "
@@ -1753,11 +1853,11 @@ msgstr ""
 "moment du paiement ; l’exemption s’applique uniquement une fois le service "
 "entièrement exécuté (partiel → prorata, le droit subsiste)."
 
-#: src/Admin/SettingsPage.php:743
+#: src/Admin/SettingsPage.php:822
 msgid "Physical goods"
 msgstr "Biens physiques"
 
-#: src/Admin/SettingsPage.php:744
+#: src/Admin/SettingsPage.php:823
 msgid ""
 "Nothing to do — physical products always keep the 14-day right and always "
 "show the button. Only tag the specific exceptions (custom-made, perishable, "
@@ -1768,27 +1868,23 @@ msgstr ""
 "spécifiques (sur mesure, périssables, hygiène scellée) sous le motif "
 "correspondant."
 
-#: src/Admin/SettingsPage.php:749
+#: src/Admin/SettingsPage.php:828
 msgid "What do you sell? (quick guide)"
 msgstr "Que vendez-vous ? (guide rapide)"
 
-#: src/Admin/SettingsPage.php:75
-msgid "Show the withdrawal button to eligible consumers."
-msgstr "Afficher le bouton de rétractation aux consommateurs éligibles."
-
-#: src/Admin/SettingsPage.php:756
+#: src/Admin/SettingsPage.php:835
 msgid "→ Go to the matching group below"
 msgstr "→ Aller au groupe correspondant ci-dessous"
 
-#: src/Admin/SettingsPage.php:772
+#: src/Admin/SettingsPage.php:851
 msgid "Advanced (legacy auto-detect + privacy)"
 msgstr "Avancé (détection automatique héritée + confidentialité)"
 
-#: src/Admin/SettingsPage.php:775
+#: src/Admin/SettingsPage.php:854
 msgid "Auto-exclude delivered digital (legacy)"
 msgstr "Exclure automatiquement les numériques livrés (hérité)"
 
-#: src/Admin/SettingsPage.php:775
+#: src/Admin/SettingsPage.php:854
 msgid ""
 "Treat virtual/downloadable items on completed orders as exempt. OFF by "
 "default — the proper path is the \"Digital content with immediate access\" "
@@ -1798,11 +1894,11 @@ msgstr ""
 "comme exempts. Désactivé par défaut — la bonne voie est le motif “Contenu "
 "numérique avec accès immédiat” avec capture du consentement."
 
-#: src/Admin/SettingsPage.php:777
+#: src/Admin/SettingsPage.php:856
 msgid "Store consumer IP with the consent"
 msgstr "Enregistrer l'IP du consommateur avec le consentement"
 
-#: src/Admin/SettingsPage.php:777
+#: src/Admin/SettingsPage.php:856
 msgid ""
 "Record the IP address alongside each captured consent as corroborating "
 "evidence. Stored only on the order (anonymised automatically after the "
@@ -1815,27 +1911,24 @@ msgstr ""
 "Désactivez pour minimiser les données personnelles — le libellé convenu, son "
 "hachage et l'horodatage sont conservés."
 
-#: src/Admin/SettingsPage.php:91
+#: src/Admin/SettingsPage.php:93
 msgid "Debug"
 msgstr "Débogage"
 
-#: src/Admin/SettingsPage.php:94
+#: src/Admin/SettingsPage.php:96
 msgid "Enable debug"
 msgstr "Activer le débogage"
 
-#: src/Admin/SettingsPage.php:96
+#: src/Admin/SettingsPage.php:98
 msgid ""
 "Collect runtime diagnostics and expose the /debug REST endpoints + Inspector."
 msgstr ""
 "Collecter les diagnostics d'exécution et exposer les points de terminaison "
 "REST /debug + l'Inspecteur."
 
-#: src/Admin/SettingsPage.php:99
-msgid "Audience"
-msgstr "Audience"
-
-#: src/Core/Install.php:264 src/Frontend/FluentCartPortal.php:114
+#: src/Core/Install.php:271 src/Frontend/FluentCartPortal.php:114
 #: src/Frontend/FluentCartPortal.php:141 src/Frontend/WooMyAccount.php:92
+#: src/Mail/FluentCartWithdrawalTag.php:76
 msgid "Right of withdrawal"
 msgstr "Droit de rétractation"
 
@@ -2151,6 +2244,18 @@ msgstr ""
 "Droit de rétractation exercé par le consommateur — signalé hors du délai "
 "calculé ; veuillez vérifier la validité."
 
+#: src/Domain/WithdrawalService.php:264
+msgid ""
+"Subscription cancelled automatically following the withdrawal (future "
+"renewals stopped). Refund / any pro-rata: handle manually."
+
+msgstr "Abonnement résilié automatiquement à la suite de la rétractation (renouvellements futurs arrêtés). Remboursement / éventuel prorata : à traiter manuellement."
+#: src/Domain/WithdrawalService.php:265
+msgid ""
+"Automatic subscription cancellation could not be completed — please cancel "
+"the subscription manually and process the refund."
+
+msgstr "La résiliation automatique de l'abonnement n'a pas pu être effectuée — veuillez résilier l'abonnement manuellement et procéder au remboursement."
 #: src/DurableMedium/ConfirmationDispatcher.php:159
 msgid "New withdrawal request — order %s"
 msgstr "Nouvelle demande de rétractation — commande %s"
@@ -2178,7 +2283,7 @@ msgstr ""
 "Votre rétractation a été enregistrée. Nous vous avons envoyé une "
 "confirmation par e-mail."
 
-#: src/Frontend/Assets.php:116 src/Frontend/NoScriptFlow.php:83
+#: src/Frontend/Assets.php:116 src/Frontend/NoScriptFlow.php:84
 #: templates/form/withdrawal-form.php:78
 msgid "Please confirm your withdrawal. This is the final step."
 msgstr "Veuillez confirmer votre rétractation. Il s'agit de la dernière étape."
@@ -2222,11 +2327,11 @@ msgstr ""
 msgid "Open the withdrawal page"
 msgstr "Ouvrir la page de rétractation"
 
-#: src/Frontend/NoScriptFlow.php:129
+#: src/Frontend/NoScriptFlow.php:131
 msgid "Withdrawal registered"
 msgstr "Rétractation enregistrée"
 
-#: src/Frontend/NoScriptFlow.php:130
+#: src/Frontend/NoScriptFlow.php:132
 msgid ""
 "Your withdrawal has been registered. We have emailed you a confirmation on a "
 "durable medium."
@@ -2234,25 +2339,32 @@ msgstr ""
 "Votre rétractation a été enregistrée. Nous vous avons envoyé une "
 "confirmation par e-mail sur un support durable."
 
-#: src/Frontend/NoScriptFlow.php:141
+#: src/Frontend/NoScriptFlow.php:146 src/REST/Routes/WithdrawalRoute.php:121
+#: src/REST/Routes/WithdrawalRoute.php:155
+#: src/REST/Routes/WithdrawalRoute.php:188
+msgid "Too many attempts. Please try again in a few minutes."
+msgstr "Trop de tentatives. Veuillez réessayer dans quelques minutes."
+
+#: src/Frontend/NoScriptFlow.php:158
 msgid "Security check failed. Please reload the form and try again."
 msgstr ""
 "La vérification de sécurité a échoué. Veuillez recharger le formulaire et "
 "réessayer."
 
-#: src/Frontend/NoScriptFlow.php:155 src/REST/Routes/WithdrawalRoute.php:41
+#: src/Frontend/NoScriptFlow.php:172 src/REST/Routes/WithdrawalRoute.php:41
 msgid "Invalid request."
 msgstr "Requête invalide."
 
-#: src/Frontend/NoScriptFlow.php:199
+#: src/Frontend/NoScriptFlow.php:216
 msgid "Back to the site"
 msgstr "Retour au site"
 
-#: src/Frontend/NoScriptFlow.php:70 src/Frontend/NoScriptFlow.php:125
+#: src/Frontend/NoScriptFlow.php:71 src/Frontend/NoScriptFlow.php:127
+#: src/Frontend/NoScriptFlow.php:145
 msgid "Withdrawal"
 msgstr "Rétractation"
 
-#: src/Frontend/NoScriptFlow.php:71 src/REST/Routes/WithdrawalRoute.php:170
+#: src/Frontend/NoScriptFlow.php:72 src/REST/Routes/WithdrawalRoute.php:173
 msgid "Please provide your name and a valid email address."
 msgstr "Veuillez indiquer votre nom et une adresse e-mail valide."
 
@@ -2315,6 +2427,10 @@ msgstr ""
 msgid "Your order %s — confirmation of your right of withdrawal"
 msgstr "Votre commande %s — confirmation de votre droit de rétractation"
 
+#: src/Mail/FluentCartWithdrawalTag.php:79
+msgid "Withdrawal link for this order"
+
+msgstr "Lien de rétractation pour cette commande"
 #: src/Mail/WooAckEmail.php:65
 msgid "Withdrawal acknowledgement"
 msgstr "Accusé de réception de rétractation"
@@ -2339,7 +2455,7 @@ msgstr "Accusé de réception de votre rétractation — commande {order_number}
 msgid "Acknowledgement of receipt of your withdrawal"
 msgstr "Accusé de réception de votre rétractation"
 
-#: src/Platform/FluentCartAdapter.php:349
+#: src/Platform/FluentCartAdapter.php:455
 msgid "Withdrawal evidence recorded"
 msgstr "Preuve de rétractation enregistrée"
 
@@ -2364,7 +2480,11 @@ msgid_plural "Withdrawal requested <span class=\"count\">(%s)</span>"
 msgstr[0] "Rétractation demandée <span class=\"count\">(%s)</span>"
 msgstr[1] "Rétractations demandées <span class=\"count\">(%s)</span>"
 
-#: src/Platform/WooCommerceAdapter.php:130
+#: src/Platform/WooCommerceAdapter.php:161
+msgid "Cancelled following the consumer right-of-withdrawal request."
+
+msgstr "Résilié à la suite de la demande de rétractation du consommateur."
+#: src/Platform/WooCommerceAdapter.php:210
 msgid "Withdrawal requested by the consumer."
 msgstr "Rétractation demandée par le consommateur."
 
@@ -2393,11 +2513,7 @@ msgstr "Introuvable."
 msgid "Receipt not available."
 msgstr "Reçu non disponible."
 
-#: src/REST/Routes/WithdrawalRoute.php:121
-msgid "Too many attempts. Please try again in a few minutes."
-msgstr "Trop de tentatives. Veuillez réessayer dans quelques minutes."
-
-#: src/REST/Routes/WithdrawalRoute.php:194
+#: src/REST/Routes/WithdrawalRoute.php:200
 msgid "Missing confirmation token. Please start again."
 msgstr "Jeton de confirmation manquant. Veuillez recommencer."
 
@@ -2405,11 +2521,15 @@ msgstr "Jeton de confirmation manquant. Veuillez recommencer."
 msgid "Order not found or access could not be verified."
 msgstr "Commande introuvable ou accès non vérifiable."
 
-#: src/Shortcodes/Shortcodes.php:137
+#: src/Shortcodes/Shortcodes.php:110
+msgid "The right of withdrawal is not available for this order."
+
+msgstr "Le droit de rétractation n'est pas disponible pour cette commande."
+#: src/Shortcodes/Shortcodes.php:145
 msgid "No withdrawal request for this order."
 msgstr "Aucune demande de rétractation pour cette commande."
 
-#: src/Shortcodes/Shortcodes.php:142
+#: src/Shortcodes/Shortcodes.php:150
 msgid "Withdrawal request status: %s"
 msgstr "Statut de la demande de rétractation : %s"
 
@@ -2786,3 +2906,4 @@ msgstr ""
 
 #~ msgid "Request: %s"
 #~ msgstr "Demande : %s"
+

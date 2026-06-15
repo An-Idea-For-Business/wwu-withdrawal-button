@@ -1,0 +1,64 @@
+/**
+ * WWU UI Kit — Main CSS entry point
+ *
+ * Single-file bundle imported by plugins via the PHP loader.
+ * Order matters: tokens first (defines CSS vars), then primitives,
+ * then layout, then interactive components.
+ *
+ * Consumer plugins enqueue this as `wwu-ui-kit-core`. If only a subset is
+ * needed, enqueue the individual component files directly.
+ *
+ * @since 0.1.0
+ */
+
+/* Foundation — MUST load first (CSS vars used by everything below). */
+@import url('tokens.css');
+
+/* Primitives. */
+@import url('badge.css');
+@import url('utilities.css');
+@import url('filter-pill.css');
+@import url('skeleton.css');
+/* 0.9.0 — VB-extracted primitives */
+@import url('status-chip.css');
+@import url('breadcrumb.css');
+@import url('code-block.css');
+@import url('segmented.css');
+
+/* Layout / structural. */
+@import url('tabs.css');
+@import url('accordion.css');
+@import url('save-bar.css');
+@import url('stepper.css');
+
+/* Data display. */
+@import url('table.css');
+@import url('pagination.css');
+@import url('rule-card.css');
+/* 0.9.0 — VB-extracted data display */
+@import url('tree-row.css');
+@import url('history-row.css');
+
+/* Form helpers. */
+@import url('form-field.css');
+@import url('switch.css');
+@import url('token-display.css');
+@import url('repeater.css');
+
+/* Input / upload. */
+@import url('dropzone.css');
+
+/* Behavior helpers (CSS half — JS-only modules are not @imported here). */
+/* 0.8.4 — save-state has both CSS and JS. */
+@import url('save-state.css');
+
+/* Overlays / floating. */
+@import url('toast.css');
+@import url('fab.css');
+@import url('drawer.css');
+@import url('modal.css');
+/* 0.9.0 — VB-extracted overflow (built on popover JS). */
+@import url('overflow.css');
+
+/* Frontend-only (loaded via kit but scoped to consumer's debug-bar markup). */
+@import url('debug-bar.css');

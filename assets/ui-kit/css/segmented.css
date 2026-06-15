@@ -1,0 +1,119 @@
+/**
+ * WWU UI Kit — Segmented control
+ *
+ * Pill-grouped buttons for mutually-exclusive toggles (2-5 options).
+ * Used for: view modes (Visual/Split/Code), tracking modes, period
+ * selectors, preset choosers, etc.
+ *
+ * Markup:
+ *   <div class="wwu-ui-segmented" role="group" aria-label="View mode">
+ *     <button type="button" class="wwu-ui-segmented__btn"
+ *             aria-pressed="true"  data-value="visual">Visual</button>
+ *     <button type="button" class="wwu-ui-segmented__btn"
+ *             aria-pressed="false" data-value="split">Split</button>
+ *     <button type="button" class="wwu-ui-segmented__btn"
+ *             aria-pressed="false" data-value="code">Code</button>
+ *   </div>
+ *
+ * Pair with `wwuUIKit.segmented.bind()` (js/segmented.js) for click +
+ * keyboard nav + onChange callback.
+ *
+ * Variants:
+ *   .wwu-ui-segmented--compact  — smaller padding + 12px font
+ *   .wwu-ui-segmented--block    — full-width (flex: 1 on each button)
+ *   .wwu-ui-segmented--icon     — square 32x32 buttons (icons only)
+ *
+ * @since 0.9.0
+ */
+
+/* ── Container ──────────────────────────────────────────────── */
+.wwu-ui-segmented {
+    display: inline-flex;
+    align-items: stretch;
+    gap: 0;
+    background: var(--wwu-ui-bg-subtle, #f0f0f1);
+    border: 1px solid var(--wwu-ui-border, #c3c4c7);
+    border-radius: var(--wwu-ui-radius-md, 6px);
+    padding: 2px;
+    line-height: 1;
+}
+
+/* ── Button ─────────────────────────────────────────────────── */
+.wwu-ui-segmented__btn {
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    border: 0;
+    color: var(--wwu-ui-text-muted, #50575e);
+    cursor: pointer;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.2;
+    border-radius: calc(var(--wwu-ui-radius-md, 6px) - 2px);
+    transition: background-color 0.12s ease, color 0.12s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.wwu-ui-segmented__btn:hover:not([aria-pressed="true"]):not(:disabled) {
+    background: rgba(0, 0, 0, 0.04);
+    color: var(--wwu-ui-text, #1d2327);
+}
+
+.wwu-ui-segmented__btn:focus-visible {
+    outline: 2px solid var(--wwu-ui-primary, #2271b1);
+    outline-offset: -2px;
+}
+
+.wwu-ui-segmented__btn[aria-pressed="true"] {
+    background: var(--wwu-ui-bg, #fff);
+    color: var(--wwu-ui-text, #1d2327);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
+    font-weight: 600;
+}
+
+.wwu-ui-segmented__btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ── Icon slot inside button ────────────────────────────────── */
+.wwu-ui-segmented__btn .dashicons,
+.wwu-ui-segmented__btn svg {
+    width: 16px;
+    height: 16px;
+    flex: 0 0 auto;
+}
+
+/* ── Variant: --compact ────────────────────────────────────── */
+.wwu-ui-segmented--compact .wwu-ui-segmented__btn {
+    padding: 4px 10px;
+    font-size: 12px;
+}
+
+/* ── Variant: --block ──────────────────────────────────────── */
+.wwu-ui-segmented--block {
+    display: flex;
+    width: 100%;
+}
+
+.wwu-ui-segmented--block .wwu-ui-segmented__btn {
+    flex: 1 1 auto;
+}
+
+/* ── Variant: --icon (square icon-only buttons) ────────────── */
+.wwu-ui-segmented--icon .wwu-ui-segmented__btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+}
+
+/* ── Trap #19 paired rule ───────────────────────────────────── */
+.wwu-ui-segmented[hidden] {
+    display: none !important;
+}

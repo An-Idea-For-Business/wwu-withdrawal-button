@@ -1,0 +1,190 @@
+/**
+ * WWU UI Kit — Tree row
+ *
+ * Hierarchical row with depth-based indent + selected state. Designed
+ * for sidebar nav / DOM-like trees / plugin dependency graphs / KPI
+ * hierarchies / category trees / page trees.
+ *
+ * NO data binding, NO expand/collapse logic — pure visual primitive.
+ * Consumer wires the keyboard nav (or uses `wwuUIKit.rovingTabindex`)
+ * and the toggle state for expandable nodes.
+ *
+ * Markup:
+ *   <button class="wwu-ui-tree-row"
+ *           type="button"
+ *           data-depth="0">
+ *     <span class="wwu-ui-tree-row__caret" data-state="expanded">▾</span>
+ *     <span class="wwu-ui-tree-row__icon"><span class="dashicons dashicons-page"></span></span>
+ *     <span class="wwu-ui-tree-row__label">Pages</span>
+ *     <span class="wwu-ui-tree-row__meta">12</span>
+ *   </button>
+ *
+ *   <button class="wwu-ui-tree-row"
+ *           type="button"
+ *           data-depth="1"
+ *           aria-current="page">
+ *     <span class="wwu-ui-tree-row__label">Landing page</span>
+ *   </button>
+ *
+ * For non-button containers (li/a), the same classes apply — the row is
+ * styled with `display: flex` and works on any block-ish element.
+ *
+ * @since 0.9.0
+ */
+
+/* ── Base row ───────────────────────────────────────────────── */
+.wwu-ui-tree-row {
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    border: 0;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--wwu-ui-text, #1d2327);
+    text-decoration: none;
+    font-family: inherit;
+    border-radius: 4px;
+    transition: background-color 0.1s ease, color 0.1s ease;
+    /* Depth-based indent — 16px per level. */
+    padding-left: calc(12px + var(--wwu-ui-tree-depth, 0) * 16px);
+}
+
+.wwu-ui-tree-row[data-depth="1"] { --wwu-ui-tree-depth: 1; }
+.wwu-ui-tree-row[data-depth="2"] { --wwu-ui-tree-depth: 2; }
+.wwu-ui-tree-row[data-depth="3"] { --wwu-ui-tree-depth: 3; }
+.wwu-ui-tree-row[data-depth="4"] { --wwu-ui-tree-depth: 4; }
+.wwu-ui-tree-row[data-depth="5"] { --wwu-ui-tree-depth: 5; }
+.wwu-ui-tree-row[data-depth="6"] { --wwu-ui-tree-depth: 6; }
+.wwu-ui-tree-row[data-depth="7"] { --wwu-ui-tree-depth: 7; }
+.wwu-ui-tree-row[data-depth="8"] { --wwu-ui-tree-depth: 8; }
+
+/* Hover */
+.wwu-ui-tree-row:hover {
+    background: var(--wwu-ui-bg-subtle, #f0f0f1);
+}
+
+/* Focus */
+.wwu-ui-tree-row:focus-visible {
+    outline: 2px solid var(--wwu-ui-primary, #2271b1);
+    outline-offset: -2px;
+}
+
+/* Selected (aria-current="page" | "true" | "step" | ...) */
+.wwu-ui-tree-row[aria-current],
+.wwu-ui-tree-row.is-selected {
+    background: rgba(34, 113, 177, 0.10);
+    color: var(--wwu-ui-primary, #2271b1);
+    font-weight: 500;
+}
+
+.wwu-ui-tree-row[aria-current]::before,
+.wwu-ui-tree-row.is-selected::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 4px;
+    bottom: 4px;
+    width: 3px;
+    background: var(--wwu-ui-primary, #2271b1);
+    border-radius: 0 3px 3px 0;
+}
+
+.wwu-ui-tree-row {
+    position: relative;
+}
+
+/* Disabled */
+.wwu-ui-tree-row:disabled,
+.wwu-ui-tree-row[aria-disabled="true"] {
+    color: var(--wwu-ui-text-muted, #9ca3af);
+    cursor: not-allowed;
+    background: transparent;
+}
+
+/* ── Caret (expand/collapse indicator) ─────────────────────── */
+.wwu-ui-tree-row__caret {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    flex: 0 0 auto;
+    color: var(--wwu-ui-text-muted, #6b7280);
+    font-size: 12px;
+    line-height: 1;
+    transition: transform 0.12s ease;
+}
+
+.wwu-ui-tree-row__caret[data-state="collapsed"] {
+    transform: rotate(-90deg);
+}
+
+.wwu-ui-tree-row__caret[data-state="leaf"] {
+    visibility: hidden; /* preserves alignment for sibling rows */
+}
+
+/* ── Icon slot ─────────────────────────────────────────────── */
+.wwu-ui-tree-row__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    flex: 0 0 auto;
+    color: var(--wwu-ui-text-muted, #6b7280);
+}
+
+.wwu-ui-tree-row__icon .dashicons,
+.wwu-ui-tree-row__icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+.wwu-ui-tree-row[aria-current] .wwu-ui-tree-row__icon,
+.wwu-ui-tree-row.is-selected .wwu-ui-tree-row__icon {
+    color: var(--wwu-ui-primary, #2271b1);
+}
+
+/* ── Label (grows to fill remaining space) ─────────────────── */
+.wwu-ui-tree-row__label {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ── Meta (right-aligned chip: count, badge, time) ─────────── */
+.wwu-ui-tree-row__meta {
+    flex: 0 0 auto;
+    font-size: 11px;
+    color: var(--wwu-ui-text-muted, #6b7280);
+    background: var(--wwu-ui-bg-subtle, #f0f0f1);
+    padding: 1px 6px;
+    border-radius: 999px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Cascadia Mono", monospace;
+}
+
+.wwu-ui-tree-row[aria-current] .wwu-ui-tree-row__meta,
+.wwu-ui-tree-row.is-selected .wwu-ui-tree-row__meta {
+    background: var(--wwu-ui-primary, #2271b1);
+    color: #fff;
+}
+
+/* ── Variant: --compact (less vertical padding) ────────────── */
+.wwu-ui-tree-row--compact {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-size: 12px;
+}
+
+/* ── Trap #19 paired rule ───────────────────────────────────── */
+.wwu-ui-tree-row[hidden] {
+    display: none !important;
+}

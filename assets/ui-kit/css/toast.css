@@ -1,0 +1,55 @@
+/**
+ * WWU UI Kit — Toast notification
+ *
+ * Fixed top-right notification with auto-dismiss.
+ * The JS helper `wwuUIKit.toast()` creates `#wwu-ui-toast` on-demand so the
+ * plugin markup doesn't need to include it explicitly.
+ *
+ * Extracted from AM Lite admin.css:402-418.
+ *
+ * @since 0.1.0
+ */
+
+.wwu-ui-toast {
+    position: fixed;
+    top: 40px;
+    right: 20px;
+    z-index: var(--wwu-ui-z-toast);
+    padding: var(--wwu-ui-space-3) var(--wwu-ui-space-5);
+    border-radius: var(--wwu-ui-radius-md);
+    font-size: var(--wwu-ui-font-md);
+    font-weight: 500;
+    box-shadow: var(--wwu-ui-shadow-md);
+    transition: opacity var(--wwu-ui-transition-slow);
+    /* display: none until .is-visible is added — JS controls visibility. */
+    display: none;
+    opacity: 0;
+    /* Max width prevents toast spanning the screen on long messages. */
+    max-width: 420px;
+    word-wrap: break-word;
+}
+
+.wwu-ui-toast.is-visible {
+    display: block;
+    opacity: 1;
+}
+
+.wwu-ui-toast.success {
+    background: var(--wwu-ui-success);
+    color: #fff;
+}
+
+.wwu-ui-toast.error {
+    background: var(--wwu-ui-danger);
+    color: #fff;
+}
+
+.wwu-ui-toast.info {
+    background: var(--wwu-ui-primary);
+    color: #fff;
+}
+
+.wwu-ui-toast.warning {
+    background: var(--wwu-ui-warning);
+    color: #1d2327;
+}

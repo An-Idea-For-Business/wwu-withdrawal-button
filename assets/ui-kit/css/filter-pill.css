@@ -1,0 +1,88 @@
+/**
+ * WWU UI Kit — Filter Pills
+ *
+ * Click-to-filter toggles typically placed in accordion headers or
+ * toolbar sections. Session-only state (no URL persistence — stored
+ * via `.is-active` class). Semantic color variants via data-filter attr.
+ *
+ * Extracted from AM Lite admin.css:297-354 (Lite 1.3.22+).
+ * Trap #42 applies: if placed inside <summary>, click handling requires
+ * capture-phase preventDefault (see `wwuUIKit.accordion.summaryClickSafe`).
+ *
+ * @since 0.3.0
+ */
+
+.wwu-ui-filter-pill {
+    display: inline-block;
+    padding: 2px 9px;
+    margin: 0 2px;
+    border-radius: var(--wwu-ui-radius-pill);
+    font-size: var(--wwu-ui-font-xs);
+    font-weight: 600;
+    border: 1px solid #dcdcde;
+    background: var(--wwu-ui-bg-subtle);
+    color: var(--wwu-ui-text-muted);
+    cursor: pointer;
+    transition: background var(--wwu-ui-transition-fast),
+                color var(--wwu-ui-transition-fast),
+                border-color var(--wwu-ui-transition-fast);
+    line-height: 1.5;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.wwu-ui-filter-pill:hover {
+    background: #e8e9ea;
+    border-color: var(--wwu-ui-border-strong);
+}
+
+.wwu-ui-filter-pill:focus-visible {
+    outline: 2px solid var(--wwu-ui-primary);
+    outline-offset: 1px;
+}
+
+.wwu-ui-filter-pill.is-active {
+    background: var(--wwu-ui-primary);
+    color: #fff;
+    border-color: #135e96;
+}
+
+.wwu-ui-filter-pill.is-active:hover {
+    background: var(--wwu-ui-primary-hover);
+}
+
+/**
+ * Semantic active colours — plugin consumer can opt into these by
+ * setting matching `data-filter="..."` values. Defaults below mirror
+ * AM Lite/Pro asset type semantics but any consumer can override via
+ * their own CSS next to this file.
+ */
+.wwu-ui-filter-pill[data-filter="type:js"].is-active   { background: #e89a1c; border-color: #b8720b; color: #fff; }
+.wwu-ui-filter-pill[data-filter="type:css"].is-active  { background: #0c5460; border-color: #0a4149; color: #fff; }
+.wwu-ui-filter-pill[data-filter="pro"].is-active       { background: #b8720b; border-color: #8a5508; color: #fff; }
+.wwu-ui-filter-pill[data-filter="off"].is-active       { background: var(--wwu-ui-danger); border-color: var(--wwu-ui-danger-hover); color: #fff; }
+.wwu-ui-filter-pill[data-filter="opt"].is-active       { background: #667eea; border-color: #4a60c0; color: #fff; }
+.wwu-ui-filter-pill[data-filter="active"].is-active    { background: var(--wwu-ui-success); border-color: #006b22; color: #fff; }
+
+/**
+ * Neutral count badge — when a filter pill is NOT clickable (count=0
+ * or pure informational), render as static transparent badge.
+ */
+.wwu-ui-filter-pill--count {
+    cursor: default;
+    background: transparent;
+    border-color: transparent;
+    color: var(--wwu-ui-text-subtle);
+    font-weight: 500;
+}
+
+.wwu-ui-filter-pill--count:hover {
+    background: transparent;
+    border-color: transparent;
+}
+
+/* Row-hidden state. `!important` overrides inline display values set
+ * by other scripts — deliberate, not an anti-pattern. */
+.wwu-ui-filter-pill--hidden-row {
+    display: none !important;
+}

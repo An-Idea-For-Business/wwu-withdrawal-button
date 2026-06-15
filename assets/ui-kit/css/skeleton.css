@@ -1,0 +1,83 @@
+/**
+ * WWU UI Kit — Skeleton loaders
+ *
+ * Shimmer-animated placeholder blocks for use while async content loads.
+ * Shape primitives — line, heading, rect, circle. Compose to match your
+ * final layout so the transition feels seamless.
+ *
+ * All elements are pure CSS — no JS. Remove from DOM (or swap with
+ * real content) when loaded.
+ *
+ * Usage:
+ *   <div class="wwu-ui-skeleton wwu-ui-skeleton-heading"></div>
+ *   <div class="wwu-ui-skeleton wwu-ui-skeleton-text"></div>
+ *   <div class="wwu-ui-skeleton wwu-ui-skeleton-text" style="width: 70%;"></div>
+ *
+ * @since 0.6.0
+ */
+
+.wwu-ui-skeleton {
+    display: block;
+    background: linear-gradient(
+        90deg,
+        var(--wwu-ui-bg-subtle) 0%,
+        var(--wwu-ui-border-soft) 50%,
+        var(--wwu-ui-bg-subtle) 100%
+    );
+    background-size: 200% 100%;
+    border-radius: var(--wwu-ui-radius-md);
+    animation: wwu-ui-skeleton-shimmer 1.5s ease-in-out infinite;
+    pointer-events: none;
+    user-select: none;
+}
+
+@keyframes wwu-ui-skeleton-shimmer {
+    0%   { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+}
+
+/* Shape variants. */
+.wwu-ui-skeleton-text {
+    height: 12px;
+    margin-bottom: 8px;
+    border-radius: var(--wwu-ui-radius-sm);
+}
+
+.wwu-ui-skeleton-text:last-child {
+    margin-bottom: 0;
+}
+
+.wwu-ui-skeleton-heading {
+    height: 24px;
+    width: 60%;
+    margin-bottom: 12px;
+    border-radius: var(--wwu-ui-radius-sm);
+}
+
+.wwu-ui-skeleton-rect {
+    height: 100px;
+    width: 100%;
+    border-radius: var(--wwu-ui-radius-md);
+}
+
+.wwu-ui-skeleton-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.wwu-ui-skeleton-button {
+    height: 32px;
+    width: 100px;
+    border-radius: var(--wwu-ui-radius-md);
+}
+
+/* Respect prefers-reduced-motion — disable shimmer animation for users
+ * who explicitly opted out of motion. The placeholder still appears
+ * (static background), just no moving gradient. */
+@media (prefers-reduced-motion: reduce) {
+    .wwu-ui-skeleton {
+        animation: none;
+        background: var(--wwu-ui-bg-subtle);
+    }
+}
