@@ -5,6 +5,25 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### FluentCart e-mail merge-tag `{{wwu.recesso_url}}` (1.0.0-alpha.37, 2026-06-15)
+The FluentCart team confirmed the value-resolver hook contract (2026-06-15) — see
+[FluentCart hooks analysis](../analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md) §"Third verification round" —
+so the long-deferred e-mail merge-tag is now implementable safely.
+- **`Mail\FluentCartWithdrawalTag`** (new) registers `{{wwu.recesso_url}}` in the FluentCart e-mail-editor
+  picker (`fluent_cart/editor_shortcodes`) and resolves it at send time (`fluent_cart/smartcode_fallback`).
+  Implements the verified `$data` contract: shape-tolerant callback (2-arg `($code,$data)` **or** 4-arg
+  `($value,$code,$data,$conditions)`, never clobbering a non-matching value) **and the team's required
+  `$data['order']` presence check** — `$data` can be EMPTY in footers / generic parsing, so the tag renders
+  `''` there. Same fail-safe gates as every surface (enabled + applicability `show` + a configured public
+  form page); the URL carries the order's own key (`order_hash`/`uuid`) for guest auth, like `OrderEmailLink`.
+  Wired in `Plugin.php` (FluentCart-active block). **Needs a live FluentCart test** (the resolver shape
+  can't be exercised without FluentCart); fail-safe until then.
+- README "known issues" note flipped from "deferred" to "implemented (needs live test)".
+- **⚠ Strategic note:** the FluentCart team also said they are shipping a **native EU withdrawal feature
+  soon**, which may overlap our FluentCart-specific surfaces. Recorded in the analysis doc; positioning to
+  be decided once its scope/timeline are known (questions tracked in `_internal/`).
+- Lint: PHP 0 errors (1 new file + Plugin.php). No consumer-facing behaviour change.
+
 ### Security hardening — full-plugin audit fixes (1.0.0-alpha.36, 2026-06-15)
 A comprehensive whole-plugin security audit (10 dimensions, multi-agent + adversarial verification —
 [report](../audits/wwu-wb-full-security-2026-06-15-AUDIT.md)) returned **0 critical / 0 high**: SQLi, XSS,

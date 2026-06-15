@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0-alpha.36
+Stable tag: 1.0.0-alpha.37
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -71,6 +71,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 
 == Changelog ==
 
+= 1.0.0-alpha.37 =
+* FluentCart e-mail merge-tag `{{wwu.recesso_url}}` — you can now drop the per-order withdrawal link into FluentCart's own transactional e-mails (the FluentCart team confirmed the value-resolver hook + its data context on 2026-06-15). It's registered in the FluentCart e-mail-editor picker and resolves safely (renders empty when there's no order in context). Needs a live FluentCart test. Note: FluentCart has told us they are shipping a native EU withdrawal feature soon, which may overlap this.
+
 = 1.0.0-alpha.36 =
 * Security hardening from a full-plugin security audit (0 critical, 0 high). Fixes: an SSRF guard for the merchant-configured RFC 3161 timestamp endpoint (blocks internal / cloud-metadata / IPv6-loopback / CGNAT targets); per-IP rate limiting on the withdrawal statement/confirm endpoints (REST + no-JS); length caps on the name/reason fields; tighter debug secret-masking; and a cron cleanup on uninstall. No change to the consumer-facing flow. Full report in docs/audits/.
 
@@ -114,6 +117,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.0.0-alpha.37 =
+FluentCart stores can now use the `{{wwu.recesso_url}}` merge-tag in FluentCart's own e-mails. No change for WooCommerce/EDD. FluentCart users: add the tag to a template and test on staging (FluentCart's own native withdrawal feature is also coming soon).
 
 = 1.0.0-alpha.36 =
 Security hardening from a full audit (0 critical/high): SSRF guard on the RFC 3161 endpoint, rate limits on the withdrawal endpoints, input length caps. Recommended for all installs; no behaviour change for consumers.

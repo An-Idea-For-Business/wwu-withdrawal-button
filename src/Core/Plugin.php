@@ -151,10 +151,12 @@ final class Plugin {
 			( new \WWU\WithdrawalButton\Frontend\WooBlockCheckoutConsent() )->register();
 		}
 
-		// FluentCart portal injection + checkout consent capture when FluentCart is active.
+		// FluentCart portal injection + checkout consent capture + the {{wwu.recesso_url}}
+		// e-mail merge tag when FluentCart is active.
 		if ( null !== $services->platforms->get( 'fluentcart' ) ) {
 			( new \WWU\WithdrawalButton\Frontend\FluentCartPortal() )->register();
 			( new \WWU\WithdrawalButton\Frontend\FluentCartCheckoutConsent() )->register();
+			( new \WWU\WithdrawalButton\Mail\FluentCartWithdrawalTag() )->register();
 		}
 
 		// EDD customer-facing surfaces (receipt + purchase-history button, e-mail link)

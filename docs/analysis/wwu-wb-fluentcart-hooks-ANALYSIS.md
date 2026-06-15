@@ -189,3 +189,37 @@ FluentCart consent capture is now **(a)** on the block-safe render hook, **(b)**
 and the category taxonomy all **confirmed by the team** rather than inferred. The only remaining
 FluentCart-specific live check is the end-to-end "does the ticked box reach the order + send the durable
 medium" pass (see `docs/testing/wwu-wb-fluentcart-consent-CHECKLIST.md`); the fail-safe holds until then.
+
+## Third verification round — `smartcode_fallback` `$data` contract + strategic heads-up (2026-06-15)
+
+A further FluentCart-team reply (Sujoy) resolved the last open item — the e-mail merge-tag — and added a
+strategic note.
+
+### `fluent_cart/smartcode_fallback` `$data` is dynamic (verified contract)
+- `$data` is the payload of the **current rendering context**, so it varies by where the tag resolves.
+- **Order e-mails:** `$data` carries `order`, `customer`, and the current transaction.
+- **Subscription e-mails:** `$data` carries `subscription`, `order`, `customer`, `transactions`.
+- **CRITICAL caveat:** the *same* fallback hook also runs elsewhere (e-mail footers, generic template
+  parsing) where `$data` can be an **EMPTY array**. So a per-order tag like `{{wwu.recesso_url}}` **must
+  check `$data['order']` exists** before building a URL and bail to `''` otherwise.
+- The callback shape is still the earlier-noted 2-vs-4-arg ambiguity (`($code, $data)` usually, sometimes
+  `($value, $code, $data, $conditions)`) → a defensive callback must tolerate both without clobbering a
+  value that isn't its own.
+
+### Shipped: `{{wwu.recesso_url}}` merge tag (alpha.37)
+`src/Mail/FluentCartWithdrawalTag.php` registers the tag in the FluentCart e-mail-editor picker
+(`fluent_cart/editor_shortcodes`) and resolves it via `fluent_cart/smartcode_fallback`, implementing the
+verified contract: shape-tolerant callback, `$data['order']` presence check, and the same fail-safe gates
+as every other surface (withdrawal enabled + applicability `show` + a configured public form page).
+The URL carries the order's own key (`order_hash`/`uuid`) for guest auth, mirroring `OrderEmailLink`.
+**Still needs a live FluentCart test** — the resolver shape cannot be exercised without a FluentCart
+install; until then it is fail-safe (renders `''`).
+
+### ⚠ Strategic: FluentCart is building NATIVE EU withdrawal
+The team stated they "have built a native EU withdrawal functionality, which will be available soon."
+This may **overlap or compete** with our FluentCart-specific surfaces (portal button, this merge tag).
+Implications: do not over-invest in FluentCart-specific depth before its scope/timeline are known;
+consider a **detect-and-coexist / defer-to-native** posture later. Our WooCommerce + EDD value is
+unaffected, and our evidence depth (hash-chained log + durable-medium PDF/verify + OpenTimestamps) may
+exceed the native feature. Open questions to ask FluentCart are tracked in
+`_internal/marketing/`.
