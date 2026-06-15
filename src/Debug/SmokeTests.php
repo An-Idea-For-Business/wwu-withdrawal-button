@@ -48,6 +48,7 @@ final class SmokeTests {
 		'fluentcart'     => 'suite_fluentcart',
 		'exemptions'     => 'suite_exemptions',
 		'consent'        => 'suite_consent',
+		'subscriptions'  => 'suite_subscriptions',
 	);
 
 	/**
@@ -671,14 +672,16 @@ final class SmokeTests {
 	/**
 	 * Build a synthetic normalized order for tests.
 	 *
-	 * @param string                  $country Country code.
-	 * @param string                  $status  Status.
-	 * @param bool                    $vat     Whether a VAT number is present.
-	 * @param array                   $items   Line items.
-	 * @param \DateTimeImmutable|null $created Created date.
+	 * @param string                  $country          Country code.
+	 * @param string                  $status           Status.
+	 * @param bool                    $vat              Whether a VAT number is present.
+	 * @param array                   $items            Line items.
+	 * @param \DateTimeImmutable|null $created          Created date.
+	 * @param bool                    $is_renewal       Whether this is a subscription renewal order.
+	 * @param string                  $subscription_ref Subscription id tied to the order, or ''.
 	 * @return \WWU\WithdrawalButton\Platform\NormalizedOrder
 	 */
-	private function fake_order( string $country, string $status, bool $vat, array $items, ?\DateTimeImmutable $created = null ): \WWU\WithdrawalButton\Platform\NormalizedOrder {
+	private function fake_order( string $country, string $status, bool $vat, array $items, ?\DateTimeImmutable $created = null, bool $is_renewal = false, string $subscription_ref = '' ): \WWU\WithdrawalButton\Platform\NormalizedOrder {
 		$created = $created ?? new \DateTimeImmutable( '-1 day' );
 		return new \WWU\WithdrawalButton\Platform\NormalizedOrder(
 			'woocommerce',
@@ -693,8 +696,65 @@ final class SmokeTests {
 			$created,
 			$status === 'completed' ? $created : null,
 			$items,
-			$vat
+			$vat,
+			$is_renewal,
+			$subscription_ref
 		);
+	}
+
+	/**
+	 * Suite: subscriptions (renewal-suppression gate + flag defaults + toggle).
+	 *
+	 * Pure resolver-level checks (no subscription plugin needed): a renewal order is
+	 * suppressed by default, the initial order keeps the button, and the opt-in
+	 * `treat_renewals_as_withdrawable` toggle flips the renewal case.
+	 *
+	 * @return array
+	 */
+	private function suite_subscriptions(): array {
+		$tests    = array();
+		$resolver = new \WWU\WithdrawalButton\Domain\ApplicabilityResolver();
+		$item     = array( $this->fake_item( false ) );
+
+		// NormalizedOrder back-compat: the new flags default to false/'' so every
+		// pre-subscription constructor call is unaffected.
+		$plain   = $this->fake_order( 'IT', 'completed', false, $item );
+		$tests[] = $this->assert( 'subscriptions.flags_default', false === $plain->is_renewal && '' === $plain->subscription_ref, 'NormalizedOrder defaults: is_renewal=false, subscription_ref="".' );
+
+		// Save + clear the toggle so the default (suppress on renewal) is exercised.
+		$settings = (array) get_option( 'wwu_wb_settings', array() );
+		$saved    = $settings;
+		$settings['treat_renewals_as_withdrawable'] = false;
+		update_option( 'wwu_wb_settings', $settings );
+		\WWU\WithdrawalButton\Core\Settings::flush();
+
+		// Initial order (not a renewal, but linked to a subscription) → shown + mandatory.
+		$initial = $this->fake_order( 'IT', 'completed', false, $item, null, false, 'SUB-1' );
+		$d_init  = $resolver->decide( $initial );
+		$tests[] = $this->assert( 'subscriptions.initial_shown', $d_init->show && $d_init->mandatory, 'Initial subscription order is shown + mandatory (subscription_ref does not suppress).' );
+
+		// Renewal order → suppressed with the renewal_order reason.
+		$renewal = $this->fake_order( 'IT', 'completed', false, $item, null, true, 'SUB-1' );
+		$d_renew = $resolver->decide( $renewal );
+		$tests[] = $this->assert( 'subscriptions.renewal_suppressed', ! $d_renew->show && 'renewal_order' === $d_renew->reason, 'Renewal order is suppressed (reason: ' . $d_renew->reason . ').' );
+
+		// Opt-in: treating renewals as withdrawable flips the renewal case to shown.
+		$settings['treat_renewals_as_withdrawable'] = true;
+		update_option( 'wwu_wb_settings', $settings );
+		\WWU\WithdrawalButton\Core\Settings::flush();
+		$d_renew_on = $resolver->decide( $this->fake_order( 'IT', 'completed', false, $item, null, true, 'SUB-1' ) );
+		$tests[]    = $this->assert( 'subscriptions.renewal_optin_shown', $d_renew_on->show, 'With treat_renewals_as_withdrawable on, the renewal order is shown again.' );
+
+		// A non-EU renewal is out of scope before the renewal gate is even reached
+		// (status → renewal → B2B → Art.59 → scope ordering); reason is country-based.
+		$d_ch_renew = $resolver->decide( $this->fake_order( 'CH', 'completed', false, $item, null, true, 'SUB-1' ) );
+		$tests[]    = $this->assert( 'subscriptions.noneu_renewal_not_mandatory', ! $d_ch_renew->mandatory, 'A non-EU renewal is never mandatory (reason: ' . $d_ch_renew->reason . ').' );
+
+		// Restore.
+		update_option( 'wwu_wb_settings', $saved );
+		\WWU\WithdrawalButton\Core\Settings::flush();
+
+		return $tests;
 	}
 
 	/**

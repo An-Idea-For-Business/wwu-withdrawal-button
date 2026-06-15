@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * FluentCart adapter.
  */
-final class FluentCartAdapter implements OrderDataSource {
+final class FluentCartAdapter implements OrderDataSource, SubscriptionAware {
 
 	/**
 	 * Per-request order cache.
@@ -271,8 +271,111 @@ final class FluentCartAdapter implements OrderDataSource {
 			$this->to_immutable( $this->attr( $order, 'paid_at' ) ?? $this->attr( $order, 'created_at' ) ),
 			$this->to_immutable( $this->attr( $order, 'completed_at' ) ),
 			$this->map_items( $order ),
-			$this->has_vat_number( $order )
+			$this->has_vat_number( $order ),
+			$this->is_renewal_order( $order_ref ),
+			$this->subscription_ref( $order_ref )
 		);
+	}
+
+	/**
+	 * Load the FluentCart subscription whose parent_order_id is this order (i.e. the
+	 * subscription created BY this order — present only on the initial order). Guarded.
+	 *
+	 * @param string $order_ref Order id.
+	 * @return object|null
+	 */
+	private function subscription_for_parent_order( string $order_ref ) {
+		$model = '\\FluentCart\\App\\Models\\Subscription';
+		if ( ! class_exists( $model ) ) {
+			return null;
+		}
+		try {
+			// where()/first() are Eloquent magic statics — call them directly (do not
+			// guard with method_exists; see the load() note for the same reason).
+			$sub = $model::where( 'parent_order_id', (int) $order_ref )->first();
+		} catch ( \Throwable $e ) {
+			return null;
+		}
+		return is_object( $sub ) ? $sub : null;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * Fails open (false): when the subscription state cannot be determined the order
+	 * is treated as a normal order so a legitimate withdrawal button is never hidden.
+	 * The only HIGH-confidence renewal signal we act on is an explicit order `type`;
+	 * the exact FluentCart renewal marker is pending confirmation from their team
+	 * (see _internal FluentCart questions), and an initial order is detected reliably
+	 * via the subscription's parent_order_id.
+	 */
+	public function is_renewal_order( string $order_ref ): bool {
+		$is_renewal = false;
+		$order      = $this->load( $order_ref );
+		if ( is_object( $order ) ) {
+			// A subscription whose parent_order_id is this order ⇒ this is the INITIAL
+			// order (it concluded the contract) and is never a renewal.
+			if ( ! $this->subscription_for_parent_order( $order_ref ) ) {
+				$type = strtolower( (string) ( $this->attr( $order, 'type' ) ?? '' ) );
+				if ( in_array( $type, array( 'renewal', 'subscription_renewal', 'sub_renewal' ), true ) ) {
+					$is_renewal = true;
+				}
+			}
+		}
+		/**
+		 * Override subscription-renewal detection for an order.
+		 *
+		 * @param bool   $is_renewal Whether the order is a subscription renewal.
+		 * @param string $order_ref  Order reference.
+		 * @param string $platform   Adapter key.
+		 */
+		return (bool) apply_filters( 'wwu_wb_order_is_renewal', $is_renewal, $order_ref, $this->key() );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function subscription_ref( string $order_ref ): string {
+		$sub = $this->subscription_for_parent_order( $order_ref );
+		if ( is_object( $sub ) ) {
+			$id = $this->attr( $sub, 'id' );
+			return null !== $id ? (string) $id : '';
+		}
+		return '';
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * Best-effort, guarded — also OFF by default (only runs when the merchant opts in
+	 * to auto-cancel). Prefers the gateway-aware cancel, then a local status flip; the
+	 * RequestsDashboard always surfaces a manual reminder so a no-op never strands the
+	 * merchant.
+	 */
+	public function cancel_subscription( string $order_ref ): bool {
+		$sub = $this->subscription_for_parent_order( $order_ref );
+		if ( ! is_object( $sub ) ) {
+			return false;
+		}
+		foreach ( array( 'cancelRemoteSubscription', 'cancel' ) as $method ) {
+			if ( method_exists( $sub, $method ) ) {
+				try {
+					$sub->{$method}();
+					return true;
+				} catch ( \Throwable $e ) {
+					continue;
+				}
+			}
+		}
+		try {
+			if ( method_exists( $sub, 'update' ) ) {
+				$sub->update( array( 'status' => 'cancelled' ) );
+				return true;
+			}
+		} catch ( \Throwable $e ) {
+			return false;
+		}
+		return false;
 	}
 
 	/**

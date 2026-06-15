@@ -181,6 +181,9 @@ final class WithdrawalService {
 
 		Debug::info( 'withdrawal', 'confirmed', array( 'request_uid' => $request_uid, 'order_ref' => $order->order_ref, 'within_window' => $within ) );
 
+		// Subscription side-effects: stamp the subscription link + (opt-in) cancel.
+		$this->maybe_handle_subscription( $adapter, $order, $request_uid );
+
 		/**
 		 * Fires when a withdrawal is confirmed. The durable-medium (email/PDF) and
 		 * timestamping layers listen here to send the acknowledgement and anchor
@@ -195,6 +198,84 @@ final class WithdrawalService {
 		do_action( 'wwu_wb_withdrawal_confirmed', $request_uid, $order, $req, $log_id, $adapter );
 
 		return $this->result( $order, $request_uid, $log_id, false, $submitted_at, $within );
+	}
+
+	/**
+	 * Subscription side-effects of a confirmed withdrawal.
+	 *
+	 * Stamps the link to the subscription on the order (so the dashboard can show the
+	 * "Subscription" badge + the cancel/pro-rata reminder), and — only when the
+	 * merchant opted in — cancels the subscription to stop future renewals. The refund
+	 * and any pro-rata deduction always stay manual; the RequestsDashboard surfaces the
+	 * reminder regardless of the auto-cancel toggle. No-op for non-subscription orders.
+	 *
+	 * @param OrderDataSource $adapter     Platform adapter.
+	 * @param NormalizedOrder $order       Order.
+	 * @param string          $request_uid Request UID (ties the evidence event to the flow).
+	 * @return void
+	 */
+	private function maybe_handle_subscription( OrderDataSource $adapter, NormalizedOrder $order, string $request_uid ): void {
+		$sub_ref = (string) $order->subscription_ref;
+		if ( '' === $sub_ref ) {
+			return; // Not a subscription order — nothing to do.
+		}
+
+		// Stamp the subscription link on the order for the dashboard reminder.
+		$adapter->batch_meta(
+			$order->order_ref,
+			array(
+				'is_subscription_initial' => $order->is_renewal ? 0 : 1,
+				'subscription_ref'        => $sub_ref,
+			)
+		);
+
+		$opted_in = ! empty( \WWU\WithdrawalButton\Core\Settings::main()['cancel_subscription_on_withdrawal'] );
+		if ( ! $opted_in || ! $adapter instanceof \WWU\WithdrawalButton\Platform\SubscriptionAware ) {
+			return;
+		}
+
+		$cancelled = false;
+		try {
+			$cancelled = $adapter->cancel_subscription( $order->order_ref );
+		} catch ( \Throwable $e ) {
+			$cancelled = false;
+		}
+
+		// Evidence event (immutable log): record the attempt + outcome.
+		$this->log->append(
+			array(
+				'request_uid'    => $request_uid,
+				'platform'       => $order->platform,
+				'order_ref'      => $order->order_ref,
+				'customer_email' => $order->email,
+				'event'          => 'subscription_cancelled',
+				'payload'        => array(
+					'subscription_ref' => $sub_ref,
+					'result'           => $cancelled ? 'cancelled' : 'failed',
+					'auto'             => true,
+				),
+				'ip_address'     => ClientInfo::ip(),
+			)
+		);
+
+		$adapter->add_note(
+			$order->order_ref,
+			$cancelled
+				? __( 'Subscription cancelled automatically following the withdrawal (future renewals stopped). Refund / any pro-rata: handle manually.', 'wwu-withdrawal-button' )
+				: __( 'Automatic subscription cancellation could not be completed — please cancel the subscription manually and process the refund.', 'wwu-withdrawal-button' )
+		);
+
+		Debug::info( 'withdrawal', 'subscription.cancel', array( 'order_ref' => $order->order_ref, 'subscription_ref' => $sub_ref, 'result' => $cancelled ) );
+
+		/**
+		 * Fires after an attempt to auto-cancel a subscription on withdrawal.
+		 *
+		 * @param bool            $cancelled Whether the cancel succeeded.
+		 * @param string          $sub_ref   Subscription reference.
+		 * @param NormalizedOrder $order     Order.
+		 * @param OrderDataSource $adapter   Adapter.
+		 */
+		do_action( 'wwu_wb_subscription_cancel_result', $cancelled, $sub_ref, $order, $adapter );
 	}
 
 	/**

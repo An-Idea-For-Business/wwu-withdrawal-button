@@ -80,6 +80,14 @@ final class ApplicabilityResolver {
 			return new ApplicabilityDecision( false, false, 'ineligible_status', $country );
 		}
 
+		// Subscription renewal: a renewal order does NOT restart the 14-day right —
+		// it continues the same contract concluded at the initial order (Art. 9 CRD /
+		// art. 52 Cod. Consumo). Suppress on renewals unless the merchant explicitly
+		// opts to treat them as withdrawable. The initial order keeps the button.
+		if ( $order->is_renewal && empty( \WWU\WithdrawalButton\Core\Settings::main()['treat_renewals_as_withdrawable'] ) ) {
+			return new ApplicabilityDecision( false, false, 'renewal_order', $country );
+		}
+
 		// B2B: a provided VAT number is treated as out of scope when configured.
 		if ( $order->has_vat_number && ! empty( $config['b2b_vat_out_of_scope'] ) ) {
 			return new ApplicabilityDecision( false, false, 'b2b_vat', $country );

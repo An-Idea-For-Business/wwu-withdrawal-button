@@ -116,7 +116,7 @@ final class RequestsDashboard {
 
 			echo '<tr>';
 			echo '<td>' . esc_html( (string) ( $payload['submitted_at'] ?? $row['created_at'] ) ) . '</td>';
-			echo '<td>' . esc_html( (string) ( $payload['order_number'] ?? $order_ref ) ) . '</td>';
+			echo '<td>' . esc_html( (string) ( $payload['order_number'] ?? $order_ref ) ) . $this->subscription_badge( $adapter, $order_ref ) . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- badge is escaped kit markup.
 			echo '<td>' . esc_html( (string) $row['customer_email'] ) . '</td>';
 			echo '<td>' . esc_html( (string) ( $payload['country'] ?? '' ) ) . '</td>';
 			echo '<td>' . ( $within
@@ -178,6 +178,30 @@ final class RequestsDashboard {
 		echo '</ol>';
 		echo '<p class="description">' . esc_html__( 'This is operational guidance, not legal advice. For services fully performed with the consumer\'s prior express consent, and other Art. 59 cases, the right of withdrawal does not apply.', 'wwu-withdrawal-button' ) . '</p>';
 		echo '</details>';
+	}
+
+	/**
+	 * Subscription indicator for the Order cell.
+	 *
+	 * Shows a badge + a reminder (via title) that the 14-day right covers the initial
+	 * contract, and that stopping future renewals and applying any pro-rata for service
+	 * already used are manual unless the merchant enabled auto-cancel. The refund is
+	 * never automatic. Renders nothing for non-subscription orders.
+	 *
+	 * @param OrderDataSource|null $adapter   Platform adapter.
+	 * @param string               $order_ref Order reference.
+	 * @return string
+	 */
+	private function subscription_badge( ?OrderDataSource $adapter, string $order_ref ): string {
+		if ( ! $adapter ) {
+			return '';
+		}
+		$sub_ref = (string) $adapter->get_meta( $order_ref, 'subscription_ref' );
+		if ( '' === $sub_ref ) {
+			return '';
+		}
+		$title = __( 'Subscription order. The 14-day right covers the initial contract — stop future renewals and apply any pro-rata for service already used, then refund. None of this is automatic unless you enabled auto-cancel.', 'wwu-withdrawal-button' );
+		return ' <span class="wwu-wb-badge wwu-wb-badge--warn" title="' . esc_attr( $title ) . '">' . esc_html__( 'Subscription', 'wwu-withdrawal-button' ) . '</span>';
 	}
 
 	/**
