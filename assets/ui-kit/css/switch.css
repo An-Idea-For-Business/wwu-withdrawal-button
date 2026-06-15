@@ -1,0 +1,126 @@
+/**
+ * WWU UI Kit — Toggle Switch
+ *
+ * iOS-style toggle for primary enable/disable actions. Larger and more
+ * prominent than a standard checkbox — use for marquee settings like
+ * "Enable pixel", "Auto-pause on Complianz decline", "Debug mode on".
+ *
+ * For dense lists of boolean settings, prefer standard checkbox +
+ * `.wwu-ui-rule-card` instead — switches are deliberately visually heavy.
+ *
+ * Extracted from Pixel Manager admin.css:846-900 (PM 0.x).
+ *
+ * @since 0.7.0
+ */
+
+.wwu-ui-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--wwu-ui-space-2);
+    cursor: pointer;
+    user-select: none;
+    padding: var(--wwu-ui-space-1) 0;
+    margin: 0;
+}
+
+/* Hidden native checkbox — positioned absolute so screen readers still
+ * see it, keyboard focus still lands on it, but visually the `.wwu-ui-switch-box`
+ * is the control. */
+.wwu-ui-switch input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 0;
+    height: 0;
+}
+
+/* The actual visible toggle. */
+.wwu-ui-switch-box {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    background: var(--wwu-ui-border-strong);
+    border-radius: 999px;
+    transition: background var(--wwu-ui-transition-fast);
+    flex-shrink: 0;
+}
+
+.wwu-ui-switch-box::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: var(--wwu-ui-bg);
+    border-radius: 50%;
+    transition: transform var(--wwu-ui-transition-fast);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.wwu-ui-switch input:checked + .wwu-ui-switch-box {
+    background: var(--wwu-ui-primary);
+}
+
+.wwu-ui-switch input:checked + .wwu-ui-switch-box::after {
+    transform: translateX(16px);
+}
+
+.wwu-ui-switch input:focus-visible + .wwu-ui-switch-box {
+    outline: 2px solid var(--wwu-ui-primary);
+    outline-offset: 2px;
+}
+
+.wwu-ui-switch input:disabled + .wwu-ui-switch-box {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.wwu-ui-switch input:disabled ~ .wwu-ui-switch-label {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.wwu-ui-switch-label {
+    font-size: var(--wwu-ui-font-md);
+    font-weight: 500;
+    color: var(--wwu-ui-text);
+}
+
+/* Semantic variants — change on-state color. */
+.wwu-ui-switch--success input:checked + .wwu-ui-switch-box {
+    background: var(--wwu-ui-success);
+}
+
+.wwu-ui-switch--danger input:checked + .wwu-ui-switch-box {
+    background: var(--wwu-ui-danger);
+}
+
+/* Size variants. */
+.wwu-ui-switch--lg .wwu-ui-switch-box {
+    width: 48px;
+    height: 26px;
+}
+
+.wwu-ui-switch--lg .wwu-ui-switch-box::after {
+    width: 22px;
+    height: 22px;
+}
+
+.wwu-ui-switch--lg input:checked + .wwu-ui-switch-box::after {
+    transform: translateX(22px);
+}
+
+.wwu-ui-switch--sm .wwu-ui-switch-box {
+    width: 28px;
+    height: 16px;
+}
+
+.wwu-ui-switch--sm .wwu-ui-switch-box::after {
+    width: 12px;
+    height: 12px;
+}
+
+.wwu-ui-switch--sm input:checked + .wwu-ui-switch-box::after {
+    transform: translateX(12px);
+}

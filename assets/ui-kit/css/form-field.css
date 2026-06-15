@@ -1,0 +1,181 @@
+/**
+ * WWU UI Kit — Form Field
+ *
+ * Label + input + optional badge + optional hint, stacked vertically.
+ * Base primitive for any settings form — every plugin will use this.
+ *
+ * Extracted from Pixel Manager admin.css:730-803 (PM 0.x).
+ *
+ * Harmonised with kit conventions:
+ * - Classes follow BEM (`.wwu-ui-field-*`) instead of PM's (`.wwu-px-field__*`)
+ * - Uses kit tokens (`--wwu-ui-*`) instead of PM's custom palette
+ * - Input padding + font-size aligned with `.wwu-ui-search` / other kit inputs
+ *
+ * @since 0.7.0
+ */
+
+.wwu-ui-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--wwu-ui-space-1);
+    margin: 0 0 var(--wwu-ui-space-4);
+}
+
+/* Label row — label text + optional small badge on the right of label. */
+.wwu-ui-field > label,
+.wwu-ui-field-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--wwu-ui-space-2);
+    margin: 0;
+    font-size: var(--wwu-ui-font-md);
+    font-weight: 500;
+    color: var(--wwu-ui-text);
+}
+
+/* "Required" / "Optional" / "PRO" pill near the label. */
+.wwu-ui-field-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    background: var(--wwu-ui-bg-subtle);
+    border: 1px solid var(--wwu-ui-border-strong);
+    border-radius: 999px;
+    color: var(--wwu-ui-text-subtle);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.wwu-ui-field-badge.required {
+    background: #fcf0f1;
+    border-color: var(--wwu-ui-danger);
+    color: var(--wwu-ui-danger);
+}
+
+.wwu-ui-field-badge.optional {
+    /* default muted look — no variant needed */
+}
+
+/* Input styling — applied via descendant selector so consumer doesn't
+ * have to add a class to every input. Max-width keeps text fields a
+ * reasonable reading length on wide screens. */
+.wwu-ui-field input[type="text"],
+.wwu-ui-field input[type="password"],
+.wwu-ui-field input[type="number"],
+.wwu-ui-field input[type="email"],
+.wwu-ui-field input[type="url"],
+.wwu-ui-field input[type="search"],
+.wwu-ui-field input[type="tel"],
+.wwu-ui-field textarea,
+.wwu-ui-field select {
+    width: 100%;
+    max-width: 480px;
+    padding: 6px 10px;
+    font-size: var(--wwu-ui-font-md);
+    line-height: 1.45;
+    border: 1px solid var(--wwu-ui-border-strong);
+    border-radius: var(--wwu-ui-radius-sm);
+    background: var(--wwu-ui-bg);
+    color: var(--wwu-ui-text);
+    transition: border-color var(--wwu-ui-transition-fast),
+                box-shadow var(--wwu-ui-transition-fast);
+}
+
+/* Password fields often carry long tokens/keys — let them grow full width. */
+.wwu-ui-field input[type="password"] {
+    max-width: 100%;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+.wwu-ui-field textarea {
+    max-width: 100%;
+    min-height: 90px;
+    resize: vertical;
+}
+
+.wwu-ui-field input:focus-visible,
+.wwu-ui-field textarea:focus-visible,
+.wwu-ui-field select:focus-visible {
+    outline: none;
+    border-color: var(--wwu-ui-primary);
+    box-shadow: 0 0 0 2px rgba(34, 113, 177, 0.18);
+}
+
+/* Helper text under the input — explanation / example / link to docs. */
+.wwu-ui-field-hint {
+    margin: var(--wwu-ui-space-1) 0 0;
+    color: var(--wwu-ui-text-subtle);
+    font-size: var(--wwu-ui-font-sm);
+    line-height: 1.5;
+    max-width: 72ch;
+}
+
+.wwu-ui-field-hint code {
+    padding: 1px 5px;
+    background: var(--wwu-ui-border-soft);
+    border-radius: var(--wwu-ui-radius-sm);
+    font-size: var(--wwu-ui-font-xs);
+}
+
+.wwu-ui-field-hint a {
+    color: var(--wwu-ui-primary);
+    text-decoration: none;
+}
+
+.wwu-ui-field-hint a:hover {
+    text-decoration: underline;
+}
+
+/* Error message variant — red text + marker icon (consumer provides icon). */
+.wwu-ui-field-error {
+    margin: var(--wwu-ui-space-1) 0 0;
+    color: var(--wwu-ui-danger);
+    font-size: var(--wwu-ui-font-sm);
+    font-weight: 500;
+}
+
+/* Invalid-state styling on the input itself — apply via `.is-invalid` class
+ * or `aria-invalid="true"` attribute. */
+.wwu-ui-field input.is-invalid,
+.wwu-ui-field input[aria-invalid="true"],
+.wwu-ui-field textarea.is-invalid,
+.wwu-ui-field textarea[aria-invalid="true"],
+.wwu-ui-field select.is-invalid,
+.wwu-ui-field select[aria-invalid="true"] {
+    border-color: var(--wwu-ui-danger);
+}
+
+.wwu-ui-field input.is-invalid:focus-visible,
+.wwu-ui-field input[aria-invalid="true"]:focus-visible,
+.wwu-ui-field textarea.is-invalid:focus-visible,
+.wwu-ui-field textarea[aria-invalid="true"]:focus-visible,
+.wwu-ui-field select.is-invalid:focus-visible,
+.wwu-ui-field select[aria-invalid="true"]:focus-visible {
+    box-shadow: 0 0 0 2px rgba(214, 54, 56, 0.2);
+}
+
+/* Horizontal field variant — label left, input right (desktop only). */
+.wwu-ui-field--horizontal {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: var(--wwu-ui-space-4);
+    align-items: start;
+}
+
+.wwu-ui-field--horizontal > label,
+.wwu-ui-field--horizontal .wwu-ui-field-label {
+    padding-top: 8px;
+}
+
+@media (max-width: 782px) {
+    .wwu-ui-field--horizontal {
+        grid-template-columns: 1fr;
+        gap: var(--wwu-ui-space-1);
+    }
+
+    .wwu-ui-field--horizontal > label,
+    .wwu-ui-field--horizontal .wwu-ui-field-label {
+        padding-top: 0;
+    }
+}

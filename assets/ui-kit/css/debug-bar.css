@@ -1,0 +1,318 @@
+/**
+ * WWU UI Kit — Debug Bar (frontend, admin-only)
+ *
+ * Chrome for a frontend debug bar: floating chip bottom-right + expandable
+ * panel with sections, rows, pills, and action buttons. Dark-themed to
+ * distinguish from the host site's frontend styling.
+ *
+ * Extracted from AM Pro `class-debug-bar.php` (Fase 11b, inline styles).
+ * The kit provides the SHELL — consumer plugin builds its own sections
+ * and collects domain-specific data.
+ *
+ * Scope: this is the ONLY kit component that intentionally renders on
+ * frontend (not just admin). Consumer PHP must gate on capability +
+ * toggle before emitting the markup — kit CSS does no gating itself.
+ *
+ * @since 0.6.0
+ */
+
+.wwu-ui-debug-bar {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 999998;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 12px;
+    color: #e7e9ea;
+}
+
+/* Chip — always visible trigger. */
+.wwu-ui-debug-bar-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #1d2327;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 999px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, .3);
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid rgba(255, 255, 255, .08);
+    transition: background .15s;
+}
+
+.wwu-ui-debug-bar-chip:hover {
+    background: #2c3338;
+}
+
+.wwu-ui-debug-bar-chip-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #00a32a;
+    flex-shrink: 0;
+}
+
+.wwu-ui-debug-bar-chip-dot.warn {
+    background: #dba617;
+}
+
+.wwu-ui-debug-bar-chip-dot.error {
+    background: #d63638;
+}
+
+.wwu-ui-debug-bar-chip-count {
+    background: rgba(255, 255, 255, .12);
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.wwu-ui-debug-bar-chip-count.warn {
+    background: #dba617;
+    color: #1d2327;
+}
+
+/* Panel — expanded state. Hidden by default; `.is-open` on root reveals it. */
+.wwu-ui-debug-bar-panel {
+    position: fixed;
+    right: 16px;
+    bottom: 64px;
+    width: 480px;
+    max-width: calc(100vw - 32px);
+    max-height: 70vh;
+    background: #1d2327;
+    color: #e7e9ea;
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, .4);
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+}
+
+.wwu-ui-debug-bar.is-open .wwu-ui-debug-bar-panel {
+    display: flex;
+}
+
+.wwu-ui-debug-bar-header {
+    padding: 10px 14px;
+    background: #2c3338;
+    border-bottom: 1px solid rgba(255, 255, 255, .08);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.wwu-ui-debug-bar-header strong {
+    color: #fff;
+    font-weight: 600;
+}
+
+.wwu-ui-debug-bar-meta {
+    margin-left: auto;
+    font-size: 11px;
+    color: #a7aaad;
+    font-variant-numeric: tabular-nums;
+}
+
+.wwu-ui-debug-bar-body {
+    overflow-y: auto;
+    padding: 4px 0;
+    flex: 1 1 auto;
+}
+
+/* Sections — native <details>/<summary>. */
+.wwu-ui-debug-bar-section {
+    border-bottom: 1px solid rgba(255, 255, 255, .05);
+}
+
+.wwu-ui-debug-bar-section[open] {
+    background: rgba(255, 255, 255, .02);
+}
+
+.wwu-ui-debug-bar-section-title {
+    padding: 8px 14px;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.wwu-ui-debug-bar-section-title::-webkit-details-marker {
+    display: none;
+}
+
+.wwu-ui-debug-bar-section-title:hover {
+    background: rgba(255, 255, 255, .04);
+}
+
+.wwu-ui-debug-bar-section-title::before {
+    content: '\25B8'; /* ▸ */
+    font-size: 10px;
+    color: #a7aaad;
+    transition: transform .1s;
+    flex-shrink: 0;
+}
+
+.wwu-ui-debug-bar-section[open] > .wwu-ui-debug-bar-section-title::before {
+    transform: rotate(90deg);
+}
+
+.wwu-ui-debug-bar-section-badge {
+    margin-left: auto;
+    background: rgba(255, 255, 255, .08);
+    padding: 1px 8px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-variant-numeric: tabular-nums;
+}
+
+.wwu-ui-debug-bar-section-badge.on {
+    background: #00a32a;
+    color: #fff;
+}
+
+.wwu-ui-debug-bar-section-badge.warn {
+    background: #dba617;
+    color: #1d2327;
+}
+
+.wwu-ui-debug-bar-section-body {
+    padding: 4px 14px 10px;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+/* Row — key / value pair inside a section body. */
+.wwu-ui-debug-bar-row {
+    display: flex;
+    gap: 8px;
+    padding: 3px 0;
+    align-items: flex-start;
+}
+
+.wwu-ui-debug-bar-k {
+    color: #a7aaad;
+    flex-shrink: 0;
+    min-width: 60px;
+}
+
+.wwu-ui-debug-bar-v {
+    color: #e7e9ea;
+    word-break: break-all;
+    flex: 1;
+}
+
+/* Pills — color-coded action/state indicators. Semantic naming mirrors
+ * AM Pro conventions but consumer plugins can add their own variants by
+ * defining additional `.wwu-ui-debug-bar-pill-{name}` classes. */
+.wwu-ui-debug-bar-pill {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    margin-right: 4px;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+}
+
+.wwu-ui-debug-bar-pill-defer        { background: #1e5fbf; color: #fff; }
+.wwu-ui-debug-bar-pill-async        { background: #008a62; color: #fff; }
+.wwu-ui-debug-bar-pill-delay        { background: #c76a00; color: #fff; }
+.wwu-ui-debug-bar-pill-footer       { background: #6a3fa5; color: #fff; }
+.wwu-ui-debug-bar-pill-disable      { background: #a00; color: #fff; }
+.wwu-ui-debug-bar-pill-nonblocking  { background: #008a62; color: #fff; }
+.wwu-ui-debug-bar-pill-preload      { background: #1e5fbf; color: #fff; }
+.wwu-ui-debug-bar-pill-swap         { background: #008a62; color: #fff; }
+.wwu-ui-debug-bar-pill-rewrite      { background: #1e5fbf; color: #fff; }
+.wwu-ui-debug-bar-pill-selfhost     { background: #008a62; color: #fff; }
+.wwu-ui-debug-bar-pill-js           { background: #c76a00; color: #fff; }
+.wwu-ui-debug-bar-pill-css          { background: #1e5fbf; color: #fff; }
+.wwu-ui-debug-bar-pill-info         { background: #2271b1; color: #fff; }
+.wwu-ui-debug-bar-pill-warn         { background: #dba617; color: #1d2327; }
+.wwu-ui-debug-bar-pill-error        { background: #d63638; color: #fff; }
+
+.wwu-ui-debug-bar-note {
+    color: #8a8d90;
+    font-style: italic;
+    font-size: 10px;
+}
+
+.wwu-ui-debug-bar-url {
+    color: #9ab8ff;
+    text-decoration: none;
+    cursor: pointer;
+    border-bottom: 1px dotted rgba(154, 184, 255, .35);
+    padding-bottom: 1px;
+    transition: color .1s, border-color .1s;
+}
+
+.wwu-ui-debug-bar-url:hover {
+    color: #fff;
+    border-bottom-color: #fff;
+}
+
+.wwu-ui-debug-bar-url.copied {
+    color: #57d17a;
+    border-bottom-color: #57d17a;
+}
+
+.wwu-ui-debug-bar-empty {
+    color: #8a8d90;
+    padding: 4px 0;
+    font-style: italic;
+}
+
+/* Actions footer — buttons (copy report, highlight DOM, close, …). */
+.wwu-ui-debug-bar-actions {
+    padding: 8px 14px;
+    border-top: 1px solid rgba(255, 255, 255, .08);
+    display: flex;
+    gap: 8px;
+}
+
+.wwu-ui-debug-bar-btn {
+    background: #2c3338;
+    border: 1px solid rgba(255, 255, 255, .12);
+    color: #e7e9ea;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 11px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background .12s, border-color .12s;
+}
+
+.wwu-ui-debug-bar-btn:hover {
+    background: #3c434a;
+}
+
+.wwu-ui-debug-bar-btn.active {
+    background: #1e5fbf;
+    border-color: #1e5fbf;
+}
+
+/* DOM highlight helpers — apply via classList.toggle on arbitrary elements
+ * when the debug bar highlights them in the page. Consumer plugin decides
+ * which elements get which class. */
+.wwu-ui-debug-hl-defer       { outline: 2px solid #1e5fbf !important; outline-offset: 2px; }
+.wwu-ui-debug-hl-async       { outline: 2px solid #008a62 !important; outline-offset: 2px; }
+.wwu-ui-debug-hl-delay       { outline: 2px solid #c76a00 !important; outline-offset: 2px; }
+.wwu-ui-debug-hl-disable     { outline: 2px dashed #a00 !important; outline-offset: 2px; }
+.wwu-ui-debug-hl-nonblocking,
+.wwu-ui-debug-hl-preload     { outline: 2px solid #1e5fbf !important; outline-offset: 2px; }
+
+/* Mobile: panel becomes full-width. */
+@media (max-width: 600px) {
+    .wwu-ui-debug-bar-panel {
+        width: calc(100vw - 32px);
+        right: 16px;
+    }
+}

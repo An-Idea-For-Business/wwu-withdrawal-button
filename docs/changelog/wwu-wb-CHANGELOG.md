@@ -5,6 +5,23 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### UI Kit bundled + Swedish (sv_SE) added (1.0.0-alpha.40, 2026-06-15)
+- **UI Kit now bundled** (`assets/ui-kit/` — css/js/dist/php, kit 0.9.2). The admin code referenced the
+  WWU UI Kit (`.wwu-ui-accordion/badge/notice` + `maybe_enqueue_ui_kit()`) but the kit assets were never
+  packaged, so the guarded loader silently no-op'd and **Settings → Exemptions rendered unstyled**. Fixed.
+  Also corrected `AdminAssets` enqueue list: `['accordion','badge','utilities']` (the components actually
+  used) — the old list requested unused components + an invalid `notice` id (`.wwu-ui-notice` lives in
+  `utilities`). The kit is a **runtime asset** → it ships in the zip (unlike dev tools).
+- **Swedish (sv_SE)** added. `LabelResolver` gains the statutory `sv` entry — button **"ångra avtalet här"**,
+  confirm **"bekräfta frånträde"**, authority **"Distansavtalslagen (2005:59)"** — sourced from the official
+  Swedish EUR-Lex text of Art. 11a (Dir. 2011/83/EU as amended by 2023/2673). `Countries::COUNTRY_LOCALE`
+  maps `SE → sv`. A **partial** `sv_SE.po`/`.mo` (147/476 UI strings) ships as a draft; the remaining UI
+  strings + a native-speaker review (Daniel) are **pending** — untranslated strings fall back to English.
+  See [Swedish draft note](../analysis/wwu-wb-swedish-sv_SE-NOTE.md).
+- New workspace dev tools (NOT shipped — live in `wwu-tools/`, outside the plugin repo + zip):
+  `wwu-class-scan.php` (catches the bare-class fatal that `php -l` misses — the alpha.38/39 bug class) and
+  `wwu-phpstan.php` (PHPStan + WP/WC stubs, parametrized per slug). The plugin is clean on both.
+
 ### Critical fix — Settings page fatal "class not found" (1.0.0-alpha.39, 2026-06-15)
 A merchant reported a **fatal error** (`Uncaught Error: Class "WWU\WithdrawalButton\Admin\Settings"
 not found`) that took down the **entire Settings page**. Root cause: `SettingsPage::render_exemptions_status()`

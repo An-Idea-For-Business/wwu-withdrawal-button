@@ -51,6 +51,7 @@ final class Countries {
 		'BE' => 'fr',
 		'LU' => 'fr',
 		'ES' => 'es',
+		'SE' => 'sv',
 	);
 
 	/**

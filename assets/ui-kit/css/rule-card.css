@@ -1,0 +1,119 @@
+/**
+ * WWU UI Kit — Rule Card
+ *
+ * Card pattern with an interactive checkbox (or toggle) + title + description.
+ * Used for settings toggles, feature flags, rule grids, pixel config lists.
+ *
+ * Promoted from AM Pro quarantine (Pro admin.css:89-132 `.wwu-amp-rule-card`) —
+ * now a kit primitive since Pixel Manager will use it for pixel toggle grid.
+ *
+ * @since 0.5.0
+ */
+
+/* Grid wrapper — auto-fit columns, reflows on narrow viewports. */
+.wwu-ui-rule-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--wwu-ui-space-4);
+    margin-bottom: var(--wwu-ui-space-5);
+}
+
+/* Card itself. */
+.wwu-ui-rule-card {
+    border: 1px solid var(--wwu-ui-border);
+    border-radius: var(--wwu-ui-radius-lg);
+    padding: var(--wwu-ui-space-4);
+    background: var(--wwu-ui-bg);
+    transition: border-color var(--wwu-ui-transition-fast),
+                box-shadow var(--wwu-ui-transition-fast);
+    position: relative;
+}
+
+.wwu-ui-rule-card:hover {
+    border-color: var(--wwu-ui-primary);
+}
+
+/* Active state — card with checkbox checked. Apply via JS or :has selector
+ * where supported. Included as an opt-in modifier. */
+.wwu-ui-rule-card.is-active {
+    border-color: var(--wwu-ui-primary);
+    background: #f7fbff;
+    box-shadow: 0 0 0 1px var(--wwu-ui-primary);
+}
+
+/* Disabled state — e.g. feature unavailable without Pro / licence / dependency. */
+.wwu-ui-rule-card.is-disabled {
+    opacity: .55;
+    pointer-events: none;
+    background: var(--wwu-ui-bg-subtle);
+}
+
+/* Label wrapper — click anywhere in card toggles the input. */
+.wwu-ui-rule-card label {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--wwu-ui-space-2);
+    cursor: pointer;
+    margin: 0;
+}
+
+.wwu-ui-rule-card input[type="checkbox"],
+.wwu-ui-rule-card input[type="radio"] {
+    margin-top: 2px;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+/* Text column. */
+.wwu-ui-rule-card-text {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.wwu-ui-rule-card-title {
+    font-weight: 600;
+    font-size: var(--wwu-ui-font-md);
+    color: var(--wwu-ui-text);
+    display: block;
+    margin: 0 0 var(--wwu-ui-space-1);
+}
+
+.wwu-ui-rule-card-desc {
+    font-size: var(--wwu-ui-font-sm);
+    color: var(--wwu-ui-text-subtle);
+    display: block;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Optional meta slot (right-aligned) — for badges/icons inside card header. */
+.wwu-ui-rule-card-meta {
+    position: absolute;
+    top: var(--wwu-ui-space-3);
+    right: var(--wwu-ui-space-3);
+    display: flex;
+    gap: var(--wwu-ui-space-1);
+    align-items: center;
+}
+
+/* When meta is present, leave room for it in the text column. */
+.wwu-ui-rule-card:has(.wwu-ui-rule-card-meta) .wwu-ui-rule-card-title {
+    padding-right: var(--wwu-ui-space-6);
+}
+
+/* Optional footer slot inside card — for sub-controls like URL inputs when
+ * the rule is enabled. Stays visually connected to the card. */
+.wwu-ui-rule-card-body {
+    margin-top: var(--wwu-ui-space-3);
+    padding-top: var(--wwu-ui-space-3);
+    border-top: 1px solid var(--wwu-ui-border-soft);
+    font-size: var(--wwu-ui-font-sm);
+}
+
+.wwu-ui-rule-card-body input[type="text"],
+.wwu-ui-rule-card-body input[type="url"],
+.wwu-ui-rule-card-body textarea,
+.wwu-ui-rule-card-body select {
+    width: 100%;
+    box-sizing: border-box;
+}

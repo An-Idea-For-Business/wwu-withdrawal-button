@@ -1,0 +1,187 @@
+/**
+ * WWU UI Kit — History / activity row
+ *
+ * Audit log entry pattern: time + body + description + author.
+ * Used for: save history (CVB revisions), audit log (AM Pro), activity
+ * feed (BI), event timeline (PM), action history (PWA).
+ *
+ * Markup:
+ *   <li class="wwu-ui-history-row" data-current="true">
+ *     <span class="wwu-ui-history-row__time">2m ago</span>
+ *     <div class="wwu-ui-history-row__body">
+ *       <span class="wwu-ui-history-row__desc">Saved manually</span>
+ *       <span class="wwu-ui-history-row__author">Edoardo</span>
+ *     </div>
+ *     <span class="wwu-ui-history-row__icon">
+ *       <span class="dashicons dashicons-yes"></span>
+ *     </span>
+ *   </li>
+ *
+ * Variants:
+ *   --compact  — single line layout (time + desc only)
+ *   --warning  — amber accent (rollback / restore events)
+ *   --danger   — red accent (delete / failure events)
+ *   --success  — green accent (publish / approve events)
+ *
+ * `data-current="true"` marks the active/restored revision (or "you are
+ * here" in a timeline). Aliases: `aria-current="true"`, `.is-current`.
+ *
+ * @since 0.9.0
+ */
+
+/* ── Container ──────────────────────────────────────────────── */
+.wwu-ui-history-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    list-style: none;
+    transition: background-color 0.1s ease;
+    position: relative;
+    /* allow the active accent bar */
+    overflow: hidden;
+}
+
+.wwu-ui-history-row:hover {
+    background: var(--wwu-ui-bg-subtle, #f0f0f1);
+}
+
+/* Selected/current row */
+.wwu-ui-history-row[data-current="true"],
+.wwu-ui-history-row[aria-current="true"],
+.wwu-ui-history-row.is-current {
+    background: rgba(34, 113, 177, 0.08);
+}
+
+.wwu-ui-history-row[data-current="true"]::before,
+.wwu-ui-history-row[aria-current="true"]::before,
+.wwu-ui-history-row.is-current::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 4px;
+    bottom: 4px;
+    width: 3px;
+    background: var(--wwu-ui-primary, #2271b1);
+    border-radius: 0 3px 3px 0;
+}
+
+/* ── Time chip (left column) ───────────────────────────────── */
+.wwu-ui-history-row__time {
+    flex: 0 0 auto;
+    min-width: 4.5em;
+    text-align: right;
+    font-size: 11px;
+    color: var(--wwu-ui-text-muted, #6b7280);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.4;
+    padding-top: 2px;
+}
+
+/* ── Body (middle column — desc + author) ──────────────────── */
+.wwu-ui-history-row__body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0; /* allow ellipsis */
+}
+
+.wwu-ui-history-row__desc {
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--wwu-ui-text, #1d2327);
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.wwu-ui-history-row__author {
+    font-size: 11px;
+    color: var(--wwu-ui-text-muted, #6b7280);
+}
+
+/* ── Icon (right column, optional) ─────────────────────────── */
+.wwu-ui-history-row__icon {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--wwu-ui-bg-subtle, #f0f0f1);
+    color: var(--wwu-ui-text-muted, #6b7280);
+}
+
+.wwu-ui-history-row__icon .dashicons,
+.wwu-ui-history-row__icon svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* ── Semantic variants ─────────────────────────────────────── */
+.wwu-ui-history-row--success .wwu-ui-history-row__icon {
+    background: #d4edda;
+    color: #1c7d3d;
+}
+
+.wwu-ui-history-row--warning .wwu-ui-history-row__icon {
+    background: #fff3cd;
+    color: #7a4100;
+}
+
+.wwu-ui-history-row--danger .wwu-ui-history-row__icon {
+    background: #fde7e9;
+    color: #b32d2e;
+}
+
+.wwu-ui-history-row--info .wwu-ui-history-row__icon {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+/* ── Variant: --compact (single line) ──────────────────────── */
+.wwu-ui-history-row--compact {
+    padding: 4px 12px;
+    align-items: center;
+}
+
+.wwu-ui-history-row--compact .wwu-ui-history-row__body {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.wwu-ui-history-row--compact .wwu-ui-history-row__author {
+    margin-left: auto;
+}
+
+/* ── Variant: --clickable (button-like cursor + bigger hover) ─ */
+.wwu-ui-history-row--clickable {
+    cursor: pointer;
+}
+
+.wwu-ui-history-row--clickable:hover {
+    background: var(--wwu-ui-bg-subtle, #f0f0f1);
+}
+
+.wwu-ui-history-row--clickable:focus-visible {
+    outline: 2px solid var(--wwu-ui-primary, #2271b1);
+    outline-offset: -2px;
+}
+
+/* ── List container (optional helper) ──────────────────────── */
+.wwu-ui-history-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+/* ── Trap #19 paired rule ───────────────────────────────────── */
+.wwu-ui-history-row[hidden] {
+    display: none !important;
+}

@@ -1,0 +1,88 @@
+/**
+ * WWU UI Kit — Accordion
+ *
+ * Native HTML5 <details>/<summary> styled as unified accordion.
+ * Zero JS required for toggle behaviour — that's handled by the browser.
+ * JS helpers (wwuUIKit.accordion.*) only add safety for click-through
+ * on interactive children of <summary>.
+ *
+ * Extracted from AM Lite admin.css:204-271 (Lite 1.3.22).
+ *
+ * @since 0.1.0
+ */
+
+.wwu-ui-accordion {
+    border: 1px solid var(--wwu-ui-border);
+    border-radius: var(--wwu-ui-radius-md);
+    margin-bottom: var(--wwu-ui-space-1);
+    overflow: hidden;
+}
+
+.wwu-ui-accordion[open] {
+    border-color: var(--wwu-ui-border-strong);
+}
+
+.wwu-ui-accordion-header {
+    display: flex;
+    align-items: center;
+    gap: var(--wwu-ui-space-2);
+    padding: var(--wwu-ui-space-3) var(--wwu-ui-space-4);
+    cursor: pointer;
+    background: var(--wwu-ui-bg-subtle);
+    user-select: none;
+    transition: background var(--wwu-ui-transition-fast);
+    list-style: none;
+    font-size: var(--wwu-ui-font-md);
+}
+
+/* Hide default disclosure triangle — replaced by ::before below. */
+.wwu-ui-accordion-header::-webkit-details-marker {
+    display: none;
+}
+
+.wwu-ui-accordion-header::before {
+    content: '\25B8'; /* ▸ */
+    font-size: var(--wwu-ui-font-sm);
+    color: var(--wwu-ui-text-subtle);
+    transition: transform var(--wwu-ui-transition-base);
+    flex-shrink: 0;
+}
+
+.wwu-ui-accordion[open] > .wwu-ui-accordion-header::before {
+    transform: rotate(90deg);
+}
+
+.wwu-ui-accordion-header:hover {
+    background: var(--wwu-ui-bg-hover);
+}
+
+.wwu-ui-accordion[open] > .wwu-ui-accordion-header {
+    background: var(--wwu-ui-bg-active);
+}
+
+/**
+ * Group toggle checkbox inside <summary>.
+ * The JS helper `wwuUIKit.accordion.summaryClickSafe()` stops event propagation
+ * in capture phase so the checkbox toggles without also opening/closing the
+ * accordion. This is trap #3 in the main CLAUDE.md — a historical footgun.
+ */
+.wwu-ui-group-toggle {
+    margin-right: var(--wwu-ui-space-1);
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.wwu-ui-accordion-body {
+    border-top: 1px solid var(--wwu-ui-border);
+}
+
+.wwu-ui-accordion-meta {
+    margin-left: auto;
+    font-size: var(--wwu-ui-font-sm);
+    color: var(--wwu-ui-text-subtle);
+    display: flex;
+    align-items: center;
+    gap: var(--wwu-ui-space-1);
+}

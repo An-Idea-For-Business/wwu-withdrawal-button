@@ -1,0 +1,86 @@
+/**
+ * WWU UI Kit — Token Display
+ *
+ * Pill that shows "API key / token saved" state with a status dot +
+ * masked value (e.g. "Saved ••••••••last4"). Used when a secret is
+ * already stored and should NOT be re-displayed in a regular input.
+ *
+ * Pairs with the `masked_api_key()` PHP pattern from AM Pro trap #15:
+ * never log or expose API keys in full — show only last 4 chars.
+ *
+ * Extracted from Pixel Manager admin.css:807-842 (PM 0.x).
+ *
+ * @since 0.7.0
+ */
+
+.wwu-ui-token-display {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--wwu-ui-space-2);
+    padding: 4px 10px;
+    margin: 0 0 var(--wwu-ui-space-1);
+    background: var(--wwu-ui-bg-subtle);
+    border: 1px solid var(--wwu-ui-border-strong);
+    border-radius: 999px;
+    font-size: var(--wwu-ui-font-sm);
+    color: var(--wwu-ui-text-subtle);
+    max-width: 100%;
+}
+
+/* Status dot — green by default (saved), yellow for pending, red for expired. */
+.wwu-ui-token-display-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--wwu-ui-success);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.wwu-ui-token-display-dot.pending {
+    background: var(--wwu-ui-warning);
+}
+
+.wwu-ui-token-display-dot.expired,
+.wwu-ui-token-display-dot.invalid {
+    background: var(--wwu-ui-danger);
+}
+
+.wwu-ui-token-display-label {
+    color: var(--wwu-ui-text);
+    font-weight: 500;
+}
+
+.wwu-ui-token-display code {
+    padding: 1px 6px;
+    background: var(--wwu-ui-bg);
+    border: 1px solid var(--wwu-ui-border-strong);
+    border-radius: var(--wwu-ui-radius-sm);
+    font-size: var(--wwu-ui-font-xs);
+    color: var(--wwu-ui-text);
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+/* Action button — "rotate key" / "remove" next to the display. */
+.wwu-ui-token-display-action {
+    margin-left: var(--wwu-ui-space-1);
+    background: none;
+    border: none;
+    color: var(--wwu-ui-primary);
+    font-size: var(--wwu-ui-font-xs);
+    cursor: pointer;
+    padding: 2px 4px;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.wwu-ui-token-display-action:hover {
+    color: var(--wwu-ui-primary-hover);
+}
+
+.wwu-ui-token-display-action--danger {
+    color: var(--wwu-ui-danger);
+}
+
+.wwu-ui-token-display-action--danger:hover {
+    color: var(--wwu-ui-danger-hover);
+}

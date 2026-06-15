@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WWU UI Kit 0.9.1 — VB-extracted components sandbox</title>
+    <link rel="stylesheet" href="ui-kit.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #f0f0f1;
+            color: #1d2327;
+            margin: 0;
+            padding: 24px;
+            line-height: 1.5;
+        }
+        h1 { margin: 0 0 8px; font-size: 24px; }
+        h2 {
+            margin: 32px 0 12px;
+            font-size: 16px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #c3c4c7;
+        }
+        h3 { margin: 16px 0 8px; font-size: 13px; color: #50575e; text-transform: uppercase; letter-spacing: 0.06em; }
+        .section { background: #fff; border: 1px solid #c3c4c7; border-radius: 8px; padding: 16px 20px; margin-bottom: 16px; }
+        .row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 8px 0; }
+        .row-vertical { display: flex; flex-direction: column; gap: 6px; max-width: 320px; }
+        .meta { font-size: 12px; color: #6b7280; font-style: italic; }
+        /* Dashicons fallback symbols (purely visual placeholders for the sandbox — not a kit dep) */
+        .dashicons {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            font-family: monospace;
+            font-size: 14px;
+            text-align: center;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body>
+
+<h1>WWU UI Kit — 0.9.1 sandbox</h1>
+<p class="meta">Visual smoke test for VB-extracted components (0.8.4 + 0.9.0 + 0.9.1). Render in any browser, scroll, click — every interaction below is wired to the kit.</p>
+
+<!-- ═══════════════════ 0.9.0 components ═══════════════════ -->
+
+<div class="section">
+    <h2>Segmented control (0.9.0)</h2>
+
+    <h3>Default</h3>
+    <div class="wwu-ui-segmented" role="group" aria-label="View mode" id="seg-view">
+        <button type="button" class="wwu-ui-segmented__btn" aria-pressed="true"  data-value="visual">Visual</button>
+        <button type="button" class="wwu-ui-segmented__btn" aria-pressed="false" data-value="split">Split</button>
+        <button type="button" class="wwu-ui-segmented__btn" aria-pressed="false" data-value="code">Code</button>
+    </div>
+
+    <h3>Compact + icon variants</h3>
+    <div class="row">
+        <div class="wwu-ui-segmented wwu-ui-segmented--compact" role="group" aria-label="Density">
+            <button type="button" class="wwu-ui-segmented__btn" aria-pressed="true">Comfortable</button>
+            <button type="button" class="wwu-ui-segmented__btn" aria-pressed="false">Compact</button>
+        </div>
+
+        <div class="wwu-ui-segmented wwu-ui-segmented--icon" role="group" aria-label="Align">
+            <button type="button" class="wwu-ui-segmented__btn" aria-pressed="true"  aria-label="Left">⟸</button>
+            <button type="button" class="wwu-ui-segmented__btn" aria-pressed="false" aria-label="Center">≡</button>
+            <button type="button" class="wwu-ui-segmented__btn" aria-pressed="false" aria-label="Right">⟹</button>
+        </div>
+    </div>
+
+    <p class="meta">Output of segmented bind: <span id="seg-output">visual</span></p>
+</div>
+
+<div class="section">
+    <h2>Status chip (0.9.0)</h2>
+
+    <h3>All semantic variants</h3>
+    <div class="row">
+        <span class="wwu-ui-status-chip wwu-ui-status-chip--neutral"><span class="wwu-ui-status-chip__dot"></span><span class="wwu-ui-status-chip__label">Neutral</span></span>
+        <span class="wwu-ui-status-chip wwu-ui-status-chip--success"><span class="wwu-ui-status-chip__dot"></span><span class="wwu-ui-status-chip__label">Success</span></span>
+        <span class="wwu-ui-status-chip wwu-ui-status-chip--warning"><span class="wwu-ui-status-chip__dot"></span><span class="wwu-ui-status-chip__label">Warning</span></span>
+        <span class="wwu-ui-status-chip wwu-ui-status-chip--danger"><span class="wwu-ui-status-chip__dot"></span><span class="wwu-ui-status-chip__label">Danger</span></span>
+        <span class="wwu-ui-status-chip wwu-ui-status-chip--info"><span class="wwu-ui-status-chip__dot"></span><span class="wwu-ui-status-chip__label">Info</span></span>
+    </div>
+
+    <h3>Aliases (semantic names you'd actually use)</h3>
+    <div class="row">
+        <span class="wwu-ui-status-chip wwu-ui-status-chip--published"><span class="wwu-ui-status-chip__dot"></span><span class="wwu-ui-status-chip__label">Published</span></span>
+        <span class="wwu-ui-status-chip wwu-ui-status-chip--draft"><span class="wwu-ui-status-chip__dot"></span><span class="wwu-ui-status-chip__label">Draft</span></span>
+        <span class="wwu-ui-status-chip wwu-ui-status-chip--pending"><span class="wwu-ui-status-chip__dot"></span><span class="wwu-ui-status-chip__label">Pending</span></span>
+        <span class="wwu-ui-status-chip wwu-ui-status-chip--error"><span class="wwu-ui-status-chip__dot"></span><span class="wwu-ui-status-chip__label">Failed</span></span>
+    </div>
+
+    <h3>Size variants</h3>
+    <div class="row">
+        <span class="wwu-ui-status-chip wwu-ui-status-chip--success wwu-ui-status-chip--sm"><span class="wwu-ui-status-chip__dot"></span><span class="wwu-ui-status-chip__label">Small</span></span>
+        <span class="wwu-ui-status-chip wwu-ui-status-chip--success"><span class="wwu-ui-status-chip__dot"></span><span class="wwu-ui-status-chip__label">Default</span></span>
+        <span class="wwu-ui-status-chip wwu-ui-status-chip--success wwu-ui-status-chip--lg"><span class="wwu-ui-status-chip__dot"></span><span class="wwu-ui-status-chip__label">Large</span></span>
+    </div>
+
+    <h3>Pulse animation</h3>
+    <div class="row">
+        <span class="wwu-ui-status-chip wwu-ui-status-chip--info wwu-ui-status-chip--pulse"><span class="wwu-ui-status-chip__dot"></span><span class="wwu-ui-status-chip__label">Syncing</span></span>
+        <span class="wwu-ui-status-chip wwu-ui-status-chip--warning wwu-ui-status-chip--pulse"><span class="wwu-ui-status-chip__dot"></span><span class="wwu-ui-status-chip__label">Reconnecting</span></span>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Overflow menu (0.9.0) + Popover (0.8.4)</h2>
+
+    <h3>Right-anchored (default)</h3>
+    <div class="wwu-ui-overflow" id="overflow-1">
+        <button type="button" class="wwu-ui-overflow__trigger" aria-expanded="false" aria-haspopup="menu" aria-label="More actions">⋯</button>
+        <div class="wwu-ui-overflow__menu" role="menu" hidden>
+            <div class="wwu-ui-overflow__row">
+                <span class="wwu-ui-overflow__row-label">Status:</span>
+                <span class="wwu-ui-overflow__row-value">Published</span>
+            </div>
+            <div class="wwu-ui-overflow__divider"></div>
+            <button class="wwu-ui-overflow__item" role="menuitem" data-value="export">Export <span class="wwu-ui-overflow__shortcut">⌘E</span></button>
+            <button class="wwu-ui-overflow__item" role="menuitem" data-value="duplicate">Duplicate</button>
+            <div class="wwu-ui-overflow__divider"></div>
+            <button class="wwu-ui-overflow__item wwu-ui-overflow__item--danger" role="menuitem" data-value="delete">Delete</button>
+        </div>
+    </div>
+
+    <h3>Left-anchored variant</h3>
+    <div class="wwu-ui-overflow wwu-ui-overflow--left" id="overflow-2">
+        <button type="button" class="wwu-ui-overflow__trigger" aria-expanded="false" aria-haspopup="menu" aria-label="More actions">⋯</button>
+        <div class="wwu-ui-overflow__menu" role="menu" hidden>
+            <button class="wwu-ui-overflow__item" role="menuitem" data-value="edit">Edit</button>
+            <button class="wwu-ui-overflow__item" role="menuitem" data-value="rename">Rename</button>
+        </div>
+    </div>
+
+    <p class="meta">Last action: <span id="overflow-output">none</span></p>
+</div>
+
+<div class="section">
+    <h2>Breadcrumb (0.9.0)</h2>
+
+    <h3>With slug chip</h3>
+    <nav class="wwu-ui-breadcrumb" aria-label="Breadcrumb">
+        <ol class="wwu-ui-breadcrumb__list">
+            <li class="wwu-ui-breadcrumb__item">
+                <a href="#" class="wwu-ui-breadcrumb__link">Pages</a>
+                <span class="wwu-ui-breadcrumb__sep" aria-hidden="true">/</span>
+            </li>
+            <li class="wwu-ui-breadcrumb__item">
+                <a href="#" class="wwu-ui-breadcrumb__link">Landing</a>
+                <span class="wwu-ui-breadcrumb__sep" aria-hidden="true">/</span>
+            </li>
+            <li class="wwu-ui-breadcrumb__item" aria-current="page">
+                <span class="wwu-ui-breadcrumb__page">Hero Section</span>
+                <span class="wwu-ui-breadcrumb__slug">/landing-2026</span>
+            </li>
+        </ol>
+    </nav>
+
+    <h3>Compact variant</h3>
+    <nav class="wwu-ui-breadcrumb wwu-ui-breadcrumb--compact" aria-label="Breadcrumb">
+        <ol class="wwu-ui-breadcrumb__list">
+            <li class="wwu-ui-breadcrumb__item"><a href="#" class="wwu-ui-breadcrumb__link">Settings</a><span class="wwu-ui-breadcrumb__sep">›</span></li>
+            <li class="wwu-ui-breadcrumb__item"><a href="#" class="wwu-ui-breadcrumb__link">Privacy</a><span class="wwu-ui-breadcrumb__sep">›</span></li>
+            <li class="wwu-ui-breadcrumb__item" aria-current="page"><span class="wwu-ui-breadcrumb__page">Cookies</span></li>
+        </ol>
+    </nav>
+</div>
+
+<div class="section">
+    <h2>Code block (0.9.0)</h2>
+
+    <h3>Light + header + copy</h3>
+    <div class="wwu-ui-code-block">
+        <div class="wwu-ui-code-block__head">
+            <span class="wwu-ui-code-block__lang">CSS</span>
+            <button class="wwu-ui-code-block__copy" data-action="copy">Copy</button>
+        </div>
+        <pre><code class="wwu-ui-code-block__src"><span class="tok-sel">.wwu-ui-btn</span> <span class="tok-brace">{</span>
+  <span class="tok-prop">color</span><span class="tok-punct">:</span> <span class="tok-val">red</span><span class="tok-punct">;</span>
+  <span class="tok-prop">padding</span><span class="tok-punct">:</span> <span class="tok-num">8px</span> <span class="tok-num">12px</span><span class="tok-punct">;</span>
+<span class="tok-brace">}</span></code></pre>
+    </div>
+
+    <h3>Dark variant</h3>
+    <div class="wwu-ui-code-block wwu-ui-code-block--dark">
+        <div class="wwu-ui-code-block__head">
+            <span class="wwu-ui-code-block__lang">JavaScript</span>
+            <button class="wwu-ui-code-block__copy" data-action="copy">Copy</button>
+        </div>
+        <pre><code class="wwu-ui-code-block__src"><span class="tok-key">function</span> <span class="tok-fn">setPressed</span>(btn, pressed) <span class="tok-brace">{</span>
+  btn.<span class="tok-fn">setAttribute</span>(<span class="tok-str">'aria-pressed'</span>, pressed <span class="tok-punct">?</span> <span class="tok-str">'true'</span> <span class="tok-punct">:</span> <span class="tok-str">'false'</span>)<span class="tok-punct">;</span>
+<span class="tok-brace">}</span>
+<span class="tok-com">// 0.8.4: moved to wwuUIKit.aria.setPressed</span></code></pre>
+    </div>
+
+    <h3>Inline</h3>
+    <p>Call <code class="wwu-ui-code-block wwu-ui-code-block--inline"><span class="tok-fn">apply_filters</span>(<span class="tok-str">'wwu_amp_global_rules'</span>)</code> in your code.</p>
+</div>
+
+<div class="section">
+    <h2>Tree row (0.9.0)</h2>
+
+    <div style="max-width: 360px; border: 1px solid #dcdcde; border-radius: 6px; padding: 6px 0; background: #fff;">
+        <button class="wwu-ui-tree-row" type="button" data-depth="0">
+            <span class="wwu-ui-tree-row__caret" data-state="expanded">▾</span>
+            <span class="wwu-ui-tree-row__icon">📁</span>
+            <span class="wwu-ui-tree-row__label">Pages</span>
+            <span class="wwu-ui-tree-row__meta">12</span>
+        </button>
+        <button class="wwu-ui-tree-row" type="button" data-depth="1">
+            <span class="wwu-ui-tree-row__caret" data-state="collapsed">▾</span>
+            <span class="wwu-ui-tree-row__icon">📄</span>
+            <span class="wwu-ui-tree-row__label">Landing page</span>
+        </button>
+        <button class="wwu-ui-tree-row" type="button" data-depth="1" aria-current="page">
+            <span class="wwu-ui-tree-row__caret" data-state="expanded">▾</span>
+            <span class="wwu-ui-tree-row__icon">📄</span>
+            <span class="wwu-ui-tree-row__label">About</span>
+            <span class="wwu-ui-tree-row__meta">3</span>
+        </button>
+        <button class="wwu-ui-tree-row" type="button" data-depth="2">
+            <span class="wwu-ui-tree-row__caret" data-state="leaf"></span>
+            <span class="wwu-ui-tree-row__icon">🧩</span>
+            <span class="wwu-ui-tree-row__label">Team section</span>
+        </button>
+        <button class="wwu-ui-tree-row" type="button" data-depth="2">
+            <span class="wwu-ui-tree-row__caret" data-state="leaf"></span>
+            <span class="wwu-ui-tree-row__icon">🧩</span>
+            <span class="wwu-ui-tree-row__label">CTA section (a very long label that should ellipsis)</span>
+        </button>
+        <button class="wwu-ui-tree-row" type="button" data-depth="0">
+            <span class="wwu-ui-tree-row__caret" data-state="leaf"></span>
+            <span class="wwu-ui-tree-row__icon">⚙</span>
+            <span class="wwu-ui-tree-row__label">Settings</span>
+        </button>
+    </div>
+</div>
+
+<div class="section">
+    <h2>History row (0.9.0)</h2>
+
+    <ul class="wwu-ui-history-list" style="max-width: 480px; background: #fff; border: 1px solid #dcdcde; border-radius: 6px; padding: 6px 0;">
+        <li class="wwu-ui-history-row wwu-ui-history-row--success" data-current="true">
+            <span class="wwu-ui-history-row__time">2m ago</span>
+            <div class="wwu-ui-history-row__body">
+                <span class="wwu-ui-history-row__desc">Saved manually</span>
+                <span class="wwu-ui-history-row__author">Edoardo</span>
+            </div>
+            <span class="wwu-ui-history-row__icon">✓</span>
+        </li>
+        <li class="wwu-ui-history-row wwu-ui-history-row--warning">
+            <span class="wwu-ui-history-row__time">3h ago</span>
+            <div class="wwu-ui-history-row__body">
+                <span class="wwu-ui-history-row__desc">Restored from revision #142</span>
+                <span class="wwu-ui-history-row__author">System</span>
+            </div>
+            <span class="wwu-ui-history-row__icon">↶</span>
+        </li>
+        <li class="wwu-ui-history-row wwu-ui-history-row--danger wwu-ui-history-row--clickable" tabindex="0">
+            <span class="wwu-ui-history-row__time">1d ago</span>
+            <div class="wwu-ui-history-row__body">
+                <span class="wwu-ui-history-row__desc">Save failed — network error</span>
+                <span class="wwu-ui-history-row__author">Matteo</span>
+            </div>
+            <span class="wwu-ui-history-row__icon">✕</span>
+        </li>
+        <li class="wwu-ui-history-row wwu-ui-history-row--info wwu-ui-history-row--compact">
+            <span class="wwu-ui-history-row__time">7d ago</span>
+            <div class="wwu-ui-history-row__body">
+                <span class="wwu-ui-history-row__desc">Compact row: imported bundle (12 components)</span>
+                <span class="wwu-ui-history-row__author">Edoardo</span>
+            </div>
+            <span class="wwu-ui-history-row__icon">ℹ</span>
+        </li>
+    </ul>
+</div>
+
+<!-- ═══════════════════ 0.8.4 utilities ═══════════════════ -->
+
+<div class="section">
+    <h2>Save state (0.8.4)</h2>
+
+    <h3>Each state side-by-side</h3>
+    <div class="row">
+        <span class="wwu-ui-save-state wwu-ui-save-state--idle"><span class="wwu-ui-save-state__dot"></span><span class="wwu-ui-save-state__text">No changes</span></span>
+        <span class="wwu-ui-save-state wwu-ui-save-state--dirty"><span class="wwu-ui-save-state__dot"></span><span class="wwu-ui-save-state__text">Unsaved changes</span></span>
+        <span class="wwu-ui-save-state wwu-ui-save-state--saving"><span class="wwu-ui-save-state__dot"></span><span class="wwu-ui-save-state__text">Saving…</span></span>
+        <span class="wwu-ui-save-state wwu-ui-save-state--saved"><span class="wwu-ui-save-state__dot"></span><span class="wwu-ui-save-state__text">Saved just now</span></span>
+        <span class="wwu-ui-save-state wwu-ui-save-state--error"><span class="wwu-ui-save-state__dot"></span><span class="wwu-ui-save-state__text">Save failed</span></span>
+    </div>
+
+    <h3>Live controller (cycles every 2s)</h3>
+    <div class="row">
+        <span class="wwu-ui-save-state" id="live-save-state"></span>
+        <button type="button" id="trigger-save-cycle">Trigger save</button>
+    </div>
+</div>
+
+<!-- ═══════════════════ 0.9.1 extensions ═══════════════════ -->
+
+<div class="section">
+    <h2>Badge --mono (0.9.1)</h2>
+
+    <h3>Inline values</h3>
+    <div class="row">
+        <span class="wwu-ui-badge wwu-ui-badge--mono">1480 × 820</span>
+        <span class="wwu-ui-badge wwu-ui-badge--mono">v0.9.1</span>
+        <span class="wwu-ui-badge wwu-ui-badge--mono">a3f9c1</span>
+        <span class="wwu-ui-badge wwu-ui-badge--mono is-active">/landing-2026</span>
+    </div>
+
+    <h3>Combined with color variants</h3>
+    <div class="row">
+        <span class="wwu-ui-badge wwu-ui-badge--mono info-soft">a3f9c1</span>
+        <span class="wwu-ui-badge wwu-ui-badge--mono success-soft">passed</span>
+        <span class="wwu-ui-badge wwu-ui-badge--mono danger-soft">failed</span>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Tabs --device (0.9.1)</h2>
+
+    <div class="wwu-ui-tabs wwu-ui-tabs--device" role="tablist" aria-label="Device preview">
+        <button class="wwu-ui-tab wwu-ui-tab--device" role="tab" aria-selected="true"  data-value="desktop">🖥 <span class="wwu-ui-tab-label">Desktop</span></button>
+        <button class="wwu-ui-tab wwu-ui-tab--device" role="tab" aria-selected="false" data-value="laptop">💻 <span class="wwu-ui-tab-label">Laptop</span></button>
+        <button class="wwu-ui-tab wwu-ui-tab--device" role="tab" aria-selected="false" data-value="tablet">📱 <span class="wwu-ui-tab-label">Tablet</span></button>
+        <button class="wwu-ui-tab wwu-ui-tab--device" role="tab" aria-selected="false" data-value="mobile">📲 <span class="wwu-ui-tab-label">Mobile</span></button>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Toolbar --3-zone (0.9.1)</h2>
+
+    <div class="wwu-ui-toolbar wwu-ui-toolbar--3-zone" style="background: #fff; border: 1px solid #c3c4c7; border-radius: 6px; padding: 8px 12px; margin: 0;">
+        <div class="wwu-ui-toolbar__zone wwu-ui-toolbar__zone--left">
+            <nav class="wwu-ui-breadcrumb wwu-ui-breadcrumb--compact">
+                <ol class="wwu-ui-breadcrumb__list">
+                    <li class="wwu-ui-breadcrumb__item"><a href="#" class="wwu-ui-breadcrumb__link">Pages</a><span class="wwu-ui-breadcrumb__sep">/</span></li>
+                    <li class="wwu-ui-breadcrumb__item" aria-current="page"><span class="wwu-ui-breadcrumb__page">Landing</span></li>
+                </ol>
+            </nav>
+            <span class="wwu-ui-status-chip wwu-ui-status-chip--draft wwu-ui-status-chip--sm"><span class="wwu-ui-status-chip__dot"></span><span class="wwu-ui-status-chip__label">Draft</span></span>
+        </div>
+
+        <div class="wwu-ui-toolbar__zone wwu-ui-toolbar__zone--center">
+            <div class="wwu-ui-segmented wwu-ui-segmented--compact" role="group" aria-label="View">
+                <button class="wwu-ui-segmented__btn" aria-pressed="true">Visual</button>
+                <button class="wwu-ui-segmented__btn" aria-pressed="false">Split</button>
+                <button class="wwu-ui-segmented__btn" aria-pressed="false">Code</button>
+            </div>
+        </div>
+
+        <div class="wwu-ui-toolbar__zone wwu-ui-toolbar__zone--right">
+            <span class="wwu-ui-save-state wwu-ui-save-state--dirty"><span class="wwu-ui-save-state__dot"></span><span class="wwu-ui-save-state__text">Unsaved</span></span>
+            <button class="wwu-ui-btn-icon" aria-label="Settings">⚙</button>
+            <button class="button button-primary" style="background: #2271b1; color: #fff; border: 0; padding: 4px 12px; border-radius: 4px;">Publish</button>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Search with icon prefix (0.9.1)</h2>
+
+    <div class="wwu-ui-search-wrap">
+        <span class="wwu-ui-search-wrap__icon" aria-hidden="true">🔍</span>
+        <input type="search" class="wwu-ui-search" placeholder="Search components…">
+    </div>
+</div>
+
+<div class="section">
+    <h2>Icon-only buttons (0.9.1)</h2>
+
+    <h3>All variants</h3>
+    <div class="row">
+        <button class="wwu-ui-btn-icon" aria-label="Default">⚙</button>
+        <button class="wwu-ui-btn-icon wwu-ui-btn-icon--sm" aria-label="Small">×</button>
+        <button class="wwu-ui-btn-icon wwu-ui-btn-icon--ghost" aria-label="Ghost">🎚</button>
+        <button class="wwu-ui-btn-icon wwu-ui-btn-icon--primary" aria-label="Primary">★</button>
+        <button class="wwu-ui-btn-icon wwu-ui-btn-icon--danger" aria-label="Danger">🗑</button>
+        <button class="wwu-ui-btn-icon" aria-label="Disabled" disabled>⊘</button>
+    </div>
+
+    <h3>Toggle state (aria-pressed)</h3>
+    <div class="row">
+        <button class="wwu-ui-btn-icon" id="toggle-btn-1" aria-pressed="false" aria-label="Toggle grid">▦</button>
+        <button class="wwu-ui-btn-icon" id="toggle-btn-2" aria-pressed="true" aria-label="Toggle outline">⬚</button>
+    </div>
+</div>
+
+<!-- ═══════════════════ Clipboard copyWithFlash (0.8.4) ═══════════════════ -->
+
+<div class="section">
+    <h2>Clipboard.copyWithFlash (0.8.4)</h2>
+    <p class="meta">Click the buttons below. They flash <code>.is-copied</code> for 1.2s — no toast.</p>
+
+    <style>
+        .copy-flash::after { content: ''; margin-left: 4px; }
+        .copy-flash.is-copied { background: #d4edda; border-color: #1c7d3d; color: #1c7d3d; }
+        .copy-flash.is-copied::after { content: ' ✓'; }
+        .copy-flash.is-copy-error { background: #fde7e9; border-color: #b32d2e; color: #b32d2e; }
+        .copy-flash.is-copy-error::after { content: ' ✗'; }
+    </style>
+
+    <div class="row">
+        <button class="wwu-ui-btn-icon copy-flash" id="copy-1" aria-label="Copy hex" data-copy="#2271b1">#2271b1</button>
+        <button class="wwu-ui-btn-icon copy-flash" id="copy-2" aria-label="Copy snippet" data-copy="wwuUIKit.aria.setPressed(btn, true)" style="width: auto; padding: 0 10px;">copy snippet</button>
+    </div>
+</div>
+
+<!-- ═══════════════════ Bundle JS ═══════════════════ -->
+
+<script src="ui-kit.js"></script>
+<script>
+    /* === Wire up demo interactions === */
+
+    // Segmented controller
+    var seg = wwuUIKit.segmented.bind('#seg-view', {
+        onChange: function (value) {
+            document.getElementById('seg-output').textContent = value;
+        },
+    });
+    wwuUIKit.segmented.bind('.wwu-ui-segmented:nth-of-type(2)');
+    wwuUIKit.segmented.bind('.wwu-ui-segmented--icon');
+    wwuUIKit.segmented.bind('.wwu-ui-tabs--device .wwu-ui-segmented, .wwu-ui-tabs--device', { /* tabs --device are segmented-like but use aria-selected */ });
+
+    // Overflow menus
+    wwuUIKit.overflow.bind('#overflow-1', {
+        onItem: function (value) {
+            document.getElementById('overflow-output').textContent = value + ' (right-anchored)';
+        },
+    });
+    wwuUIKit.overflow.bind('#overflow-2', {
+        onItem: function (value) {
+            document.getElementById('overflow-output').textContent = value + ' (left-anchored)';
+        },
+    });
+
+    // Save state — live cycle on button click
+    var saver = wwuUIKit.saveState.attach('#live-save-state', {
+        labels: {
+            idle:   'No changes',
+            dirty:  'Unsaved changes',
+            saving: 'Saving…',
+            saved:  'Saved',
+            error:  'Save failed — retry',
+        },
+    });
+    var triggerCount = 0;
+    document.getElementById('trigger-save-cycle').addEventListener('click', function () {
+        triggerCount++;
+        saver.set('dirty');
+        setTimeout(function () {
+            saver.cycle(function () {
+                return new Promise(function (resolve, reject) {
+                    setTimeout(function () {
+                        // Fail every 3rd attempt to demo --error state.
+                        triggerCount % 3 === 0 ? reject(new Error('Network')) : resolve();
+                    }, 900);
+                });
+            }).catch(function () {});
+        }, 300);
+    });
+
+    // Toggle buttons via aria helper
+    [document.getElementById('toggle-btn-1'), document.getElementById('toggle-btn-2')].forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            wwuUIKit.aria.setPressed(btn, !wwuUIKit.aria.isPressed(btn));
+        });
+    });
+
+    // copyWithFlash demos
+    document.getElementById('copy-1').addEventListener('click', function () {
+        wwuUIKit.clipboard.copyWithFlash(this, this.dataset.copy);
+    });
+    document.getElementById('copy-2').addEventListener('click', function () {
+        wwuUIKit.clipboard.copyWithFlash(this, this.dataset.copy);
+    });
+
+    // Code block copy buttons
+    document.querySelectorAll('.wwu-ui-code-block__copy').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var src = btn.closest('.wwu-ui-code-block').querySelector('.wwu-ui-code-block__src');
+            wwuUIKit.clipboard.copyWithFlash(btn, src ? src.textContent : '');
+        });
+    });
+
+    console.log('[wwu-ui-kit] sandbox loaded — kit version:', wwuUIKit.version);
+    console.log('[wwu-ui-kit] namespaces:', Object.keys(wwuUIKit).filter(function (k) {
+        return wwuUIKit[k] && typeof wwuUIKit[k] === 'object';
+    }));
+</script>
+
+</body>
+</html>

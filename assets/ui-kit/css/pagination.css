@@ -1,0 +1,117 @@
+/**
+ * WWU UI Kit — Pagination
+ *
+ * WordPress-style pagination bar. Shows "N of M" summary + prev/next +
+ * numbered page buttons. Used under long data tables.
+ *
+ * @since 0.5.0
+ */
+
+.wwu-ui-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--wwu-ui-space-4);
+    padding: var(--wwu-ui-space-3) 0;
+    font-size: var(--wwu-ui-font-md);
+    flex-wrap: wrap;
+}
+
+.wwu-ui-pagination-summary {
+    color: var(--wwu-ui-text-subtle);
+    font-size: var(--wwu-ui-font-sm);
+}
+
+.wwu-ui-pagination-summary strong {
+    color: var(--wwu-ui-text);
+    font-weight: 600;
+}
+
+.wwu-ui-pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--wwu-ui-space-1);
+}
+
+.wwu-ui-pagination-btn {
+    min-width: 28px;
+    height: 28px;
+    padding: 0 var(--wwu-ui-space-2);
+    background: var(--wwu-ui-bg);
+    border: 1px solid var(--wwu-ui-border-strong);
+    border-radius: var(--wwu-ui-radius-md);
+    color: var(--wwu-ui-text);
+    font-size: var(--wwu-ui-font-sm);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--wwu-ui-transition-fast),
+                border-color var(--wwu-ui-transition-fast),
+                color var(--wwu-ui-transition-fast);
+}
+
+.wwu-ui-pagination-btn:hover:not(:disabled) {
+    background: var(--wwu-ui-bg-subtle);
+    border-color: var(--wwu-ui-primary);
+    color: var(--wwu-ui-primary);
+}
+
+.wwu-ui-pagination-btn:focus-visible {
+    outline: 2px solid var(--wwu-ui-primary);
+    outline-offset: 1px;
+}
+
+.wwu-ui-pagination-btn:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+}
+
+.wwu-ui-pagination-btn.is-active {
+    background: var(--wwu-ui-primary);
+    border-color: var(--wwu-ui-primary);
+    color: #fff;
+    font-weight: 600;
+}
+
+.wwu-ui-pagination-btn.is-active:hover {
+    background: var(--wwu-ui-primary-hover);
+    border-color: var(--wwu-ui-primary-hover);
+    color: #fff;
+}
+
+/* Ellipsis placeholder between distant page numbers. */
+.wwu-ui-pagination-ellipsis {
+    padding: 0 var(--wwu-ui-space-1);
+    color: var(--wwu-ui-text-subtle);
+    user-select: none;
+}
+
+/* Per-page dropdown, optional. */
+.wwu-ui-pagination-perpage {
+    display: flex;
+    align-items: center;
+    gap: var(--wwu-ui-space-1);
+    font-size: var(--wwu-ui-font-sm);
+    color: var(--wwu-ui-text-muted);
+}
+
+.wwu-ui-pagination-perpage select {
+    padding: 4px 8px;
+    border: 1px solid var(--wwu-ui-border-strong);
+    border-radius: var(--wwu-ui-radius-md);
+    font-size: var(--wwu-ui-font-sm);
+}
+
+/* Responsive: stack on narrow screens. */
+@media (max-width: 600px) {
+    .wwu-ui-pagination {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .wwu-ui-pagination-summary {
+        flex: 1 0 100%;
+        text-align: center;
+    }
+}

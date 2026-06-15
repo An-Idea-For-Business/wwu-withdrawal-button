@@ -1,0 +1,124 @@
+/**
+ * WWU UI Kit — Repeater
+ *
+ * Dynamic row list: user adds rows via Add button, removes via per-row
+ * Remove button. CSS grid layout for the row, responsive stack on narrow
+ * screens. JS pairs with `<template>` element for add-row markup.
+ *
+ * Extracted from Pixel Manager admin.css:1030-1133 + admin.js:488-544
+ * (PM uses it for Google Ads conversion label / value grids).
+ *
+ * Generalised: original hardcoded 5-column grid for PM's specific use case
+ * (2 label + 1 value + 1 currency + 1 remove); kit version accepts arbitrary
+ * `grid-template-columns` via `--wwu-ui-repeater-columns` custom property so
+ * consumers choose their own column mix.
+ *
+ * @since 0.7.0
+ */
+
+.wwu-ui-repeater {
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 var(--wwu-ui-space-2);
+}
+
+/* Grid layout for header + rows. Columns are consumer-configurable via
+ * the `--wwu-ui-repeater-columns` custom property — set it on the root
+ * `.wwu-ui-repeater` element inline or in a scoped rule. */
+.wwu-ui-repeater-header,
+.wwu-ui-repeater-row {
+    display: grid;
+    grid-template-columns: var(--wwu-ui-repeater-columns, 1fr 1fr auto);
+    gap: var(--wwu-ui-space-2);
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--wwu-ui-border-soft);
+}
+
+.wwu-ui-repeater-row:last-child,
+.wwu-ui-repeater-header:last-child {
+    border-bottom: 0;
+}
+
+.wwu-ui-repeater-header {
+    font-size: var(--wwu-ui-font-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--wwu-ui-text-subtle);
+    padding-bottom: 4px;
+}
+
+/* Inputs inside a row — monospace + subtle border. */
+.wwu-ui-repeater input[type="text"],
+.wwu-ui-repeater input[type="number"],
+.wwu-ui-repeater input[type="email"],
+.wwu-ui-repeater input[type="url"] {
+    width: 100%;
+    padding: 5px 8px;
+    font-size: var(--wwu-ui-font-sm);
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    border: 1px solid var(--wwu-ui-border-strong);
+    border-radius: var(--wwu-ui-radius-sm);
+    background: var(--wwu-ui-bg);
+}
+
+.wwu-ui-repeater input:focus-visible {
+    outline: none;
+    border-color: var(--wwu-ui-primary);
+    box-shadow: 0 0 0 2px rgba(34, 113, 177, 0.18);
+}
+
+/* Remove button — small icon-only square, red hover. */
+.wwu-ui-repeater-remove {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--wwu-ui-radius-sm);
+    padding: 4px;
+    cursor: pointer;
+    color: var(--wwu-ui-text-subtle);
+    transition: background var(--wwu-ui-transition-fast),
+                color var(--wwu-ui-transition-fast),
+                border-color var(--wwu-ui-transition-fast);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+}
+
+.wwu-ui-repeater-remove:hover {
+    background: rgba(214, 54, 56, 0.1);
+    color: var(--wwu-ui-danger);
+    border-color: rgba(214, 54, 56, 0.3);
+}
+
+.wwu-ui-repeater-remove:focus-visible {
+    outline: 2px solid var(--wwu-ui-primary);
+    outline-offset: 1px;
+}
+
+.wwu-ui-repeater-remove .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+/* Add button — typically placed below the list. Consumer provides markup
+ * as a regular WP `.button`, the kit just provides spacing convention. */
+.wwu-ui-repeater-add {
+    margin-top: var(--wwu-ui-space-2);
+}
+
+/* Responsive: stack each row vertically on narrow screens. */
+@media (max-width: 782px) {
+    .wwu-ui-repeater-header {
+        display: none;
+    }
+
+    .wwu-ui-repeater-row {
+        grid-template-columns: 1fr;
+        padding: var(--wwu-ui-space-2) 0;
+        border-bottom: 2px solid var(--wwu-ui-border-soft);
+    }
+}

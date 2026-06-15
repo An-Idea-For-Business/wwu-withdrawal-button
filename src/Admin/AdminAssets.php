@@ -89,9 +89,14 @@ final class AdminAssets {
 		}
 		require_once $loader;
 		if ( class_exists( '\\WWU_UI_Kit_Loader' ) ) {
+			// Only the components actually used by the admin UI. `.wwu-ui-notice`
+			// lives in `utilities` (there is no standalone `notice` component); the
+			// loader auto-pulls the `tokens` + `core` baseline. (The old list also
+			// requested unused components — toast/ajax/form-field/switch/save-bar —
+			// and an invalid `notice` id that the loader silently skipped.)
 			\WWU_UI_Kit_Loader::enqueue(
 				'wwu-wb',
-				array( 'toast', 'accordion', 'ajax', 'form-field', 'switch', 'save-bar', 'notice', 'badge' )
+				array( 'accordion', 'badge', 'utilities' )
 			);
 		}
 	}

@@ -1,0 +1,122 @@
+/**
+ * WWU UI Kit — Breadcrumb
+ *
+ * Lightweight navigation crumbs: `Section / Subsection / Current`.
+ * Markup follows WAI-ARIA breadcrumb pattern.
+ *
+ * Markup:
+ *   <nav class="wwu-ui-breadcrumb" aria-label="Breadcrumb">
+ *     <ol class="wwu-ui-breadcrumb__list">
+ *       <li class="wwu-ui-breadcrumb__item">
+ *         <a href="/pages" class="wwu-ui-breadcrumb__link">Pages</a>
+ *         <span class="wwu-ui-breadcrumb__sep" aria-hidden="true">/</span>
+ *       </li>
+ *       <li class="wwu-ui-breadcrumb__item">
+ *         <a href="/pages/landing" class="wwu-ui-breadcrumb__link">Landing</a>
+ *         <span class="wwu-ui-breadcrumb__sep" aria-hidden="true">/</span>
+ *       </li>
+ *       <li class="wwu-ui-breadcrumb__item" aria-current="page">
+ *         <span class="wwu-ui-breadcrumb__page">Hero Section</span>
+ *       </li>
+ *     </ol>
+ *   </nav>
+ *
+ * Optional slug chip after the current page name (CVB-style):
+ *   <span class="wwu-ui-breadcrumb__slug">/landing-2026</span>
+ *
+ * Variants:
+ *   --compact   smaller font + tighter padding
+ *
+ * @since 0.9.0
+ */
+
+/* ── Container ──────────────────────────────────────────────── */
+.wwu-ui-breadcrumb {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--wwu-ui-text-muted, #6b7280);
+}
+
+.wwu-ui-breadcrumb__list {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+    gap: 0;
+}
+
+.wwu-ui-breadcrumb__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ── Link (intermediate items) ─────────────────────────────── */
+.wwu-ui-breadcrumb__link {
+    color: var(--wwu-ui-text-muted, #6b7280);
+    text-decoration: none;
+    transition: color 0.12s ease;
+}
+
+.wwu-ui-breadcrumb__link:hover,
+.wwu-ui-breadcrumb__link:focus-visible {
+    color: var(--wwu-ui-primary, #2271b1);
+    text-decoration: underline;
+}
+
+.wwu-ui-breadcrumb__link:focus-visible {
+    outline: 2px solid var(--wwu-ui-primary, #2271b1);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+/* ── Separator ──────────────────────────────────────────────── */
+.wwu-ui-breadcrumb__sep {
+    color: var(--wwu-ui-border, #c3c4c7);
+    margin: 0 4px;
+    user-select: none;
+}
+
+/* ── Current page (final item, non-clickable) ──────────────── */
+.wwu-ui-breadcrumb__page {
+    color: var(--wwu-ui-text, #1d2327);
+    font-weight: 500;
+}
+
+/* aria-current target gets bolder treatment */
+.wwu-ui-breadcrumb__item[aria-current] .wwu-ui-breadcrumb__link {
+    color: var(--wwu-ui-text, #1d2327);
+    font-weight: 500;
+    pointer-events: none;
+}
+
+/* ── Optional slug chip ─────────────────────────────────────── */
+.wwu-ui-breadcrumb__slug {
+    display: inline-block;
+    padding: 1px 8px;
+    margin-left: 8px;
+    background: var(--wwu-ui-bg-subtle, #f0f0f1);
+    border: 1px solid var(--wwu-ui-border, #e5e7eb);
+    border-radius: 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Cascadia Mono", monospace;
+    font-size: 11px;
+    color: var(--wwu-ui-text-muted, #6b7280);
+}
+
+/* ── Variant: --compact ────────────────────────────────────── */
+.wwu-ui-breadcrumb--compact {
+    font-size: 12px;
+}
+
+.wwu-ui-breadcrumb--compact .wwu-ui-breadcrumb__sep {
+    margin: 0 2px;
+}
+
+/* ── Trap #19 paired rule ───────────────────────────────────── */
+.wwu-ui-breadcrumb[hidden] {
+    display: none !important;
+}

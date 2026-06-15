@@ -1,0 +1,158 @@
+/**
+ * WWU UI Kit — Data Table
+ *
+ * Unified replacement for .wwu-aml-table, .wwu-amp-snapshot-list,
+ * .wwu-amp-hints-list, .wwu-amp-resource-table — 4 divergent variants
+ * in AM Lite/Pro that all wanted the same thing: WP-style admin table
+ * with uppercase header, hover row, underlined dividers.
+ *
+ * Variants via class modifiers:
+ *   .wwu-ui-table--sticky-header     — sticky thead, needs parent scroll container
+ *   .wwu-ui-table--bordered          — outer border around the whole table
+ *   .wwu-ui-table--compact           — reduced padding for dense lists
+ *   .wwu-ui-table--scroll            — wraps in horizontal scroll on narrow viewports
+ *
+ * @since 0.5.0
+ */
+
+.wwu-ui-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--wwu-ui-font-md);
+}
+
+.wwu-ui-table th,
+.wwu-ui-table td {
+    padding: var(--wwu-ui-space-2) var(--wwu-ui-space-3);
+    text-align: left;
+    border-bottom: 1px solid var(--wwu-ui-border-soft);
+    vertical-align: middle;
+}
+
+.wwu-ui-table th {
+    background: #fafafa;
+    font-weight: 600;
+    font-size: var(--wwu-ui-font-sm);
+    text-transform: uppercase;
+    color: var(--wwu-ui-text-subtle);
+    letter-spacing: .02em;
+    white-space: nowrap;
+}
+
+.wwu-ui-table tbody tr:hover {
+    background: #f9f9f9;
+}
+
+/* Empty-state cell (single row spanning all columns). */
+.wwu-ui-table-empty td {
+    text-align: center;
+    padding: var(--wwu-ui-space-6) var(--wwu-ui-space-4);
+    color: var(--wwu-ui-text-subtle);
+    font-style: italic;
+}
+
+/* Row action cluster — small button group typically at end-of-row. */
+.wwu-ui-table-actions {
+    display: flex;
+    gap: var(--wwu-ui-space-1);
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+}
+
+/* Cell content helpers. */
+.wwu-ui-table-monospace {
+    font-family: Consolas, Monaco, "Courier New", monospace;
+    font-size: var(--wwu-ui-font-sm);
+    color: var(--wwu-ui-primary);
+}
+
+.wwu-ui-table-muted {
+    color: var(--wwu-ui-text-subtle);
+    font-size: var(--wwu-ui-font-sm);
+}
+
+.wwu-ui-table-truncate {
+    max-width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Sort-icon slot — consumers wire a button inside <th> that toggles this. */
+.wwu-ui-table-sort {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    user-select: none;
+    color: inherit;
+    text-transform: inherit;
+    font-weight: inherit;
+    background: none;
+    border: 0;
+    padding: 0;
+    font-size: inherit;
+    letter-spacing: inherit;
+}
+
+.wwu-ui-table-sort::after {
+    content: '\2195'; /* ↕ */
+    opacity: .35;
+    font-size: 10px;
+}
+
+.wwu-ui-table-sort[aria-sort="ascending"]::after  { content: '\25B4'; opacity: 1; } /* ▴ */
+.wwu-ui-table-sort[aria-sort="descending"]::after { content: '\25BE'; opacity: 1; } /* ▾ */
+
+/* ── Modifier: sticky header ────────────────────── */
+/* Requires parent with `overflow-y: auto` + a max-height, else sticky has no effect. */
+
+.wwu-ui-table--sticky-header thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+/* ── Modifier: bordered ─────────────────────────── */
+
+.wwu-ui-table--bordered {
+    border: 1px solid var(--wwu-ui-border-strong);
+    border-radius: var(--wwu-ui-radius-md);
+    overflow: hidden; /* clip corner radius */
+}
+
+.wwu-ui-table--bordered th:first-child,
+.wwu-ui-table--bordered td:first-child {
+    padding-left: var(--wwu-ui-space-4);
+}
+
+.wwu-ui-table--bordered th:last-child,
+.wwu-ui-table--bordered td:last-child {
+    padding-right: var(--wwu-ui-space-4);
+}
+
+/* ── Modifier: compact ──────────────────────────── */
+
+.wwu-ui-table--compact th,
+.wwu-ui-table--compact td {
+    padding: 6px var(--wwu-ui-space-2);
+}
+
+/* ── Modifier: horizontal scroll wrapper ────────── */
+/* Wrap the table in <div class="wwu-ui-table--scroll"> to handle narrow viewports. */
+
+.wwu-ui-table--scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Responsive: on narrow screens, force whitespace-normal on truncated cells
+ * so content wraps rather than overflowing. Consumer opts in per-table. */
+@media (max-width: 782px) {
+    .wwu-ui-table-truncate--wrap-mobile {
+        white-space: normal;
+        max-width: 100%;
+    }
+}

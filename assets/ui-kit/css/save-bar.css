@@ -1,0 +1,94 @@
+/**
+ * WWU UI Kit — Save Bar (sticky bottom action bar)
+ *
+ * Sticks to the bottom of its scroll container, showing a context legend
+ * on the left and save/action buttons on the right. Goes red/pulsing when
+ * the panel has unsaved changes (`.is-dirty` modifier).
+ *
+ * Extracted from AM Lite admin.css:482-556 (Lite 1.3.23+).
+ *
+ * @since 0.2.0
+ */
+
+.wwu-ui-save-bar {
+    position: sticky;
+    bottom: 0;
+    background: var(--wwu-ui-bg);
+    border-top: 2px solid var(--wwu-ui-primary);
+    padding: var(--wwu-ui-space-3) var(--wwu-ui-space-4);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--wwu-ui-space-3);
+    margin-top: var(--wwu-ui-space-4);
+    z-index: 10;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.04);
+    flex-wrap: wrap;
+}
+
+/* Left half — legend text + inline badges/code samples. */
+.wwu-ui-save-bar-legend {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: var(--wwu-ui-font-sm);
+    color: var(--wwu-ui-text-muted);
+    line-height: 1.6;
+}
+
+.wwu-ui-save-bar-legend .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    vertical-align: text-top;
+    color: var(--wwu-ui-text-subtle);
+}
+
+.wwu-ui-save-bar-legend code {
+    background: var(--wwu-ui-border-soft);
+    padding: 1px 5px;
+    border-radius: var(--wwu-ui-radius-sm);
+    font-size: var(--wwu-ui-font-xs);
+    color: var(--wwu-ui-primary);
+}
+
+/* Right half — action buttons (main save + optional extras). */
+.wwu-ui-save-bar-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--wwu-ui-space-2);
+    flex: 0 0 auto;
+}
+
+.wwu-ui-save-bar-actions .button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--wwu-ui-space-1);
+}
+
+/**
+ * Dirty state — applied when there are unsaved changes.
+ * Red top border + pink wash + visible dirty hint prompt the user.
+ * Toggle via `bar.classList.toggle('is-dirty', hasUnsavedChanges)`.
+ */
+.wwu-ui-save-bar.is-dirty {
+    border-top-color: var(--wwu-ui-danger);
+    background: #fcf0f1;
+}
+
+.wwu-ui-save-bar-dirty-hint {
+    display: none;
+    color: var(--wwu-ui-danger);
+    font-weight: 600;
+    font-size: var(--wwu-ui-font-sm);
+    margin-right: var(--wwu-ui-space-1);
+    white-space: nowrap;
+}
+
+.wwu-ui-save-bar.is-dirty .wwu-ui-save-bar-dirty-hint {
+    display: inline-block;
+}
+
+/* Additional pulse ring on the primary save button when dirty. */
+.wwu-ui-save-bar.is-dirty .wwu-ui-save-bar-actions .button-primary {
+    box-shadow: 0 0 0 2px var(--wwu-ui-danger);
+}

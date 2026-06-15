@@ -1,0 +1,328 @@
+/**
+ * WWU UI Kit — Tabs + Sidebar Nav layout
+ *
+ * Full admin page layout: left sidebar (grouped tab list) + main panel.
+ * Sticky sidebar, scrollable on long nav lists, collapses to a horizontal
+ * strip under 1024px and to icon-only under 600px.
+ *
+ * This is the canonical admin layout for every WWU plugin. AM Lite/Pro,
+ * Pixel Manager, future Code & Visual Builder should all use this.
+ *
+ * Extracted from AM Lite admin.css:10-185 (Lite 1.3.0+).
+ *
+ * @since 0.2.0
+ */
+
+/* ── Layout root ─────────────────────────────── */
+
+.wwu-ui-wrap {
+    max-width: 1400px;
+    margin: 20px auto;
+}
+
+.wwu-ui-wrap h1 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.wwu-ui-layout {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    align-items: flex-start;
+}
+
+/* ── Sidebar ─────────────────────────────────── */
+
+.wwu-ui-sidebar {
+    flex: 0 0 220px;
+    min-width: 220px;
+    background: var(--wwu-ui-bg);
+    border: 1px solid var(--wwu-ui-border-strong);
+    border-radius: var(--wwu-ui-radius-lg);
+    padding: 10px 8px;
+    position: sticky;
+    top: 42px; /* below WP admin bar */
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
+    box-shadow: var(--wwu-ui-shadow-sm);
+}
+
+/* Sidebar groups — section dividers within the nav (e.g. "Base", "Pro"). */
+.wwu-ui-sidebar-group + .wwu-ui-sidebar-group {
+    margin-top: var(--wwu-ui-space-3);
+    padding-top: 10px;
+    border-top: 1px solid var(--wwu-ui-border-soft);
+}
+
+.wwu-ui-sidebar-heading {
+    display: flex;
+    align-items: center;
+    gap: var(--wwu-ui-space-1);
+    padding: 4px 10px 6px;
+    font-size: var(--wwu-ui-font-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--wwu-ui-text-subtle);
+}
+
+.wwu-ui-sidebar-heading .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    color: #a7aaad;
+}
+
+/* ── Tab (sidebar item) ──────────────────────── */
+
+.wwu-ui-tab {
+    display: flex;
+    align-items: center;
+    gap: var(--wwu-ui-space-2);
+    padding: 8px 10px;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--wwu-ui-radius-md);
+    font-weight: 500;
+    font-size: var(--wwu-ui-font-md);
+    text-decoration: none;
+    color: var(--wwu-ui-text);
+    transition: background .12s, color .12s, border-color .12s;
+    line-height: 1.35;
+}
+
+.wwu-ui-tab .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    color: var(--wwu-ui-text-subtle);
+    flex: 0 0 16px;
+    transition: color .12s;
+}
+
+.wwu-ui-tab-label {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.wwu-ui-tab:hover {
+    background: var(--wwu-ui-bg-subtle);
+    color: var(--wwu-ui-text);
+}
+
+.wwu-ui-tab:hover .dashicons {
+    color: var(--wwu-ui-text);
+}
+
+.wwu-ui-tab:focus-visible {
+    outline: 2px solid var(--wwu-ui-primary);
+    outline-offset: 1px;
+}
+
+.wwu-ui-tab.active {
+    background: #eef4fa;
+    color: #0a4b78;
+    border-color: #c5dcee;
+    font-weight: 600;
+    box-shadow: inset 3px 0 0 var(--wwu-ui-primary);
+}
+
+.wwu-ui-tab.active .dashicons {
+    color: var(--wwu-ui-primary);
+}
+
+/* Optional right-aligned badge inside tab (e.g. count, PRO). */
+.wwu-ui-tab-badge {
+    margin-left: auto;
+    font-size: var(--wwu-ui-font-xs);
+    padding: 1px 6px;
+    border-radius: var(--wwu-ui-radius-sm);
+    background: var(--wwu-ui-primary);
+    color: #fff;
+    line-height: 1.4;
+}
+
+/* ── Main panel area ─────────────────────────── */
+
+.wwu-ui-main {
+    flex: 1;
+    min-width: 0; /* allow flex child to shrink below content width */
+}
+
+.wwu-ui-panel {
+    display: none;
+    background: var(--wwu-ui-bg);
+    padding: 20px;
+    border: 1px solid var(--wwu-ui-border-strong);
+    border-radius: var(--wwu-ui-radius-lg);
+    box-shadow: var(--wwu-ui-shadow-sm);
+}
+
+.wwu-ui-panel.active {
+    display: block;
+}
+
+/* ── Responsive: collapse sidebar to top strip ── */
+
+@media (max-width: 1024px) {
+    .wwu-ui-layout {
+        flex-direction: column;
+    }
+
+    .wwu-ui-sidebar {
+        flex: 0 0 auto;
+        width: 100%;
+        min-width: 0;
+        position: static;
+        max-height: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0;
+        padding: 6px;
+    }
+
+    .wwu-ui-sidebar-group {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--wwu-ui-space-1);
+        padding: 4px 6px;
+        flex: 0 0 auto;
+    }
+
+    .wwu-ui-sidebar-group + .wwu-ui-sidebar-group {
+        margin-top: 0;
+        padding-top: 4px;
+        border-top: none;
+        border-left: 1px solid var(--wwu-ui-border-soft);
+        padding-left: 10px;
+        margin-left: 6px;
+    }
+
+    .wwu-ui-sidebar-heading {
+        padding: 2px 4px 2px 0;
+        font-size: 10px;
+    }
+
+    .wwu-ui-tab {
+        padding: 6px 10px;
+        font-size: var(--wwu-ui-font-sm);
+    }
+
+    .wwu-ui-tab.active {
+        box-shadow: inset 0 -2px 0 var(--wwu-ui-primary);
+    }
+}
+
+@media (max-width: 600px) {
+    .wwu-ui-sidebar-heading {
+        display: none;
+    }
+
+    .wwu-ui-tab-label {
+        display: none;
+    }
+
+    .wwu-ui-tab {
+        padding: 8px;
+    }
+
+    .wwu-ui-tab .dashicons {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+    }
+}
+
+/* ── Variant: --device (compact horizontal device tabs) ─────────────────
+   Added in 0.9.1.
+   For viewport / responsive preview switchers (Desktop / Laptop / Tablet /
+   Mobile). Compact horizontal row, icon + label, no sidebar context.
+
+   Markup:
+     <div class="wwu-ui-tabs wwu-ui-tabs--device" role="tablist">
+       <button class="wwu-ui-tab wwu-ui-tab--device" role="tab"
+               aria-selected="true" data-value="desktop">
+         <span class="dashicons dashicons-desktop"></span>
+         <span class="wwu-ui-tab-label">Desktop</span>
+       </button>
+       ...
+     </div>
+
+   Combine with wwuUIKit.segmented.bind() for the same UX as the segmented
+   control but in a tab role (semantic tablist instead of group).
+─────────────────────────────────────────────────────────────────────── */
+
+.wwu-ui-tabs--device {
+    display: inline-flex;
+    align-items: stretch;
+    gap: 2px;
+    background: var(--wwu-ui-bg-subtle, #f0f0f1);
+    border: 1px solid var(--wwu-ui-border, #c3c4c7);
+    border-radius: var(--wwu-ui-radius-md, 6px);
+    padding: 2px;
+}
+
+.wwu-ui-tab--device {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 4px 10px;
+    background: transparent;
+    border: 0;
+    border-radius: 4px;
+    color: var(--wwu-ui-text-muted, #50575e);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    line-height: 1;
+    min-width: 64px;
+    transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.wwu-ui-tab--device:hover:not([aria-selected="true"]):not(:disabled) {
+    background: rgba(0, 0, 0, 0.04);
+    color: var(--wwu-ui-text, #1d2327);
+}
+
+.wwu-ui-tab--device[aria-selected="true"],
+.wwu-ui-tab--device.active {
+    background: var(--wwu-ui-bg, #fff);
+    color: var(--wwu-ui-text, #1d2327);
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+.wwu-ui-tab--device:focus-visible {
+    outline: 2px solid var(--wwu-ui-primary, #2271b1);
+    outline-offset: -2px;
+}
+
+.wwu-ui-tab--device .dashicons,
+.wwu-ui-tab--device svg {
+    width: 14px;
+    height: 14px;
+    flex: 0 0 auto;
+}
+
+.wwu-ui-tab--device .wwu-ui-tab-label {
+    display: inline;
+}
+
+/* On very narrow viewports, hide the label and keep icons only. */
+@media (max-width: 600px) {
+    .wwu-ui-tab--device {
+        min-width: 32px;
+        padding: 4px;
+    }
+    .wwu-ui-tab--device .wwu-ui-tab-label {
+        display: none;
+    }
+}
+

@@ -1,0 +1,94 @@
+/**
+ * WWU UI Kit — Badge
+ *
+ * Small inline pill for labels, counts, status indicators.
+ * Used everywhere in WWU plugins for "PRO" markers, counts of disabled
+ * assets, source tags, scope indicators, etc.
+ *
+ * Base class + color variants. Size modifiers available.
+ *
+ * Extracted from AM Lite admin.css:290-295 + AM Pro admin.css:80-85, 284-287,
+ * 339-341, 408-411, 593-595.
+ *
+ * @since 0.2.0
+ */
+
+.wwu-ui-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: var(--wwu-ui-radius-sm);
+    font-size: var(--wwu-ui-font-xs);
+    font-weight: 600;
+    line-height: 1.5;
+    vertical-align: middle;
+    white-space: nowrap;
+    background: var(--wwu-ui-border-soft);
+    color: var(--wwu-ui-text-muted);
+}
+
+/* Size modifiers. */
+.wwu-ui-badge-sm {
+    padding: 1px 6px;
+    font-size: 10px;
+}
+
+.wwu-ui-badge-lg {
+    padding: 4px 10px;
+    font-size: var(--wwu-ui-font-sm);
+}
+
+/* Color variants — semantic. */
+.wwu-ui-badge.primary   { background: var(--wwu-ui-primary); color: #fff; }
+.wwu-ui-badge.success   { background: var(--wwu-ui-success); color: #fff; }
+.wwu-ui-badge.danger    { background: var(--wwu-ui-danger); color: #fff; }
+.wwu-ui-badge.warning   { background: var(--wwu-ui-warning); color: var(--wwu-ui-text); }
+.wwu-ui-badge.info      { background: #d1ecf1; color: #0c5460; }
+.wwu-ui-badge.neutral   { background: #e2e3e5; color: #383d41; }
+
+/* Soft-tone variants — subtle backgrounds, colored text. */
+.wwu-ui-badge.primary-soft { background: #e8f0fe; color: #1a73e8; }
+.wwu-ui-badge.success-soft { background: #d4edda; color: #155724; }
+.wwu-ui-badge.danger-soft  { background: #f8d7da; color: #721c24; }
+.wwu-ui-badge.warning-soft { background: #fff3cd; color: #856404; }
+.wwu-ui-badge.info-soft    { background: #d1ecf1; color: #0c5460; }
+
+/**
+ * Pro badge — gradient gold, used to mark premium features throughout
+ * WWU plugins (e.g. Pro tab in Lite UI, Pro-only actions).
+ */
+.wwu-ui-badge.pro {
+    background: linear-gradient(135deg, #f0b849, #e89a1c);
+    color: #fff;
+    padding: 1px 6px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-left: var(--wwu-ui-space-1);
+}
+
+/* ── Variant: --mono (monospace tiny pill for values/codes) ─────────────
+   Added in 0.9.1.
+   Use for showing values inline: viewport sizes (`1480 × 820`), hash
+   commits (`a3f9c1`), code-related tokens, slugs, version numbers.
+   Mirrors the .wwu-cvb-pill pattern from the VB editor redesign.
+
+   Combines with the regular color variants: .wwu-ui-badge--mono.info-soft
+─────────────────────────────────────────────────────────────────────── */
+.wwu-ui-badge.wwu-ui-badge--mono,
+.wwu-ui-badge--mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Cascadia Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    padding: 1px 6px;
+    background: var(--wwu-ui-bg-subtle, #f0f0f1);
+    color: var(--wwu-ui-text, #1d2327);
+    border: 1px solid var(--wwu-ui-border, #e5e7eb);
+}
+
+/* When --mono is also --active, give it a soft primary tint. */
+.wwu-ui-badge--mono.is-active {
+    background: rgba(34, 113, 177, 0.10);
+    border-color: rgba(34, 113, 177, 0.30);
+    color: var(--wwu-ui-primary, #2271b1);
+}
+

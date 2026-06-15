@@ -1,0 +1,81 @@
+/**
+ * WWU UI Kit — Design Tokens
+ *
+ * CSS custom properties shared by every component.
+ * Plugins can override these at `:root` or scoped within their own wrapper
+ * element to re-skin without touching kit files.
+ *
+ * Naming: --wwu-ui-{category}-{modifier}
+ * Categories: color, space, radius, z, font, shadow, motion
+ *
+ * @since 0.1.0
+ */
+
+:root {
+    /* Colors — aligned to WordPress admin palette for native feel. */
+    --wwu-ui-primary: #2271b1;
+    --wwu-ui-primary-hover: #135e96;
+    --wwu-ui-primary-focus: #2271b1;
+
+    --wwu-ui-success: #00a32a;
+    --wwu-ui-success-bg: #d7f0d9;
+
+    --wwu-ui-warning: #dba617;
+    --wwu-ui-warning-bg: #fff8e5;
+
+    --wwu-ui-danger: #d63638;
+    --wwu-ui-danger-hover: #a32a2b;
+
+    --wwu-ui-info: #72aee6;
+    --wwu-ui-info-bg: #d1ecf1;
+
+    --wwu-ui-text: #1d2327;
+    --wwu-ui-text-muted: #50575e;
+    --wwu-ui-text-subtle: #787c82;
+
+    --wwu-ui-bg: #ffffff;
+    --wwu-ui-bg-subtle: #f6f7f7;
+    --wwu-ui-bg-hover: #eef0f1;
+    --wwu-ui-bg-active: #e8f0fe;
+
+    --wwu-ui-border: #e0e0e0;
+    --wwu-ui-border-strong: #c3c4c7;
+    --wwu-ui-border-soft: #f0f0f1;
+
+    /* Spacing — 4px base scale. */
+    --wwu-ui-space-1: 4px;
+    --wwu-ui-space-2: 8px;
+    --wwu-ui-space-3: 12px;
+    --wwu-ui-space-4: 16px;
+    --wwu-ui-space-5: 20px;
+    --wwu-ui-space-6: 24px;
+    --wwu-ui-space-8: 32px;
+
+    /* Radius. */
+    --wwu-ui-radius-sm: 3px;
+    --wwu-ui-radius-md: 4px;
+    --wwu-ui-radius-lg: 6px;
+    --wwu-ui-radius-pill: 10px;
+
+    /* Z-index — stackable layers, keep gaps for future. */
+    --wwu-ui-z-accordion: 1;
+    --wwu-ui-z-drawer: 9000;
+    --wwu-ui-z-modal: 9500;
+    --wwu-ui-z-toast: 100000;
+
+    /* Font sizes. */
+    --wwu-ui-font-xs: 11px;
+    --wwu-ui-font-sm: 12px;
+    --wwu-ui-font-md: 13px;
+    --wwu-ui-font-lg: 14px;
+
+    /* Shadow. */
+    --wwu-ui-shadow-sm: 0 1px 2px rgba(0, 0, 0, .08);
+    --wwu-ui-shadow-md: 0 4px 12px rgba(0, 0, 0, .15);
+    --wwu-ui-shadow-lg: 0 8px 24px rgba(0, 0, 0, .2);
+
+    /* Motion. */
+    --wwu-ui-transition-fast: .15s ease;
+    --wwu-ui-transition-base: .2s ease;
+    --wwu-ui-transition-slow: .3s ease;
+}

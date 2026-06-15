@@ -1,0 +1,118 @@
+/**
+ * WWU UI Kit — Save state inline microcopy
+ *
+ * Lightweight "Saved just now" / "Saving…" / "Unsaved changes" indicator
+ * that fits on a single line and never shifts layout. Pair with
+ * `wwuUIKit.saveState` controller (js/save-state.js) for state transitions.
+ *
+ * Markup:
+ *   <span class="wwu-ui-save-state">
+ *     <span class="wwu-ui-save-state__dot" aria-hidden="true"></span>
+ *     <span class="wwu-ui-save-state__text">Saved just now</span>
+ *   </span>
+ *
+ * Variants (apply to the root):
+ *   .wwu-ui-save-state--idle    — quiet, muted (default)
+ *   .wwu-ui-save-state--dirty   — amber dot, "Unsaved changes" text
+ *   .wwu-ui-save-state--saving  — primary blue dot, pulse animation
+ *   .wwu-ui-save-state--saved   — success green dot
+ *   .wwu-ui-save-state--error   — danger red dot
+ *
+ * Respects `prefers-reduced-motion: reduce` — the pulse animation is
+ * disabled, the dot stays full-opacity.
+ *
+ * @since 0.8.4
+ */
+
+/* ── Container ──────────────────────────────────────────────── */
+.wwu-ui-save-state {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--wwu-ui-space-2, 8px);
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--wwu-ui-text-muted, #6b7280);
+    user-select: none;
+    white-space: nowrap;
+    /* Prevent layout shift across state transitions — reserve a min width
+       roughly fitting "Saved just now". Consumers can override via CSS. */
+    min-width: 12ch;
+}
+
+/* ── Dot ─────────────────────────────────────────────────────── */
+.wwu-ui-save-state__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+    flex: 0 0 auto;
+    position: relative;
+}
+
+/* ── Text ────────────────────────────────────────────────────── */
+.wwu-ui-save-state__text {
+    font-variant-numeric: tabular-nums;
+}
+
+/* ── State: idle (default) ──────────────────────────────────── */
+.wwu-ui-save-state,
+.wwu-ui-save-state--idle {
+    color: var(--wwu-ui-text-muted, #6b7280);
+}
+
+/* ── State: dirty ───────────────────────────────────────────── */
+.wwu-ui-save-state--dirty {
+    color: var(--wwu-ui-warning, #b08300);
+}
+.wwu-ui-save-state--dirty .wwu-ui-save-state__dot {
+    background: var(--wwu-ui-warning, #f0b400);
+    box-shadow: 0 0 0 0 rgba(240, 180, 0, 0.5);
+}
+
+/* ── State: saving ──────────────────────────────────────────── */
+.wwu-ui-save-state--saving {
+    color: var(--wwu-ui-primary, #2271b1);
+}
+.wwu-ui-save-state--saving .wwu-ui-save-state__dot {
+    background: var(--wwu-ui-primary, #2271b1);
+    animation: wwu-ui-save-state-pulse 1.2s ease-in-out infinite;
+}
+
+/* ── State: saved ───────────────────────────────────────────── */
+.wwu-ui-save-state--saved {
+    color: var(--wwu-ui-success, #1c7d3d);
+}
+.wwu-ui-save-state--saved .wwu-ui-save-state__dot {
+    background: var(--wwu-ui-success, #2ea155);
+}
+
+/* ── State: error ───────────────────────────────────────────── */
+.wwu-ui-save-state--error {
+    color: var(--wwu-ui-danger, #b32d2e);
+}
+.wwu-ui-save-state--error .wwu-ui-save-state__dot {
+    background: var(--wwu-ui-danger, #d63638);
+}
+
+/* ── Pulse keyframe ─────────────────────────────────────────── */
+@keyframes wwu-ui-save-state-pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(34, 113, 177, 0.45);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 0 4px rgba(34, 113, 177, 0);
+        transform: scale(1.15);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wwu-ui-save-state--saving .wwu-ui-save-state__dot {
+        animation: none;
+    }
+}
+
+/* ── Trap #19 paired rule ───────────────────────────────────── */
+.wwu-ui-save-state[hidden] {
+    display: none !important;
+}
