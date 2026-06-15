@@ -52,6 +52,7 @@ function wwu_wb_uninstall_cleanup_site(): void {
 	// Cron.
 	wp_clear_scheduled_hook( 'wwu_wb_complete_network_activation' );
 	wp_clear_scheduled_hook( 'wwu_wb_timestamp_upgrade' );
+	wp_clear_scheduled_hook( 'wwu_wb_consent_retention_purge' );
 
 	if ( $erase_all ) {
 		// Irreversible: drop the evidence tables + secret only on explicit opt-in.

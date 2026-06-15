@@ -5,6 +5,30 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### Security hardening — full-plugin audit fixes (1.0.0-alpha.36, 2026-06-15)
+A comprehensive whole-plugin security audit (10 dimensions, multi-agent + adversarial verification —
+[report](../audits/wwu-wb-full-security-2026-06-15-AUDIT.md)) returned **0 critical / 0 high**: SQLi, XSS,
+CSRF, AuthZ/IDOR (incl. the new `EddCustomerOrders`), file/path/deserialization, crypto/evidence-integrity
+and the Dompdf 3.1.5 dependency all clean. One Medium + a cluster of Low items were found and fixed here.
+- **SSRF guard (Medium)** — new `Security\OutboundUrlGuard` rejects internal / cloud-metadata
+  (`169.254.169.254`) / loopback / private / CGNAT / IPv4-mapped-IPv6 targets for the merchant-configured
+  **RFC 3161 TSA endpoint** (resolves A/AAAA, fail-closed on unresolvable). Wired into
+  `Rfc3161Provider::endpoint_is_valid()` (request-time, with the existing `redirection=>0`) **and**
+  `SettingsPage::handle_save()` (never persists an unsafe endpoint). `wp_http_validate_url()` alone was
+  insufficient (no IPv6, misses 169.254/16 + 100.64/10). Mirrors WWU Pixel Manager's `SgtmGuard`.
+- **Rate limiting (Low)** — `GuestAccess::check_rate_limit()` (10/5 min per IP) now also gates
+  `WithdrawalRoute::statement()`/`confirm()` and the no-JS `NoScriptFlow` handlers (were only on `lookup` +
+  receipt), preventing authorised-credential griefing/log-bloat.
+- **Input caps (Low)** — `WithdrawalRequest::from_input()` length-caps name (200) / order_ref (100) /
+  email (254) / reason (2000), so an oversized field can't bloat the append-only log or heavy PDF renders.
+- **Debug masking (Low)** — added `'pass'` to `Collector::SECRET_KEY_HINTS` (the 4-char RFC3161 `pass` key
+  was below the substring hints; no active leak, latent).
+- **Uninstall (Low)** — clear the `wwu_wb_consent_retention_purge` cron on uninstall.
+- **Tracked (not changed):** `customer_email` column excluded from the hash chain (needs a chain-format
+  decision); the email-in-immutable-log GDPR trade-off (documented). The multisite-uninstall batching item
+  was **refuted** as a security finding (super-admin hygiene).
+- Lint: PHP 0 errors (1 new file + 7 changed). No consumer-facing behaviour change.
+
 ### EDD integration completed — customer-facing withdrawal button + e-mail link (1.0.0-alpha.35, 2026-06-15)
 Closes the EDD gap: the statutory withdrawal button — the plugin's single most important surface — now
 appears on the EDD customer's own pages, reaching full parity with WooCommerce (`WooMyAccount`) and

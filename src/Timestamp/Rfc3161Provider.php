@@ -26,6 +26,7 @@ declare( strict_types=1 );
 namespace WWU\WithdrawalButton\Timestamp;
 
 use WWU\WithdrawalButton\Debug\Debug;
+use WWU\WithdrawalButton\Security\OutboundUrlGuard;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -151,7 +152,12 @@ final class Rfc3161Provider implements TimestampProvider {
 	}
 
 	/**
-	 * Whether the configured endpoint is a syntactically valid http(s) URL.
+	 * Whether the configured endpoint is a valid http(s) URL that is safe to fetch.
+	 *
+	 * Beyond WP core's wp_http_validate_url(), OutboundUrlGuard rejects internal /
+	 * cloud-metadata / loopback / CGNAT / IPv4-mapped-IPv6 targets (SSRF defence) at
+	 * request time — combined with redirection=>0 on the POST below this also blocks
+	 * a post-validation DNS-rebind/redirect to an internal host.
 	 *
 	 * @return bool
 	 */
@@ -160,7 +166,17 @@ final class Rfc3161Provider implements TimestampProvider {
 			return false;
 		}
 		$scheme = strtolower( (string) wp_parse_url( $this->endpoint, PHP_URL_SCHEME ) );
-		return ( 'http' === $scheme || 'https' === $scheme ) && false !== wp_http_validate_url( $this->endpoint );
+		if ( 'http' !== $scheme && 'https' !== $scheme ) {
+			return false;
+		}
+		if ( false === wp_http_validate_url( $this->endpoint ) ) {
+			return false;
+		}
+		if ( ! OutboundUrlGuard::is_safe_url( $this->endpoint ) ) {
+			Debug::warn( 'timestamp', 'rfc3161.endpoint_blocked_ssrf', array() );
+			return false;
+		}
+		return true;
 	}
 
 	/**

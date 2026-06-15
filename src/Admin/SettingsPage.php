@@ -851,6 +851,13 @@ final class SettingsPage {
 		// the saved secret is never re-emitted to the browser.
 		$rfc3161           = (array) ( $timestamp['rfc3161'] ?? array() );
 		$rfc3161['endpoint'] = esc_url_raw( trim( (string) ( $_POST['rfc3161_endpoint'] ?? '' ) ) );
+		// SSRF: never persist a TSA endpoint that resolves to an internal/reserved
+		// target (cloud-metadata, loopback, private, CGNAT, IPv4-mapped IPv6). The
+		// request-time guard in Rfc3161Provider blocks it too, but refusing to store
+		// it stops the misconfiguration at the source.
+		if ( '' !== $rfc3161['endpoint'] && ! \WWU\WithdrawalButton\Security\OutboundUrlGuard::is_safe_url( $rfc3161['endpoint'] ) ) {
+			$rfc3161['endpoint'] = '';
+		}
 		$rfc3161['user']     = sanitize_text_field( (string) ( $_POST['rfc3161_user'] ?? '' ) );
 		$new_pass            = (string) ( $_POST['rfc3161_pass'] ?? '' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Basic-auth secret kept verbatim.
 		if ( '' !== $new_pass ) {

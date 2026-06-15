@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0-alpha.35
+Stable tag: 1.0.0-alpha.36
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -71,6 +71,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 
 == Changelog ==
 
+= 1.0.0-alpha.36 =
+* Security hardening from a full-plugin security audit (0 critical, 0 high). Fixes: an SSRF guard for the merchant-configured RFC 3161 timestamp endpoint (blocks internal / cloud-metadata / IPv6-loopback / CGNAT targets); per-IP rate limiting on the withdrawal statement/confirm endpoints (REST + no-JS); length caps on the name/reason fields; tighter debug secret-masking; and a cron cleanup on uninstall. No change to the consumer-facing flow. Full report in docs/audits/.
+
 = 1.0.0-alpha.35 =
 * **EDD integration completed — the withdrawal button now appears on the EDD customer's own pages.** Easy Digital Downloads customers see the statutory withdrawal button on the **purchase receipt** and in **purchase history**, and the withdrawal link is added to the EDD **purchase-receipt e-mail** — reaching full parity with WooCommerce and FluentCart (previously EDD relied only on the standalone public page). Built on EDD 3.x hooks verified against the official EDD source. Fail-safe as everywhere: the button only shows on eligible orders and links to your withdrawal page pre-authenticated. Needs a live EDD test.
 
@@ -111,6 +114,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.0.0-alpha.36 =
+Security hardening from a full audit (0 critical/high): SSRF guard on the RFC 3161 endpoint, rate limits on the withdrawal endpoints, input length caps. Recommended for all installs; no behaviour change for consumers.
 
 = 1.0.0-alpha.35 =
 EDD stores now show the withdrawal button on the purchase receipt + purchase history, and add the withdrawal link to the EDD receipt e-mail (parity with WooCommerce/FluentCart). Set a public withdrawal page in Settings and re-test the EDD customer flow on staging.

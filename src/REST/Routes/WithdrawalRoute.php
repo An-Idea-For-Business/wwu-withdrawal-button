@@ -151,6 +151,9 @@ final class WithdrawalRoute extends AbstractRoute {
 	 * @return \WP_REST_Response|\WP_Error
 	 */
 	public function statement( \WP_REST_Request $request ) {
+		if ( ! GuestAccess::check_rate_limit() ) {
+			return $this->error( 'wwu_wb_rate_limited', __( 'Too many attempts. Please try again in a few minutes.', 'wwu-withdrawal-button' ), 429 );
+		}
 		$order_ref = sanitize_text_field( (string) $request->get_param( 'order_ref' ) );
 		$resolved  = $this->resolve( $order_ref );
 		if ( ! $resolved || ! $this->has_access( $resolved[0], $resolved[1], $request ) ) {
@@ -181,6 +184,9 @@ final class WithdrawalRoute extends AbstractRoute {
 	 * @return \WP_REST_Response|\WP_Error
 	 */
 	public function confirm( \WP_REST_Request $request ) {
+		if ( ! GuestAccess::check_rate_limit() ) {
+			return $this->error( 'wwu_wb_rate_limited', __( 'Too many attempts. Please try again in a few minutes.', 'wwu-withdrawal-button' ), 429 );
+		}
 		$order_ref = sanitize_text_field( (string) $request->get_param( 'order_ref' ) );
 		$resolved  = $this->resolve( $order_ref );
 		if ( ! $resolved || ! $this->has_access( $resolved[0], $resolved[1], $request ) ) {

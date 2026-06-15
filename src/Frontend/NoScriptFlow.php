@@ -53,6 +53,7 @@ final class NoScriptFlow {
 	 * @return void
 	 */
 	public function handle_statement(): void {
+		$this->enforce_rate_limit();
 		$this->verify_nonce();
 		$ctx = $this->resolve();
 		list( $adapter, $order ) = $ctx;
@@ -104,6 +105,7 @@ final class NoScriptFlow {
 	 * @return void
 	 */
 	public function handle_confirm(): void {
+		$this->enforce_rate_limit();
 		$this->verify_nonce();
 		$ctx = $this->resolve();
 		list( $adapter, $order ) = $ctx;
@@ -129,6 +131,21 @@ final class NoScriptFlow {
 			__( 'Withdrawal registered', 'wwu-withdrawal-button' ),
 			'<p>' . esc_html__( 'Your withdrawal has been registered. We have emailed you a confirmation on a durable medium.', 'wwu-withdrawal-button' ) . '</p>'
 		);
+	}
+
+	/**
+	 * Throttle the public no-JS handlers per IP (shared bucket with the REST flow),
+	 * rendering a generic notice + exiting when the limit is exceeded.
+	 *
+	 * @return void
+	 */
+	private function enforce_rate_limit(): void {
+		if ( ! GuestAccess::check_rate_limit() ) {
+			$this->render_page(
+				__( 'Withdrawal', 'wwu-withdrawal-button' ),
+				'<p>' . esc_html__( 'Too many attempts. Please try again in a few minutes.', 'wwu-withdrawal-button' ) . '</p>'
+			);
+		}
 	}
 
 	/**

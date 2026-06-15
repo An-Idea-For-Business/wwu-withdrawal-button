@@ -3,12 +3,12 @@
 > Single index for the **WWU Withdrawal Button** plugin: the EU online right-of-withdrawal function ("withdrawal button", Art. 11a / Art. 54-bis) for WooCommerce & FluentCart. One line per doc; never put content here.
 
 - **Slug:** `wwu-wb` · **Folder:** `wwu-withdrawal-button`
-- **Status:** **MVP feature-complete** (F0–F8 + audit hardening), merged to `main`, **released** [`v1.0.0-alpha.34`](https://github.com/An-Idea-For-Business/wwu-withdrawal-button/releases/tag/v1.0.0-alpha.34) — in live testing. Current build `1.0.0-alpha.35` (**EDD integration completed**: the withdrawal button now appears on the EDD purchase receipt + purchase history + receipt e-mail — full parity with WooCommerce/FluentCart).
+- **Status:** **MVP feature-complete** (F0–F8 + audit hardening), merged to `main`, **released** [`v1.0.0-alpha.34`](https://github.com/An-Idea-For-Business/wwu-withdrawal-button/releases/tag/v1.0.0-alpha.34) — in live testing. Current build `1.0.0-alpha.36` (EDD customer-facing button — full platform parity — **+ a full-plugin security audit**: 0 critical / 0 high, 1 Medium SSRF + Low cluster fixed).
 - **Target version:** `1.0.0` · **License:** GPL-3.0-or-later
 - **Credits:** mredodos · Matteo Alfieri (An Idea for Business) · WebWakeUp ([webwakeup.it](https://webwakeup.it))
 - **Product page (live):** [webwakeup.it/wwu-withdrawal-button](https://webwakeup.it/wwu-withdrawal-button/)
 - **Legal go-live:** **2026-06-19** (contracts concluded on/after)
-- **Last updated:** 2026-06-15 (alpha.35 — **EDD integration completed**: new `Frontend\EddCustomerOrders` renders the withdrawal button on the EDD receipt (`edd_order_receipt_after_table`) + purchase history (`edd_order_history_row_end`) + receipt e-mail (`edd_order_receipt`), EDD 3.x hooks source-verified — full customer-surface parity with WooCommerce/FluentCart)
+- **Last updated:** 2026-06-15 (alpha.36 — full-plugin **security audit** (10 dimensions, multi-agent + adversarial verify): 0 critical / 0 high; fixed a Medium SSRF on the RFC 3161 endpoint (new `Security\OutboundUrlGuard`) + Low cluster (rate limits, input caps, debug masking, uninstall cron). On top of alpha.35 EDD customer-button parity. Report: `docs/audits/wwu-wb-full-security-2026-06-15-AUDIT.md`)
 
 ## What it is (one paragraph)
 A free, open-source WordPress plugin that makes a store compliant with Directive (EU) 2023/2673 (new Art. 11a of the Consumer Rights Directive 2011/83/EU; Italy: Art. 54-bis Codice del Consumo via D.Lgs. 209/2025): a prominently displayed, continuously available, statutory-labelled withdrawal button → two-step statement + confirmation → durable-medium acknowledgement (email + PDF + verifiable link) → tamper-evident immutable log anchored to OpenTimestamps. Dual platform (WooCommerce HPOS+legacy / FluentCart), multilingual (IT/EN/FR/ES/DE + extensible), Complianz/TranslatePress-compatible, shortcodes + blocks, plus generators for the Annex I-B model form and Privacy/Terms/pre-contractual clauses.
@@ -33,6 +33,7 @@ Namespace `WWU\WithdrawalButton` · constants `WWU_WB_*` · options `wwu_wb_*` �
 
 ## Audits
 - [Core F0–F6 audit (2026-06-13)](docs/audits/wwu-wb-core-2026-06-13-AUDIT.md) — security (0 findings) + performance + compliance; all critical/high gaps closed.
+- [Full-plugin security audit (2026-06-15)](docs/audits/wwu-wb-full-security-2026-06-15-AUDIT.md) — whole-codebase, 10 dimensions, multi-agent + adversarial verification. **0 critical / 0 high.** 7 dimensions clean (SQLi/XSS/CSRF/IDOR/files/crypto/supply-chain); fixed 1 Medium SSRF (RFC 3161 endpoint → new `Security\OutboundUrlGuard`) + a Low cluster (rate limits, input caps, debug masking, uninstall cron) in alpha.36.
 
 ## Analysis
 - [Timestamp providers (RFC 3161 + eIDAS)](docs/analysis/wwu-wb-timestamp-providers-ANALYSIS.md) — which trusted-timestamp authorities to add to the pluggable provider (free Sectigo `/qualified`, per-country QTSPs) + PHP integration (2026-06-14).

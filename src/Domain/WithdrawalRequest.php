@@ -52,12 +52,27 @@ final class WithdrawalRequest {
 	 * @return WithdrawalRequest
 	 */
 	public static function from_input( array $data ): WithdrawalRequest {
+		// Length caps applied AFTER sanitising: defence against bloating the
+		// append-only immutable log (a permanent, non-deletable LONGTEXT row) and
+		// against heavy outbound e-mail / PDF renders from an oversized field. A
+		// legitimate statement is far below these limits.
 		return new self(
-			sanitize_text_field( (string) ( $data['name'] ?? '' ) ),
-			sanitize_text_field( (string) ( $data['order_ref'] ?? '' ) ),
-			sanitize_email( (string) ( $data['email'] ?? '' ) ),
-			sanitize_textarea_field( (string) ( $data['reason'] ?? '' ) )
+			self::cap( sanitize_text_field( (string) ( $data['name'] ?? '' ) ), 200 ),
+			self::cap( sanitize_text_field( (string) ( $data['order_ref'] ?? '' ) ), 100 ),
+			self::cap( sanitize_email( (string) ( $data['email'] ?? '' ) ), 254 ),
+			self::cap( sanitize_textarea_field( (string) ( $data['reason'] ?? '' ) ), 2000 )
 		);
+	}
+
+	/**
+	 * Cap a string to a maximum character length (multibyte-safe).
+	 *
+	 * @param string $value Value.
+	 * @param int    $max   Maximum length.
+	 * @return string
+	 */
+	private static function cap( string $value, int $max ): string {
+		return function_exists( 'mb_substr' ) ? mb_substr( $value, 0, $max ) : substr( $value, 0, $max );
 	}
 
 	/**

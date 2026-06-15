@@ -61,6 +61,7 @@ final class Collector {
 		'pwd',
 		'passphrase',
 		'pass_hash',
+		'pass',
 		'authorization',
 		'bearer',
 		'auth_header',
