@@ -5,6 +5,43 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### Subscription-aware withdrawal (1.0.0-alpha.38, 2026-06-15)
+Implements the [subscriptions × withdrawal SPEC](../specs/wwu-wb-subscriptions-withdrawal-SPEC.md).
+EU law gives **one** 14-day right of withdrawal **per contract**, starting at conclusion (Art. 9 CRD /
+art. 52 Cod. Consumo) — a **renewal does not restart it**. So the button shows on the **initial order
+only** and is suppressed on renewals, through a single gate that covers all 8 button surfaces.
+- **`Platform\NormalizedOrder`** gained `$is_renewal` + `$subscription_ref` (both optional, appended last —
+  back-compat with every existing constructor call).
+- **`Platform\SubscriptionAware`** (new optional interface): `is_renewal_order()` (MUST fail open),
+  `subscription_ref()`, `cancel_subscription()`. Implemented by all three adapters behind `function_exists`/
+  `class_exists` guards so stores **without** a subscription plugin are untouched and the 23-method
+  `OrderDataSource` contract is unchanged.
+  - **WooCommerce** — `wcs_order_contains_renewal()` (fallback `_subscription_renewal` meta);
+    `wcs_get_subscriptions_for_order()` for the ref + cancel (`can_be_updated_to('cancelled')` →
+    `update_status('cancelled')`).
+  - **FluentCart** — initial order detected via `Subscription::where('parent_order_id', …)`; renewal marker
+    is best-effort (order `type`) pending FluentCart confirmation, fail-open; cancel via
+    `cancelRemoteSubscription()` → `cancel()` → status flip.
+  - **EDD** — `EDD_Subscriptions_DB::get_subscriptions(['parent_payment_id'=>…])` + `EDD_Subscription`
+    (`can_cancel()`/`cancel()`); renewal status `edd_subscription`, fail-open.
+- **`Domain\ApplicabilityResolver::evaluate()`** — single `renewal_order` gate after status-eligibility,
+  before B2B. Suppressed unless `treat_renewals_as_withdrawable` is on.
+- **`Shortcodes::form()`** — applicability guard so a renewal reached via `[wwu_wb_form order_id=…]` cannot
+  render the two-step form either (matches the button surfaces).
+- **`Domain\WithdrawalService::confirm()`** — on confirm, stamps `is_subscription_initial` +
+  `subscription_ref` on the order; if the merchant opted in to auto-cancel, cancels the subscription and
+  writes a `subscription_cancelled` evidence row + an order note (refund/pro-rata stay manual). New filter
+  `wwu_wb_subscription_cancel_result`, action retained.
+- **Settings → Subscriptions** (new section) — two opt-in toggles, both **off** by default:
+  `treat_renewals_as_withdrawable`, `cancel_subscription_on_withdrawal`. Standard #12: each ships a hint, a
+  legal note and a worked example, plus a detected-plugin notice.
+- **`Admin\RequestsDashboard`** — subscription orders get a **"Subscription"** badge + a reminder (stop
+  renewals, apply any pro-rata, then refund — none automatic unless auto-cancel is on).
+- New filter `wwu_wb_order_is_renewal` (override detection). Renewal detection is guarded and **fail-open**:
+  an undetermined state keeps the button visible (over-showing is the safe failure for a consumer right).
+- **Needs a live test** with WooCommerce Subscriptions / FluentCart subscriptions / EDD Recurring active.
+  Lint: PHP 0 errors across 8 touched + 1 new file.
+
 ### FluentCart e-mail merge-tag `{{wwu.recesso_url}}` (1.0.0-alpha.37, 2026-06-15)
 The FluentCart team confirmed the value-resolver hook contract (2026-06-15) — see
 [FluentCart hooks analysis](../analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md) §"Third verification round" —

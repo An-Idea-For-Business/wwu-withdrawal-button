@@ -102,6 +102,14 @@ final class Shortcodes {
 		}
 		list( $adapter, $order ) = $ctx;
 
+		// Close the direct-shortcode path: a renewal order (or any order the
+		// applicability engine excludes) must not render the two-step form even when
+		// reached via [wwu_wb_form order_id=…]. The button surfaces already gate on
+		// applicability; this matches them.
+		if ( ! Services::instance()->applicability->decide( $order )->show ) {
+			return '<p class="wwu-wb-notice">' . esc_html__( 'The right of withdrawal is not available for this order.', 'wwu-withdrawal-button' ) . '</p>';
+		}
+
 		$services = Services::instance();
 		$locale   = $this->locale( $order );
 		$user     = wp_get_current_user();

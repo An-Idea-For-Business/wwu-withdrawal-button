@@ -60,6 +60,12 @@ final class NormalizedOrder {
 	/** @var bool Whether a VAT/business number was provided. */
 	public $has_vat_number;
 
+	/** @var bool Whether this is a subscription RENEWAL order (no fresh 14-day right). */
+	public $is_renewal;
+
+	/** @var string Platform subscription id tied to this order, or '' when not a subscription. */
+	public $subscription_ref;
+
 	/**
 	 * Constructor.
 	 *
@@ -74,8 +80,10 @@ final class NormalizedOrder {
 	 * @param \DateTimeImmutable|null        $created        Order created date.
 	 * @param \DateTimeImmutable|null        $paid           Paid date.
 	 * @param \DateTimeImmutable|null        $completed      Completed/delivered date.
-	 * @param array<int,array<string,mixed>> $items          Line items.
-	 * @param bool                           $has_vat_number Whether a VAT/business number was provided.
+	 * @param array<int,array<string,mixed>> $items            Line items.
+	 * @param bool                           $has_vat_number   Whether a VAT/business number was provided.
+	 * @param bool                           $is_renewal       Whether this is a subscription renewal order.
+	 * @param string                         $subscription_ref Platform subscription id, or ''.
 	 */
 	public function __construct(
 		string $platform,
@@ -90,21 +98,25 @@ final class NormalizedOrder {
 		?\DateTimeImmutable $paid,
 		?\DateTimeImmutable $completed,
 		array $items,
-		bool $has_vat_number
+		bool $has_vat_number,
+		bool $is_renewal = false,
+		string $subscription_ref = ''
 	) {
-		$this->platform       = $platform;
-		$this->order_ref      = $order_ref;
-		$this->number         = $number;
-		$this->email          = $email;
-		$this->customer_id    = $customer_id;
-		$this->country        = $country;
-		$this->status         = $status;
-		$this->locale         = $locale;
-		$this->created        = $created;
-		$this->paid           = $paid;
-		$this->completed      = $completed;
-		$this->items          = $items;
-		$this->has_vat_number = $has_vat_number;
+		$this->platform         = $platform;
+		$this->order_ref        = $order_ref;
+		$this->number           = $number;
+		$this->email            = $email;
+		$this->customer_id      = $customer_id;
+		$this->country          = $country;
+		$this->status           = $status;
+		$this->locale           = $locale;
+		$this->created          = $created;
+		$this->paid             = $paid;
+		$this->completed        = $completed;
+		$this->items            = $items;
+		$this->has_vat_number   = $has_vat_number;
+		$this->is_renewal       = $is_renewal;
+		$this->subscription_ref = $subscription_ref;
 	}
 
 	/**

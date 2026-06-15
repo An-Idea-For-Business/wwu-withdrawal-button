@@ -1,7 +1,8 @@
 # SPEC — Subscription-aware withdrawal (EU 14-day right)
 
-> **Status:** Design — awaiting go-ahead to implement. **Created:** 2026-06-15 · **Slug:** `wwu-wb` · **Feature:** `subscriptions-withdrawal`
+> **Status:** **Implemented in `1.0.0-alpha.38`** (2026-06-15) — needs a live test with a subscription plugin active. **Created:** 2026-06-15 · **Slug:** `wwu-wb` · **Feature:** `subscriptions-withdrawal`
 > **Decision (user, 2026-06-15):** make the EU withdrawal button subscription-aware (button on the INITIAL order only; suppressed on renewals), grounded in a 2-agent recon (codebase + official-source + EUR-Lex/Cod. Consumo). See § References.
+> **Implementation note:** shipped with the recommended defaults — renewals suppressed (`treat_renewals_as_withdrawable` off), auto-cancel off, pro-rata + refund manual. Renewal detection is guarded + **fail-open** per platform (`SubscriptionAware`); the FluentCart renewal marker is best-effort pending a FluentCart-team confirmation (question logged in `_internal/`). Smoke suite `subscriptions` added. Filter `wwu_wb_order_is_renewal` to override detection.
 > **Distinct from** the NA "click-to-cancel" module ([wwu-wb-subscription-cancellation-na-SPEC.md](wwu-wb-subscription-cancellation-na-SPEC.md)) — that is forward-looking *cancellation of renewals*; this is the *14-day withdrawal* applied to subscriptions. They do not overlap.
 
 ---

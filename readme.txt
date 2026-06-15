@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0-alpha.37
+Stable tag: 1.0.0-alpha.38
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -71,6 +71,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 
 == Changelog ==
 
+= 1.0.0-alpha.38 =
+* **Subscriptions handled correctly (WooCommerce Subscriptions, FluentCart, EDD Recurring).** EU law gives one 14-day right of withdrawal per contract, at conclusion — a renewal does **not** restart it. The button now appears on the **initial order only** and is suppressed on renewal orders (single gate covering every surface). Two opt-in settings under **Settings → Subscriptions**: "also show on renewals" (off by default) and "auto-cancel the subscription on withdrawal" (off by default — the refund and any pro-rata always stay manual). The Requests dashboard flags subscription orders with a reminder. Renewal detection is guarded and fail-open (an undetermined state keeps the button visible). Needs a live test with a subscription plugin active.
+
 = 1.0.0-alpha.37 =
 * FluentCart e-mail merge-tag `{{wwu.recesso_url}}` — you can now drop the per-order withdrawal link into FluentCart's own transactional e-mails (the FluentCart team confirmed the value-resolver hook + its data context on 2026-06-15). It's registered in the FluentCart e-mail-editor picker and resolves safely (renders empty when there's no order in context). Needs a live FluentCart test. Note: FluentCart has told us they are shipping a native EU withdrawal feature soon, which may overlap this.
 
@@ -117,6 +120,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.0.0-alpha.38 =
+Subscriptions are now handled correctly: the withdrawal button shows on the initial order only and is hidden on renewals (one 14-day right per contract). Two opt-in toggles under Settings → Subscriptions. If you run WooCommerce Subscriptions / FluentCart subscriptions / EDD Recurring, test on staging.
 
 = 1.0.0-alpha.37 =
 FluentCart stores can now use the `{{wwu.recesso_url}}` merge-tag in FluentCart's own e-mails. No change for WooCommerce/EDD. FluentCart users: add the tag to a template and test on staging (FluentCart's own native withdrawal feature is also coming soon).

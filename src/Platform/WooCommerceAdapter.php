@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * WooCommerce adapter.
  */
-final class WooCommerceAdapter implements OrderDataSource {
+final class WooCommerceAdapter implements OrderDataSource, SubscriptionAware {
 
 	/**
 	 * Per-request cache of loaded orders.
@@ -85,8 +85,88 @@ final class WooCommerceAdapter implements OrderDataSource {
 			$this->to_immutable( $order->get_date_paid() ),
 			$this->to_immutable( $order->get_date_completed() ),
 			$this->map_items( $order ),
-			$this->has_vat_number( $order )
+			$this->has_vat_number( $order ),
+			$this->is_renewal_order( $order_ref ),
+			$this->subscription_ref( $order_ref )
 		);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * WooCommerce Subscriptions renewal detection (guarded — WCS is a separate plugin).
+	 * Fails open: returns false when WCS is absent / state unknown.
+	 */
+	public function is_renewal_order( string $order_ref ): bool {
+		$is_renewal = false;
+		$order      = $this->load( $order_ref );
+		if ( $order instanceof \WC_Order ) {
+			if ( function_exists( 'wcs_order_contains_renewal' ) ) {
+				$is_renewal = (bool) wcs_order_contains_renewal( $order );
+			} else {
+				// Fallback: WCS renewal orders carry the _subscription_renewal meta.
+				$is_renewal = '' !== (string) $order->get_meta( '_subscription_renewal' );
+			}
+		}
+		/**
+		 * Override subscription-renewal detection for an order.
+		 *
+		 * @param bool   $is_renewal Whether the order is a subscription renewal.
+		 * @param string $order_ref  Order reference.
+		 * @param string $platform   Adapter key.
+		 */
+		return (bool) apply_filters( 'wwu_wb_order_is_renewal', $is_renewal, $order_ref, $this->key() );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * Returns the first related subscription id (works for the initial order too, so
+	 * the subscription can be cancelled when the consumer withdraws from it).
+	 */
+	public function subscription_ref( string $order_ref ): string {
+		if ( ! function_exists( 'wcs_get_subscriptions_for_order' ) ) {
+			return '';
+		}
+		$order = $this->load( $order_ref );
+		if ( ! $order instanceof \WC_Order ) {
+			return '';
+		}
+		$subs = wcs_get_subscriptions_for_order( $order, array( 'order_type' => 'any' ) );
+		if ( is_array( $subs ) && ! empty( $subs ) ) {
+			$ids = array_keys( $subs );
+			return (string) reset( $ids );
+		}
+		return '';
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * Cancels every subscription related to the order (guarded; never fatals).
+	 */
+	public function cancel_subscription( string $order_ref ): bool {
+		if ( ! function_exists( 'wcs_get_subscriptions_for_order' ) ) {
+			return false;
+		}
+		$order = $this->load( $order_ref );
+		if ( ! $order instanceof \WC_Order ) {
+			return false;
+		}
+		$subs = wcs_get_subscriptions_for_order( $order, array( 'order_type' => 'any' ) );
+		$ok   = false;
+		foreach ( (array) $subs as $sub ) {
+			if ( is_object( $sub ) && method_exists( $sub, 'can_be_updated_to' ) && $sub->can_be_updated_to( 'cancelled' ) ) {
+				try {
+					$sub->update_status( 'cancelled', __( 'Cancelled following the consumer right-of-withdrawal request.', 'wwu-withdrawal-button' ) );
+					$ok = true;
+				} catch ( \Exception $e ) {
+					// Leave $ok false on this subscription; caller logs the failure.
+					continue;
+				}
+			}
+		}
+		return $ok;
 	}
 
 	/**

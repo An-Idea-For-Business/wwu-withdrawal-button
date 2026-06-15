@@ -165,6 +165,13 @@ final class Install {
 				'consent_capture_ip'   => true,
 				'go_live_date'         => WWU_WB_GO_LIVE_DATE,
 				'custom_css'           => '',
+				// Subscriptions: a renewal does NOT restart the 14-day right (one right
+				// per contract, at conclusion — Art. 9 CRD / art. 52 Cod. Consumo), so by
+				// default the button shows on the initial order only and is suppressed on
+				// renewals. Auto-cancelling the subscription on withdrawal is OFF by
+				// default (the merchant handles the refund + any pro-rata manually).
+				'treat_renewals_as_withdrawable'   => false,
+				'cancel_subscription_on_withdrawal' => false,
 			),
 			'',
 			'yes'

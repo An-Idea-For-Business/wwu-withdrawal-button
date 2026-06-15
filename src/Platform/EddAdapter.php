@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * EDD adapter.
  */
-final class EddAdapter implements OrderDataSource {
+final class EddAdapter implements OrderDataSource, SubscriptionAware {
 
 	/**
 	 * Per-request order cache.
@@ -140,8 +140,112 @@ final class EddAdapter implements OrderDataSource {
 			$completed ?? $created,
 			$completed,
 			$this->map_items( $order ),
-			$this->has_vat_number( $order_ref )
+			$this->has_vat_number( $order_ref ),
+			$this->is_renewal_order( $order_ref ),
+			$this->subscription_ref( $order_ref )
 		);
+	}
+
+	/**
+	 * Load the EDD Recurring subscription whose parent_payment_id is this order — i.e.
+	 * the subscription created by this order, present only on the INITIAL order.
+	 * Returns a full EDD_Subscription (so can_cancel()/cancel() work). Guarded.
+	 *
+	 * @param string $order_ref Order id.
+	 * @return \EDD_Subscription|null
+	 */
+	private function edd_subscription_for_parent( string $order_ref ) {
+		if ( ! class_exists( '\\EDD_Subscriptions_DB' ) || ! class_exists( '\\EDD_Subscription' ) ) {
+			return null; // EDD Recurring not active — fail open.
+		}
+		try {
+			$db   = new \EDD_Subscriptions_DB();
+			$rows = $db->get_subscriptions( array( 'parent_payment_id' => (int) $order_ref, 'number' => 1 ) );
+		} catch ( \Throwable $e ) {
+			return null;
+		}
+		if ( ! is_array( $rows ) || empty( $rows ) ) {
+			return null;
+		}
+		$row = reset( $rows );
+		$id  = is_object( $row ) ? (int) ( $row->id ?? 0 ) : 0;
+		if ( $id <= 0 ) {
+			return null;
+		}
+		try {
+			$sub = new \EDD_Subscription( $id );
+		} catch ( \Throwable $e ) {
+			return null;
+		}
+		// An EDD_Subscription built from a missing id has id === 0.
+		return ( is_object( $sub ) && (int) ( $sub->id ?? 0 ) > 0 ) ? $sub : null;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * Fails open (false): a state we cannot determine is treated as a normal order so a
+	 * legitimate withdrawal button is never hidden. We only act on the high-confidence
+	 * EDD Recurring renewal status; renewal orders that EDD completes with a plain
+	 * 'complete' status may not be detected here — by design (over-showing the button is
+	 * the safe failure). Integrators can refine via the `wwu_wb_order_is_renewal` filter.
+	 */
+	public function is_renewal_order( string $order_ref ): bool {
+		$is_renewal = false;
+		$order      = $this->load( $order_ref );
+		if ( is_object( $order ) ) {
+			// The subscription's parent payment is the INITIAL order — never a renewal.
+			if ( ! $this->edd_subscription_for_parent( $order_ref ) ) {
+				// EDD Recurring marks renewal payments with the 'edd_subscription' status.
+				$status = strtolower( (string) ( $this->attr( $order, 'status' ) ?? '' ) );
+				if ( 'edd_subscription' === $status ) {
+					$is_renewal = true;
+				}
+			}
+		}
+		/**
+		 * Override subscription-renewal detection for an order.
+		 *
+		 * @param bool   $is_renewal Whether the order is a subscription renewal.
+		 * @param string $order_ref  Order reference.
+		 * @param string $platform   Adapter key.
+		 */
+		return (bool) apply_filters( 'wwu_wb_order_is_renewal', $is_renewal, $order_ref, $this->key() );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function subscription_ref( string $order_ref ): string {
+		$sub = $this->edd_subscription_for_parent( $order_ref );
+		if ( is_object( $sub ) ) {
+			$id = $this->attr( $sub, 'id' );
+			return null !== $id ? (string) $id : '';
+		}
+		return '';
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * Guarded + OFF by default (only runs on merchant opt-in). Honours EDD Recurring's
+	 * own can_cancel() gate; the RequestsDashboard always shows a manual reminder so a
+	 * no-op never strands the merchant.
+	 */
+	public function cancel_subscription( string $order_ref ): bool {
+		$sub = $this->edd_subscription_for_parent( $order_ref );
+		if ( ! is_object( $sub ) || ! method_exists( $sub, 'cancel' ) ) {
+			return false;
+		}
+		try {
+			if ( method_exists( $sub, 'can_cancel' ) && ! $sub->can_cancel() ) {
+				return false;
+			}
+			$sub->cancel();
+			return true;
+		} catch ( \Throwable $e ) {
+			return false;
+		}
 	}
 
 	/**

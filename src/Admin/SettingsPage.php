@@ -84,6 +84,7 @@ final class SettingsPage {
 		echo '</tbody></table>';
 
 		$this->render_applicability_section( $settings );
+		$this->render_subscriptions_section( $settings );
 		$this->render_guidance_section( $settings );
 		$this->render_exemptions_section();
 		$this->render_receipt_section( $settings );
@@ -181,6 +182,83 @@ final class SettingsPage {
 		echo '</td></tr>';
 
 		echo '</tbody></table>';
+	}
+
+	/**
+	 * Render the "Subscriptions" section.
+	 *
+	 * EU law gives ONE 14-day right per contract, at conclusion (Art. 9 CRD / art. 52
+	 * Cod. Consumo); a renewal does NOT restart it. So by default the button shows on
+	 * the initial order only and is suppressed on renewals. Two opt-in toggles let the
+	 * merchant override that (rarely needed) and auto-cancel the subscription when a
+	 * consumer withdraws (refund + any pro-rata stay manual). Standard #12: each toggle
+	 * ships a plain-language hint, a legal note, and a worked example.
+	 *
+	 * @param array $settings Current settings.
+	 * @return void
+	 */
+	private function render_subscriptions_section( array $settings ): void {
+		$treat_renewals = ! empty( $settings['treat_renewals_as_withdrawable'] );
+		$auto_cancel    = ! empty( $settings['cancel_subscription_on_withdrawal'] );
+		$active         = $this->subscription_plugin_active();
+
+		echo '<h2>' . esc_html__( 'Subscriptions', 'wwu-withdrawal-button' ) . '</h2>';
+
+		if ( '' !== $active ) {
+			echo '<div class="wwu-ui-notice info" style="margin:12px 0;max-width:860px;"><p style="margin:0;">' . esc_html(
+				sprintf(
+					/* translators: %s: detected subscription plugin name. */
+					__( 'Detected subscription plugin: %s. These settings take effect for its orders.', 'wwu-withdrawal-button' ),
+					$active
+				)
+			) . '</p></div>';
+		} else {
+			echo '<p class="description" style="max-width:860px;">' . esc_html__( 'No subscription plugin detected (WooCommerce Subscriptions, FluentCart subscriptions, EDD Recurring). These settings are harmless until one is active.', 'wwu-withdrawal-button' ) . '</p>';
+		}
+
+		echo '<p class="description" style="max-width:860px;">' . wp_kses_post( __( 'EU law gives <strong>one 14-day right of withdrawal per contract</strong>, starting when the contract is concluded (Art. 9 CRD / art. 52 Cod. Consumo). A <strong>renewal does not restart it</strong>. So the button appears on the <strong>initial order only</strong> and is hidden on renewals. Withdrawal is <strong>not</strong> the same as cancelling: a consumer can always stop future renewals from their account; the withdrawal button is the statutory 14-day right that also entitles them to a refund.', 'wwu-withdrawal-button' ) ) . '</p>';
+
+		echo '<table class="form-table" role="presentation"><tbody>';
+
+		echo '<tr><th scope="row">' . esc_html__( 'Renewal orders', 'wwu-withdrawal-button' )
+			. ' <span class="wwu-wb-help" tabindex="0" title="' . esc_attr__( 'Leave OFF in almost all cases. A renewal continues the same contract — it has no fresh 14-day right.', 'wwu-withdrawal-button' ) . '" style="display:inline-block;width:16px;height:16px;line-height:16px;text-align:center;border-radius:50%;background:#e0e0e0;color:#333;font-size:11px;cursor:help;">?</span></th><td>';
+		echo '<label><input type="checkbox" name="treat_renewals_as_withdrawable" value="1" ' . checked( $treat_renewals, true, false ) . ' /> ';
+		echo esc_html__( 'Also show the withdrawal button on renewal orders.', 'wwu-withdrawal-button' ) . '</label>';
+		echo '<p class="description">' . esc_html__( 'Off (recommended): renewals continue the same contract and have no new 14-day right. Turn on only if your legal advice says a specific renewal restarts the right.', 'wwu-withdrawal-button' ) . '</p>';
+		echo '</td></tr>';
+
+		echo '<tr><th scope="row">' . esc_html__( 'On withdrawal', 'wwu-withdrawal-button' )
+			. ' <span class="wwu-wb-help" tabindex="0" title="' . esc_attr__( 'When a consumer withdraws from the initial order, optionally stop future renewals automatically.', 'wwu-withdrawal-button' ) . '" style="display:inline-block;width:16px;height:16px;line-height:16px;text-align:center;border-radius:50%;background:#e0e0e0;color:#333;font-size:11px;cursor:help;">?</span></th><td>';
+		echo '<label><input type="checkbox" name="cancel_subscription_on_withdrawal" value="1" ' . checked( $auto_cancel, true, false ) . ' /> ';
+		echo esc_html__( 'Automatically cancel the subscription when the consumer withdraws from its initial order.', 'wwu-withdrawal-button' ) . '</label>';
+		echo '<p class="description">' . esc_html__( 'Off by default. The refund and any pro-rata deduction (for service already used) always stay manual — only the future renewals are stopped. The Requests dashboard reminds you either way.', 'wwu-withdrawal-button' ) . '</p>';
+		echo '</td></tr>';
+
+		echo '<tr><th scope="row"></th><td>';
+		echo '<details class="wwu-wb-clause"><summary><strong>' . esc_html__( 'Show example', 'wwu-withdrawal-button' ) . '</strong></summary>';
+		echo '<p class="description" style="max-width:760px;margin-top:8px;">' . esc_html__( 'A customer subscribes on 1 March (initial order). They get 14 days to withdraw → the button shows on that order until 15 March. On 1 April the subscription renews (renewal order) → no button, because the right was already exercised-or-expired on the original contract. If they no longer want the service they cancel future renewals from their account; that is separate from the 14-day withdrawal.', 'wwu-withdrawal-button' ) . '</p>';
+		echo '</details>';
+		echo '</td></tr>';
+
+		echo '</tbody></table>';
+	}
+
+	/**
+	 * Best-effort name of an active subscription plugin (for the contextual note).
+	 *
+	 * @return string Plugin name, or '' when none is detected.
+	 */
+	private function subscription_plugin_active(): string {
+		if ( function_exists( 'wcs_get_subscriptions_for_order' ) || class_exists( '\\WC_Subscriptions' ) ) {
+			return 'WooCommerce Subscriptions';
+		}
+		if ( class_exists( '\\FluentCart\\App\\Models\\Subscription' ) ) {
+			return 'FluentCart Subscriptions';
+		}
+		if ( class_exists( '\\EDD_Subscription' ) ) {
+			return 'EDD Recurring Payments';
+		}
+		return '';
 	}
 
 	/**
@@ -804,6 +882,11 @@ final class SettingsPage {
 		// text replaces the default block (basic HTML allowed, merchant-owned).
 		$settings['withdrawal_window_days'] = max( 14, min( 365, (int) ( $_POST['withdrawal_window_days'] ?? 14 ) ) );
 		$settings['custom_guidance']        = wp_kses_post( wp_unslash( $_POST['custom_guidance'] ?? '' ) );
+		// Subscriptions: a renewal does not restart the 14-day right, so the button is
+		// suppressed on renewals unless the merchant opts in; auto-cancelling the
+		// subscription on a withdrawal is opt-in (refund/pro-rata stay manual).
+		$settings['treat_renewals_as_withdrawable']    = Sanitizer::bool( $_POST['treat_renewals_as_withdrawable'] ?? '' );
+		$settings['cancel_subscription_on_withdrawal'] = Sanitizer::bool( $_POST['cancel_subscription_on_withdrawal'] ?? '' );
 		$new_slug                    = sanitize_title( (string) ( $_POST['endpoint_slug'] ?? 'wwu-withdrawal' ) );
 		$settings['endpoint_slug']   = '' !== $new_slug ? $new_slug : 'wwu-withdrawal';
 		update_option( 'wwu_wb_settings', $settings );
