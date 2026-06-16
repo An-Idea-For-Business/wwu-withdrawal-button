@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WWU Withdrawal Button\n"
 "Report-Msgid-Bugs-To: https://webwakeup.it/wwu-withdrawal-button/\n"
-"POT-Creation-Date: 2026-06-15 19:25+0000\n"
+"POT-Creation-Date: 2026-06-16 06:03+0000\n"
 "PO-Revision-Date: 2026-06-14 00:00+0000\n"
 "Last-Translator: WebWakeUp <info@webwakeup.it>\n"
 "Language-Team: WebWakeUp\n"
@@ -269,7 +269,7 @@ msgid "Next"
 msgstr "Successivo"
 
 #: src/Admin/ConsentRecordsPage.php:200 src/Admin/DashboardPage.php:287
-#: src/Admin/RequestsDashboard.php:397 src/Admin/SettingsPage.php:480
+#: src/Admin/RequestsDashboard.php:400 src/Admin/SettingsPage.php:480
 #: src/Admin/SettingsPage.php:923 src/REST/Authentication.php:55
 #: src/REST/Authentication.php:80
 msgid "Insufficient permissions."
@@ -713,34 +713,38 @@ msgid "Country"
 msgstr "Paese"
 
 #: src/Admin/RequestsDashboard.php:101
+msgid "Products"
+msgstr "Prodotti"
+
+#: src/Admin/RequestsDashboard.php:102
 msgid "In time"
 msgstr "Nei termini"
 
-#: src/Admin/RequestsDashboard.php:102
+#: src/Admin/RequestsDashboard.php:103
 msgid "Status"
 msgstr "Stato"
 
-#: src/Admin/RequestsDashboard.php:103
+#: src/Admin/RequestsDashboard.php:104
 msgid "Evidence"
 msgstr "Prove"
 
-#: src/Admin/RequestsDashboard.php:104
+#: src/Admin/RequestsDashboard.php:105
 msgid "Actions"
 msgstr "Azioni"
 
-#: src/Admin/RequestsDashboard.php:123 templates/public/verify-receipt.php:73
+#: src/Admin/RequestsDashboard.php:126 templates/public/verify-receipt.php:73
 msgid "Yes"
 msgstr "Sì"
 
-#: src/Admin/RequestsDashboard.php:124
+#: src/Admin/RequestsDashboard.php:127
 msgid "Flagged late"
 msgstr "Segnalato come tardivo"
 
-#: src/Admin/RequestsDashboard.php:129
+#: src/Admin/RequestsDashboard.php:132
 msgid "Verify"
 msgstr "Verifica"
 
-#: src/Admin/RequestsDashboard.php:166
+#: src/Admin/RequestsDashboard.php:169
 msgid ""
 "Check the request is in scope. The list hides orders outside the right of "
 "withdrawal; \"In time\" shows whether it was within the 14-day window. A "
@@ -751,7 +755,7 @@ msgstr ""
 "se la richiesta è stata presentata entro i 14 giorni. Una richiesta tardiva "
 "viene comunque registrata — verificane la validità prima di rifiutarla."
 
-#: src/Admin/RequestsDashboard.php:167
+#: src/Admin/RequestsDashboard.php:170
 msgid ""
 "If the order is goods, the consumer must send them back within 14 days. You "
 "may withhold the refund until you receive the goods back, or until the "
@@ -762,7 +766,7 @@ msgstr ""
 "quando il consumatore dimostri di averli spedito — a seconda di quale delle "
 "due condizioni si verifichi prima."
 
-#: src/Admin/RequestsDashboard.php:168
+#: src/Admin/RequestsDashboard.php:171
 msgid ""
 "Reimburse within 14 days of being informed of the withdrawal. Refund ALL "
 "payments received, including the standard delivery cost, using the same "
@@ -777,7 +781,7 @@ msgstr ""
 "WooCommerce — il rimborso viene registrato automaticamente nel log delle "
 "prove."
 
-#: src/Admin/RequestsDashboard.php:169
+#: src/Admin/RequestsDashboard.php:172
 msgid ""
 "Mark the request as processed once you have refunded (and received any "
 "returned goods). This closes it in this list; the immutable log keeps the "
@@ -787,11 +791,11 @@ msgstr ""
 "ricevuti eventuali beni restituiti). Questo la chiude in questo elenco; il "
 "log immodificabile conserva la cronologia completa."
 
-#: src/Admin/RequestsDashboard.php:173
+#: src/Admin/RequestsDashboard.php:176
 msgid "What to do after receiving a request"
 msgstr "Cosa fare dopo aver ricevuto una richiesta"
 
-#: src/Admin/RequestsDashboard.php:179
+#: src/Admin/RequestsDashboard.php:182
 msgid ""
 "This is operational guidance, not legal advice. For services fully performed "
 "with the consumer's prior express consent, and other Art. 59 cases, the "
@@ -801,7 +805,7 @@ msgstr ""
 "completamente eseguiti con il previo consenso espresso del consumatore e per "
 "gli altri casi dell'Art. 59, il diritto di recesso non si applica."
 
-#: src/Admin/RequestsDashboard.php:203
+#: src/Admin/RequestsDashboard.php:206
 msgid ""
 "Subscription order. The 14-day right covers the initial contract — stop "
 "future renewals and apply any pro-rata for service already used, then "
@@ -812,56 +816,56 @@ msgstr ""
 "usato, poi rimborsa. Niente di tutto ciò è automatico a meno che tu non "
 "abbia attivato l'annullamento automatico."
 
-#: src/Admin/RequestsDashboard.php:204
+#: src/Admin/RequestsDashboard.php:207
 msgid "Subscription"
 msgstr "Abbonamento"
 
-#: src/Admin/RequestsDashboard.php:232 src/Frontend/EligibleOrders.php:56
+#: src/Admin/RequestsDashboard.php:235 src/Frontend/EligibleOrders.php:56
 msgid "Refunded"
 msgstr "Rimborsato"
 
-#: src/Admin/RequestsDashboard.php:236
+#: src/Admin/RequestsDashboard.php:239
 msgid "Processed"
 msgstr "Elaborato"
 
-#: src/Admin/RequestsDashboard.php:239
+#: src/Admin/RequestsDashboard.php:242
 msgid "Open"
 msgstr "Aperto"
 
-#: src/Admin/RequestsDashboard.php:257
+#: src/Admin/RequestsDashboard.php:260
 msgid "Mark processed"
 msgstr "Segna come elaborato"
 
-#: src/Admin/RequestsDashboard.php:261
+#: src/Admin/RequestsDashboard.php:264
 msgid "Resend email"
 msgstr "Invia di nuovo l'e-mail"
 
-#: src/Admin/RequestsDashboard.php:265
+#: src/Admin/RequestsDashboard.php:268
 msgid "Open order (refund)"
 msgstr "Ordine aperto (rimborso)"
 
-#: src/Admin/RequestsDashboard.php:441
+#: src/Admin/RequestsDashboard.php:444
 msgid "Request marked as processed."
 msgstr "Richiesta contrassegnata come elaborata."
 
-#: src/Admin/RequestsDashboard.php:442
+#: src/Admin/RequestsDashboard.php:445
 msgid ""
 "Could not mark the request as processed — the order could not be loaded."
 msgstr ""
 "Impossibile contrassegnare la richiesta come elaborata — l'ordine non ha "
 "potuto essere caricato."
 
-#: src/Admin/RequestsDashboard.php:443
+#: src/Admin/RequestsDashboard.php:446
 msgid "Acknowledgement email resent."
 msgstr "E-mail di conferma inviata nuovamente."
 
-#: src/Admin/RequestsDashboard.php:444
+#: src/Admin/RequestsDashboard.php:447
 msgid "Could not resend the email — check your email/SMTP configuration."
 msgstr ""
 "Impossibile inviare nuovamente l'e-mail — verifica la configurazione e-mail/"
 "SMTP."
 
-#: src/Admin/RequestsDashboard.php:445
+#: src/Admin/RequestsDashboard.php:448
 msgid "Please wait a few seconds before resending again."
 msgstr "Attendi alcuni secondi prima di inviare di nuovo."
 
@@ -1117,21 +1121,29 @@ msgstr "FluentCart"
 msgid ""
 "FluentCart is not active. This setting takes effect only once FluentCart is "
 "installed."
-msgstr "FluentCart non è attivo. Questa impostazione ha effetto solo quando FluentCart è installato."
+msgstr ""
+"FluentCart non è attivo. Questa impostazione ha effetto solo quando "
+"FluentCart è installato."
 
 #: src/Admin/SettingsPage.php:272
 msgid ""
 "FluentCart's own withdrawal add-on was detected. In Auto mode this plugin "
 "steps aside on FluentCart orders, so customers see a single withdrawal "
 "button."
-msgstr "È stato rilevato l'add-on di recesso di FluentCart. In modalità Auto questo plugin si fa da parte sugli ordini FluentCart, così i clienti vedono un solo pulsante di recesso."
+msgstr ""
+"È stato rilevato l'add-on di recesso di FluentCart. In modalità Auto questo "
+"plugin si fa da parte sugli ordini FluentCart, così i clienti vedono un solo "
+"pulsante di recesso."
 
 #: src/Admin/SettingsPage.php:274
 msgid ""
 "FluentCart is active and this plugin handles its withdrawal button. If "
 "FluentCart later ships its own withdrawal add-on, Auto mode steps aside "
 "automatically."
-msgstr "FluentCart è attivo e questo plugin gestisce il suo pulsante di recesso. Se in futuro FluentCart rilascia il proprio add-on di recesso, la modalità Auto si fa da parte automaticamente."
+msgstr ""
+"FluentCart è attivo e questo plugin gestisce il suo pulsante di recesso. Se "
+"in futuro FluentCart rilascia il proprio add-on di recesso, la modalità Auto "
+"si fa da parte automaticamente."
 
 #: src/Admin/SettingsPage.php:278
 msgid "Withdrawal handling"
@@ -1142,15 +1154,20 @@ msgid ""
 "Auto (recommended): show our button on FluentCart orders, but step aside "
 "automatically if FluentCart's own withdrawal add-on is installed, so "
 "consumers never see two buttons."
-msgstr "Auto (consigliato): mostra il nostro pulsante sugli ordini FluentCart, ma si fa da parte automaticamente se è installato l'add-on di recesso di FluentCart, così i consumatori non vedono mai due pulsanti."
+msgstr ""
+"Auto (consigliato): mostra il nostro pulsante sugli ordini FluentCart, ma si "
+"fa da parte automaticamente se è installato l'add-on di recesso di "
+"FluentCart, così i consumatori non vedono mai due pulsanti."
 
 #: src/Admin/SettingsPage.php:282
 msgid "Auto — defer to FluentCart's native add-on when present (recommended)"
-msgstr "Auto — cedi all'add-on nativo di FluentCart quando presente (consigliato)"
+msgstr ""
+"Auto — cedi all'add-on nativo di FluentCart quando presente (consigliato)"
 
 #: src/Admin/SettingsPage.php:283
 msgid "Always — keep our button on FluentCart orders regardless"
-msgstr "Sempre — mantieni il nostro pulsante sugli ordini FluentCart in ogni caso"
+msgstr ""
+"Sempre — mantieni il nostro pulsante sugli ordini FluentCart in ogni caso"
 
 #: src/Admin/SettingsPage.php:284
 msgid "Off — never handle FluentCart orders"
@@ -1162,7 +1179,12 @@ msgid ""
 "the checkout consent capture, the withdrawal e-mail link, and the public "
 "form. The admin Requests dashboard and any in-flight confirmation always "
 "keep working, so existing requests are never stranded."
-msgstr "Controlla solo le nostre superfici FluentCart rivolte al consumatore: il pulsante nel portale, la cattura del consenso al checkout, il link di recesso nelle e-mail e il form pubblico. Il cruscotto Richieste lato admin e le conferme già in corso continuano sempre a funzionare, così le richieste esistenti non restano mai bloccate."
+msgstr ""
+"Controlla solo le nostre superfici FluentCart rivolte al consumatore: il "
+"pulsante nel portale, la cattura del consenso al checkout, il link di "
+"recesso nelle e-mail e il form pubblico. Il cruscotto Richieste lato admin e "
+"le conferme già in corso continuano sempre a funzionare, così le richieste "
+"esistenti non restano mai bloccate."
 
 #: src/Admin/SettingsPage.php:295
 msgid ""
@@ -1170,7 +1192,12 @@ msgid ""
 "leave this on Auto: this plugin detects it and hides its own FluentCart "
 "button so customers see only one. Pick Off to disable our FluentCart "
 "handling now, or Always to keep ours regardless of any add-on."
-msgstr "FluentCart ha annunciato un add-on di recesso dedicato. Quando lo installi, lascia questa opzione su Auto: questo plugin lo rileva e nasconde il proprio pulsante FluentCart, così i clienti ne vedono uno solo. Scegli Off per disattivare subito la nostra gestione FluentCart, oppure Sempre per mantenere la nostra a prescindere da qualsiasi add-on."
+msgstr ""
+"FluentCart ha annunciato un add-on di recesso dedicato. Quando lo installi, "
+"lascia questa opzione su Auto: questo plugin lo rileva e nasconde il proprio "
+"pulsante FluentCart, così i clienti ne vedono uno solo. Scegli Off per "
+"disattivare subito la nostra gestione FluentCart, oppure Sempre per "
+"mantenere la nostra a prescindere da qualsiasi add-on."
 
 #: src/Admin/SettingsPage.php:330
 msgid "Consumer guidance"
@@ -2369,8 +2396,8 @@ msgstr ""
 "Il tuo recesso è stato registrato. Ti abbiamo inviato una conferma via e-"
 "mail."
 
-#: src/Frontend/Assets.php:116 src/Frontend/NoScriptFlow.php:84
-#: templates/form/withdrawal-form.php:78
+#: src/Frontend/Assets.php:116 src/Frontend/NoScriptFlow.php:88
+#: templates/form/withdrawal-form.php:97
 msgid "Please confirm your withdrawal. This is the final step."
 msgstr "Conferma il tuo recesso. Questo è il passaggio finale."
 
@@ -2412,11 +2439,11 @@ msgstr ""
 msgid "Open the withdrawal page"
 msgstr "Apri la pagina di recesso"
 
-#: src/Frontend/NoScriptFlow.php:131
+#: src/Frontend/NoScriptFlow.php:142
 msgid "Withdrawal registered"
 msgstr "Recesso registrato"
 
-#: src/Frontend/NoScriptFlow.php:132
+#: src/Frontend/NoScriptFlow.php:143
 msgid ""
 "Your withdrawal has been registered. We have emailed you a confirmation on a "
 "durable medium."
@@ -2424,30 +2451,30 @@ msgstr ""
 "Il tuo recesso è stato registrato. Ti abbiamo inviato una conferma su "
 "supporto durevole via e-mail."
 
-#: src/Frontend/NoScriptFlow.php:146 src/REST/Routes/WithdrawalRoute.php:121
+#: src/Frontend/NoScriptFlow.php:157 src/REST/Routes/WithdrawalRoute.php:121
 #: src/REST/Routes/WithdrawalRoute.php:155
-#: src/REST/Routes/WithdrawalRoute.php:188
+#: src/REST/Routes/WithdrawalRoute.php:189
 msgid "Too many attempts. Please try again in a few minutes."
 msgstr "Troppi tentativi. Riprova tra qualche minuto."
 
-#: src/Frontend/NoScriptFlow.php:158
+#: src/Frontend/NoScriptFlow.php:169
 msgid "Security check failed. Please reload the form and try again."
 msgstr "Verifica di sicurezza non riuscita. Ricarica il modulo e riprova."
 
-#: src/Frontend/NoScriptFlow.php:172 src/REST/Routes/WithdrawalRoute.php:41
+#: src/Frontend/NoScriptFlow.php:183 src/REST/Routes/WithdrawalRoute.php:41
 msgid "Invalid request."
 msgstr "Richiesta non valida."
 
-#: src/Frontend/NoScriptFlow.php:216
+#: src/Frontend/NoScriptFlow.php:227
 msgid "Back to the site"
 msgstr "Torna al sito"
 
-#: src/Frontend/NoScriptFlow.php:71 src/Frontend/NoScriptFlow.php:127
-#: src/Frontend/NoScriptFlow.php:145
+#: src/Frontend/NoScriptFlow.php:75 src/Frontend/NoScriptFlow.php:138
+#: src/Frontend/NoScriptFlow.php:156
 msgid "Withdrawal"
 msgstr "Recesso"
 
-#: src/Frontend/NoScriptFlow.php:72 src/REST/Routes/WithdrawalRoute.php:173
+#: src/Frontend/NoScriptFlow.php:76 src/REST/Routes/WithdrawalRoute.php:174
 msgid "Please provide your name and a valid email address."
 msgstr "Fornisci il tuo nome e un indirizzo e-mail valido."
 
@@ -2595,7 +2622,7 @@ msgstr "Non trovato."
 msgid "Receipt not available."
 msgstr "Ricevuta non disponibile."
 
-#: src/REST/Routes/WithdrawalRoute.php:200
+#: src/REST/Routes/WithdrawalRoute.php:201
 msgid "Missing confirmation token. Please start again."
 msgstr "Token di conferma mancante. Inizia nuovamente."
 
@@ -2607,11 +2634,11 @@ msgstr "Ordine non trovato o accesso non verificabile."
 msgid "The right of withdrawal is not available for this order."
 msgstr "Il diritto di recesso non è disponibile per questo ordine."
 
-#: src/Shortcodes/Shortcodes.php:145
+#: src/Shortcodes/Shortcodes.php:146
 msgid "No withdrawal request for this order."
 msgstr "Nessuna richiesta di recesso per questo ordine."
 
-#: src/Shortcodes/Shortcodes.php:150
+#: src/Shortcodes/Shortcodes.php:151
 msgid "Withdrawal request status: %s"
 msgstr "Stato della richiesta di recesso: %s"
 
@@ -2689,15 +2716,15 @@ msgid "Reason (optional)"
 msgstr "Motivo (facoltativo)"
 
 #: templates/emails/plain/wwu-wb-withdrawal-ack.php:33
-#: templates/emails/withdrawal-confirmation.php:42
-#: templates/emails/wwu-wb-withdrawal-ack.php:68
-#: templates/pdf/receipt-pdf.php:54
+#: templates/emails/withdrawal-confirmation.php:45
+#: templates/emails/wwu-wb-withdrawal-ack.php:74
+#: templates/pdf/receipt-pdf.php:57
 msgid "Date and time of submission"
 msgstr "Data e ora di invio"
 
 #: templates/emails/plain/wwu-wb-withdrawal-ack.php:35
-#: templates/emails/withdrawal-confirmation.php:46
-#: templates/emails/wwu-wb-withdrawal-ack.php:73
+#: templates/emails/withdrawal-confirmation.php:49
+#: templates/emails/wwu-wb-withdrawal-ack.php:79
 msgid "Addressee (trader):"
 msgstr "Destinatario (professionista):"
 
@@ -2709,18 +2736,24 @@ msgstr "Scarica la tua ricevuta (PDF):"
 msgid "Verify this receipt:"
 msgstr "Verifica questa ricevuta:"
 
-#: templates/emails/withdrawal-confirmation.php:51
-#: templates/emails/wwu-wb-withdrawal-ack.php:78
+#: templates/emails/withdrawal-confirmation.php:43
+#: templates/emails/wwu-wb-withdrawal-ack.php:69
+#: templates/pdf/receipt-pdf.php:55
+msgid "Products withdrawn"
+msgstr "Prodotti oggetto di recesso"
+
+#: templates/emails/withdrawal-confirmation.php:54
+#: templates/emails/wwu-wb-withdrawal-ack.php:84
 msgid "Download your receipt (PDF)"
 msgstr "Scarica la tua ricevuta (PDF)"
 
-#: templates/emails/withdrawal-confirmation.php:55
-#: templates/emails/wwu-wb-withdrawal-ack.php:82
+#: templates/emails/withdrawal-confirmation.php:58
+#: templates/emails/wwu-wb-withdrawal-ack.php:88
 msgid "Evidence reference:"
 msgstr "Riferimento della prova:"
 
-#: templates/emails/withdrawal-confirmation.php:56
-#: templates/emails/wwu-wb-withdrawal-ack.php:84
+#: templates/emails/withdrawal-confirmation.php:59
+#: templates/emails/wwu-wb-withdrawal-ack.php:90
 msgid "Verify this receipt"
 msgstr "Verifica questa ricevuta"
 
@@ -2748,7 +2781,15 @@ msgstr "E-mail per la conferma"
 msgid "You are not required to give a reason."
 msgstr "Non sei obbligato a indicare un motivo."
 
-#: templates/form/withdrawal-form.php:73
+#: templates/form/withdrawal-form.php:74
+msgid "Withdrawing from only some products?"
+msgstr "Stai recedendo solo da alcuni prodotti?"
+
+#: templates/form/withdrawal-form.php:75
+msgid "Tick them — leave empty to withdraw from the whole order."
+msgstr "Spuntali — lascia vuoto per recedere dall'intero ordine."
+
+#: templates/form/withdrawal-form.php:92
 msgid "Continue"
 msgstr "Continua"
 
@@ -2878,15 +2919,15 @@ msgstr "Attestazione di ricevimento del recesso"
 msgid "durable medium (Art. 11a Dir. 2011/83/EU)"
 msgstr "supporto durevole (Art. 11a Dir. 2011/83/UE)"
 
-#: templates/pdf/receipt-pdf.php:55
+#: templates/pdf/receipt-pdf.php:58
 msgid "Addressee (trader)"
 msgstr "Destinatario (professionista)"
 
-#: templates/pdf/receipt-pdf.php:59
+#: templates/pdf/receipt-pdf.php:62
 msgid "Declaration"
 msgstr "Dichiarazione"
 
-#: templates/pdf/receipt-pdf.php:60
+#: templates/pdf/receipt-pdf.php:63
 msgid ""
 "I, %1$s, hereby give notice that I withdraw from my contract of sale of the "
 "following goods/services: %2$s."
@@ -2894,16 +2935,16 @@ msgstr ""
 "Io sottoscritto/a %1$s, con la presente comunico il mio recesso dal "
 "contratto di vendita relativo ai seguenti beni/servizi: %2$s."
 
-#: templates/pdf/receipt-pdf.php:64
+#: templates/pdf/receipt-pdf.php:67
 msgid "Tamper-evidence reference (SHA-256 of the immutable-log record):"
 msgstr ""
 "Riferimento antimanomissione (SHA-256 del record nel log immodificabile):"
 
-#: templates/pdf/receipt-pdf.php:66
+#: templates/pdf/receipt-pdf.php:69
 msgid "Request ID:"
 msgstr "ID richiesta:"
 
-#: templates/pdf/receipt-pdf.php:67
+#: templates/pdf/receipt-pdf.php:70
 msgid "Verify:"
 msgstr "Verifica:"
 

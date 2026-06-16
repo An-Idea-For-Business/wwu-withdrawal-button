@@ -64,13 +64,19 @@
 		}
 
 		function readFields() {
+			var productCheckboxes = wrap.querySelectorAll( '[name="products[]"]:checked' );
+			var products = [];
+			Array.prototype.forEach.call( productCheckboxes, function ( cb ) {
+				products.push( cb.value );
+			} );
 			return {
 				order_ref: orderRef,
 				key: key,
 				access_token: accessToken,
 				name: ( wrap.querySelector( '[name="name"]' ) || {} ).value || '',
 				email: ( wrap.querySelector( '[name="email"]' ) || {} ).value || '',
-				reason: ( wrap.querySelector( '[name="reason"]' ) || {} ).value || ''
+				reason: ( wrap.querySelector( '[name="reason"]' ) || {} ).value || '',
+				products: products
 			};
 		}
 

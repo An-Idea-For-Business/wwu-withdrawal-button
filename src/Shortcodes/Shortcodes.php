@@ -123,6 +123,7 @@ final class Shortcodes {
 				'withdraw_label' => $services->labels->withdraw_label( $order->country, $locale ),
 				'confirm_label'  => $services->labels->confirm_label( $order->country, $locale ),
 				'days_remaining' => $services->window->days_remaining( $order ),
+				'items'          => $order->items,
 			)
 		);
 	}

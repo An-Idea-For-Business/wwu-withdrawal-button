@@ -69,6 +69,25 @@ $wwu_wb_token = isset( $_GET['access_token'] ) ? sanitize_text_field( wp_unslash
 			<textarea id="wwu-wb-reason" name="reason" rows="2" placeholder="<?php esc_attr_e( 'You are not required to give a reason.', 'wwu-withdrawal-button' ); ?>"></textarea>
 		</p>
 
+		<?php if ( ! empty( $items ) && is_array( $items ) ) : ?>
+		<fieldset class="wwu-wb-field wwu-wb-products">
+			<legend><?php esc_html_e( 'Withdrawing from only some products?', 'wwu-withdrawal-button' ); ?></legend>
+			<p class="wwu-wb-products-help"><?php esc_html_e( 'Tick them — leave empty to withdraw from the whole order.', 'wwu-withdrawal-button' ); ?></p>
+			<?php foreach ( $items as $item ) :
+				$item_name = (string) ( $item['name'] ?? '' );
+				$item_qty  = (int) ( $item['qty'] ?? 1 );
+				if ( '' === $item_name ) {
+					continue;
+				}
+			?>
+			<label class="wwu-wb-products-item">
+				<input type="checkbox" name="products[]" value="<?php echo esc_attr( $item_name ); ?>" />
+				<?php echo esc_html( $item_name ); ?><?php if ( $item_qty > 1 ) : ?> <span class="wwu-wb-products-qty">&times; <?php echo esc_html( (string) $item_qty ); ?></span><?php endif; ?>
+			</label>
+			<?php endforeach; ?>
+		</fieldset>
+		<?php endif; ?>
+
 		<p class="wwu-wb-actions">
 			<button type="submit" class="wwu-wb-button wwu-wb-continue"><?php esc_html_e( 'Continue', 'wwu-withdrawal-button' ); ?></button>
 		</p>

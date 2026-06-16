@@ -30,6 +30,9 @@ final class WithdrawalRequest {
 	/** @var string Optional reason (never required by law). */
 	public $reason;
 
+	/** @var array Optional list of product names the consumer is withdrawing from (never required; empty = whole order). */
+	public array $products = array();
+
 	/**
 	 * Constructor.
 	 *
@@ -56,12 +59,25 @@ final class WithdrawalRequest {
 		// append-only immutable log (a permanent, non-deletable LONGTEXT row) and
 		// against heavy outbound e-mail / PDF renders from an oversized field. A
 		// legitimate statement is far below these limits.
-		return new self(
+		$instance = new self(
 			self::cap( sanitize_text_field( (string) ( $data['name'] ?? '' ) ), 200 ),
 			self::cap( sanitize_text_field( (string) ( $data['order_ref'] ?? '' ) ), 100 ),
 			self::cap( sanitize_email( (string) ( $data['email'] ?? '' ) ), 254 ),
 			self::cap( sanitize_textarea_field( (string) ( $data['reason'] ?? '' ) ), 2000 )
 		);
+
+		/* Sanitise the optional products list (DoS guards: 50 items max, 200 chars each). */
+		$raw_products = isset( $data['products'] ) && is_array( $data['products'] ) ? $data['products'] : array();
+		$sanitized    = array();
+		foreach ( array_slice( $raw_products, 0, 50 ) as $item ) {
+			$v = self::cap( sanitize_text_field( (string) $item ), 200 );
+			if ( '' !== $v ) {
+				$sanitized[] = $v;
+			}
+		}
+		$instance->products = array_values( $sanitized );
+
+		return $instance;
 	}
 
 	/**
@@ -87,7 +103,7 @@ final class WithdrawalRequest {
 	/**
 	 * Export as an array for the evidence payload.
 	 *
-	 * @return array<string,string>
+	 * @return array<string,mixed>
 	 */
 	public function to_array(): array {
 		return array(
@@ -95,6 +111,7 @@ final class WithdrawalRequest {
 			'order_ref' => $this->order_ref,
 			'email'     => $this->email,
 			'reason'    => $this->reason,
+			'products'  => $this->products,
 		);
 	}
 }

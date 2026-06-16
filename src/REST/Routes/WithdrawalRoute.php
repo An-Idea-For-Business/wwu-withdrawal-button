@@ -167,6 +167,7 @@ final class WithdrawalRoute extends AbstractRoute {
 				'order_ref' => $order->order_ref,
 				'email'     => $request->get_param( 'email' ) ?: $order->email,
 				'reason'    => $request->get_param( 'reason' ),
+				'products'  => $request->get_param( 'products' ),
 			)
 		);
 		if ( ! $req->is_valid() ) {
@@ -206,6 +207,7 @@ final class WithdrawalRoute extends AbstractRoute {
 				'order_ref' => $order->order_ref,
 				'email'     => $request->get_param( 'email' ) ?: $order->email,
 				'reason'    => $request->get_param( 'reason' ),
+				'products'  => $request->get_param( 'products' ),
 			)
 		);
 		$result = Services::instance()->withdrawal->confirm( $adapter, $order, $req, $request_uid, $token );

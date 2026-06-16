@@ -51,6 +51,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php if ( '' !== $reason ) : ?>
 		<tr><td class="k"><?php esc_html_e( 'Reason (optional)', 'wwu-withdrawal-button' ); ?></td><td><?php echo esc_html( $reason ); ?></td></tr>
 		<?php endif; ?>
+		<?php if ( '' !== $products_selected ) : ?>
+		<tr><td class="k"><?php esc_html_e( 'Products withdrawn', 'wwu-withdrawal-button' ); ?></td><td><?php echo esc_html( $products_selected ); ?></td></tr>
+		<?php endif; ?>
 		<tr><td class="k"><?php esc_html_e( 'Date and time of submission', 'wwu-withdrawal-button' ); ?></td><td><strong><?php echo esc_html( $submitted_local ); ?></strong> (<?php echo esc_html( $submitted_at ); ?>)</td></tr>
 		<tr><td class="k"><?php esc_html_e( 'Addressee (trader)', 'wwu-withdrawal-button' ); ?></td><td><?php echo esc_html( $trader['name'] ); ?><?php echo '' !== $trader['address'] ? ', ' . esc_html( $trader['address'] ) : ''; ?><?php echo '' !== $trader['email'] ? ' — ' . esc_html( $trader['email'] ) : ''; ?></td></tr>
 	</table>

@@ -42,20 +42,21 @@ final class ReceiptBuilder {
 		$within      = (bool) ( $row_payload['within_window'] ?? true );
 
 		return array(
-			'within_window' => $within,
-			'request_uid'  => $request_uid,
-			'order_number' => $order->number,
-			'name'         => $req->name,
-			'email'        => $req->email,
-			'reason'       => $req->reason,
-			'items'        => $this->items_summary( $order ),
-			'submitted_at' => $submitted_at,
-			'submitted_local' => $this->localize_datetime( $submitted_at ),
-			'row_hash'     => $row_hash,
-			'trader'       => $this->trader(),
-			'download_url' => VerifiableLink::download_url( $request_uid ),
-			'verify_url'   => VerifiableLink::verify_url( $request_uid ),
-			'site_name'    => get_bloginfo( 'name' ),
+			'within_window'     => $within,
+			'request_uid'       => $request_uid,
+			'order_number'      => $order->number,
+			'name'              => $req->name,
+			'email'             => $req->email,
+			'reason'            => $req->reason,
+			'products_selected' => implode( ', ', $req->products ),
+			'items'             => $this->items_summary( $order ),
+			'submitted_at'      => $submitted_at,
+			'submitted_local'   => $this->localize_datetime( $submitted_at ),
+			'row_hash'          => $row_hash,
+			'trader'            => $this->trader(),
+			'download_url'      => VerifiableLink::download_url( $request_uid ),
+			'verify_url'        => VerifiableLink::verify_url( $request_uid ),
+			'site_name'         => get_bloginfo( 'name' ),
 		);
 	}
 

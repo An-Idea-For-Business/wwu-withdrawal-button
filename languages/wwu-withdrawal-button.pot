@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WWU Withdrawal Button 1.0.0-alpha.41\n"
 "Report-Msgid-Bugs-To: https://webwakeup.it/wwu-withdrawal-button/\n"
-"POT-Creation-Date: 2026-06-15 19:25+0000\n"
+"POT-Creation-Date: 2026-06-16 06:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: WebWakeUp\n"
@@ -233,7 +233,7 @@ msgstr ""
 
 #: src/Admin/ConsentRecordsPage.php:200
 #: src/Admin/DashboardPage.php:287
-#: src/Admin/RequestsDashboard.php:397
+#: src/Admin/RequestsDashboard.php:400
 #: src/Admin/SettingsPage.php:480
 #: src/Admin/SettingsPage.php:923
 #: src/REST/Authentication.php:55
@@ -532,108 +532,112 @@ msgid "Country"
 msgstr ""
 
 #: src/Admin/RequestsDashboard.php:101
-msgid "In time"
+msgid "Products"
 msgstr ""
 
 #: src/Admin/RequestsDashboard.php:102
-msgid "Status"
+msgid "In time"
 msgstr ""
 
 #: src/Admin/RequestsDashboard.php:103
-msgid "Evidence"
+msgid "Status"
 msgstr ""
 
 #: src/Admin/RequestsDashboard.php:104
+msgid "Evidence"
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:105
 msgid "Actions"
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:123
+#: src/Admin/RequestsDashboard.php:126
 #: templates/public/verify-receipt.php:73
 msgid "Yes"
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:124
+#: src/Admin/RequestsDashboard.php:127
 msgid "Flagged late"
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:129
+#: src/Admin/RequestsDashboard.php:132
 msgid "Verify"
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:166
+#: src/Admin/RequestsDashboard.php:169
 msgid "Check the request is in scope. The list hides orders outside the right of withdrawal; \"In time\" shows whether it was within the 14-day window. A late one is still recorded — verify its validity before refusing it."
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:167
+#: src/Admin/RequestsDashboard.php:170
 msgid "If the order is goods, the consumer must send them back within 14 days. You may withhold the refund until you receive the goods back, or until the consumer proves they have shipped them — whichever is earlier."
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:168
+#: src/Admin/RequestsDashboard.php:171
 msgid "Reimburse within 14 days of being informed of the withdrawal. Refund ALL payments received, including the standard delivery cost, using the same payment method the consumer used (unless they expressly agreed otherwise). Click \"Refund order\" to do it in WooCommerce — the refund is recorded automatically in the evidence log."
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:169
+#: src/Admin/RequestsDashboard.php:172
 msgid "Mark the request as processed once you have refunded (and received any returned goods). This closes it in this list; the immutable log keeps the full history."
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:173
+#: src/Admin/RequestsDashboard.php:176
 msgid "What to do after receiving a request"
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:179
+#: src/Admin/RequestsDashboard.php:182
 msgid "This is operational guidance, not legal advice. For services fully performed with the consumer's prior express consent, and other Art. 59 cases, the right of withdrawal does not apply."
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:203
+#: src/Admin/RequestsDashboard.php:206
 msgid "Subscription order. The 14-day right covers the initial contract — stop future renewals and apply any pro-rata for service already used, then refund. None of this is automatic unless you enabled auto-cancel."
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:204
+#: src/Admin/RequestsDashboard.php:207
 msgid "Subscription"
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:232
+#: src/Admin/RequestsDashboard.php:235
 #: src/Frontend/EligibleOrders.php:56
 msgid "Refunded"
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:236
+#: src/Admin/RequestsDashboard.php:239
 msgid "Processed"
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:239
+#: src/Admin/RequestsDashboard.php:242
 msgid "Open"
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:257
+#: src/Admin/RequestsDashboard.php:260
 msgid "Mark processed"
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:261
+#: src/Admin/RequestsDashboard.php:264
 msgid "Resend email"
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:265
+#: src/Admin/RequestsDashboard.php:268
 msgid "Open order (refund)"
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:441
+#: src/Admin/RequestsDashboard.php:444
 msgid "Request marked as processed."
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:442
+#: src/Admin/RequestsDashboard.php:445
 msgid "Could not mark the request as processed — the order could not be loaded."
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:443
+#: src/Admin/RequestsDashboard.php:446
 msgid "Acknowledgement email resent."
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:444
+#: src/Admin/RequestsDashboard.php:447
 msgid "Could not resend the email — check your email/SMTP configuration."
 msgstr ""
 
-#: src/Admin/RequestsDashboard.php:445
+#: src/Admin/RequestsDashboard.php:448
 msgid "Please wait a few seconds before resending again."
 msgstr ""
 
@@ -1665,8 +1669,8 @@ msgid "Your withdrawal has been registered. We have emailed you a confirmation."
 msgstr ""
 
 #: src/Frontend/Assets.php:116
-#: src/Frontend/NoScriptFlow.php:84
-#: templates/form/withdrawal-form.php:78
+#: src/Frontend/NoScriptFlow.php:88
+#: templates/form/withdrawal-form.php:97
 msgid "Please confirm your withdrawal. This is the final step."
 msgstr ""
 
@@ -1701,42 +1705,42 @@ msgstr ""
 msgid "Open the withdrawal page"
 msgstr ""
 
-#: src/Frontend/NoScriptFlow.php:131
+#: src/Frontend/NoScriptFlow.php:142
 msgid "Withdrawal registered"
 msgstr ""
 
-#: src/Frontend/NoScriptFlow.php:132
+#: src/Frontend/NoScriptFlow.php:143
 msgid "Your withdrawal has been registered. We have emailed you a confirmation on a durable medium."
 msgstr ""
 
-#: src/Frontend/NoScriptFlow.php:146
+#: src/Frontend/NoScriptFlow.php:157
 #: src/REST/Routes/WithdrawalRoute.php:121
 #: src/REST/Routes/WithdrawalRoute.php:155
-#: src/REST/Routes/WithdrawalRoute.php:188
+#: src/REST/Routes/WithdrawalRoute.php:189
 msgid "Too many attempts. Please try again in a few minutes."
 msgstr ""
 
-#: src/Frontend/NoScriptFlow.php:158
+#: src/Frontend/NoScriptFlow.php:169
 msgid "Security check failed. Please reload the form and try again."
 msgstr ""
 
-#: src/Frontend/NoScriptFlow.php:172
+#: src/Frontend/NoScriptFlow.php:183
 #: src/REST/Routes/WithdrawalRoute.php:41
 msgid "Invalid request."
 msgstr ""
 
-#: src/Frontend/NoScriptFlow.php:216
+#: src/Frontend/NoScriptFlow.php:227
 msgid "Back to the site"
 msgstr ""
 
-#: src/Frontend/NoScriptFlow.php:71
-#: src/Frontend/NoScriptFlow.php:127
-#: src/Frontend/NoScriptFlow.php:145
+#: src/Frontend/NoScriptFlow.php:75
+#: src/Frontend/NoScriptFlow.php:138
+#: src/Frontend/NoScriptFlow.php:156
 msgid "Withdrawal"
 msgstr ""
 
-#: src/Frontend/NoScriptFlow.php:72
-#: src/REST/Routes/WithdrawalRoute.php:173
+#: src/Frontend/NoScriptFlow.php:76
+#: src/REST/Routes/WithdrawalRoute.php:174
 msgid "Please provide your name and a valid email address."
 msgstr ""
 
@@ -1854,7 +1858,7 @@ msgstr ""
 msgid "Receipt not available."
 msgstr ""
 
-#: src/REST/Routes/WithdrawalRoute.php:200
+#: src/REST/Routes/WithdrawalRoute.php:201
 msgid "Missing confirmation token. Please start again."
 msgstr ""
 
@@ -1866,11 +1870,11 @@ msgstr ""
 msgid "The right of withdrawal is not available for this order."
 msgstr ""
 
-#: src/Shortcodes/Shortcodes.php:145
+#: src/Shortcodes/Shortcodes.php:146
 msgid "No withdrawal request for this order."
 msgstr ""
 
-#: src/Shortcodes/Shortcodes.php:150
+#: src/Shortcodes/Shortcodes.php:151
 msgid "Withdrawal request status: %s"
 msgstr ""
 
@@ -1938,15 +1942,15 @@ msgid "Reason (optional)"
 msgstr ""
 
 #: templates/emails/plain/wwu-wb-withdrawal-ack.php:33
-#: templates/emails/withdrawal-confirmation.php:42
-#: templates/emails/wwu-wb-withdrawal-ack.php:68
-#: templates/pdf/receipt-pdf.php:54
+#: templates/emails/withdrawal-confirmation.php:45
+#: templates/emails/wwu-wb-withdrawal-ack.php:74
+#: templates/pdf/receipt-pdf.php:57
 msgid "Date and time of submission"
 msgstr ""
 
 #: templates/emails/plain/wwu-wb-withdrawal-ack.php:35
-#: templates/emails/withdrawal-confirmation.php:46
-#: templates/emails/wwu-wb-withdrawal-ack.php:73
+#: templates/emails/withdrawal-confirmation.php:49
+#: templates/emails/wwu-wb-withdrawal-ack.php:79
 msgid "Addressee (trader):"
 msgstr ""
 
@@ -1958,18 +1962,24 @@ msgstr ""
 msgid "Verify this receipt:"
 msgstr ""
 
-#: templates/emails/withdrawal-confirmation.php:51
-#: templates/emails/wwu-wb-withdrawal-ack.php:78
+#: templates/emails/withdrawal-confirmation.php:43
+#: templates/emails/wwu-wb-withdrawal-ack.php:69
+#: templates/pdf/receipt-pdf.php:55
+msgid "Products withdrawn"
+msgstr ""
+
+#: templates/emails/withdrawal-confirmation.php:54
+#: templates/emails/wwu-wb-withdrawal-ack.php:84
 msgid "Download your receipt (PDF)"
 msgstr ""
 
-#: templates/emails/withdrawal-confirmation.php:55
-#: templates/emails/wwu-wb-withdrawal-ack.php:82
+#: templates/emails/withdrawal-confirmation.php:58
+#: templates/emails/wwu-wb-withdrawal-ack.php:88
 msgid "Evidence reference:"
 msgstr ""
 
-#: templates/emails/withdrawal-confirmation.php:56
-#: templates/emails/wwu-wb-withdrawal-ack.php:84
+#: templates/emails/withdrawal-confirmation.php:59
+#: templates/emails/wwu-wb-withdrawal-ack.php:90
 msgid "Verify this receipt"
 msgstr ""
 
@@ -1993,7 +2003,15 @@ msgstr ""
 msgid "You are not required to give a reason."
 msgstr ""
 
-#: templates/form/withdrawal-form.php:73
+#: templates/form/withdrawal-form.php:74
+msgid "Withdrawing from only some products?"
+msgstr ""
+
+#: templates/form/withdrawal-form.php:75
+msgid "Tick them — leave empty to withdraw from the whole order."
+msgstr ""
+
+#: templates/form/withdrawal-form.php:92
 msgid "Continue"
 msgstr ""
 
@@ -2069,27 +2087,27 @@ msgstr ""
 msgid "durable medium (Art. 11a Dir. 2011/83/EU)"
 msgstr ""
 
-#: templates/pdf/receipt-pdf.php:55
+#: templates/pdf/receipt-pdf.php:58
 msgid "Addressee (trader)"
 msgstr ""
 
-#: templates/pdf/receipt-pdf.php:59
+#: templates/pdf/receipt-pdf.php:62
 msgid "Declaration"
 msgstr ""
 
-#: templates/pdf/receipt-pdf.php:60
+#: templates/pdf/receipt-pdf.php:63
 msgid "I, %1$s, hereby give notice that I withdraw from my contract of sale of the following goods/services: %2$s."
 msgstr ""
 
-#: templates/pdf/receipt-pdf.php:64
+#: templates/pdf/receipt-pdf.php:67
 msgid "Tamper-evidence reference (SHA-256 of the immutable-log record):"
 msgstr ""
 
-#: templates/pdf/receipt-pdf.php:66
+#: templates/pdf/receipt-pdf.php:69
 msgid "Request ID:"
 msgstr ""
 
-#: templates/pdf/receipt-pdf.php:67
+#: templates/pdf/receipt-pdf.php:70
 msgid "Verify:"
 msgstr ""
 

@@ -48,7 +48,8 @@ final class SmokeTests {
 		'fluentcart'     => 'suite_fluentcart',
 		'exemptions'     => 'suite_exemptions',
 		'consent'        => 'suite_consent',
-		'subscriptions'  => 'suite_subscriptions',
+		'subscriptions'       => 'suite_subscriptions',
+		'withdrawal_request'  => 'suite_withdrawal_request',
 	);
 
 	/**
@@ -868,6 +869,103 @@ final class SmokeTests {
 		// Return the flat test array like every other suite — run() wraps it in
 		// { name, tests }. Returning the wrapped shape here double-wrapped it, so
 		// the JSON `tests` became an object and the Inspector's forEach threw.
+		return $tests;
+	}
+
+	/**
+	 * Suite: withdrawal_request (WithdrawalRequest::from_input products pipeline).
+	 *
+	 * Covers: normal round-trip, DoS cap (>50 truncated), per-element cap (>200 chars
+	 * truncated), and absent/empty input resulting in an empty array while is_valid()
+	 * remains unaffected.
+	 *
+	 * @return array
+	 */
+	private function suite_withdrawal_request(): array {
+		$tests = array();
+		$class = '\\WWU\\WithdrawalButton\\Domain\\WithdrawalRequest';
+
+		/* (a) Normal products array round-trips via to_array(). */
+		$req_a = $class::from_input(
+			array(
+				'order_id' => '99',
+				'name'     => 'Jane',
+				'email'    => 'jane@example.com',
+				'country'  => 'IT',
+				'reason'   => '',
+				'products' => array( 'Widget A', 'Widget B' ),
+			)
+		);
+		$arr_a   = $req_a->to_array();
+		$tests[] = $this->assert(
+			'withdrawal_request.products_roundtrip',
+			isset( $arr_a['products'] ) && array( 'Widget A', 'Widget B' ) === $arr_a['products'],
+			'Products round-trip via to_array() (got: ' . wp_json_encode( $arr_a['products'] ?? null ) . ').'
+		);
+
+		/* (b) Array with more than 50 elements is capped to 50. */
+		$long_list = array_map( static function ( $i ) {
+			return 'Product ' . $i;
+		}, range( 1, 75 ) );
+		$req_b   = $class::from_input(
+			array(
+				'order_id' => '99',
+				'name'     => 'Jane',
+				'email'    => 'jane@example.com',
+				'country'  => 'IT',
+				'reason'   => '',
+				'products' => $long_list,
+			)
+		);
+		$arr_b   = $req_b->to_array();
+		$tests[] = $this->assert(
+			'withdrawal_request.products_cap_50',
+			isset( $arr_b['products'] ) && 50 === count( $arr_b['products'] ),
+			'Oversized array (75 items) capped to 50 (got: ' . count( $arr_b['products'] ?? array() ) . ').'
+		);
+
+		/* (c) An element longer than 200 chars is truncated to ≤ 200 chars. */
+		$long_name = str_repeat( 'X', 300 );
+		$req_c     = $class::from_input(
+			array(
+				'order_id' => '99',
+				'name'     => 'Jane',
+				'email'    => 'jane@example.com',
+				'country'  => 'IT',
+				'reason'   => '',
+				'products' => array( $long_name ),
+			)
+		);
+		$arr_c         = $req_c->to_array();
+		$first_product = isset( $arr_c['products'][0] ) ? (string) $arr_c['products'][0] : '';
+		$tests[]       = $this->assert(
+			'withdrawal_request.product_element_cap_200',
+			mb_strlen( $first_product ) <= 200 && mb_strlen( $first_product ) > 0,
+			'300-char element truncated to ≤ 200 chars (got: ' . mb_strlen( $first_product ) . ').'
+		);
+
+		/* (d) Absent/empty products → to_array()['products'] === [] and is_valid() is still true. */
+		$req_d = $class::from_input(
+			array(
+				'order_id' => '99',
+				'name'     => 'Jane',
+				'email'    => 'jane@example.com',
+				'country'  => 'IT',
+				'reason'   => '',
+			)
+		);
+		$arr_d   = $req_d->to_array();
+		$tests[] = $this->assert(
+			'withdrawal_request.products_absent_empty_array',
+			isset( $arr_d['products'] ) && array() === $arr_d['products'],
+			'Absent products key yields empty array in to_array().'
+		);
+		$tests[] = $this->assert(
+			'withdrawal_request.is_valid_unaffected',
+			$req_d->is_valid(),
+			'is_valid() remains true when no products are selected.'
+		);
+
 		return $tests;
 	}
 

@@ -98,6 +98,7 @@ final class RequestsDashboard {
 		echo '<th>' . esc_html__( 'Order', 'wwu-withdrawal-button' ) . '</th>';
 		echo '<th>' . esc_html__( 'Consumer', 'wwu-withdrawal-button' ) . '</th>';
 		echo '<th>' . esc_html__( 'Country', 'wwu-withdrawal-button' ) . '</th>';
+		echo '<th>' . esc_html__( 'Products', 'wwu-withdrawal-button' ) . '</th>';
 		echo '<th>' . esc_html__( 'In time', 'wwu-withdrawal-button' ) . '</th>';
 		echo '<th>' . esc_html__( 'Status', 'wwu-withdrawal-button' ) . '</th>';
 		echo '<th>' . esc_html__( 'Evidence', 'wwu-withdrawal-button' ) . '</th>';
@@ -119,6 +120,8 @@ final class RequestsDashboard {
 			echo '<td>' . esc_html( (string) ( $payload['order_number'] ?? $order_ref ) ) . $this->subscription_badge( $adapter, $order_ref ) . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- badge is escaped kit markup.
 			echo '<td>' . esc_html( (string) $row['customer_email'] ) . '</td>';
 			echo '<td>' . esc_html( (string) ( $payload['country'] ?? '' ) ) . '</td>';
+			$products_arr = isset( $payload['statement']['products'] ) && is_array( $payload['statement']['products'] ) ? $payload['statement']['products'] : array();
+			echo '<td>' . ( ! empty( $products_arr ) ? esc_html( implode( ', ', $products_arr ) ) : '&mdash;' ) . '</td>';
 			echo '<td>' . ( $within
 				? '<span class="wwu-wb-badge wwu-wb-badge--ok">' . esc_html__( 'Yes', 'wwu-withdrawal-button' ) . '</span>'
 				: '<span class="wwu-wb-badge wwu-wb-badge--warn">' . esc_html__( 'Flagged late', 'wwu-withdrawal-button' ) . '</span>' ) . '</td>';
