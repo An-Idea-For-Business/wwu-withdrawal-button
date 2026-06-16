@@ -39,11 +39,14 @@ This plugin makes a WooCommerce, FluentCart or Easy Digital Downloads store comp
 - ✅ **WooCommerce (HPOS + legacy), FluentCart and Easy Digital Downloads (3.0+)** via a common adapter.
 - ✅ **Multilingual** (IT/EN/FR/ES/DE, extensible) and **jurisdiction-aware** (DE §356a, FR D.221-5, ES direct-effect; Switzerland handled as voluntary; applicability follows the **consumer's country** per Rome I Art. 6).
 - ✅ **Compliance documents**: generates the **Annex I-B model withdrawal form** (multilingual) and ready clauses for Privacy Policy / Terms / pre-contractual info.
-- ✅ **Plays nicely** with **Complianz** and **TranslatePress**; excluded from page cache where needed; **shortcodes + blocks + hooks + template overrides** for customisation.
+- ✅ **Plays nicely** with **Complianz** and **TranslatePress**; excluded from page cache where needed; **shortcodes + blocks + hooks + template overrides** for customisation — with a [documented public hooks & filters API](docs/reference/wwu-wb-hooks-filters-REFERENCE.md) for developers.
+- ✅ **Partial withdrawal** (since `1.0.0-alpha.42`) — the consumer can withdraw from only *some* products of an order (EU partial withdrawal; leave empty for the whole order); the selection appears on the durable-medium receipt and the merchant's Requests dashboard.
+- ✅ **Transparency on exempt orders** (since `1.0.0-alpha.43`) — when an order is exempt under Art. 59, the consumer sees a short note explaining *why* the withdrawal button is absent (the specific statutory exception + legal reference), instead of silence. Editable + fail-safe.
+- ✅ **Configurable FluentCart handling** (since `1.0.0-alpha.41`) — FluentCart is shipping its own native withdrawal add-on; a **Settings → FluentCart** mode (Auto / Always / Off) makes this plugin step aside automatically so customers never see two buttons.
 
 ## Status
 
-🚧 **In active development.** This repository currently contains the full design + legal analysis (see [`docs/`](docs/)) and the **F0 foundation** (bootstrap, schema, debug stack, REST diagnostics). The withdrawal flow, durable medium, log chain and compliance documents are landing phase by phase — see the [roadmap](docs/plans/wwu-wb-roadmap-PLAN.md).
+🟢 **MVP feature-complete, in live testing.** The full withdrawal flow — statutory button, two-step confirmation, durable-medium acknowledgement (email + PDF + verifiable link), tamper-evident hash-chained log, and the compliance-document generators — is **built and shipping** across WooCommerce, FluentCart and Easy Digital Downloads. Current pre-release: **`1.0.0-alpha.43`** (see [Releases](../../releases) and the [changelog](docs/changelog/wwu-wb-CHANGELOG.md)). Recent additions: configurable FluentCart handling (alpha.41), partial withdrawal — choose which products (alpha.42), and a consumer "why exempt" transparency note (alpha.43). Six locales at 100% (IT/EN/DE/FR/ES/SV). See the [roadmap](docs/plans/wwu-wb-roadmap-PLAN.md) for what's next.
 
 ## Known issues & limitations
 
@@ -63,6 +66,7 @@ We document limitations openly. None of these block the legal compliance core �
 | [Legal reference](docs/legal/wwu-wb-legal-reference.md) | Verbatim statutory text (Art. 11a EN+IT, Art. 54-bis, Annex I-B, per-country labels) |
 | [Compliance matrix](docs/legal/wwu-wb-compliance-matrix.md) | Every legal obligation → feature → test |
 | [Exemption-consent evidence note](docs/legal/wwu-wb-exemption-consent-evidence-NOTE.md) | What the law requires for recording the Art. 59 exemption consents (burden of proof, durable-medium confirmation, retention, GDPR basis) — verified against official sources |
+| [Hooks & filters reference](docs/reference/wwu-wb-hooks-filters-REFERENCE.md) | The supported public extension API — 30 hooks (filters + actions) with signatures + examples |
 | [Roadmap](docs/plans/wwu-wb-roadmap-PLAN.md) | Phased implementation plan |
 | [Test checklists](docs/testing/README.md) | End-to-end "try the plugin" evaluator guides (WooCommerce / FluentCart / EDD) + exemption consent-capture checklists — runnable on a staging store by anyone |
 | [MASTER index](MASTER-wwu-wb.md) | One-page project index |
