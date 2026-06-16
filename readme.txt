@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0-alpha.40
+Stable tag: 1.0.0-alpha.41
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -71,6 +71,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 
 == Changelog ==
 
+= 1.0.0-alpha.41 =
+* **FluentCart handling is now configurable.** FluentCart is building its own withdrawal add-on, so a new **Settings → FluentCart** control lets you choose how this plugin behaves on FluentCart orders: **Auto** (recommended — show our button, but step aside automatically if FluentCart's own add-on is installed, so customers never see two buttons), **Always** (keep ours regardless), or **Off** (never handle FluentCart). Only our consumer-facing FluentCart surfaces are affected — the admin Requests dashboard and any in-flight confirmation keep working. No change for WooCommerce or EDD.
+
 = 1.0.0-alpha.40 =
 * **Admin UI styling restored + Swedish added.** The bundled WWU UI Kit is now shipped with the plugin (it was referenced but never packaged), so the Settings → Exemptions section (accordions, badges, notices) renders styled instead of plain. Added **Swedish (sv_SE)**: the statutory withdrawal-button label ("ångra avtalet här") and confirmation ("bekräfta frånträde") per the official EUR-Lex Art. 11a wording (Distansavtalslagen 2005:59), plus a complete UI translation (all 495 strings; the legal term "varaktigt medium" corrected) — pending a native Swedish review by Daniel before it's marked final.
 
@@ -126,6 +129,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.0.0-alpha.41 =
+Adds a FluentCart handling mode (Auto/Always/Off) so this plugin steps aside automatically when FluentCart's own withdrawal add-on is installed. No breaking changes; WooCommerce and EDD are unaffected.
 
 = 1.0.0-alpha.40 =
 Restores the admin UI styling (the UI Kit is now bundled) and adds Swedish (statutory button label + complete UI translation, pending native review). No breaking changes.

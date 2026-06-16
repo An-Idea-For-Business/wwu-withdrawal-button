@@ -140,6 +140,12 @@ final class FluentCartWithdrawalTag {
 			return '';
 		}
 
+		// Respect the FluentCart handling mode — emit an empty link when our FluentCart
+		// handling is off or auto-deferred to a native add-on (no stray placeholder).
+		if ( ! \WWU\WithdrawalButton\Platform\FluentCartAdapter::should_render() ) {
+			return '';
+		}
+
 		$adapter = Services::instance()->platforms->get( 'fluentcart' );
 		if ( ! $adapter ) {
 			return '';

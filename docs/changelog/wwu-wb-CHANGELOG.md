@@ -5,6 +5,26 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### Configurable FluentCart handling + auto-defer to a native add-on (1.0.0-alpha.41, 2026-06-15)
+FluentCart confirmed it will ship its own withdrawal add-on. To avoid two buttons, a new
+**Settings → FluentCart → Withdrawal handling** control (`wwu_wb_settings['fluentcart_mode']`, default
+`auto`) governs our FluentCart surfaces:
+- **Auto** (default) — render our FluentCart button / checkout consent / e-mail link / public form UNLESS
+  FluentCart's native withdrawal add-on is detected, then step aside (no duplicate).
+- **Always** — keep ours regardless of any native add-on.
+- **Off** — never render our FluentCart surfaces.
+
+Implemented as `FluentCartAdapter::should_render()` (+ `mode()` + `native_addon_active()`), consulted by the
+**four consumer entry points only** — `FluentCartPortal`, `FluentCartCheckoutConsent`,
+`FluentCartWithdrawalTag` and `EligibleOrders::collect_fluentcart()` (public form). The **admin Requests
+dashboard and any in-flight durable-medium confirmation are untouched**, so a FluentCart withdrawal already
+recorded is never stranded when handling is turned off (`is_active()` keeps its pure-presence meaning — the
+suppression lives at the surfaces, not the registry). Native-add-on detection is **filterable** via
+`wwu_wb_fluentcart_native_active`; its exact class/constant signal is pending from FluentCart, so Auto never
+auto-defers until that filter (or a future build) wires the real check. 8 new smoke assertions in
+`suite_fluentcart`. PHPStan level 2 clean; class scan clean. See
+[spec](specs/wwu-wb-fluentcart-handling-mode-SPEC.md).
+
 ### UI Kit bundled + Swedish (sv_SE) added (1.0.0-alpha.40, 2026-06-15)
 - **UI Kit now bundled** (`assets/ui-kit/` — css/js/dist/php, kit 0.9.2). The admin code referenced the
   WWU UI Kit (`.wwu-ui-accordion/badge/notice` + `maybe_enqueue_ui_kit()`) but the kit assets were never
