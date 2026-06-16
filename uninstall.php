@@ -39,6 +39,7 @@ function wwu_wb_uninstall_cleanup_site(): void {
 		'wwu_wb_timestamp',
 		'wwu_wb_compliance',
 		'wwu_wb_debug',
+		'wwu_wb_webhook',
 		'wwu_wb_db_version',
 	);
 	foreach ( $options as $option ) {
@@ -53,6 +54,7 @@ function wwu_wb_uninstall_cleanup_site(): void {
 	wp_clear_scheduled_hook( 'wwu_wb_complete_network_activation' );
 	wp_clear_scheduled_hook( 'wwu_wb_timestamp_upgrade' );
 	wp_clear_scheduled_hook( 'wwu_wb_consent_retention_purge' );
+	wp_clear_scheduled_hook( 'wwu_wb_deliver_webhook' );
 
 	if ( $erase_all ) {
 		// Irreversible: drop the evidence tables + secret only on explicit opt-in.

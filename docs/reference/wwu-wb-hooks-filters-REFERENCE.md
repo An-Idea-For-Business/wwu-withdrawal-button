@@ -19,6 +19,7 @@ Every `apply_filters()` / `do_action()` listed below was verified by reading the
 9. [Timestamping](#9-timestamping)
 10. [Lifecycle & log](#10-lifecycle--log)
 11. [At a glance](#11-at-a-glance)
+12. [Automations (REST API & webhook)](#12-automations-rest-api--webhook)
 
 ---
 
@@ -725,6 +726,46 @@ add_filter(
 
 ---
 
+### `wwu_wb_exemption_note_text`
+
+| | |
+|---|---|
+| **Type** | `filter` |
+| **Since** | `1.0.0-alpha.43` |
+| **Fire site** | `src/Frontend/ExemptionNoteRenderer.php` |
+
+**Signature**
+
+```php
+apply_filters( 'wwu_wb_exemption_note_text', string $text, array $reason_ids, \WWU\WithdrawalButton\Platform\NormalizedOrder $order )
+```
+
+| Param | Type | Description |
+|---|---|---|
+| `$text` | `string` | The resolved "why exempt" note (HTML). Either the built-in copy naming the matched Art. 59 exception(s) + legal reference, or the merchant override `wwu_wb_settings['custom_exemption_note']`. |
+| `$reason_ids` | `string[]` | The per-item statutory reason ids that resolved (e.g. `['59_o']`). |
+| `$order` | `NormalizedOrder` | The exempt order being rendered. |
+
+**Purpose.** Overrides the consumer-facing note that explains *why* the withdrawal button is absent on a fully-exempt order (digital with immediate access, service performed, custom-made…). Return `''` to suppress the note entirely. Fail-safe: the renderer only runs when the order is genuinely exempt (`no_withdrawal_right`) and the reasons are non-seal-based — so this filter never fires on ordinary, out-of-scope, renewal or B2B orders.
+
+**Example**
+
+```php
+add_filter(
+    'wwu_wb_exemption_note_text',
+    function ( string $text, array $reason_ids, $order ) {
+        if ( in_array( '59_o', $reason_ids, true ) ) {
+            return '<p>' . esc_html__( 'Digital content: you agreed to immediate access and waived withdrawal at checkout.', 'my-textdomain' ) . '</p>';
+        }
+        return $text;
+    },
+    10,
+    3
+);
+```
+
+---
+
 ## 7. Guest access & security
 
 ### `wwu_wb_client_ip`
@@ -1187,6 +1228,7 @@ add_action(
 | `wwu_wb_excluded_product_ids` | filter | Add product IDs to the exemption list at evaluation time. |
 | `wwu_wb_exemption_confirmation_html` | filter | Replace the HTML body of the Art. 59 exemption confirmation email. |
 | `wwu_wb_exemption_consent` | filter | Override captured consent data for a specific exemption reason. |
+| `wwu_wb_exemption_note_text` | filter | Override the consumer "why exempt" note on fully-exempt orders. |
 | `wwu_wb_fluentcart_native_active` | filter | Override whether the FluentCart adapter is treated as active. |
 | `wwu_wb_fluentcart_product_category_ids` | filter | Override category term IDs for a FluentCart product. |
 | `wwu_wb_force_enqueue_frontend` | filter | Force-enqueue frontend assets on pages not auto-detected. |
@@ -1200,9 +1242,95 @@ add_action(
 | `wwu_wb_rate_limit_window_seconds` | filter | Change the guest rate-limit sliding window duration. |
 | `wwu_wb_template_path` | filter | Override a frontend template file path. |
 | `wwu_wb_timestamp_provider` | filter | Swap in a custom timestamping provider implementation. |
+| `wwu_wb_webhook_payload` | filter | Filter the outbound automations webhook payload before signing/sending. |
 | `wwu_wb_withdrawal_window_days` | filter | Change the statutory withdrawal period (default: 14 days). |
 | `wwu_wb_log_written` | action | Fires after every audit log write — replicate events to external sinks. |
 | `wwu_wb_receipt_sent` | action | Fires after the durable-medium receipt is dispatched to the consumer. |
 | `wwu_wb_subscription_cancel_result` | action | Fires after subscription cancellation is attempted. |
 | `wwu_wb_timestamp_anchored` | action | Fires after a log row is successfully anchored by the timestamp provider. |
+| `wwu_wb_webhook_delivered` | action | Fires after each outbound webhook delivery attempt (success or failure). |
 | `wwu_wb_withdrawal_confirmed` | action | Fires once per successful withdrawal confirmation — main integration hook. |
+
+---
+
+## 12. Automations (REST API & webhook)
+
+The read-only REST API + outbound webhook (since `1.0.0-alpha.44`). Full endpoint
+reference, auth and signature-verification examples:
+[`wwu-wb-rest-api-REFERENCE.md`](./wwu-wb-rest-api-REFERENCE.md). The two hooks
+below are the extension points for the **webhook**.
+
+### `wwu_wb_webhook_payload`
+
+| | |
+|---|---|
+| **Type** | `filter` |
+| **Since** | `1.0.0-alpha.44` |
+| **Fire site** | `src/Api/WebhookDispatcher.php` |
+
+**Signature**
+
+```php
+apply_filters( 'wwu_wb_webhook_payload', array $payload, string $request_uid )
+```
+
+| Param | Type | Description |
+|---|---|---|
+| `$payload` | `array` | The default JSON payload: `event, request_uid, platform, order_ref, order_number, consumer_email, status, country, within_window, created_at, row_hash`. **Never contains the raw IP.** |
+| `$request_uid` | `string` | The confirmed request UID. |
+
+**Purpose.** Add or reshape fields sent to your endpoint (e.g. attach an internal customer id, drop a field you don't need). The (possibly filtered) payload is what gets signed — the `X-WWU-WB-Signature` is computed over the final body, so your receiver verifies whatever you return here. Do **not** add the consumer IP back in (it is intentionally excluded).
+
+**Example**
+
+```php
+add_filter(
+    'wwu_wb_webhook_payload',
+    function ( array $payload, string $request_uid ) {
+        $payload['source'] = 'my-store';
+        return $payload;
+    },
+    10,
+    2
+);
+```
+
+---
+
+### `wwu_wb_webhook_delivered`
+
+| | |
+|---|---|
+| **Type** | `action` |
+| **Since** | `1.0.0-alpha.44` |
+| **Fire site** | `src/Api/WebhookDispatcher.php` |
+
+**Signature**
+
+```php
+do_action( 'wwu_wb_webhook_delivered', bool $ok, int $code, string $request_uid, string $delivery_id )
+```
+
+| Param | Type | Description |
+|---|---|---|
+| `$ok` | `bool` | Whether the receiver returned a `2xx`. |
+| `$code` | `int` | HTTP status code (`0` on a transport error). |
+| `$request_uid` | `string` | The request UID this delivery was for. |
+| `$delivery_id` | `string` | The per-attempt uuid (the `X-WWU-WB-Delivery` header). |
+
+**Purpose.** Observe webhook delivery outcomes — record them, alert on repeated failures, or trigger a fallback. Fires once per attempt (the dispatcher retries once on a transport error, so a failed delivery can fire twice with the same `request_uid` but different `delivery_id`).
+
+**Example**
+
+```php
+add_action(
+    'wwu_wb_webhook_delivered',
+    function ( bool $ok, int $code, string $request_uid, string $delivery_id ) {
+        if ( ! $ok ) {
+            error_log( "WWU-WB webhook failed for {$request_uid} (HTTP {$code}, delivery {$delivery_id})" );
+        }
+    },
+    10,
+    4
+);
+```

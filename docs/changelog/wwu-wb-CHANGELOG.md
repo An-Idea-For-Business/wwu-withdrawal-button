@@ -5,6 +5,41 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### Automations: read-only REST API + signed outbound webhook (1.0.0-alpha.44, 2026-06-16)
+External systems (Zapier / Make / n8n / a CRM / helpdesk) can now **read** withdrawal requests and be
+**notified** the instant a withdrawal is confirmed — without ever exposing the consumer's raw IP. Two surfaces,
+both designed PII-first:
+
+- **Read-only REST API** (`wwu-wb/v1`), authenticated with a WordPress **Application Password** + the plugin
+  admin capability (no custom key system, no nonce — Application-Password requests carry none), rate-limited,
+  HTTPS-recommended, all `GET`:
+  - `GET /requests` — paginated confirmed requests (lean rows: `request_uid, platform, order_ref, order_number,
+    status, country, within_window, created_at` — **never** the email or IP). Filters: `page`, `per_page`
+    (cap 100), `platform`, `status` (open/processed/refunded), `after`/`before` (ISO date).
+  - `GET /requests/{request_uid}` — one request, adding `consumer_email`, the partial `products` selection,
+    `submitted_at`, `days_left` and the evidence `row_hash` (for external integrity checks) — **never** the IP
+    or chain internals.
+  - `GET /orders/{platform}/{order_ref}/withdrawal` — per-order status (`{withdrawn, status, request_uid?,
+    created_at?}`; 404 when the order is unknown).
+- **Outbound webhook** on `wwu_wb_withdrawal_confirmed` (opt-in under **Settings → Integrations**): an
+  async, **HMAC-SHA256-signed** `POST` (`X-WWU-WB-Signature: sha256=…`, `X-WWU-WB-Event`, `X-WWU-WB-Delivery`)
+  with a JSON payload (incl. `consumer_email` + `row_hash`, never the IP). The endpoint URL is validated through
+  the `OutboundUrlGuard` SSRF guard at **save time and again at send time** (DNS-rebinding / TOCTOU defence),
+  delivered with `redirection => 0` + `reject_unsafe_urls => true`, one retry on transport error. Signing secret
+  stored autoload-off, shown only masked, never logged. Filter `wwu_wb_webhook_payload`, action
+  `wwu_wb_webhook_delivered`.
+
+There is deliberately **no endpoint to create a withdrawal** — a withdrawal is the consumer's own legal
+declaration and must not be fabricated via an API. Write/mutation endpoints are likewise out of scope for now.
+Dedicated **Opus security audit** (PII surface, Standard #13) — verdict **SHIP**, 0 critical/high/medium
+(confirmed: no email/IP in any list row, prepared-statement correctness in the dynamic WHERE/`IN()`/EXISTS SQL,
+dual SSRF check, secret hygiene, async boundary carries only the request_uid). New `Api\RequestReader` /
+`Api\Webhook` / `Api\WebhookDispatcher` / `REST\Routes\ApiRoutes`; new option `wwu_wb_webhook` (autoload no);
+new smoke suite `automations`. PHPStan L2 + class-scan + `php -l` clean. New
+[REST API reference](../reference/wwu-wb-rest-api-REFERENCE.md); see also the
+[spec](../specs/wwu-wb-rest-api-automations-SPEC.md) and the
+[hooks reference](../reference/wwu-wb-hooks-filters-REFERENCE.md).
+
 ### Consumer "why exempt" transparency note (1.0.0-alpha.43, 2026-06-16)
 When an order is exempt from the right of withdrawal under **Art. 59** (every item carries a captured exemption
 — e.g. digital content with immediate access, or a service fully performed), the withdrawal button is absent.

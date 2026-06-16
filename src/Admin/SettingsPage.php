@@ -14,11 +14,13 @@ declare( strict_types=1 );
 
 namespace WWU\WithdrawalButton\Admin;
 
+use WWU\WithdrawalButton\Api\Webhook;
 use WWU\WithdrawalButton\Core\Settings;
 use WWU\WithdrawalButton\Debug\Audience;
 use WWU\WithdrawalButton\Frontend\Template;
 use WWU\WithdrawalButton\Mail\WooAckEmail;
 use WWU\WithdrawalButton\REST\Authentication;
+use WWU\WithdrawalButton\Security\OutboundUrlGuard;
 use WWU\WithdrawalButton\Security\Sanitizer;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -90,6 +92,7 @@ final class SettingsPage {
 		$this->render_guidance_section( $settings );
 		$this->render_exemptions_section();
 		$this->render_receipt_section( $settings );
+		$this->render_integrations_section();
 
 		echo '<h2>' . esc_html__( 'Debug', 'wwu-withdrawal-button' ) . '</h2>';
 		echo '<table class="form-table" role="presentation"><tbody>';
@@ -925,6 +928,67 @@ final class SettingsPage {
 	}
 
 	/**
+	 * Render the "Integrations" section: read-only REST API + outbound webhook.
+	 *
+	 * The read API needs no setting here — it authenticates with WordPress
+	 * Application Passwords + the admin capability. The webhook is opt-in: enable +
+	 * URL + a generated HMAC secret. The secret is only ever shown masked; the URL
+	 * is validated through the SSRF guard on save.
+	 *
+	 * @return void
+	 */
+	private function render_integrations_section(): void {
+		$cfg     = Webhook::config();
+		$has_key = '' !== $cfg['secret'];
+		$rest    = esc_url( rest_url( WWU_WB_REST_NAMESPACE ) );
+
+		echo '<h2>' . esc_html__( 'Integrations (automations)', 'wwu-withdrawal-button' ) . '</h2>';
+		echo '<p class="description" style="max-width:820px;">' . esc_html__( 'Connect external systems (Zapier, Make, n8n, a CRM or helpdesk) to your withdrawal requests. Reading is done with a WordPress Application Password; a webhook can also notify your endpoint the moment a withdrawal is confirmed. The consumer IP is never exposed — only a row hash, for integrity checks.', 'wwu-withdrawal-button' ) . '</p>';
+
+		/* --- Read-only REST API (Application Passwords) --- */
+		echo '<table class="form-table" role="presentation"><tbody>';
+		echo '<tr><th scope="row">' . esc_html__( 'Read API', 'wwu-withdrawal-button' ) . '</th><td>';
+		echo '<p style="margin-top:0;">' . esc_html__( 'Authenticate with a WordPress Application Password (Users → Profile → Application Passwords) over HTTPS. The user needs the plugin admin capability. These endpoints are read-only:', 'wwu-withdrawal-button' ) . '</p>';
+		echo '<ul style="list-style:disc;margin-left:1.4em;">';
+		echo '<li><code>GET ' . esc_html( $rest ) . '/requests</code> — ' . esc_html__( 'list confirmed requests (paginated).', 'wwu-withdrawal-button' ) . '</li>';
+		echo '<li><code>GET ' . esc_html( $rest ) . '/requests/{request_uid}</code> — ' . esc_html__( 'one request (with the consumer email + any partial product selection).', 'wwu-withdrawal-button' ) . '</li>';
+		echo '<li><code>GET ' . esc_html( $rest ) . '/orders/{platform}/{order_ref}/withdrawal</code> — ' . esc_html__( 'per-order withdrawal status.', 'wwu-withdrawal-button' ) . '</li>';
+		echo '</ul>';
+		echo '<p class="description">' . esc_html__( 'There is no endpoint to create a withdrawal: a withdrawal is the consumer’s own legal declaration and cannot be filed on their behalf via the API.', 'wwu-withdrawal-button' ) . '</p>';
+		echo '</td></tr>';
+		echo '</tbody></table>';
+
+		/* --- Outbound webhook --- */
+		echo '<table class="form-table" role="presentation"><tbody>';
+
+		echo '<tr><th scope="row">' . esc_html__( 'Webhook on confirmed withdrawal', 'wwu-withdrawal-button' ) . '</th><td>';
+		echo '<label><input type="checkbox" name="webhook_enabled" value="1" ' . checked( $cfg['enabled'], true, false ) . ' /> ';
+		echo esc_html__( 'POST a signed JSON payload to my endpoint when a withdrawal is confirmed.', 'wwu-withdrawal-button' ) . '</label>';
+		echo '<p class="description">' . esc_html__( 'Delivered asynchronously, so the consumer is never kept waiting. Payload: event, request_uid, platform, order_ref, order_number, consumer_email, status, country, within_window, created_at, row_hash.', 'wwu-withdrawal-button' ) . '</p>';
+		echo '</td></tr>';
+
+		echo '<tr><th scope="row"><label for="wwu-wb-webhook-url">' . esc_html__( 'Endpoint URL', 'wwu-withdrawal-button' ) . '</label></th><td>';
+		echo '<input type="url" id="wwu-wb-webhook-url" class="regular-text" name="webhook_url" value="' . esc_attr( $cfg['url'] ) . '" placeholder="https://hooks.example.com/withdrawal" />';
+		echo '<p class="description">' . esc_html__( 'HTTPS recommended. Internal, loopback and cloud-metadata addresses are refused (SSRF protection).', 'wwu-withdrawal-button' ) . '</p>';
+		echo '</td></tr>';
+
+		echo '<tr><th scope="row"><label for="wwu-wb-webhook-secret">' . esc_html__( 'Signing secret', 'wwu-withdrawal-button' ) . '</label></th><td>';
+		if ( $has_key ) {
+			echo '<p style="margin-top:0;"><code>' . esc_html( Webhook::masked_secret( $cfg['secret'] ) ) . '</code> ';
+			echo '<span class="description">' . esc_html__( '(stored — leave the field blank to keep it)', 'wwu-withdrawal-button' ) . '</span></p>';
+		}
+		echo '<input type="text" id="wwu-wb-webhook-secret" class="regular-text" name="webhook_secret" value="" autocomplete="off" placeholder="' . esc_attr__( 'Paste your own secret, or tick “Generate” below', 'wwu-withdrawal-button' ) . '" />';
+		echo '<p><label><input type="checkbox" name="webhook_regenerate" value="1" /> ' . esc_html__( 'Generate a new random secret on save', 'wwu-withdrawal-button' ) . '</label></p>';
+		echo '<p class="description">' . wp_kses(
+			__( 'Each delivery is signed: <code>X-WWU-WB-Signature: sha256=HMAC-SHA256(body, secret)</code>, with <code>X-WWU-WB-Event</code> and a unique <code>X-WWU-WB-Delivery</code> id. Verify the signature on your side to trust the payload. The secret is never shown again in full and never written to logs.', 'wwu-withdrawal-button' ),
+			array( 'code' => array() )
+		) . '</p>';
+		echo '</td></tr>';
+
+		echo '</tbody></table>';
+	}
+
+	/**
 	 * Handle the settings POST (admin-post.php). PRG redirect on success.
 	 *
 	 * @return void
@@ -1019,6 +1083,32 @@ final class SettingsPage {
 		$timestamp['rfc3161'] = $rfc3161;
 
 		update_option( 'wwu_wb_timestamp', $timestamp );
+
+		// Integrations: outbound webhook. The URL passes through the SSRF guard at
+		// save time (the dispatcher re-checks at send time); the secret uses the
+		// "leave blank to keep" pattern (+ optional regenerate), so the stored HMAC
+		// key is never re-emitted to the browser. Enabling without a secret mints one
+		// so every delivery is signed.
+		$webhook            = (array) get_option( 'wwu_wb_webhook', array() );
+		$webhook['enabled'] = Sanitizer::bool( $_POST['webhook_enabled'] ?? '' );
+		$webhook_url        = esc_url_raw( trim( (string) ( $_POST['webhook_url'] ?? '' ) ) );
+		if ( '' !== $webhook_url && ! OutboundUrlGuard::is_safe_url( $webhook_url ) ) {
+			$webhook_url = '';
+		}
+		$webhook['url'] = $webhook_url;
+
+		$current_secret = (string) ( $webhook['secret'] ?? '' );
+		$posted_secret  = trim( (string) ( $_POST['webhook_secret'] ?? '' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- HMAC key kept verbatim; capped below.
+		if ( Sanitizer::bool( $_POST['webhook_regenerate'] ?? '' ) ) {
+			$webhook['secret'] = Webhook::generate_secret();
+		} elseif ( '' !== $posted_secret ) {
+			$webhook['secret'] = substr( $posted_secret, 0, 128 );
+		} elseif ( $webhook['enabled'] && '' === $current_secret ) {
+			$webhook['secret'] = Webhook::generate_secret();
+		} else {
+			$webhook['secret'] = $current_secret;
+		}
+		update_option( 'wwu_wb_webhook', $webhook );
 
 		// If the account-tab slug changed, refresh rewrite rules so it works immediately.
 		if ( $new_slug !== $old_slug ) {

@@ -1,7 +1,9 @@
 # SPEC — Public REST API + outbound webhook (automations)
 
-- **Slug:** wwu-wb · **Target version:** 1.0.0-alpha.44 (after the alpha.43 why-note ships) · **Status:** Designed (2026-06-16) — feasibility decided, implementation pending
+- **Slug:** wwu-wb · **Target version:** 1.0.0-alpha.44 · **Status:** ✅ **Shipped (1.0.0-alpha.44, 2026-06-16)** — built as designed, dedicated Opus security audit verdict **SHIP** (0 critical/high/medium). Endpoint/payload reference: [`docs/reference/wwu-wb-rest-api-REFERENCE.md`](../reference/wwu-wb-rest-api-REFERENCE.md).
 - **Task:** #37 — "public REST API for automations". The decision of *what is feasible* was delegated; this SPEC records it.
+
+> **Implementation note (alpha.44).** Built exactly as specified below. New `src/Api/{RequestReader,Webhook,WebhookDispatcher}.php` + `src/REST/Routes/ApiRoutes.php`; `Authentication::enforce_rate_limit()` added (the SPEC's "reuse rate-limit helper" — there was none, so it was added); option `wwu_wb_webhook` (autoload no); Settings → Integrations section; smoke suite `automations`; new hooks `wwu_wb_webhook_payload` (filter) + `wwu_wb_webhook_delivered` (action). **Open questions resolved:** (1) Action Scheduler is **not** bundled in this plugin → async delivery uses `wp_schedule_single_event` (carrying only the request_uid). (2) **One** webhook endpoint (array is additive later). (3) Exemption records stay **out of scope** (covered by the Consent-records admin export).
 
 ## Feasibility decision (the delegated call)
 | Surface | Verdict | Why |
