@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0-alpha.43
+Stable tag: 1.0.0-alpha.44
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -70,6 +70,9 @@ The plugin records withdrawal declarations (name, identified contract, email, IP
 For the conditional Art. 59 exemptions, the plugin also stores the consumer's checkout consent + acknowledgement (the agreed wording, a hash, the date/time and — unless you turn it off — the IP) as evidence to prove the exemption is valid. The lawful basis is **legitimate interest** (GDPR Art. 6(1)(f); defence of legal claims), **not** GDPR consent. The IP lives only on the order (never in the immutable log) and is automatically anonymised once the retention period lapses. A second ready-to-paste privacy clause is generated for this processing.
 
 == Changelog ==
+
+= 1.0.0-alpha.44 =
+* **Connect your withdrawal requests to other tools (automations).** A new **Settings → Integrations** section adds two optional, developer-friendly ways to plug withdrawal requests into Zapier, Make, n8n, a CRM or a helpdesk. (1) A **read-only REST API** to list requests and check an order's withdrawal status, authenticated with a standard WordPress Application Password. (2) An optional **webhook** that sends a signed notification to your endpoint the moment a withdrawal is confirmed. Privacy-first: the consumer's IP address is never exposed — only a verification hash. There is intentionally no way to *create* a withdrawal via the API (a withdrawal is the consumer's own legal act). Passed a dedicated security audit before release. No change to the withdrawal flow itself.
 
 = 1.0.0-alpha.43 =
 * **Consumers now see WHY the withdrawal button is absent on exempt orders.** When an order is exempt from the right of withdrawal under Art. 59 (e.g. digital content with immediate access, or a service fully performed — both with the consumer's consent at checkout), the button is hidden. The plugin now shows a short, accurate note explaining the specific statutory exception and its legal reference, instead of just silence. Shown on the withdrawal form, the WooCommerce/EDD account pages and the FluentCart portal. The text is editable (Settings → Consumer guidance). It only appears on genuinely exempt orders — never on ordinary ones; button visibility is unchanged.

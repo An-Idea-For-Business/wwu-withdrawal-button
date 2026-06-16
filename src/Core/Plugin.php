@@ -185,6 +185,10 @@ final class Plugin {
 		// Trusted timestamping (OpenTimestamps) of the immutable-log hash.
 		( new TimestampService() )->register();
 
+		// Outbound webhook for automations: async HMAC delivery on withdrawal
+		// confirmed (no-op unless the merchant configured it under Integrations).
+		( new \WWU\WithdrawalButton\Api\WebhookDispatcher() )->register();
+
 		// Shortcodes (button / form / status / model form / info).
 		( new Shortcodes() )->register();
 

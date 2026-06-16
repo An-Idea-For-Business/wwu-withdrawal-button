@@ -51,6 +51,7 @@ final class SmokeTests {
 		'subscriptions'       => 'suite_subscriptions',
 		'withdrawal_request'  => 'suite_withdrawal_request',
 		'exemption_note'      => 'suite_exemption_note',
+		'automations'         => 'suite_automations',
 	);
 
 	/**
@@ -1056,6 +1057,130 @@ final class SmokeTests {
 		update_option( 'wwu_wb_exclusions', is_array( $saved_exclusions ) ? $saved_exclusions : array() );
 		update_option( 'wwu_wb_settings', $saved_settings );
 		\WWU\WithdrawalButton\Core\Settings::flush();
+
+		return $tests;
+	}
+
+	/**
+	 * Suite: automations (read API + webhook). All assertions are read-only — they
+	 * never write to the append-only evidence log. The privacy crux (no email / no
+	 * IP in the list shape) is asserted against whatever real confirmed rows exist,
+	 * so it holds on live data too.
+	 *
+	 * @return array
+	 */
+	private function suite_automations(): array {
+		$tests   = array();
+		$webhook = '\\WWU\\WithdrawalButton\\Api\\Webhook';
+		$guard   = '\\WWU\\WithdrawalButton\\Security\\OutboundUrlGuard';
+
+		// Wiring: the classes are present.
+		$tests[] = $this->assert(
+			'automations.classes_present',
+			class_exists( '\\WWU\\WithdrawalButton\\Api\\RequestReader' )
+				&& class_exists( '\\WWU\\WithdrawalButton\\Api\\Webhook' )
+				&& class_exists( '\\WWU\\WithdrawalButton\\Api\\WebhookDispatcher' )
+				&& class_exists( '\\WWU\\WithdrawalButton\\REST\\Routes\\ApiRoutes' ),
+			'RequestReader / Webhook / WebhookDispatcher / ApiRoutes all autoload.'
+		);
+
+		// HMAC signature format + correctness (known vector).
+		$body     = '{"event":"withdrawal.confirmed"}';
+		$secret   = 'test-secret-0123456789';
+		$sig      = $webhook::sign( $body, $secret );
+		$expected = 'sha256=' . hash_hmac( 'sha256', $body, $secret );
+		$tests[]  = $this->assert(
+			'automations.hmac_signature_correct',
+			$sig === $expected && 0 === strpos( $sig, 'sha256=' ) && 64 === strlen( substr( $sig, 7 ) ),
+			'sign() returns sha256=<64-hex HMAC-SHA256(body, secret)>.'
+		);
+		$tests[] = $this->assert(
+			'automations.hmac_deterministic',
+			$webhook::sign( $body, $secret ) === $sig,
+			'sign() is deterministic for the same body + secret.'
+		);
+
+		// Masking never reveals more than the last 4 characters.
+		$plain  = 'abcdefghijklmnopqrstuvwxyz0123456789';
+		$masked = $webhook::masked_secret( $plain );
+		$tests[] = $this->assert(
+			'automations.secret_masked',
+			false === strpos( $masked, $plain ) && substr( $masked, -4 ) === substr( $plain, -4 ) && false !== strpos( $masked, "\u{2022}" ),
+			'masked_secret() hides everything but the last 4 chars (got: ' . $masked . ').'
+		);
+		$tests[] = $this->assert(
+			'automations.generated_secret_strong',
+			40 === strlen( $webhook::generate_secret() ) && 1 === preg_match( '/^[A-Za-z0-9]+$/', $webhook::generate_secret() ),
+			'generate_secret() returns a 40-char alphanumeric key.'
+		);
+
+		// Default config is inactive (no accidental deliveries on a fresh install).
+		$cfg     = $webhook::config();
+		$tests[] = $this->assert(
+			'automations.webhook_inactive_by_default',
+			isset( $cfg['enabled'], $cfg['url'], $cfg['secret'] ) && ( ! $webhook::is_active() || '' !== $cfg['url'] ),
+			'Webhook config has a stable shape and is not active unless fully configured.'
+		);
+
+		// SSRF guard refuses internal targets (defence shared with the webhook send path).
+		$tests[] = $this->assert(
+			'automations.ssrf_blocks_metadata',
+			false === $guard::is_safe_url( 'http://169.254.169.254/latest/meta-data/' ),
+			'OutboundUrlGuard rejects the cloud-metadata address.'
+		);
+		$tests[] = $this->assert(
+			'automations.ssrf_blocks_loopback',
+			false === $guard::is_safe_url( 'http://localhost/hook' ) && false === $guard::is_safe_url( 'http://[::1]/hook' ),
+			'OutboundUrlGuard rejects loopback hosts (IPv4 + IPv6).'
+		);
+
+		// Reader: unknown lookups return null (read-only, no writes).
+		$reader  = new \WWU\WithdrawalButton\Api\RequestReader();
+		$tests[] = $this->assert(
+			'automations.detail_unknown_null',
+			null === $reader->detail( 'no-such-uid-0000' ),
+			'detail() returns null for an unknown request_uid.'
+		);
+		$tests[] = $this->assert(
+			'automations.order_status_unknown_null',
+			null === $reader->order_status( 'wwu_wb_no_platform', 'nonexistent-ref' ),
+			'order_status() returns null for an unknown platform/order.'
+		);
+		$tests[] = $this->assert(
+			'automations.webhook_payload_unknown_null',
+			null === $reader->webhook_payload( 'no-such-uid-0000' ),
+			'webhook_payload() returns null for an unknown request_uid.'
+		);
+
+		// List: per_page is clamped to the cap, the structure is well-formed, and the
+		// status-filter EXISTS subqueries are valid SQL (they must execute clean).
+		$listed  = $reader->list( array(), 1, 999 );
+		$tests[] = $this->assert(
+			'automations.list_per_page_clamped',
+			isset( $listed['per_page'] ) && \WWU\WithdrawalButton\Api\RequestReader::MAX_PER_PAGE === (int) $listed['per_page'],
+			'list() clamps per_page to MAX_PER_PAGE (got: ' . ( $listed['per_page'] ?? 'n/a' ) . ').'
+		);
+		$filtered = $reader->list( array( 'status' => 'refunded' ), 1, 10 );
+		$tests[]  = $this->assert(
+			'automations.list_status_filter_sql_valid',
+			is_array( $filtered['rows'] ?? null ) && is_int( $filtered['total'] ?? null ),
+			'list() with a status filter executes the EXISTS subqueries without error.'
+		);
+
+		// Privacy crux: NO list row ever carries the email or the raw IP, and every
+		// row has the public request_uid. Asserted against real data when present.
+		$leaks = false;
+		foreach ( (array) ( $listed['rows'] ?? array() ) as $row ) {
+			if ( array_key_exists( 'consumer_email', $row ) || array_key_exists( 'ip_address', $row ) || array_key_exists( 'ip', $row ) || ! array_key_exists( 'request_uid', $row ) ) {
+				$leaks = true;
+				break;
+			}
+		}
+		$tests[] = $this->assert(
+			'automations.list_rows_omit_pii',
+			! $leaks,
+			'List rows never expose consumer_email or the raw IP (checked ' . count( (array) ( $listed['rows'] ?? array() ) ) . ' row(s)).'
+		);
 
 		return $tests;
 	}

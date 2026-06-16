@@ -12,6 +12,7 @@ declare( strict_types=1 );
 
 namespace WWU\WithdrawalButton\REST;
 
+use WWU\WithdrawalButton\REST\Routes\ApiRoutes;
 use WWU\WithdrawalButton\REST\Routes\DebugRoute;
 use WWU\WithdrawalButton\REST\Routes\DebugTestsRoute;
 use WWU\WithdrawalButton\REST\Routes\WithdrawalRoute;
@@ -57,6 +58,7 @@ final class RestApi {
 			new DebugTestsRoute(),
 			new WithdrawalRoute(),
 			new ReceiptRoute(),
+			new ApiRoutes(),
 		);
 	}
 }

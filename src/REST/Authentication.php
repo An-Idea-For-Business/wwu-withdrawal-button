@@ -61,6 +61,28 @@ final class Authentication {
 	}
 
 	/**
+	 * Simple per-user, per-bucket rate limit (DoS guard for the read API).
+	 *
+	 * Authenticated admins only ever reach these endpoints, so this is a soft
+	 * abuse cap rather than a security control. Keyed by the current user id so one
+	 * caller cannot exhaust another's budget. Returns true while under the cap.
+	 *
+	 * @param string $bucket Logical bucket (e.g. 'read_api').
+	 * @param int    $max    Max requests per window.
+	 * @param int    $window Window length in seconds.
+	 * @return bool True if the request is allowed.
+	 */
+	public static function enforce_rate_limit( string $bucket, int $max = 120, int $window = 60 ): bool {
+		$key  = 'wwu_wb_rl_' . md5( $bucket . '|' . (int) get_current_user_id() );
+		$hits = (int) get_transient( $key );
+		if ( $hits >= $max ) {
+			return false;
+		}
+		set_transient( $key, $hits + 1, $window );
+		return true;
+	}
+
+	/**
 	 * Permission callback for /debug/* endpoints: admin capability + audience gate.
 	 *
 	 * @return callable

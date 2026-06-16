@@ -260,6 +260,21 @@ final class Install {
 			'no'
 		);
 
+		// Outbound automations webhook (read-only API needs no option — it uses
+		// Application Passwords). The secret is a shared HMAC key, stored retrievable
+		// (we sign every delivery) and only ever shown masked. Autoload no: it is
+		// read only at delivery time, never on a front-end page.
+		add_option(
+			'wwu_wb_webhook',
+			array(
+				'enabled' => false,
+				'url'     => '',
+				'secret'  => '',
+			),
+			'',
+			'no'
+		);
+
 		add_option( Migrator::OPTION_DB_VERSION, '0', '', 'yes' );
 	}
 
