@@ -39,6 +39,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php if ( '' !== $reason ) : ?>
 		<tr><td style="padding:6px 0;color:#666;"><?php esc_html_e( 'Reason (optional)', 'wwu-withdrawal-button' ); ?></td><td style="padding:6px 0;"><?php echo esc_html( $reason ); ?></td></tr>
 		<?php endif; ?>
+		<?php if ( '' !== $products_selected ) : ?>
+		<tr><td style="padding:6px 0;color:#666;"><?php esc_html_e( 'Products withdrawn', 'wwu-withdrawal-button' ); ?></td><td style="padding:6px 0;"><?php echo esc_html( $products_selected ); ?></td></tr>
+		<?php endif; ?>
 		<tr><td style="padding:6px 0;color:#666;"><?php esc_html_e( 'Date and time of submission', 'wwu-withdrawal-button' ); ?></td><td style="padding:6px 0;"><strong><?php echo esc_html( $submitted_local ); ?></strong> <span style="color:#999;">(<?php echo esc_html( $submitted_at ); ?>)</span></td></tr>
 	</table>
 

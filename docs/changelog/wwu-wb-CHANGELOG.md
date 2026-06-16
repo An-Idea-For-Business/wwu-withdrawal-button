@@ -5,6 +5,20 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### Optional "which products" field in the withdrawal form — partial withdrawal (1.0.0-alpha.42, 2026-06-16)
+A consumer can now indicate **which products** of an order they are withdrawing from — EU law allows partial
+withdrawal (the Annex I-B model form declares withdrawal "of the following goods"; it is not all-or-nothing).
+An **optional** per-item checklist appears in step 1 of the withdrawal form (rendered only when the order's
+line items are readable, **all unchecked by default**). Leaving it empty = withdrawal from the **whole order**,
+exactly as before — it is never a validation gate (`WithdrawalRequest::is_valid()` unchanged; fail-open). The
+selection (`statement.products`, mirroring the optional `reason` field) flows into the immutable evidence log,
+the durable-medium acknowledgement (e-mail + PDF — a conditional "Products withdrawn" row) and a new
+**Products** column in the admin Requests dashboard. **Informational only** — the merchant still processes the
+(full or partial) refund manually. Sanitised array (50 items × 200 chars caps). All 6 locales 100% (510/510).
+PHPStan L2 + class-scan clean; 5 new smoke assertions (`suite_withdrawal_request`). Implementation mirrored the
+`reason` field across the form / REST + no-JS handlers / receipt / dashboard. See
+[spec](specs/wwu-wb-partial-withdrawal-products-SPEC.md).
+
 ### Configurable FluentCart handling + auto-defer to a native add-on (1.0.0-alpha.41, 2026-06-15)
 FluentCart confirmed it will ship its own withdrawal add-on. To avoid two buttons, a new
 **Settings → FluentCart → Withdrawal handling** control (`wwu_wb_settings['fluentcart_mode']`, default

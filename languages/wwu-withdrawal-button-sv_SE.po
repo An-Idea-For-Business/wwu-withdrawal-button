@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WWU Withdrawal Button\n"
 "Report-Msgid-Bugs-To: https://webwakeup.it/wwu-withdrawal-button/\n"
-"POT-Creation-Date: 2026-06-15 19:25+0000\n"
+"POT-Creation-Date: 2026-06-16 06:03+0000\n"
 "PO-Revision-Date: 2026-06-15 00:00+0000\n"
 "Last-Translator: WWU translate workflow (sv draft — pending native review)\n"
 "Language-Team: WebWakeUp\n"
@@ -269,7 +269,7 @@ msgid "Next"
 msgstr "Nästa"
 
 #: src/Admin/ConsentRecordsPage.php:200 src/Admin/DashboardPage.php:287
-#: src/Admin/RequestsDashboard.php:397 src/Admin/SettingsPage.php:480
+#: src/Admin/RequestsDashboard.php:400 src/Admin/SettingsPage.php:480
 #: src/Admin/SettingsPage.php:923 src/REST/Authentication.php:55
 #: src/REST/Authentication.php:80
 msgid "Insufficient permissions."
@@ -708,34 +708,38 @@ msgid "Country"
 msgstr "Land"
 
 #: src/Admin/RequestsDashboard.php:101
+msgid "Products"
+msgstr "Produkter"
+
+#: src/Admin/RequestsDashboard.php:102
 msgid "In time"
 msgstr "I tid"
 
-#: src/Admin/RequestsDashboard.php:102
+#: src/Admin/RequestsDashboard.php:103
 msgid "Status"
 msgstr "Status"
 
-#: src/Admin/RequestsDashboard.php:103
+#: src/Admin/RequestsDashboard.php:104
 msgid "Evidence"
 msgstr "Bevis"
 
-#: src/Admin/RequestsDashboard.php:104
+#: src/Admin/RequestsDashboard.php:105
 msgid "Actions"
 msgstr "Åtgärder"
 
-#: src/Admin/RequestsDashboard.php:123 templates/public/verify-receipt.php:73
+#: src/Admin/RequestsDashboard.php:126 templates/public/verify-receipt.php:73
 msgid "Yes"
 msgstr "Ja"
 
-#: src/Admin/RequestsDashboard.php:124
+#: src/Admin/RequestsDashboard.php:127
 msgid "Flagged late"
 msgstr "Flaggad som sen"
 
-#: src/Admin/RequestsDashboard.php:129
+#: src/Admin/RequestsDashboard.php:132
 msgid "Verify"
 msgstr "Verifiera"
 
-#: src/Admin/RequestsDashboard.php:166
+#: src/Admin/RequestsDashboard.php:169
 msgid ""
 "Check the request is in scope. The list hides orders outside the right of "
 "withdrawal; \"In time\" shows whether it was within the 14-day window. A "
@@ -746,7 +750,7 @@ msgstr ""
 "dagarsfönstret. Ett sent ärende registreras ändå — verifiera dess giltighet "
 "innan du avvisar det."
 
-#: src/Admin/RequestsDashboard.php:167
+#: src/Admin/RequestsDashboard.php:170
 msgid ""
 "If the order is goods, the consumer must send them back within 14 days. You "
 "may withhold the refund until you receive the goods back, or until the "
@@ -756,7 +760,7 @@ msgstr ""
 "Du kan hålla inne återbetalningen tills du har fått tillbaka varorna, eller "
 "tills konsumenten kan bevisa att de har skickats — det som inträffar först."
 
-#: src/Admin/RequestsDashboard.php:168
+#: src/Admin/RequestsDashboard.php:171
 msgid ""
 "Reimburse within 14 days of being informed of the withdrawal. Refund ALL "
 "payments received, including the standard delivery cost, using the same "
@@ -770,7 +774,7 @@ msgstr ""
 "kommit överens om annat). Klicka på \"Återbetala beställning\" för att göra "
 "det i WooCommerce — återbetalningen registreras automatiskt i bevisloggen."
 
-#: src/Admin/RequestsDashboard.php:169
+#: src/Admin/RequestsDashboard.php:172
 msgid ""
 "Mark the request as processed once you have refunded (and received any "
 "returned goods). This closes it in this list; the immutable log keeps the "
@@ -780,11 +784,11 @@ msgstr ""
 "returnerade varor). Det stänger det i den här listan; den oföränderliga "
 "loggen bevarar hela historiken."
 
-#: src/Admin/RequestsDashboard.php:173
+#: src/Admin/RequestsDashboard.php:176
 msgid "What to do after receiving a request"
 msgstr "Vad du ska göra efter att ha tagit emot ett ärende"
 
-#: src/Admin/RequestsDashboard.php:179
+#: src/Admin/RequestsDashboard.php:182
 msgid ""
 "This is operational guidance, not legal advice. For services fully performed "
 "with the consumer's prior express consent, and other Art. 59 cases, the "
@@ -794,7 +798,7 @@ msgstr ""
 "fullständigt utförts med konsumentens förhandsuttryckliga samtycke, och "
 "andra fall under Art. 59, gäller inte ångerrätten."
 
-#: src/Admin/RequestsDashboard.php:203
+#: src/Admin/RequestsDashboard.php:206
 msgid ""
 "Subscription order. The 14-day right covers the initial contract — stop "
 "future renewals and apply any pro-rata for service already used, then "
@@ -805,56 +809,56 @@ msgstr ""
 "avräkning för redan utnyttjad tjänst, återbetala sedan. Inget av detta är "
 "automatiskt om du inte aktiverat automatisk annullering."
 
-#: src/Admin/RequestsDashboard.php:204
+#: src/Admin/RequestsDashboard.php:207
 msgid "Subscription"
 msgstr "Prenumeration"
 
-#: src/Admin/RequestsDashboard.php:232 src/Frontend/EligibleOrders.php:56
+#: src/Admin/RequestsDashboard.php:235 src/Frontend/EligibleOrders.php:56
 msgid "Refunded"
 msgstr "Återbetald"
 
-#: src/Admin/RequestsDashboard.php:236
+#: src/Admin/RequestsDashboard.php:239
 msgid "Processed"
 msgstr "Behandlad"
 
-#: src/Admin/RequestsDashboard.php:239
+#: src/Admin/RequestsDashboard.php:242
 msgid "Open"
 msgstr "Öppen"
 
-#: src/Admin/RequestsDashboard.php:257
+#: src/Admin/RequestsDashboard.php:260
 msgid "Mark processed"
 msgstr "Markera som hanterat"
 
-#: src/Admin/RequestsDashboard.php:261
+#: src/Admin/RequestsDashboard.php:264
 msgid "Resend email"
 msgstr "Skicka om mail"
 
-#: src/Admin/RequestsDashboard.php:265
+#: src/Admin/RequestsDashboard.php:268
 msgid "Open order (refund)"
 msgstr "Öppna beställning (återbetalning)"
 
-#: src/Admin/RequestsDashboard.php:441
+#: src/Admin/RequestsDashboard.php:444
 msgid "Request marked as processed."
 msgstr "Ärendet markerades som hanterat."
 
-#: src/Admin/RequestsDashboard.php:442
+#: src/Admin/RequestsDashboard.php:445
 msgid ""
 "Could not mark the request as processed — the order could not be loaded."
 msgstr ""
 "Det gick inte att markera ärendet som hanterat — beställningen kunde inte "
 "laddas."
 
-#: src/Admin/RequestsDashboard.php:443
+#: src/Admin/RequestsDashboard.php:446
 msgid "Acknowledgement email resent."
 msgstr "Bekräftelsemail skickat om."
 
-#: src/Admin/RequestsDashboard.php:444
+#: src/Admin/RequestsDashboard.php:447
 msgid "Could not resend the email — check your email/SMTP configuration."
 msgstr ""
 "Det gick inte att skicka om mailet — kontrollera din e-post-/SMTP-"
 "konfiguration."
 
-#: src/Admin/RequestsDashboard.php:445
+#: src/Admin/RequestsDashboard.php:448
 msgid "Please wait a few seconds before resending again."
 msgstr "Vänta några sekunder innan du skickar om igen."
 
@@ -1110,21 +1114,29 @@ msgstr "FluentCart"
 msgid ""
 "FluentCart is not active. This setting takes effect only once FluentCart is "
 "installed."
-msgstr "FluentCart är inte aktivt. Denna inställning träder i kraft först när FluentCart är installerat."
+msgstr ""
+"FluentCart är inte aktivt. Denna inställning träder i kraft först när "
+"FluentCart är installerat."
 
 #: src/Admin/SettingsPage.php:272
 msgid ""
 "FluentCart's own withdrawal add-on was detected. In Auto mode this plugin "
 "steps aside on FluentCart orders, so customers see a single withdrawal "
 "button."
-msgstr "FluentCarts eget tillägg för frånträde upptäcktes. I Auto-läge träder denna plugin tillbaka på FluentCart-beställningar, så att kunderna ser en enda ångerknapp."
+msgstr ""
+"FluentCarts eget tillägg för frånträde upptäcktes. I Auto-läge träder denna "
+"plugin tillbaka på FluentCart-beställningar, så att kunderna ser en enda "
+"ångerknapp."
 
 #: src/Admin/SettingsPage.php:274
 msgid ""
 "FluentCart is active and this plugin handles its withdrawal button. If "
 "FluentCart later ships its own withdrawal add-on, Auto mode steps aside "
 "automatically."
-msgstr "FluentCart är aktivt och denna plugin hanterar dess ångerknapp. Om FluentCart senare släpper ett eget tillägg för frånträde träder Auto-läget tillbaka automatiskt."
+msgstr ""
+"FluentCart är aktivt och denna plugin hanterar dess ångerknapp. Om "
+"FluentCart senare släpper ett eget tillägg för frånträde träder Auto-läget "
+"tillbaka automatiskt."
 
 #: src/Admin/SettingsPage.php:278
 msgid "Withdrawal handling"
@@ -1135,11 +1147,16 @@ msgid ""
 "Auto (recommended): show our button on FluentCart orders, but step aside "
 "automatically if FluentCart's own withdrawal add-on is installed, so "
 "consumers never see two buttons."
-msgstr "Auto (rekommenderas): visar vår knapp på FluentCart-beställningar, men träder automatiskt tillbaka om FluentCarts eget tillägg för frånträde är installerat, så att konsumenter aldrig ser två knappar."
+msgstr ""
+"Auto (rekommenderas): visar vår knapp på FluentCart-beställningar, men "
+"träder automatiskt tillbaka om FluentCarts eget tillägg för frånträde är "
+"installerat, så att konsumenter aldrig ser två knappar."
 
 #: src/Admin/SettingsPage.php:282
 msgid "Auto — defer to FluentCart's native add-on when present (recommended)"
-msgstr "Auto — lämna företräde åt FluentCarts inbyggda tillägg när det finns (rekommenderas)"
+msgstr ""
+"Auto — lämna företräde åt FluentCarts inbyggda tillägg när det finns "
+"(rekommenderas)"
 
 #: src/Admin/SettingsPage.php:283
 msgid "Always — keep our button on FluentCart orders regardless"
@@ -1155,7 +1172,12 @@ msgid ""
 "the checkout consent capture, the withdrawal e-mail link, and the public "
 "form. The admin Requests dashboard and any in-flight confirmation always "
 "keep working, so existing requests are never stranded."
-msgstr "Styr endast våra konsumentvända FluentCart-ytor: portalknappen, samtyckesinsamlingen i kassan, ångerlänken i e-post och det publika formuläret. Administratörens Begäranden-panel och pågående bekräftelser fortsätter alltid att fungera, så att befintliga begäranden aldrig blir strandade."
+msgstr ""
+"Styr endast våra konsumentvända FluentCart-ytor: portalknappen, "
+"samtyckesinsamlingen i kassan, ångerlänken i e-post och det publika "
+"formuläret. Administratörens Begäranden-panel och pågående bekräftelser "
+"fortsätter alltid att fungera, så att befintliga begäranden aldrig blir "
+"strandade."
 
 #: src/Admin/SettingsPage.php:295
 msgid ""
@@ -1163,7 +1185,12 @@ msgid ""
 "leave this on Auto: this plugin detects it and hides its own FluentCart "
 "button so customers see only one. Pick Off to disable our FluentCart "
 "handling now, or Always to keep ours regardless of any add-on."
-msgstr "FluentCart har aviserat ett särskilt tillägg för frånträde. När du installerar det, låt detta stå på Auto: denna plugin upptäcker det och döljer sin egen FluentCart-knapp så att kunderna bara ser en. Välj Av för att inaktivera vår FluentCart-hantering nu, eller Alltid för att behålla vår oavsett tillägg."
+msgstr ""
+"FluentCart har aviserat ett särskilt tillägg för frånträde. När du "
+"installerar det, låt detta stå på Auto: denna plugin upptäcker det och "
+"döljer sin egen FluentCart-knapp så att kunderna bara ser en. Välj Av för "
+"att inaktivera vår FluentCart-hantering nu, eller Alltid för att behålla vår "
+"oavsett tillägg."
 
 #: src/Admin/SettingsPage.php:330
 msgid "Consumer guidance"
@@ -2354,8 +2381,8 @@ msgstr ""
 "Ditt frånträde har registrerats. Vi har skickat en bekräftelse till dig via "
 "mail."
 
-#: src/Frontend/Assets.php:116 src/Frontend/NoScriptFlow.php:84
-#: templates/form/withdrawal-form.php:78
+#: src/Frontend/Assets.php:116 src/Frontend/NoScriptFlow.php:88
+#: templates/form/withdrawal-form.php:97
 msgid "Please confirm your withdrawal. This is the final step."
 msgstr "Bekräfta din ångerbegäran. Det här är det sista steget."
 
@@ -2395,11 +2422,11 @@ msgstr "Ändrat dig? Du kan utöva din ångerrätt på berättigade beställning
 msgid "Open the withdrawal page"
 msgstr "Öppna ångersidan"
 
-#: src/Frontend/NoScriptFlow.php:131
+#: src/Frontend/NoScriptFlow.php:142
 msgid "Withdrawal registered"
 msgstr "Ångerbegäran registrerad"
 
-#: src/Frontend/NoScriptFlow.php:132
+#: src/Frontend/NoScriptFlow.php:143
 msgid ""
 "Your withdrawal has been registered. We have emailed you a confirmation on a "
 "durable medium."
@@ -2407,30 +2434,30 @@ msgstr ""
 "Ditt frånträde har registrerats. Vi har skickat dig en bekräftelse på ett "
 "varaktigt medium via e-post."
 
-#: src/Frontend/NoScriptFlow.php:146 src/REST/Routes/WithdrawalRoute.php:121
+#: src/Frontend/NoScriptFlow.php:157 src/REST/Routes/WithdrawalRoute.php:121
 #: src/REST/Routes/WithdrawalRoute.php:155
-#: src/REST/Routes/WithdrawalRoute.php:188
+#: src/REST/Routes/WithdrawalRoute.php:189
 msgid "Too many attempts. Please try again in a few minutes."
 msgstr "För många försök. Försök igen om några minuter."
 
-#: src/Frontend/NoScriptFlow.php:158
+#: src/Frontend/NoScriptFlow.php:169
 msgid "Security check failed. Please reload the form and try again."
 msgstr "Säkerhetskontrollen misslyckades. Ladda om formuläret och försök igen."
 
-#: src/Frontend/NoScriptFlow.php:172 src/REST/Routes/WithdrawalRoute.php:41
+#: src/Frontend/NoScriptFlow.php:183 src/REST/Routes/WithdrawalRoute.php:41
 msgid "Invalid request."
 msgstr "Ogiltig begäran."
 
-#: src/Frontend/NoScriptFlow.php:216
+#: src/Frontend/NoScriptFlow.php:227
 msgid "Back to the site"
 msgstr "Tillbaka till webbplatsen"
 
-#: src/Frontend/NoScriptFlow.php:71 src/Frontend/NoScriptFlow.php:127
-#: src/Frontend/NoScriptFlow.php:145
+#: src/Frontend/NoScriptFlow.php:75 src/Frontend/NoScriptFlow.php:138
+#: src/Frontend/NoScriptFlow.php:156
 msgid "Withdrawal"
 msgstr "Ångerbegäran"
 
-#: src/Frontend/NoScriptFlow.php:72 src/REST/Routes/WithdrawalRoute.php:173
+#: src/Frontend/NoScriptFlow.php:76 src/REST/Routes/WithdrawalRoute.php:174
 msgid "Please provide your name and a valid email address."
 msgstr "Ange ditt namn och en giltig e-postadress."
 
@@ -2576,7 +2603,7 @@ msgstr "Hittades inte."
 msgid "Receipt not available."
 msgstr "Kvitto ej tillgängligt."
 
-#: src/REST/Routes/WithdrawalRoute.php:200
+#: src/REST/Routes/WithdrawalRoute.php:201
 msgid "Missing confirmation token. Please start again."
 msgstr "Bekräftelsetoken saknas. Börja om."
 
@@ -2588,11 +2615,11 @@ msgstr "Beställningen hittades inte eller åtkomsten kunde inte verifieras."
 msgid "The right of withdrawal is not available for this order."
 msgstr "Ångerrätten är inte tillgänglig för denna beställning."
 
-#: src/Shortcodes/Shortcodes.php:145
+#: src/Shortcodes/Shortcodes.php:146
 msgid "No withdrawal request for this order."
 msgstr "Inget ångerrättsärende för denna beställning."
 
-#: src/Shortcodes/Shortcodes.php:150
+#: src/Shortcodes/Shortcodes.php:151
 msgid "Withdrawal request status: %s"
 msgstr "Status för ångerrättsärende: %s"
 
@@ -2669,15 +2696,15 @@ msgid "Reason (optional)"
 msgstr "Skäl (valfritt)"
 
 #: templates/emails/plain/wwu-wb-withdrawal-ack.php:33
-#: templates/emails/withdrawal-confirmation.php:42
-#: templates/emails/wwu-wb-withdrawal-ack.php:68
-#: templates/pdf/receipt-pdf.php:54
+#: templates/emails/withdrawal-confirmation.php:45
+#: templates/emails/wwu-wb-withdrawal-ack.php:74
+#: templates/pdf/receipt-pdf.php:57
 msgid "Date and time of submission"
 msgstr "Datum och tid för inlämning"
 
 #: templates/emails/plain/wwu-wb-withdrawal-ack.php:35
-#: templates/emails/withdrawal-confirmation.php:46
-#: templates/emails/wwu-wb-withdrawal-ack.php:73
+#: templates/emails/withdrawal-confirmation.php:49
+#: templates/emails/wwu-wb-withdrawal-ack.php:79
 msgid "Addressee (trader):"
 msgstr "Adressat (handlare):"
 
@@ -2689,18 +2716,24 @@ msgstr "Ladda ned ditt kvitto (PDF):"
 msgid "Verify this receipt:"
 msgstr "Verifiera detta kvitto:"
 
-#: templates/emails/withdrawal-confirmation.php:51
-#: templates/emails/wwu-wb-withdrawal-ack.php:78
+#: templates/emails/withdrawal-confirmation.php:43
+#: templates/emails/wwu-wb-withdrawal-ack.php:69
+#: templates/pdf/receipt-pdf.php:55
+msgid "Products withdrawn"
+msgstr "Produkter som frånträds"
+
+#: templates/emails/withdrawal-confirmation.php:54
+#: templates/emails/wwu-wb-withdrawal-ack.php:84
 msgid "Download your receipt (PDF)"
 msgstr "Ladda ned ditt kvitto (PDF)"
 
-#: templates/emails/withdrawal-confirmation.php:55
-#: templates/emails/wwu-wb-withdrawal-ack.php:82
+#: templates/emails/withdrawal-confirmation.php:58
+#: templates/emails/wwu-wb-withdrawal-ack.php:88
 msgid "Evidence reference:"
 msgstr "Bevisreferens:"
 
-#: templates/emails/withdrawal-confirmation.php:56
-#: templates/emails/wwu-wb-withdrawal-ack.php:84
+#: templates/emails/withdrawal-confirmation.php:59
+#: templates/emails/wwu-wb-withdrawal-ack.php:90
 msgid "Verify this receipt"
 msgstr "Verifiera detta kvitto"
 
@@ -2728,7 +2761,15 @@ msgstr "E-post för bekräftelsen"
 msgid "You are not required to give a reason."
 msgstr "Du behöver inte ange något skäl."
 
-#: templates/form/withdrawal-form.php:73
+#: templates/form/withdrawal-form.php:74
+msgid "Withdrawing from only some products?"
+msgstr "Frånträder du endast vissa produkter?"
+
+#: templates/form/withdrawal-form.php:75
+msgid "Tick them — leave empty to withdraw from the whole order."
+msgstr "Bocka i dem — lämna tomt för att frånträda hela beställningen."
+
+#: templates/form/withdrawal-form.php:92
 msgid "Continue"
 msgstr "Fortsätt"
 
@@ -2855,15 +2896,15 @@ msgstr "Mottagningsbevis för ångerbegäran"
 msgid "durable medium (Art. 11a Dir. 2011/83/EU)"
 msgstr "varaktigt medium (art. 11a Dir. 2011/83/EU)"
 
-#: templates/pdf/receipt-pdf.php:55
+#: templates/pdf/receipt-pdf.php:58
 msgid "Addressee (trader)"
 msgstr "Adressat (handlare)"
 
-#: templates/pdf/receipt-pdf.php:59
+#: templates/pdf/receipt-pdf.php:62
 msgid "Declaration"
 msgstr "Förklaring"
 
-#: templates/pdf/receipt-pdf.php:60
+#: templates/pdf/receipt-pdf.php:63
 msgid ""
 "I, %1$s, hereby give notice that I withdraw from my contract of sale of the "
 "following goods/services: %2$s."
@@ -2871,15 +2912,15 @@ msgstr ""
 "Jag, %1$s, meddelar härmed att jag frånträder mitt köpeavtal avseende "
 "följande varor/tjänster: %2$s."
 
-#: templates/pdf/receipt-pdf.php:64
+#: templates/pdf/receipt-pdf.php:67
 msgid "Tamper-evidence reference (SHA-256 of the immutable-log record):"
 msgstr "Manipuleringssäker referens (SHA-256 av den oföränderliga loggposten):"
 
-#: templates/pdf/receipt-pdf.php:66
+#: templates/pdf/receipt-pdf.php:69
 msgid "Request ID:"
 msgstr "Begärans-ID:"
 
-#: templates/pdf/receipt-pdf.php:67
+#: templates/pdf/receipt-pdf.php:70
 msgid "Verify:"
 msgstr "Verifiera:"
 

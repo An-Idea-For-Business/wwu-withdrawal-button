@@ -64,6 +64,12 @@ do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
 		<td class="td" style="text-align: left;"><?php echo esc_html( (string) $data['reason'] ); ?></td>
 	</tr>
 	<?php endif; ?>
+	<?php if ( ! empty( $data['products_selected'] ) ) : ?>
+	<tr>
+		<th class="td" scope="row" style="text-align: left;"><?php esc_html_e( 'Products withdrawn', 'wwu-withdrawal-button' ); ?></th>
+		<td class="td" style="text-align: left;"><?php echo esc_html( (string) $data['products_selected'] ); ?></td>
+	</tr>
+	<?php endif; ?>
 	<tr>
 		<th class="td" scope="row" style="text-align: left;"><?php esc_html_e( 'Date and time of submission', 'wwu-withdrawal-button' ); ?></th>
 		<td class="td" style="text-align: left;"><strong><?php echo esc_html( (string) ( $data['submitted_local'] ?? '' ) ); ?></strong> (<?php echo esc_html( (string) ( $data['submitted_at'] ?? '' ) ); ?>)</td>

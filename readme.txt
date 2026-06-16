@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0-alpha.41
+Stable tag: 1.0.0-alpha.42
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -71,6 +71,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 
 == Changelog ==
 
+= 1.0.0-alpha.42 =
+* **You can now withdraw from only some products of an order.** EU law allows partial withdrawal (it's not all-or-nothing), so step 1 of the withdrawal form gains an **optional** checklist of the order's products — tick the ones you're withdrawing from, or leave it empty to withdraw from the whole order (the default). The choice appears on the confirmation e-mail/PDF and in the admin Requests dashboard. It's informational: you still process the refund (full or partial) yourself. No change for anyone who withdraws from the whole order.
+
 = 1.0.0-alpha.41 =
 * **FluentCart handling is now configurable.** FluentCart is building its own withdrawal add-on, so a new **Settings → FluentCart** control lets you choose how this plugin behaves on FluentCart orders: **Auto** (recommended — show our button, but step aside automatically if FluentCart's own add-on is installed, so customers never see two buttons), **Always** (keep ours regardless), or **Off** (never handle FluentCart). Only our consumer-facing FluentCart surfaces are affected — the admin Requests dashboard and any in-flight confirmation keep working. No change for WooCommerce or EDD.
 
@@ -129,6 +132,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.0.0-alpha.42 =
+Adds an optional "which products" checklist to the withdrawal form (partial withdrawal), shown on the receipt and the Requests dashboard. Optional and fail-open — leaving it empty withdraws from the whole order as before. No breaking changes.
 
 = 1.0.0-alpha.41 =
 Adds a FluentCart handling mode (Auto/Always/Off) so this plugin steps aside automatically when FluentCart's own withdrawal add-on is installed. No breaking changes; WooCommerce and EDD are unaffected.
