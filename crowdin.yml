@@ -1,0 +1,16 @@
+# Crowdin configuration — WWU Withdrawal Button localization.
+#
+# project_id + api_token are NOT stored here: they are supplied at runtime via the
+# CROWDIN_PROJECT_ID and CROWDIN_PERSONAL_TOKEN environment variables (GitHub Action
+# secrets). Never commit credentials to this file.
+#
+# %locale_with_underscore% yields the WordPress locale format (it_IT, de_DE, fr_FR,
+# es_ES, sv_SE), which matches our .po file naming exactly.
+#
+# Full setup + workflow: docs/reference/wwu-wb-localization-crowdin-REFERENCE.md
+
+"preserve_hierarchy": true
+
+files:
+  - source: "/languages/wwu-withdrawal-button.pot"
+    translation: "/languages/wwu-withdrawal-button-%locale_with_underscore%.po"

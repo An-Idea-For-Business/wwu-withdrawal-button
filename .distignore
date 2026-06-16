@@ -17,6 +17,7 @@ composer.json
 composer.lock
 phpcs.xml.dist
 *.dist
+crowdin.yml
 CONTRIBUTING.md
 CODE_OF_CONDUCT.md
 SECURITY.md
