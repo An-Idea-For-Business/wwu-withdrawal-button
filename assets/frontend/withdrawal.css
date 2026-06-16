@@ -281,3 +281,22 @@
 .wwu-wb-form-wrap [hidden] {
 	display: none !important;
 }
+
+/*
+ * Art. 59 exemption transparency note — shown when the button is absent
+ * because the order is exempt from the right of withdrawal.
+ */
+.wwu-wb-exempt-note {
+	margin: 1em 0;
+	padding: 0.75em 1em;
+	background-color: #f9f0e0;
+	border-left: 4px solid #c78a00;
+	border-radius: 0 4px 4px 0;
+	color: var(--wwu-wb-text-color, #333);
+	font-size: 0.9rem;
+	line-height: 1.5;
+}
+
+.wwu-wb-exempt-note p {
+	margin: 0;
+}

@@ -39,6 +39,7 @@ namespace WWU\WithdrawalButton\Frontend;
 
 use WWU\WithdrawalButton\Core\Services;
 use WWU\WithdrawalButton\Core\Settings;
+use WWU\WithdrawalButton\Frontend\ExemptionNoteRenderer;
 use WWU\WithdrawalButton\Platform\NormalizedOrder;
 use WWU\WithdrawalButton\Platform\OrderDataSource;
 
@@ -169,7 +170,19 @@ final class EddCustomerOrders {
 			return '<p class="wwu-wb-status-notice">' . esc_html( $status_label ) . '</p>';
 		}
 
-		if ( ! Settings::enabled() || ! Services::instance()->applicability->decide( $order )->show ) {
+		if ( ! Settings::enabled() ) {
+			return '';
+		}
+		$decision = Services::instance()->applicability->decide( $order );
+		if ( ! $decision->show ) {
+			/*
+			 * When the order is exempt under Art. 59, return the transparency note so
+			 * the consumer understands why the button is absent. For any other reason
+			 * (out-of-scope country, B2B, ineligible status …) return ''.
+			 */
+			if ( 'no_withdrawal_right' === $decision->reason ) {
+				return ExemptionNoteRenderer::render( $order );
+			}
 			return '';
 		}
 

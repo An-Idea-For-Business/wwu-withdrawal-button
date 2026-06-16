@@ -165,6 +165,13 @@ final class Install {
 				'consent_capture_ip'   => true,
 				'go_live_date'         => WWU_WB_GO_LIVE_DATE,
 				'custom_css'           => '',
+				/*
+				 * Consumer-facing copy overrides. Both default to '' which means the
+				 * built-in i18n text is used; non-empty values are rendered as-is
+				 * (sanitized via wp_kses_post on save). See SettingsPage::render_guidance_section().
+				 */
+				'custom_guidance'       => '',
+				'custom_exemption_note' => '',
 				// Subscriptions: a renewal does NOT restart the 14-day right (one right
 				// per contract, at conclusion — Art. 9 CRD / art. 52 Cod. Consumo), so by
 				// default the button shows on the initial order only and is suppressed on

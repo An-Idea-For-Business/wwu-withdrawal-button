@@ -16,6 +16,7 @@ declare( strict_types=1 );
 namespace WWU\WithdrawalButton\Frontend;
 
 use WWU\WithdrawalButton\Core\Services;
+use WWU\WithdrawalButton\Frontend\ExemptionNoteRenderer;
 use WWU\WithdrawalButton\Platform\NormalizedOrder;
 use WWU\WithdrawalButton\Platform\OrderDataSource;
 
@@ -168,7 +169,21 @@ final class WooMyAccount {
 			return;
 		}
 
-		if ( ! $this->should_show( $order ) ) {
+		/*
+		 * Call decide() directly here (not should_show()) so we can inspect ->reason
+		 * and emit the exemption transparency note when the right is removed by Art. 59.
+		 */
+		if ( ! \WWU\WithdrawalButton\Core\Settings::enabled() ) {
+			return;
+		}
+		$decision = Services::instance()->applicability->decide( $order );
+		if ( ! $decision->show ) {
+			if ( 'no_withdrawal_right' === $decision->reason ) {
+				$note = ExemptionNoteRenderer::render( $order );
+				if ( '' !== $note ) {
+					echo $note; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ExemptionNoteRenderer builds safe HTML.
+				}
+			}
 			return;
 		}
 		echo $this->render_button( $order, $adapter ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- template escapes.

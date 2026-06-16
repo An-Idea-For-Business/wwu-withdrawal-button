@@ -50,6 +50,7 @@ final class SmokeTests {
 		'consent'        => 'suite_consent',
 		'subscriptions'       => 'suite_subscriptions',
 		'withdrawal_request'  => 'suite_withdrawal_request',
+		'exemption_note'      => 'suite_exemption_note',
 	);
 
 	/**
@@ -965,6 +966,96 @@ final class SmokeTests {
 			$req_d->is_valid(),
 			'is_valid() remains true when no products are selected.'
 		);
+
+		return $tests;
+	}
+
+	/**
+	 * Suite: Art. 59 exemption transparency note (ExemptionNoteRenderer).
+	 *
+	 * Verifies that:
+	 * (a) an order with NO matched reason returns '' (fail-safe / no phantom note),
+	 * (b) an order with an unconditional reason returns a non-empty HTML note that
+	 *     names the statutory exception,
+	 * (c) a custom_exemption_note setting overrides the built-in copy.
+	 *
+	 * @return array
+	 */
+	private function suite_exemption_note(): array {
+		$tests    = array();
+		$renderer = '\\WWU\\WithdrawalButton\\Frontend\\ExemptionNoteRenderer';
+
+		// Save + restore option state so the tests don't pollute each other.
+		$saved_exclusions = get_option( 'wwu_wb_exclusions' );
+		$saved_settings   = (array) get_option( 'wwu_wb_settings', array() );
+
+		/* (a) No exemption rule for product 111 → renderer returns ''. */
+		update_option(
+			'wwu_wb_exclusions',
+			array(
+				'by_reason'           => array(),
+				'auto_detect_virtual' => false,
+			)
+		);
+		\WWU\WithdrawalButton\Core\Settings::flush();
+		$order_plain = $this->fake_order(
+			'IT',
+			'completed',
+			false,
+			array( array( 'product_id' => 111, 'name' => 'Plain product', 'qty' => 1, 'virtual' => false, 'downloadable' => false, 'type' => 'simple', 'category_ids' => array() ) )
+		);
+		$note_a  = $renderer::render( $order_plain );
+		$tests[] = $this->assert(
+			'exemption_note.fail_safe_empty',
+			'' === $note_a,
+			'No exemption rule → renderer returns empty string (got: ' . ( '' === $note_a ? 'empty' : mb_substr( $note_a, 0, 80 ) ) . ').'
+		);
+
+		/* (b) Unconditional reason (59_c custom-made) → note names the exception. */
+		update_option(
+			'wwu_wb_exclusions',
+			array(
+				'by_reason'           => array( '59_c' => array( 'products' => array( 222 ), 'categories' => array() ) ),
+				'auto_detect_virtual' => false,
+			)
+		);
+		\WWU\WithdrawalButton\Core\Settings::flush();
+		// Ensure no custom override is active.
+		$settings_b = $saved_settings;
+		$settings_b['custom_exemption_note'] = '';
+		update_option( 'wwu_wb_settings', $settings_b );
+		\WWU\WithdrawalButton\Core\Settings::flush();
+
+		$order_exempt = $this->fake_order(
+			'IT',
+			'completed',
+			false,
+			array( array( 'product_id' => 222, 'name' => 'Custom-made product', 'qty' => 1, 'virtual' => false, 'downloadable' => false, 'type' => 'simple', 'category_ids' => array() ) )
+		);
+		$note_b  = $renderer::render( $order_exempt );
+		$tests[] = $this->assert(
+			'exemption_note.reason_names_exception',
+			'' !== $note_b && false !== strpos( $note_b, 'wwu-wb-exempt-note' ),
+			'Exempt order → note HTML contains .wwu-wb-exempt-note (got: ' . mb_substr( $note_b, 0, 120 ) . ').'
+		);
+
+		/* (c) custom_exemption_note in settings overrides built-in copy. */
+		$settings_c = $saved_settings;
+		$settings_c['custom_exemption_note'] = '<p>Custom store policy note.</p>';
+		update_option( 'wwu_wb_settings', $settings_c );
+		\WWU\WithdrawalButton\Core\Settings::flush();
+
+		$note_c  = $renderer::render( $order_exempt );
+		$tests[] = $this->assert(
+			'exemption_note.custom_override_wins',
+			'' !== $note_c && false !== strpos( $note_c, 'Custom store policy note.' ),
+			'Custom note override wins over built-in copy (got: ' . mb_substr( $note_c, 0, 120 ) . ').'
+		);
+
+		// Restore.
+		update_option( 'wwu_wb_exclusions', is_array( $saved_exclusions ) ? $saved_exclusions : array() );
+		update_option( 'wwu_wb_settings', $saved_settings );
+		\WWU\WithdrawalButton\Core\Settings::flush();
 
 		return $tests;
 	}

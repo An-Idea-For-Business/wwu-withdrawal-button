@@ -35,6 +35,7 @@ namespace WWU\WithdrawalButton\Frontend;
 
 use WWU\WithdrawalButton\Core\Services;
 use WWU\WithdrawalButton\Core\Settings;
+use WWU\WithdrawalButton\Frontend\ExemptionNoteRenderer;
 use WWU\WithdrawalButton\Platform\NormalizedOrder;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -220,7 +221,21 @@ final class FluentCartPortal {
 			return $sections;
 		}
 
-		if ( ! Settings::enabled() || ! Services::instance()->applicability->decide( $order )->show ) {
+		if ( ! Settings::enabled() ) {
+			return $sections;
+		}
+		$decision = Services::instance()->applicability->decide( $order );
+		if ( ! $decision->show ) {
+			/*
+			 * When the reason is a confirmed Art. 59 exemption, append the transparency
+			 * note into after_summary so the consumer knows why the button is absent.
+			 */
+			if ( 'no_withdrawal_right' === $decision->reason ) {
+				$note = ExemptionNoteRenderer::render( $order );
+				if ( '' !== $note ) {
+					$sections['after_summary'] = ( $sections['after_summary'] ?? '' ) . $note;
+				}
+			}
 			return $sections;
 		}
 

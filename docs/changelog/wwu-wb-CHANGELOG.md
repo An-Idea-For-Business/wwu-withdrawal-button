@@ -5,6 +5,21 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [Unreleased]
 
+### Consumer "why exempt" transparency note (1.0.0-alpha.43, 2026-06-16)
+When an order is exempt from the right of withdrawal under **Art. 59** (every item carries a captured exemption
+— e.g. digital content with immediate access, or a service fully performed), the withdrawal button is absent.
+Until now the consumer simply saw nothing; this adds a short, accurate **"why" note** on the order surfaces —
+naming the matched statutory exception(s) + legal reference and noting the consumer's prior express consent at
+checkout. New `ExemptionNoteRenderer` (shared helper), wired into the public form / Gutenberg block, the
+WooCommerce My Account order detail, the FluentCart portal and the EDD customer surfaces. **Strictly gated +
+fail-safe:** rendered ONLY when the applicability reason is `no_withdrawal_right` AND the per-item reasons
+genuinely resolve to a non-seal-based Art. 59 exception — never on ordinary, out-of-scope, renewal or B2B
+orders, and never when the exemption isn't evidence-backed (empty → nothing). The copy is merchant-overridable
+(`wwu_wb_settings['custom_exemption_note']`, mirrors `custom_guidance`) and filterable
+(`wwu_wb_exemption_note_text`). The button-visibility logic is unchanged. All 6 locales 100% (517/517).
+PHPStan L2 + class-scan clean; new smoke suite `exemption_note`. See
+[spec](specs/wwu-wb-exemption-why-note-SPEC.md).
+
 ### Optional "which products" field in the withdrawal form — partial withdrawal (1.0.0-alpha.42, 2026-06-16)
 A consumer can now indicate **which products** of an order they are withdrawing from — EU law allows partial
 withdrawal (the Annex I-B model form declares withdrawal "of the following goods"; it is not all-or-nothing).

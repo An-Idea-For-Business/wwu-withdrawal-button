@@ -19,6 +19,7 @@ declare( strict_types=1 );
 namespace WWU\WithdrawalButton\Shortcodes;
 
 use WWU\WithdrawalButton\Core\Services;
+use WWU\WithdrawalButton\Frontend\ExemptionNoteRenderer;
 use WWU\WithdrawalButton\Frontend\GuestAccess;
 use WWU\WithdrawalButton\Frontend\Template;
 use WWU\WithdrawalButton\Legal\ClauseLibrary;
@@ -106,7 +107,20 @@ final class Shortcodes {
 		// applicability engine excludes) must not render the two-step form even when
 		// reached via [wwu_wb_form order_id=…]. The button surfaces already gate on
 		// applicability; this matches them.
-		if ( ! Services::instance()->applicability->decide( $order )->show ) {
+		$decision = Services::instance()->applicability->decide( $order );
+		if ( ! $decision->show ) {
+			/*
+			 * When the reason is a confirmed Art. 59 exemption, show the transparency
+			 * note naming the applicable exception(s) — more informative than a generic
+			 * "not available" message. For any other reason (out-of-scope country, B2B
+			 * order, ineligible status …) keep the generic notice.
+			 */
+			if ( 'no_withdrawal_right' === $decision->reason ) {
+				$note = ExemptionNoteRenderer::render( $order );
+				if ( '' !== $note ) {
+					return $note;
+				}
+			}
 			return '<p class="wwu-wb-notice">' . esc_html__( 'The right of withdrawal is not available for this order.', 'wwu-withdrawal-button' ) . '</p>';
 		}
 

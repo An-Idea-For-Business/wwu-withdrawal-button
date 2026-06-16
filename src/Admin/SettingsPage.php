@@ -341,6 +341,17 @@ final class SettingsPage {
 		echo '<p class="description">' . wp_kses_post( __( 'For products with no right of withdrawal (e.g. dated event tickets, immediate-access digital content), the proper fix is to exempt them per Art. 59 — see the upcoming Exemptions feature. Do not simply hide the button without the legal conditions.', 'wwu-withdrawal-button' ) ) . '</p>';
 		echo '</td></tr>';
 
+		// Custom exemption note (why the button is absent on Art. 59 exempt orders).
+		$custom_note = isset( $settings['custom_exemption_note'] ) ? (string) $settings['custom_exemption_note'] : '';
+		echo '<tr><th scope="row">' . esc_html__( 'Custom exemption note', 'wwu-withdrawal-button' ) . '</th><td>';
+		echo '<textarea name="custom_exemption_note" rows="4" class="large-text" placeholder="' . esc_attr__( 'Leave empty to use the built-in note. When set, this replaces the default text shown to consumers when an order is exempt under Art. 59 (e.g. digital content with immediate access) — explaining why the withdrawal button is absent.', 'wwu-withdrawal-button' ) . '">' . esc_textarea( $custom_note ) . '</textarea>';
+		echo '<p class="description">' . esc_html__( 'Shown to the consumer instead of the default "The right of withdrawal does not apply …" message. Basic HTML allowed. The note only appears when the order is confirmed exempt by the Art. 59 rules you configured — never on ordinary orders.', 'wwu-withdrawal-button' ) . '</p>';
+		echo '<details style="margin-top:6px;"><summary style="cursor:pointer;color:#2271b1;">' . esc_html__( 'Show default note example', 'wwu-withdrawal-button' ) . '</summary>';
+		echo '<blockquote style="margin:8px 0;padding:8px 12px;border-left:4px solid #c3c4c7;color:#3c434a;">';
+		echo esc_html__( 'The right of withdrawal does not apply to this order: every item falls under a statutory exception to the 14-day right (Digital content with immediate access — Art. 16(1)(m) CRD / Art. 59(1)(o) CdC), which you expressly agreed to at checkout.', 'wwu-withdrawal-button' );
+		echo '</blockquote></details>';
+		echo '</td></tr>';
+
 		echo '</tbody></table>';
 	}
 
@@ -938,6 +949,7 @@ final class SettingsPage {
 		// text replaces the default block (basic HTML allowed, merchant-owned).
 		$settings['withdrawal_window_days'] = max( 14, min( 365, (int) ( $_POST['withdrawal_window_days'] ?? 14 ) ) );
 		$settings['custom_guidance']        = wp_kses_post( wp_unslash( $_POST['custom_guidance'] ?? '' ) );
+		$settings['custom_exemption_note']  = wp_kses_post( wp_unslash( $_POST['custom_exemption_note'] ?? '' ) );
 		// Subscriptions: a renewal does not restart the 14-day right, so the button is
 		// suppressed on renewals unless the merchant opts in; auto-cancelling the
 		// subscription on a withdrawal is opt-in (refund/pro-rata stay manual).

@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0-alpha.42
+Stable tag: 1.0.0-alpha.43
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -71,6 +71,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 
 == Changelog ==
 
+= 1.0.0-alpha.43 =
+* **Consumers now see WHY the withdrawal button is absent on exempt orders.** When an order is exempt from the right of withdrawal under Art. 59 (e.g. digital content with immediate access, or a service fully performed — both with the consumer's consent at checkout), the button is hidden. The plugin now shows a short, accurate note explaining the specific statutory exception and its legal reference, instead of just silence. Shown on the withdrawal form, the WooCommerce/EDD account pages and the FluentCart portal. The text is editable (Settings → Consumer guidance). It only appears on genuinely exempt orders — never on ordinary ones; button visibility is unchanged.
+
 = 1.0.0-alpha.42 =
 * **You can now withdraw from only some products of an order.** EU law allows partial withdrawal (it's not all-or-nothing), so step 1 of the withdrawal form gains an **optional** checklist of the order's products — tick the ones you're withdrawing from, or leave it empty to withdraw from the whole order (the default). The choice appears on the confirmation e-mail/PDF and in the admin Requests dashboard. It's informational: you still process the refund (full or partial) yourself. No change for anyone who withdraws from the whole order.
 
@@ -132,6 +135,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.0.0-alpha.43 =
+Adds a consumer-facing "why exempt" note: on orders exempt under Art. 59 the plugin now explains why the withdrawal button is absent (naming the exception + legal reference), instead of showing nothing. Editable, fail-safe, only on genuinely exempt orders. No change to button visibility. No breaking changes.
 
 = 1.0.0-alpha.42 =
 Adds an optional "which products" checklist to the withdrawal form (partial withdrawal), shown on the receipt and the Requests dashboard. Optional and fail-open — leaving it empty withdraws from the whole order as before. No breaking changes.
