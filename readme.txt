@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0-alpha.45
+Stable tag: 1.0.0
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -61,6 +61,11 @@ This plugin connects to the **OpenTimestamps** public calendar servers to obtain
 - **Where:** the OpenTimestamps public calendars (a.pool.opentimestamps.org, b.pool.opentimestamps.org, a.pool.eternitywall.com, ots.btc.catallaxy.com).
 - **Service info / privacy:** https://opentimestamps.org/
 
+**Optional** services, all **off by default** and used only if you turn them on:
+
+- **RFC 3161 / eIDAS timestamp authority** — if you switch the timestamp provider away from OpenTimestamps, the same one-way SHA-256 hash (no personal data) is sent instead to the timestamp-authority URL you configure.
+- **Outbound webhook** (Settings → Integrations) — if enabled, the plugin sends a signed POST to the endpoint URL **you** specify whenever a withdrawal is confirmed. The payload carries a verification hash and contract reference, never the consumer's IP address.
+
 No other external services are used. The plugin does not load remote scripts, fonts or trackers on your site.
 
 == Privacy ==
@@ -70,6 +75,9 @@ The plugin records withdrawal declarations (name, identified contract, email, IP
 For the conditional Art. 59 exemptions, the plugin also stores the consumer's checkout consent + acknowledgement (the agreed wording, a hash, the date/time and — unless you turn it off — the IP) as evidence to prove the exemption is valid. The lawful basis is **legitimate interest** (GDPR Art. 6(1)(f); defence of legal claims), **not** GDPR consent. The IP lives only on the order (never in the immutable log) and is automatically anonymised once the retention period lapses. A second ready-to-paste privacy clause is generated for this processing.
 
 == Changelog ==
+
+= 1.0.0 =
+* **First stable release**, for the EU withdrawal-button mandate that applies from **19 June 2026**. Consolidates the full feature set: the statutory two-step withdrawal flow with per-language wording (IT, EN, DE, FR, ES, SV), a durable-medium acknowledgement (email + PDF + verifiable link + OpenTimestamps), a tamper-evident hash-chained log, the Art. 59 exemptions with checkout consent capture and a consumer "why exempt" note, optional partial withdrawal, WooCommerce (HPOS + legacy) / FluentCart / Easy Digital Downloads adapters, the withdrawal link in order e-mails, a read-only REST API + signed webhook for automations, and the Annex I-B model form + ready legal clauses. All six locales fully translated (545/545). No functional change from 1.0.0-alpha.45 — the External services disclosure was clarified and translations finalised for release.
 
 = 1.0.0-alpha.45 =
 * **Withdrawal link in your order e-mails — across all platforms.** The withdrawal link is added **automatically** to WooCommerce customer order e-mails and to the Easy Digital Downloads purchase-receipt e-mail (so customers can reach the withdrawal straight from the e-mail, as the law's Recital 37 suggests). FluentCart doesn't allow plugins to add content to its e-mails automatically, so **Settings → FluentCart** now shows a short, optional one-time guide to drop the `{{wwu.recesso_url}}` shortcode into your FluentCart receipt template (copy-ready, 3 steps). Nothing invasive, nothing required — the withdrawal is always reachable from the account/portal and the public page regardless.

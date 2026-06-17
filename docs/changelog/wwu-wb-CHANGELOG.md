@@ -3,7 +3,15 @@
 All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); the project uses Semantic Versioning.
 
-## [Unreleased]
+## [1.0.0] — 2026-06-17 — First stable release
+
+Promotes the alpha series to the first **stable** release, for the EU withdrawal-button
+mandate that applies from **19 June 2026**. No functional change from `1.0.0-alpha.45`:
+the External services disclosure in `readme.txt` was clarified (the optional RFC 3161 /
+eIDAS provider and the optional outbound webhook are now spelled out, both off by
+default), and translations were reconciled with the Crowdin TMS after PR #20 — all six
+locales 545/545, `.mo` recompiled. The consolidated feature set is summarised in
+`readme.txt`.
 
 ### FluentCart e-mail link helper + verified email-reachability matrix (1.0.0-alpha.45, 2026-06-16)
 Closes the loop on **withdrawal-link reachability in transactional e-mails** across all three platforms — and
