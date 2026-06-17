@@ -475,6 +475,32 @@ final class SmokeTests {
 
 		$tests[] = $this->assert( 'log.genesis_stable', \WWU\WithdrawalButton\Storage\LogChain::genesis() === $prev, 'Genesis hash is stable per site.' );
 
+		// Chain v2: the row hash is keyed (HMAC) and differs from the legacy v1
+		// (unkeyed SHA-256) form; the default version is the current one.
+		$h_v1 = \WWU\WithdrawalButton\Storage\LogChain::compute( $prev, $ev_a, 1 );
+		$h_v2 = \WWU\WithdrawalButton\Storage\LogChain::compute( $prev, $ev_a, 2 );
+		$tests[] = $this->assert(
+			'log.v2_keyed',
+			$h_v1 !== $h_v2 && $h_a === $h_v2,
+			'v2 row hash is HMAC-keyed (differs from v1) and is the current default.'
+		);
+
+		// IP anonymisation for the hashed evidence (full IP kept separately).
+		$tests[] = $this->assert(
+			'log.ip_anonymized',
+			'203.0.113.0' === \WWU\WithdrawalButton\Security\ClientInfo::anonymize_ip( '203.0.113.45' )
+				&& '' === \WWU\WithdrawalButton\Security\ClientInfo::anonymize_ip( '' ),
+			'IPv4 is anonymised (last octet zeroed); empty stays empty.'
+		);
+
+		// Schema v3: the new columns exist (ip_full purgeable + per-row chain_version).
+		global $wpdb;
+		$log_table = \WWU\WithdrawalButton\Storage\Database\LogTable::name();
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery -- table name is constant-derived; read-only column introspection.
+		$cols   = (array) $wpdb->get_col( "SHOW COLUMNS FROM {$log_table}" );
+		$has_v3 = in_array( 'ip_full', $cols, true ) && in_array( 'chain_version', $cols, true );
+		$tests[] = $this->assert( 'log.schema_v3_columns', $has_v3, 'Log table has ip_full + chain_version (schema v3).' );
+
 		// Verify the live chain is intact (0 = no broken row).
 		$broken = ( new \WWU\WithdrawalButton\Storage\LogRepository() )->verify_chain();
 		$tests[] = $this->assert( 'log.chain_intact', 0 === $broken, 0 === $broken ? 'Live chain intact.' : 'Chain broken at row ' . $broken . '.' );

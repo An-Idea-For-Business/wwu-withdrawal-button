@@ -61,7 +61,7 @@ define( 'WWU_WB_NONCE_ACTION', 'wwu_wb_nonce' );
  * src/Storage/Database/Migrations/. The Migrator runs every migration whose
  * number is greater than the stored wwu_wb_db_version option.
  */
-define( 'WWU_WB_SCHEMA_VERSION', 2 );
+define( 'WWU_WB_SCHEMA_VERSION', 3 );
 
 /**
  * Legal application ("go-live") date for the EU/IT market.
