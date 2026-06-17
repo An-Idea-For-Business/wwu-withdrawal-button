@@ -60,7 +60,7 @@ The plugin isn't on the WordPress.org directory **yet** (submission in progress)
 5. Open **Withdrawal Button → Settings**, enable the function, and choose your applicability mode (EU/EEA only is the default).
 6. From the **Compliance** page, publish the generated **Annex I‑B model form** and update your Privacy / Terms / pre‑contractual information.
 
-**Requirements:** WordPress 5.8+, PHP 7.4+ (tested up to WordPress 6.8). Updating later: deactivate the old version and upload the new ZIP the same way — your settings and the evidence log are preserved.
+**Requirements:** WordPress 5.8+, PHP 7.4+ (tested up to WordPress 7.0). Updating later: deactivate the old version and upload the new ZIP the same way — your settings and the evidence log are preserved.
 
 <details>
 <summary>Installing from source (developers)</summary>

@@ -2,9 +2,9 @@
 Contributors: mredodos, webwakeup, anideaforbusiness
 Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
-Tested up to: 6.8
+Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -75,6 +75,9 @@ The plugin records withdrawal declarations (name, identified contract, email, IP
 For the conditional Art. 59 exemptions, the plugin also stores the consumer's checkout consent + acknowledgement (the agreed wording, a hash, the date/time and — unless you turn it off — the IP) as evidence to prove the exemption is valid. The lawful basis is **legitimate interest** (GDPR Art. 6(1)(f); defence of legal claims), **not** GDPR consent. The IP lives only on the order (never in the immutable log) and is automatically anonymised once the retention period lapses. A second ready-to-paste privacy clause is generated for this processing.
 
 == Changelog ==
+
+= 1.0.1 =
+* **wordpress.org readiness + security hardening.** Resolves the Plugin Check items for the directory submission: the unused `clipboard.js` UI-kit asset is no longer shipped, `composer.json` is now included alongside the bundled library, the SSRF smoke-test no longer uses a literal localhost host, and "Tested up to" is current. Plus minor hardening from a full security audit: the OpenTimestamps calls now pass through the same SSRF guard as the webhook / RFC 3161 callers (and never follow redirects), and two admin credential fields gain `wp_unslash()`. No functional change to the withdrawal flow.
 
 = 1.0.0 =
 * **First stable release**, for the EU withdrawal-button mandate that applies from **19 June 2026**. Consolidates the full feature set: the statutory two-step withdrawal flow with per-language wording (IT, EN, DE, FR, ES, SV), a durable-medium acknowledgement (email + PDF + verifiable link + OpenTimestamps), a tamper-evident hash-chained log, the Art. 59 exemptions with checkout consent capture and a consumer "why exempt" note, optional partial withdrawal, WooCommerce (HPOS + legacy) / FluentCart / Easy Digital Downloads adapters, the withdrawal link in order e-mails, a read-only REST API + signed webhook for automations, and the Annex I-B model form + ready legal clauses. All six locales fully translated (545/545). No functional change from 1.0.0-alpha.45 — the External services disclosure was clarified and translations finalised for release.

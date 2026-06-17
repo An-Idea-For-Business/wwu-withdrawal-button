@@ -3,6 +3,30 @@
 All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); the project uses Semantic Versioning.
 
+## [1.0.1] — 2026-06-17 — wordpress.org readiness + security hardening
+
+Prepares the wordpress.org directory submission and lands the low-risk fixes from a full
+5-part security audit (REST/SSRF, evidence-log/crypto/PII, adapters/consent, admin/XSS,
+wp.org compliance). Audit report: `docs/audits/wwu-wb-full-2026-06-17-AUDIT.md`.
+
+- **Plugin Check fixes:** the unused UI-kit `clipboard.js` (its filename collided with a
+  WP-core library) is excluded from the build; `composer.json` now ships alongside the
+  bundled `vendor/` (Dompdf); the SSRF smoke-test uses a private IP instead of a literal
+  `localhost`; `readme.txt` "Tested up to" bumped to 7.0.
+- **SSRF parity (audit M-1):** the OpenTimestamps stamp/upgrade calls now pass through
+  `OutboundUrlGuard` and use `redirection => 0` + `reject_unsafe_urls => true`, matching the
+  webhook and RFC 3161 callers.
+- **Input hygiene:** `wp_unslash()` added to the RFC 3161 password and webhook secret fields
+  in the settings save handler.
+- **Defensive:** explicit `return` after the no-JS flow's error renders.
+
+Audit verdict: **no remotely-exploitable XSS / SQLi / SSRF / CSRF / IDOR found.** Three
+deeper integrity/privacy findings are tracked for a follow-up release: the evidence-log
+hash chain is unkeyed SHA-256 (forgeable by a DB-write attacker), the external timestamp
+anchor is not fully verified (OTS block height, RFC 3161 token signature), and
+withdrawal-event IPs in the immutable log have no anonymisation horizon (GDPR storage
+limitation).
+
 ## [1.0.0] — 2026-06-17 — First stable release
 
 Promotes the alpha series to the first **stable** release, for the EU withdrawal-button

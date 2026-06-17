@@ -1129,9 +1129,9 @@ final class SmokeTests {
 			'OutboundUrlGuard rejects the cloud-metadata address.'
 		);
 		$tests[] = $this->assert(
-			'automations.ssrf_blocks_loopback',
-			false === $guard::is_safe_url( 'http://localhost/hook' ) && false === $guard::is_safe_url( 'http://[::1]/hook' ),
-			'OutboundUrlGuard rejects loopback hosts (IPv4 + IPv6).'
+			'automations.ssrf_blocks_private_loopback',
+			false === $guard::is_safe_url( 'http://10.0.0.1/hook' ) && false === $guard::is_safe_url( 'http://[::1]/hook' ),
+			'OutboundUrlGuard rejects private + loopback hosts (IPv4 + IPv6).'
 		);
 
 		// Reader: unknown lookups return null (read-only, no writes).
