@@ -300,6 +300,28 @@ final class SettingsPage {
 
 		echo '</td></tr>';
 		echo '</tbody></table>';
+
+		// FluentCart e-mail link helper. WooCommerce and EDD e-mails receive the
+		// withdrawal link automatically (documented hooks). FluentCart exposes no hook
+		// to append to its e-mail body — only the merge-tag, which the merchant inserts
+		// into the template — so we surface clear one-time instructions here. Shown only
+		// when we actually handle FluentCart (active + not stepping aside to a native add-on).
+		$fc_we_handle = ( 'always' === $mode ) || ( 'auto' === $mode && ! $fc_native );
+		if ( $fc_active && $fc_we_handle ) {
+			echo '<div class="wwu-ui-notice info" style="margin:0 0 8px;max-width:860px;">';
+			echo '<p style="margin:0 0 6px;"><strong>' . esc_html__( 'Add the withdrawal link to FluentCart e-mails (optional)', 'wwu-withdrawal-button' ) . '</strong></p>';
+			echo '<p class="description" style="margin:0 0 8px;">' . esc_html__( 'WooCommerce and Easy Digital Downloads order e-mails get the withdrawal link automatically. FluentCart does not let plugins add content to its e-mails automatically, so to include the link in your FluentCart order e-mails add this shortcode once to your receipt template:', 'wwu-withdrawal-button' ) . '</p>';
+			echo '<p style="margin:0 0 8px;"><code style="user-select:all;padding:3px 8px;background:#f0f0f1;border-radius:4px;">{{wwu.recesso_url}}</code></p>';
+			echo '<details class="wwu-wb-clause"><summary><strong>' . esc_html__( 'How to add it (3 steps)', 'wwu-withdrawal-button' ) . '</strong></summary>';
+			echo '<ol class="description" style="max-width:760px;margin:8px 0 0 18px;">';
+			echo '<li>' . esc_html__( 'In FluentCart open Settings → Emails and edit your order receipt / order confirmation notification.', 'wwu-withdrawal-button' ) . '</li>';
+			echo '<li>' . esc_html__( 'Switch the body to "Customized Body", then use the shortcode picker ({;}) above the editor — or simply paste the shortcode above where you want the link to appear.', 'wwu-withdrawal-button' ) . '</li>';
+			echo '<li>' . esc_html__( 'Save. FluentCart replaces the shortcode with the consumer\'s personal, pre-authenticated withdrawal link when the e-mail is sent.', 'wwu-withdrawal-button' ) . '</li>';
+			echo '</ol>';
+			echo '<p class="description" style="max-width:760px;margin-top:8px;">' . esc_html__( 'Optional: customers can always reach the withdrawal from the FluentCart "Right of withdrawal" portal page and the public form, regardless of the e-mail.', 'wwu-withdrawal-button' ) . '</p>';
+			echo '</details>';
+			echo '</div>';
+		}
 	}
 
 	/**

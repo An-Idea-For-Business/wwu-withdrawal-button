@@ -3,7 +3,36 @@
 All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); the project uses Semantic Versioning.
 
-## [Unreleased]
+## [1.0.0] — 2026-06-17 — First stable release
+
+Promotes the alpha series to the first **stable** release, for the EU withdrawal-button
+mandate that applies from **19 June 2026**. No functional change from `1.0.0-alpha.45`:
+the External services disclosure in `readme.txt` was clarified (the optional RFC 3161 /
+eIDAS provider and the optional outbound webhook are now spelled out, both off by
+default), and translations were reconciled with the Crowdin TMS after PR #20 — all six
+locales 545/545, `.mo` recompiled. The consolidated feature set is summarised in
+`readme.txt`.
+
+### FluentCart e-mail link helper + verified email-reachability matrix (1.0.0-alpha.45, 2026-06-16)
+Closes the loop on **withdrawal-link reachability in transactional e-mails** across all three platforms — and
+documents *why*, per each platform's official API. Verified state:
+
+- **WooCommerce** — the withdrawal link is added **automatically** to every customer order e-mail
+  (`woocommerce_email_after_order_table`), gated by eligibility, as a pre-authenticated guest link. (Already shipped.)
+- **Easy Digital Downloads** — added **automatically** to the purchase-receipt e-mail (`edd_order_receipt` 3.2.0+ /
+  `edd_purchase_receipt` legacy, de-duplicated). (Already shipped.)
+- **FluentCart** — re-verified against FluentCart's current developer docs (June 2026): FluentCart exposes **no PHP
+  hook** to auto-append content to its e-mail bodies (the only mechanism is the template editor + shortcodes). So
+  auto-injection isn't possible *per their documentation*. Instead, **Settings → FluentCart** now shows a clear,
+  optional **one-time setup helper**: it surfaces the `{{wwu.recesso_url}}` merge-tag with copy-ready code + a
+  3-step guide (Settings → Emails → Customized Body → shortcode picker `{;}` → Save), shown only when FluentCart is
+  active and this plugin actually handles it (not stepping aside to a native add-on). This turns the "manual but
+  supported" path into a 30-second task while staying 100% within FluentCart's documented API.
+
+**Legal framing:** Art. 11a(1) mandates the function on the **online interface** (the site) — covered by the My
+Account/order area + the permanent public page; **Recital 37** *suggests* "hyperlinks leading the consumer to the
+withdrawal function" (e-mails), which we satisfy automatically on WC + EDD and via the documented merge-tag on
+FluentCart. No new hooks invented. 7 new admin strings, all 6 locales 100% (545/545). PHP `php -l` clean.
 
 ### Automations: read-only REST API + signed outbound webhook (1.0.0-alpha.44, 2026-06-16)
 External systems (Zapier / Make / n8n / a CRM / helpdesk) can now **read** withdrawal requests and be
