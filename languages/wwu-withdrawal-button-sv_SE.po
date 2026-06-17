@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WWU Withdrawal Button\n"
 "Report-Msgid-Bugs-To: https://webwakeup.it/wwu-withdrawal-button/\n"
-"POT-Creation-Date: 2026-06-16 14:16+0000\n"
+"POT-Creation-Date: 2026-06-17 11:15+0000\n"
 "PO-Revision-Date: 2026-06-15 00:00+0000\n"
 "Last-Translator: WWU translate workflow (sv draft — pending native review)\n"
 "Language-Team: WebWakeUp\n"
@@ -269,8 +269,8 @@ msgid "Next"
 msgstr "Nästa"
 
 #: src/Admin/ConsentRecordsPage.php:200 src/Admin/DashboardPage.php:287
-#: src/Admin/RequestsDashboard.php:400 src/Admin/SettingsPage.php:494
-#: src/Admin/SettingsPage.php:998 src/REST/Authentication.php:55
+#: src/Admin/RequestsDashboard.php:400 src/Admin/SettingsPage.php:516
+#: src/Admin/SettingsPage.php:1020 src/REST/Authentication.php:55
 #: src/REST/Authentication.php:102
 msgid "Insufficient permissions."
 msgstr "Otillräckliga behörigheter."
@@ -903,6 +903,31 @@ msgstr "Konsument"
 msgid "Enable debug"
 msgstr "Aktivera felsökning"
 
+#: src/Admin/SettingsPage.php:1000
+msgid "(stored — leave the field blank to keep it)"
+msgstr "(sparad — lämna fältet tomt för att behålla den)"
+
+#: src/Admin/SettingsPage.php:1002
+msgid "Paste your own secret, or tick “Generate” below"
+msgstr "Klistra in din egen hemlighet, eller kryssa i ”Generera” nedan"
+
+#: src/Admin/SettingsPage.php:1003
+msgid "Generate a new random secret on save"
+msgstr "Generera en ny slumpmässig hemlighet vid sparande"
+
+#: src/Admin/SettingsPage.php:1005
+msgid ""
+"Each delivery is signed: <code>X-WWU-WB-Signature: sha256=HMAC-SHA256(body, "
+"secret)</code>, with <code>X-WWU-WB-Event</code> and a unique <code>X-WWU-WB-"
+"Delivery</code> id. Verify the signature on your side to trust the payload. "
+"The secret is never shown again in full and never written to logs."
+msgstr ""
+"Varje leverans signeras: <code>X-WWU-WB-Signature: sha256=HMAC-SHA256(body, "
+"secret)</code>, med <code>X-WWU-WB-Event</code> och ett unikt <code>X-WWU-WB-"
+"Delivery</code>-id. Verifiera signaturen på din sida för att lita på "
+"nyttolasten. Hemligheten visas aldrig mer i sin helhet och skrivs aldrig "
+"till loggar."
+
 #: src/Admin/SettingsPage.php:102
 msgid ""
 "Collect runtime diagnostics and expose the /debug REST endpoints + Inspector."
@@ -1096,7 +1121,7 @@ msgstr ""
 "stoppas. Ärendetavlan påminner dig oavsett."
 
 #: src/Admin/SettingsPage.php:243 src/Admin/SettingsPage.php:297
-#: src/Admin/SettingsPage.php:766
+#: src/Admin/SettingsPage.php:788
 msgid "Show example"
 msgstr "Visa exempel"
 
@@ -1202,15 +1227,57 @@ msgstr ""
 "att inaktivera vår FluentCart-hantering nu, eller Alltid för att behålla vår "
 "oavsett tillägg."
 
-#: src/Admin/SettingsPage.php:333
+#: src/Admin/SettingsPage.php:312
+msgid "Add the withdrawal link to FluentCart e-mails (optional)"
+msgstr "Lägg till ångerlänken i FluentCart-e-postmeddelanden (valfritt)"
+
+#: src/Admin/SettingsPage.php:313
+msgid ""
+"WooCommerce and Easy Digital Downloads order e-mails get the withdrawal link "
+"automatically. FluentCart does not let plugins add content to its e-mails "
+"automatically, so to include the link in your FluentCart order e-mails add "
+"this shortcode once to your receipt template:"
+msgstr "Order-e-post från WooCommerce och Easy Digital Downloads får ångerlänken automatiskt. FluentCart tillåter inte att tillägg lägger till innehåll i sina e-postmeddelanden automatiskt, så för att inkludera länken i dina FluentCart-ordermejl lägger du till denna shortcode en gång i din kvittomall:"
+
+#: src/Admin/SettingsPage.php:315
+msgid "How to add it (3 steps)"
+msgstr "Så här lägger du till den (3 steg)"
+
+#: src/Admin/SettingsPage.php:317
+msgid ""
+"In FluentCart open Settings → Emails and edit your order receipt / order "
+"confirmation notification."
+msgstr "I FluentCart, öppna Inställningar → E-post och redigera din kvitto- / orderbekräftelsenotis."
+
+#: src/Admin/SettingsPage.php:318
+msgid ""
+"Switch the body to \"Customized Body\", then use the shortcode picker ({;}) "
+"above the editor — or simply paste the shortcode above where you want the "
+"link to appear."
+msgstr "Ändra brödtexten till \"Customized Body\" och använd sedan shortcode-väljaren ({;}) ovanför redigeraren — eller klistra helt enkelt in shortcoden ovan där du vill att länken ska visas."
+
+#: src/Admin/SettingsPage.php:319
+msgid ""
+"Save. FluentCart replaces the shortcode with the consumer's personal, pre-"
+"authenticated withdrawal link when the e-mail is sent."
+msgstr "Spara. FluentCart ersätter shortcoden med konsumentens personliga, förautentiserade ångerlänk när e-postmeddelandet skickas."
+
+#: src/Admin/SettingsPage.php:321
+msgid ""
+"Optional: customers can always reach the withdrawal from the FluentCart "
+"\"Right of withdrawal\" portal page and the public form, regardless of the e-"
+"mail."
+msgstr "Valfritt: kunder kan alltid nå ångerrätten från FluentCart-portalsidan ”Ångerrätt” och det offentliga formuläret, oavsett e-postmeddelandet."
+
+#: src/Admin/SettingsPage.php:355
 msgid "Consumer guidance"
 msgstr "Konsumentinformation"
 
-#: src/Admin/SettingsPage.php:336
+#: src/Admin/SettingsPage.php:358
 msgid "Withdrawal period (days)"
 msgstr "Ångerfristen (dagar)"
 
-#: src/Admin/SettingsPage.php:338
+#: src/Admin/SettingsPage.php:360
 msgid ""
 "The legal minimum is 14. You may grant MORE (e.g. 30) as a voluntary "
 "extension — the figure shown to customers updates accordingly. You cannot "
@@ -1220,11 +1287,11 @@ msgstr ""
 "frivillig förlängning — det tal som visas för kunderna uppdateras i enlighet "
 "med detta. Du kan inte ange mindre än 14."
 
-#: src/Admin/SettingsPage.php:341
+#: src/Admin/SettingsPage.php:363
 msgid "Custom guidance text"
 msgstr "Anpassad informationstext"
 
-#: src/Admin/SettingsPage.php:342
+#: src/Admin/SettingsPage.php:364
 msgid ""
 "Leave empty to use the built-in explanation. Paste your own to fully replace "
 "it — e.g. to spell out exemptions for event tickets or services started "
@@ -1234,7 +1301,7 @@ msgstr ""
 "för att ersätta den helt — t.ex. för att specificera undantag för "
 "evenemangsbiljetter eller tjänster som påbörjas omedelbart."
 
-#: src/Admin/SettingsPage.php:343
+#: src/Admin/SettingsPage.php:365
 msgid ""
 "When set, this replaces the default \"how withdrawal works\" block shown to "
 "customers. Basic HTML is allowed. You are responsible for its legal accuracy "
@@ -1245,7 +1312,7 @@ msgstr ""
 "Du ansvarar för att innehållet är juridiskt korrekt — håll det "
 "sanningsenligt och avskräck inte från frånträde."
 
-#: src/Admin/SettingsPage.php:344
+#: src/Admin/SettingsPage.php:366
 msgid ""
 "For products with no right of withdrawal (e.g. dated event tickets, "
 "immediate-access digital content), the proper fix is to exempt them per Art. "
@@ -1257,11 +1324,11 @@ msgstr ""
 "undanta dem enligt Art. 59 — se den kommande funktionen Undantag. Dölj inte "
 "bara knappen utan de juridiska förutsättningarna."
 
-#: src/Admin/SettingsPage.php:349
+#: src/Admin/SettingsPage.php:371
 msgid "Custom exemption note"
 msgstr "Anpassad undantagsnotis"
 
-#: src/Admin/SettingsPage.php:350
+#: src/Admin/SettingsPage.php:372
 msgid ""
 "Leave empty to use the built-in note. When set, this replaces the default "
 "text shown to consumers when an order is exempt under Art. 59 (e.g. digital "
@@ -1273,7 +1340,7 @@ msgstr ""
 "enligt art. 59 (t.ex. digitalt innehåll med omedelbar åtkomst) och förklarar "
 "varför ångerknappen saknas."
 
-#: src/Admin/SettingsPage.php:351
+#: src/Admin/SettingsPage.php:373
 msgid ""
 "Shown to the consumer instead of the default \"The right of withdrawal does "
 "not apply …\" message. Basic HTML allowed. The note only appears when the "
@@ -1285,11 +1352,11 @@ msgstr ""
 "bekräftats undantagen enligt de art. 59-regler du konfigurerat — aldrig på "
 "vanliga beställningar."
 
-#: src/Admin/SettingsPage.php:352
+#: src/Admin/SettingsPage.php:374
 msgid "Show default note example"
 msgstr "Visa exempel på standardnotis"
 
-#: src/Admin/SettingsPage.php:354
+#: src/Admin/SettingsPage.php:376
 msgid ""
 "The right of withdrawal does not apply to this order: every item falls under "
 "a statutory exception to the 14-day right (Digital content with immediate "
@@ -1301,15 +1368,15 @@ msgstr ""
 "åtkomst — Art. 16(1)(m) CRD / Art. 59(1)(o) CdC), som du uttryckligen "
 "godkände i kassan."
 
-#: src/Admin/SettingsPage.php:373
+#: src/Admin/SettingsPage.php:395
 msgid "Receipt & evidence"
 msgstr "Kvitto och bevisning"
 
-#: src/Admin/SettingsPage.php:376
+#: src/Admin/SettingsPage.php:398
 msgid "Attach PDF receipt"
 msgstr "Bifoga PDF-kvitto"
 
-#: src/Admin/SettingsPage.php:378
+#: src/Admin/SettingsPage.php:400
 msgid ""
 "Attach a PDF copy to the acknowledgement email (the email itself is always "
 "the durable medium)."
@@ -1317,7 +1384,7 @@ msgstr ""
 "Bifoga en PDF-kopia till bekräftelsemailet (mailet självt är alltid det "
 "varaktiga mediet)."
 
-#: src/Admin/SettingsPage.php:380
+#: src/Admin/SettingsPage.php:402
 msgid ""
 "PDF library not detected — PDF receipts are currently disabled (the email "
 "still works). Install the plugin from the official ZIP to enable PDFs."
@@ -1326,19 +1393,19 @@ msgstr ""
 "inaktiverade (mailet fungerar fortfarande). Installera insticksprogrammet "
 "från den officiella ZIP-filen för att aktivera PDF:er."
 
-#: src/Admin/SettingsPage.php:384
+#: src/Admin/SettingsPage.php:406
 msgid "Notification email"
 msgstr "Notifieringsmail"
 
-#: src/Admin/SettingsPage.php:386
+#: src/Admin/SettingsPage.php:408
 msgid "Where to notify you of new withdrawal requests."
 msgstr "Var du ska meddelas om nya ångerrättsärenden."
 
-#: src/Admin/SettingsPage.php:389
+#: src/Admin/SettingsPage.php:411
 msgid "Evidence retention (years)"
 msgstr "Bevisbevarandetid (år)"
 
-#: src/Admin/SettingsPage.php:391
+#: src/Admin/SettingsPage.php:413
 msgid ""
 "How long to keep the immutable log (default 10 — the contract limitation "
 "period)."
@@ -1346,24 +1413,24 @@ msgstr ""
 "Hur länge den oföränderliga loggen ska sparas (standard 10 — den "
 "avtalsrättsliga preskriptionstiden)."
 
-#: src/Admin/SettingsPage.php:403
+#: src/Admin/SettingsPage.php:425
 msgid "Trusted timestamp"
 msgstr "Betrodd tidsstämpel"
 
-#: src/Admin/SettingsPage.php:406
+#: src/Admin/SettingsPage.php:428
 msgid "OpenTimestamps (free, Bitcoin-anchored — recommended)"
 msgstr "OpenTimestamps (gratis, Bitcoin-förankrad — rekommenderas)"
 
-#: src/Admin/SettingsPage.php:407
+#: src/Admin/SettingsPage.php:429
 msgid "RFC 3161 timestamp authority (immediate; eIDAS-qualified options)"
 msgstr ""
 "RFC 3161-tidsstämpelutfärdare (omedelbar; eIDAS-kvalificerade alternativ)"
 
-#: src/Admin/SettingsPage.php:408
+#: src/Admin/SettingsPage.php:430
 msgid "None (the hash chain alone is the evidence)"
 msgstr "Ingen (hash-kedjan ensam är bevisningen)"
 
-#: src/Admin/SettingsPage.php:414
+#: src/Admin/SettingsPage.php:436
 msgid ""
 "Only a one-way hash leaves your site — never personal data. OpenTimestamps "
 "anchors to Bitcoin (free, ~hours). RFC 3161 gets an immediate signed token "
@@ -1373,11 +1440,11 @@ msgstr ""
 "OpenTimestamps förankrar till Bitcoin (gratis, ~timmar). RFC 3161 erhåller "
 "en omedelbar signerad token från en tidsstämpelutfärdare."
 
-#: src/Admin/SettingsPage.php:418
+#: src/Admin/SettingsPage.php:440
 msgid "RFC 3161 — TSA endpoint"
 msgstr "RFC 3161 — TSA-slutpunkt"
 
-#: src/Admin/SettingsPage.php:420
+#: src/Admin/SettingsPage.php:442
 msgid ""
 "Free, no account: <code>http://timestamp.sectigo.com/qualified</code> (eIDAS-"
 "qualified) or <code>http://timestamp.digicert.com</code>. For a national "
@@ -1390,19 +1457,19 @@ msgstr ""
 "Universign, FNMT, SwissSign) klistra in deras RFC 3161-slutpunkt och fyll i "
 "uppgifterna nedan."
 
-#: src/Admin/SettingsPage.php:423
+#: src/Admin/SettingsPage.php:445
 msgid "RFC 3161 — credentials (optional)"
 msgstr "RFC 3161 — uppgifter (valfritt)"
 
-#: src/Admin/SettingsPage.php:424
+#: src/Admin/SettingsPage.php:446
 msgid "Username (only for account-based QTSPs)"
 msgstr "Användarnamn (bara för kontobaserade QTSP:er)"
 
-#: src/Admin/SettingsPage.php:425
+#: src/Admin/SettingsPage.php:447
 msgid "Password — leave blank to keep the saved one"
 msgstr "Lösenord — lämna tomt för att behålla det sparade"
 
-#: src/Admin/SettingsPage.php:426
+#: src/Admin/SettingsPage.php:448
 msgid ""
 "Basic-auth username/password, only required by paid qualified providers. "
 "Free TSAs need none. The password is stored on your server and never shown "
@@ -1412,11 +1479,11 @@ msgstr ""
 "kvalificerade leverantörer. Gratis TSA:er behöver inga. Lösenordet lagras på "
 "din server och visas aldrig igen."
 
-#: src/Admin/SettingsPage.php:431
+#: src/Admin/SettingsPage.php:453
 msgid "My Account tab slug"
 msgstr "URL-slug för Mina sidor-fliken"
 
-#: src/Admin/SettingsPage.php:433
+#: src/Admin/SettingsPage.php:455
 msgid ""
 "The URL slug of the \"Right of withdrawal\" tab in the customer account. "
 "Change only if it conflicts."
@@ -1424,15 +1491,15 @@ msgstr ""
 "URL-slugen för fliken \"Ångerrätt\" i kundkontot. Ändra bara om den "
 "kolliderar."
 
-#: src/Admin/SettingsPage.php:438
+#: src/Admin/SettingsPage.php:460
 msgid "Email preview"
 msgstr "E-postförhandsvisning"
 
-#: src/Admin/SettingsPage.php:439
+#: src/Admin/SettingsPage.php:461
 msgid "Preview the acknowledgement email"
 msgstr "Förhandsgranska bekräftelsemailet"
 
-#: src/Admin/SettingsPage.php:440
+#: src/Admin/SettingsPage.php:462
 msgid ""
 "Opens a sample of the email the consumer receives. On WooCommerce it uses "
 "your store's email branding (header, footer, colours) exactly as it will be "
@@ -1442,7 +1509,7 @@ msgstr ""
 "din butiks e-postformgivning (sidhuvud, sidfot, färger) precis som det "
 "kommer att skickas."
 
-#: src/Admin/SettingsPage.php:457
+#: src/Admin/SettingsPage.php:479
 msgid ""
 "Free, Bitcoin-anchored, no account — the default. Proof completes after a "
 "block (~hours)."
@@ -1450,7 +1517,7 @@ msgstr ""
 "Gratis, Bitcoin-förankrad, inget konto — standardalternativet. Beviset "
 "slutförs efter ett block (~timmar)."
 
-#: src/Admin/SettingsPage.php:458
+#: src/Admin/SettingsPage.php:480
 msgid ""
 "Free RFC 3161. Its /qualified endpoint is eIDAS-qualified and needs no "
 "account — recommended free option."
@@ -1458,14 +1525,14 @@ msgstr ""
 "Gratis RFC 3161. Dess /qualified-slutpunkt är eIDAS-kvalificerad och behöver "
 "inget konto — rekommenderat gratisalternativ."
 
-#: src/Admin/SettingsPage.php:459
+#: src/Admin/SettingsPage.php:481
 msgid ""
 "Free RFC 3161 timestamp authority, no account: http://timestamp.digicert.com"
 msgstr ""
 "Gratis RFC 3161-tidsstämpelutfärdare, inget konto: http://"
 "timestamp.digicert.com"
 
-#: src/Admin/SettingsPage.php:460
+#: src/Admin/SettingsPage.php:482
 msgid ""
 "Italian eIDAS-qualified timestamp (marca temporale). Paid account; widely "
 "accepted in Italy."
@@ -1473,38 +1540,38 @@ msgstr ""
 "Italiensk eIDAS-kvalificerad tidsstämpel (marca temporale). Betalkonto; "
 "allmänt accepterad i Italien."
 
-#: src/Admin/SettingsPage.php:461
+#: src/Admin/SettingsPage.php:483
 msgid "Italian eIDAS-qualified timestamp. Paid account."
 msgstr "Italiensk eIDAS-kvalificerad tidsstämpel. Betalkonto."
 
-#: src/Admin/SettingsPage.php:462
+#: src/Admin/SettingsPage.php:484
 msgid "German eIDAS-qualified timestamp (Bundesdruckerei). Account required."
 msgstr "Tysk eIDAS-kvalificerad tidsstämpel (Bundesdruckerei). Konto krävs."
 
-#: src/Admin/SettingsPage.php:463
+#: src/Admin/SettingsPage.php:485
 msgid "French eIDAS-qualified timestamp. Account required."
 msgstr "Fransk eIDAS-kvalificerad tidsstämpel. Konto krävs."
 
-#: src/Admin/SettingsPage.php:464
+#: src/Admin/SettingsPage.php:486
 msgid ""
 "Spanish eIDAS-qualified timestamp (national mint). Registration required."
 msgstr ""
 "Spansk eIDAS-kvalificerad tidsstämpel (nationell myntverket). Registrering "
 "krävs."
 
-#: src/Admin/SettingsPage.php:465
+#: src/Admin/SettingsPage.php:487
 msgid "Swiss ZertES-qualified timestamp. Account required."
 msgstr "Schweizisk ZertES-kvalificerad tidsstämpel. Konto krävs."
 
-#: src/Admin/SettingsPage.php:469
+#: src/Admin/SettingsPage.php:491
 msgid "Timestamp providers — which to choose"
 msgstr "Tidsstämpelleverantörer — vilket ska man välja"
 
-#: src/Admin/SettingsPage.php:473
+#: src/Admin/SettingsPage.php:495
 msgid "site"
 msgstr "webbplats"
 
-#: src/Admin/SettingsPage.php:476
+#: src/Admin/SettingsPage.php:498
 msgid ""
 "Any RFC 3161 authority works — paste its endpoint above and add credentials "
 "if it is account-based. Running OpenTimestamps and an RFC 3161 token "
@@ -1514,19 +1581,19 @@ msgstr ""
 "ovan och lägg till uppgifter om det är kontobaserat. Att köra OpenTimestamps "
 "och en RFC 3161-token tillsammans ger två oberoende bevis."
 
-#: src/Admin/SettingsPage.php:530
+#: src/Admin/SettingsPage.php:552
 msgid "Sample Customer"
 msgstr "Exempelkund"
 
-#: src/Admin/SettingsPage.php:532
+#: src/Admin/SettingsPage.php:554
 msgid "Sample product × 1"
 msgstr "Exempelprodukt × 1"
 
-#: src/Admin/SettingsPage.php:559
+#: src/Admin/SettingsPage.php:581
 msgid "Appearance — Custom CSS"
 msgstr "Utseende — Anpassad CSS"
 
-#: src/Admin/SettingsPage.php:560
+#: src/Admin/SettingsPage.php:582
 msgid ""
 "Paste CSS to restyle any element of the withdrawal flow on your site. It is "
 "loaded after the plugin styles, so it always wins. Tip: override the CSS "
@@ -1538,11 +1605,11 @@ msgstr ""
 "Tips: åsidosätt CSS-variablerna nedan för snabba färg-/formändringar, eller "
 "rikta in dig på klasserna för full kontroll."
 
-#: src/Admin/SettingsPage.php:561
+#: src/Admin/SettingsPage.php:583
 msgid "Compliance note:"
 msgstr "Regelefterlevnadsanmärkning:"
 
-#: src/Admin/SettingsPage.php:561
+#: src/Admin/SettingsPage.php:583
 msgid ""
 "the withdrawal button must stay legible and prominent (Art. 11a). Do not "
 "hide it, shrink it, or reduce its contrast."
@@ -1550,183 +1617,187 @@ msgstr ""
 "ångerrätt-knappen måste förbli läsbar och tydlig (Art. 11a). Dölj den inte, "
 "krympa den inte eller minska dess kontrast."
 
-#: src/Admin/SettingsPage.php:567
+#: src/Admin/SettingsPage.php:589
 msgid "Button background color"
 msgstr "Knappens bakgrundsfärg"
 
-#: src/Admin/SettingsPage.php:568
+#: src/Admin/SettingsPage.php:590
 msgid "Button text color"
 msgstr "Knappens textfärg"
 
-#: src/Admin/SettingsPage.php:569
+#: src/Admin/SettingsPage.php:591
 msgid "Button focus outline color"
 msgstr "Knappens fokuskonturfärg"
 
-#: src/Admin/SettingsPage.php:570
+#: src/Admin/SettingsPage.php:592
 msgid "Button corner radius"
 msgstr "Knappens hörnradie"
 
-#: src/Admin/SettingsPage.php:571
+#: src/Admin/SettingsPage.php:593
 msgid "Input/result corner radius"
 msgstr "Inmatnings-/resultatets hörnradie"
 
-#: src/Admin/SettingsPage.php:572
+#: src/Admin/SettingsPage.php:594
 msgid "Button padding"
 msgstr "Knappens utfyllnad"
 
-#: src/Admin/SettingsPage.php:573
+#: src/Admin/SettingsPage.php:595
 msgid "Button font size"
 msgstr "Knappens teckenstorlek"
 
-#: src/Admin/SettingsPage.php:574
+#: src/Admin/SettingsPage.php:596
 msgid "Button font weight"
 msgstr "Knappens teckensnittsvikt"
 
-#: src/Admin/SettingsPage.php:575
+#: src/Admin/SettingsPage.php:597
 msgid "Button border"
 msgstr "Knappens kant"
 
-#: src/Admin/SettingsPage.php:576
+#: src/Admin/SettingsPage.php:598
 msgid "Form max width"
 msgstr "Formulärets maxbredd"
 
-#: src/Admin/SettingsPage.php:577
+#: src/Admin/SettingsPage.php:599
 msgid "Input border color"
 msgstr "Inmatningsfältets kantfärg"
 
-#: src/Admin/SettingsPage.php:578
+#: src/Admin/SettingsPage.php:600
 msgid "Input padding"
 msgstr "Inmatningsfältets utfyllnad"
 
-#: src/Admin/SettingsPage.php:579
+#: src/Admin/SettingsPage.php:601
 msgid "Field label weight"
 msgstr "Fältetikett-vikt"
 
-#: src/Admin/SettingsPage.php:580
+#: src/Admin/SettingsPage.php:602
 msgid "Helper/note text color"
 msgstr "Hjälp-/anteckningstextfärg"
 
-#: src/Admin/SettingsPage.php:581
+#: src/Admin/SettingsPage.php:603
 msgid "Success message colors"
 msgstr "Framgångsmeddelandets färger"
 
-#: src/Admin/SettingsPage.php:582
+#: src/Admin/SettingsPage.php:604
 msgid "Error message colors"
 msgstr "Felmeddelandets färger"
 
-#: src/Admin/SettingsPage.php:583
+#: src/Admin/SettingsPage.php:605
 msgid "Status-notice colors"
 msgstr "Statusmeddelandets färger"
 
-#: src/Admin/SettingsPage.php:584
+#: src/Admin/SettingsPage.php:606
 msgid "Vertical spacing rhythm"
 msgstr "Vertikalt avståndsmönster"
 
-#: src/Admin/SettingsPage.php:589
+#: src/Admin/SettingsPage.php:611
 msgid "Wrapper around the withdrawal button"
 msgstr "Omslutning runt ångerrätt-knappen"
 
-#: src/Admin/SettingsPage.php:590
+#: src/Admin/SettingsPage.php:612
 msgid "Every button/CTA (withdraw, continue, confirm)"
 msgstr "Varje knapp/CTA (frånträde, fortsätt, bekräfta)"
 
-#: src/Admin/SettingsPage.php:591
+#: src/Admin/SettingsPage.php:613
 msgid "The Step-1 \"Continue\" button"
 msgstr "Knappen \"Fortsätt\" i steg 1"
 
-#: src/Admin/SettingsPage.php:592
+#: src/Admin/SettingsPage.php:614
 msgid "The statutory \"Confirm withdrawal\" button"
 msgstr "Den lagstadgade knappen \"Bekräfta frånträde\""
 
-#: src/Admin/SettingsPage.php:593
+#: src/Admin/SettingsPage.php:615
 msgid "The \"X days left\" note next to the button"
 msgstr "Anteckningen \"X dagar kvar\" bredvid knappen"
 
-#: src/Admin/SettingsPage.php:594
+#: src/Admin/SettingsPage.php:616
 msgid "The withdrawal form container"
 msgstr "Ångerformulärsbehållaren"
 
-#: src/Admin/SettingsPage.php:595
+#: src/Admin/SettingsPage.php:617
 msgid "The form heading"
 msgstr "Formulärrubriken"
 
-#: src/Admin/SettingsPage.php:596
+#: src/Admin/SettingsPage.php:618
 msgid "Each field row (label + input)"
 msgstr "Varje fältrad (etikett + inmatning)"
 
-#: src/Admin/SettingsPage.php:597
+#: src/Admin/SettingsPage.php:619
 msgid "The actions row holding a button"
 msgstr "Åtgärdsraden med en knapp"
 
-#: src/Admin/SettingsPage.php:598
+#: src/Admin/SettingsPage.php:620
 msgid "The Step-2 confirmation block + its intro text"
 msgstr "Bekräftelseblocket i steg 2 + dess introduktionstext"
 
-#: src/Admin/SettingsPage.php:599
+#: src/Admin/SettingsPage.php:621
 msgid "The result message (success / error states)"
 msgstr "Resultatmeddelandet (lyckade / felstatus)"
 
-#: src/Admin/SettingsPage.php:600
+#: src/Admin/SettingsPage.php:622
 msgid "The \"request status\" notice on an order"
 msgstr "Meddelandet om \"ärendestatus\" på en beställning"
 
-#: src/Admin/SettingsPage.php:601
+#: src/Admin/SettingsPage.php:623
 msgid "Generic inline notice"
 msgstr "Generellt infogat meddelande"
 
-#: src/Admin/SettingsPage.php:602
+#: src/Admin/SettingsPage.php:624
 msgid "The Annex I-B model form block"
 msgstr "Blocket för standardformulär (bilaga I-B)"
 
-#: src/Admin/SettingsPage.php:603
+#: src/Admin/SettingsPage.php:625
 msgid "The pre-contractual info block"
 msgstr "Blocket för förköpsinformation"
 
-#: src/Admin/SettingsPage.php:606
+#: src/Admin/SettingsPage.php:628
 msgid "CSS reference — variables & classes"
 msgstr "CSS-referens — variabler och klasser"
 
-#: src/Admin/SettingsPage.php:608
+#: src/Admin/SettingsPage.php:630
 msgid "CSS variables (quick overrides)"
 msgstr "CSS-variabler (snabba åsidosättanden)"
 
-#: src/Admin/SettingsPage.php:609
+#: src/Admin/SettingsPage.php:631
 msgid "Variable"
 msgstr "Variabel"
 
-#: src/Admin/SettingsPage.php:609
+#: src/Admin/SettingsPage.php:631
 msgid "Default"
 msgstr "Standard"
 
-#: src/Admin/SettingsPage.php:609
+#: src/Admin/SettingsPage.php:631
 msgid "Controls"
 msgstr "Kontroller"
 
-#: src/Admin/SettingsPage.php:615
+#: src/Admin/SettingsPage.php:637
 msgid "Classes (full control)"
 msgstr "Klasser (full kontroll)"
 
-#: src/Admin/SettingsPage.php:616
+#: src/Admin/SettingsPage.php:638
 msgid "Class"
 msgstr "Klass"
 
-#: src/Admin/SettingsPage.php:616
+#: src/Admin/SettingsPage.php:638
 msgid "Targets"
 msgstr "Mål"
-
-#: src/Admin/SettingsPage.php:622
-msgid "Examples"
-msgstr "Exempel"
 
 #: src/Admin/SettingsPage.php:64
 msgid "WWU Withdrawal Button — Settings"
 msgstr "WWU Withdrawal Button — Inställningar"
 
-#: src/Admin/SettingsPage.php:649
+#: src/Admin/SettingsPage.php:644
+msgid "Examples"
+msgstr "Exempel"
+
+#: src/Admin/SettingsPage.php:67
+msgid "Settings saved."
+msgstr "Inställningar sparade."
+
+#: src/Admin/SettingsPage.php:671
 msgid "Exemptions (Art. 59)"
 msgstr "Undantag (Art. 59)"
 
-#: src/Admin/SettingsPage.php:650
+#: src/Admin/SettingsPage.php:672
 msgid ""
 "The right of withdrawal applies <strong>by default to every product</"
 "strong>, including digital goods and services. <strong>Physical products "
@@ -1749,7 +1820,7 @@ msgstr ""
 "specifikt skäl nedan genom att ange produkt-ID:n och/eller kategori-ID:n "
 "(kommaseparerade)."
 
-#: src/Admin/SettingsPage.php:652
+#: src/Admin/SettingsPage.php:674
 msgid ""
 "For the two conditional reasons the plugin <strong>captures the consent "
 "first, then hides the button</strong>: on the <strong>WooCommerce checkout</"
@@ -1774,7 +1845,7 @@ msgstr ""
 "konsumenten bryter förseglingen efter leverans, så de döljs aldrig "
 "automatiskt."
 
-#: src/Admin/SettingsPage.php:654
+#: src/Admin/SettingsPage.php:676
 msgid ""
 "The stored consent is <strong>evidence to discharge your burden of proof</"
 "strong> (Art. 6(9) Dir. 2011/83/EU; GDPR accountability Art. 5(2)) — not a "
@@ -1791,15 +1862,11 @@ msgstr ""
 "gäller inte undantaget. Se insticksprogrammets juridiska anmärkning för den "
 "fullständiga grunden."
 
-#: src/Admin/SettingsPage.php:67
-msgid "Settings saved."
-msgstr "Inställningar sparade."
-
-#: src/Admin/SettingsPage.php:675
+#: src/Admin/SettingsPage.php:697
 msgid "Conditional — these need the consumer's consent"
 msgstr "Villkorade — dessa kräver konsumentens samtycke"
 
-#: src/Admin/SettingsPage.php:676
+#: src/Admin/SettingsPage.php:698
 msgid ""
 "Tag here only digital content with immediate access and services fully "
 "performed. The button is hidden ONLY after the consumer consents at "
@@ -1809,11 +1876,11 @@ msgstr ""
 "fullständigt utförts. Knappen döljs BARA efter att konsumenten samtycker vid "
 "kassan; annars stannar den kvar (säkerhetsmarginal)."
 
-#: src/Admin/SettingsPage.php:680
+#: src/Admin/SettingsPage.php:702
 msgid "Unconditional — exempt by nature (no consent)"
 msgstr "Villkorslösa — undantagna av naturen (inget samtycke)"
 
-#: src/Admin/SettingsPage.php:681
+#: src/Admin/SettingsPage.php:703
 msgid ""
 "These have no right of withdrawal by law (custom-made, perishable, dated "
 "events, …). Tagged products hide the button with no checkbox."
@@ -1822,11 +1889,11 @@ msgstr ""
 "datumspecifika evenemang, …). Taggade produkter döljer knappen utan "
 "kryssruta."
 
-#: src/Admin/SettingsPage.php:685
+#: src/Admin/SettingsPage.php:707
 msgid "Seal-based — assess on return (never auto-hidden)"
 msgstr "Förseglingsbaserade — bedöm vid retur (aldrig automatiskt dolda)"
 
-#: src/Admin/SettingsPage.php:686
+#: src/Admin/SettingsPage.php:708
 msgid ""
 "These depend on the consumer unsealing after delivery, which cannot be known "
 "at order time. Tag them, but the button stays; assess on return."
@@ -1835,7 +1902,7 @@ msgstr ""
 "inte kan fastställas vid beställningstillfället. Tagga dem, men knappen "
 "stannar; bedöm vid retur."
 
-#: src/Admin/SettingsPage.php:707
+#: src/Admin/SettingsPage.php:729
 msgid "%d configured"
 msgid_plural "%d configured"
 msgstr[0] "%d konfigurerad"
@@ -1845,39 +1912,43 @@ msgstr[1] "%d konfigurerade"
 msgid "General"
 msgstr "Allmänt"
 
-#: src/Admin/SettingsPage.php:748
-msgid "needs consent"
-msgstr "kräver samtycke"
-
-#: src/Admin/SettingsPage.php:750
-msgid "not auto-hidden"
-msgstr "inte automatiskt dold"
-
 #: src/Admin/SettingsPage.php:76
 msgid "Enable withdrawal function"
 msgstr "Aktivera ångerfunktionen"
 
-#: src/Admin/SettingsPage.php:762
+#: src/Admin/SettingsPage.php:770
+msgid "needs consent"
+msgstr "kräver samtycke"
+
+#: src/Admin/SettingsPage.php:772
+msgid "not auto-hidden"
+msgstr "inte automatiskt dold"
+
+#: src/Admin/SettingsPage.php:78
+msgid "Show the withdrawal button to eligible consumers."
+msgstr "Visa ångerrätt-knappen för berättigade konsumenter."
+
+#: src/Admin/SettingsPage.php:784
 msgid "Product IDs"
 msgstr "Produkt-ID:n"
 
-#: src/Admin/SettingsPage.php:762
+#: src/Admin/SettingsPage.php:784
 msgid "e.g. 12, 84"
 msgstr "t.ex. 12, 84"
 
-#: src/Admin/SettingsPage.php:763
+#: src/Admin/SettingsPage.php:785
 msgid "Category IDs"
 msgstr "Kategori-ID:n"
 
-#: src/Admin/SettingsPage.php:763
+#: src/Admin/SettingsPage.php:785
 msgid "e.g. 5"
 msgstr "t.ex. 5"
 
-#: src/Admin/SettingsPage.php:770
+#: src/Admin/SettingsPage.php:792
 msgid "How the plugin enforces this:"
 msgstr "Hur insticksprogrammet tillämpar detta:"
 
-#: src/Admin/SettingsPage.php:770
+#: src/Admin/SettingsPage.php:792
 msgid ""
 "on the WooCommerce / FluentCart checkout a required acknowledgement tick-box "
 "is added automatically. The button stays visible until the consumer ticks "
@@ -1892,61 +1963,57 @@ msgstr ""
 "leverera en bekräftelse på ett varaktigt medium (e-post) till konsumenten "
 "innan åtkomst börjar."
 
-#: src/Admin/SettingsPage.php:775
+#: src/Admin/SettingsPage.php:797
 msgid "Preview what the consumer sees"
 msgstr "Förhandsgranska vad konsumenten ser"
 
-#: src/Admin/SettingsPage.php:777
+#: src/Admin/SettingsPage.php:799
 msgid "At checkout, the buyer must tick:"
 msgstr "Vid kassan måste köparen kryssa i:"
 
-#: src/Admin/SettingsPage.php:78
-msgid "Show the withdrawal button to eligible consumers."
-msgstr "Visa ångerrätt-knappen för berättigade konsumenter."
-
-#: src/Admin/SettingsPage.php:780
+#: src/Admin/SettingsPage.php:802
 msgid "And receives this confirmation e-mail:"
 msgstr "Och tar emot detta bekräftelsemail:"
 
-#: src/Admin/SettingsPage.php:821
+#: src/Admin/SettingsPage.php:843
 msgid "Exemptions status"
 msgstr "Undantagsstatus"
 
-#: src/Admin/SettingsPage.php:827
+#: src/Admin/SettingsPage.php:849
 msgid "%d reason configured"
 msgid_plural "%d reasons configured"
 msgstr[0] "%d skäl konfigurerat"
 msgstr[1] "%d skäl konfigurerade"
 
-#: src/Admin/SettingsPage.php:835
+#: src/Admin/SettingsPage.php:857
 msgid "%1$d product IDs, %2$d category IDs"
 msgstr "%1$d produkt-ID:n, %2$d kategori-ID:n"
 
-#: src/Admin/SettingsPage.php:842
+#: src/Admin/SettingsPage.php:864
 msgid "IP capture: on"
 msgstr "IP-insamling: på"
 
-#: src/Admin/SettingsPage.php:842
+#: src/Admin/SettingsPage.php:864
 msgid "IP capture: off"
 msgstr "IP-insamling: av"
 
-#: src/Admin/SettingsPage.php:848
+#: src/Admin/SettingsPage.php:870
 msgid "Retention: %d years"
 msgstr "Bevarandetid: %d år"
 
-#: src/Admin/SettingsPage.php:854
+#: src/Admin/SettingsPage.php:876
 msgid "IP purge last ran %s ago"
 msgstr "IP-rensning kördes senast för %s sedan"
 
-#: src/Admin/SettingsPage.php:855
+#: src/Admin/SettingsPage.php:877
 msgid "IP purge: not run yet (runs daily)"
 msgstr "IP-rensning: har inte körts ännu (körs dagligen)"
 
-#: src/Admin/SettingsPage.php:871
+#: src/Admin/SettingsPage.php:893
 msgid "Event tickets (a specific date)"
 msgstr "Evenemangsbiljetter (ett specifikt datum)"
 
-#: src/Admin/SettingsPage.php:872
+#: src/Admin/SettingsPage.php:894
 msgid ""
 "A ticket for an event tied to a specific date has NO right of withdrawal "
 "(Art. 59(1)(n)). Tag it under \"Accommodation / transport / leisure on a "
@@ -1958,11 +2025,11 @@ msgstr ""
 "ett specifikt datum\" i gruppen Villkorslösa — knappen döljs, ingen "
 "kryssruta."
 
-#: src/Admin/SettingsPage.php:876
+#: src/Admin/SettingsPage.php:898
 msgid "Digital downloads & recordings"
 msgstr "Digitala nedladdningar och inspelningar"
 
-#: src/Admin/SettingsPage.php:877
+#: src/Admin/SettingsPage.php:899
 msgid ""
 "Content the buyer downloads or streams immediately is a CONDITIONAL "
 "exemption (Art. 59(1)(o)): tag it under \"Digital content with immediate "
@@ -1978,11 +2045,11 @@ msgstr ""
 "knappen. (En prenumeration/ett medlemskap: den initiala beställningen "
 "behåller rätten; den digitala åtkomsten är del 59(1)(o).)"
 
-#: src/Admin/SettingsPage.php:881
+#: src/Admin/SettingsPage.php:903
 msgid "Live sessions (e.g. Zoom)"
 msgstr "Live-sessioner (t.ex. Zoom)"
 
-#: src/Admin/SettingsPage.php:882
+#: src/Admin/SettingsPage.php:904
 msgid ""
 "A dated live session (e.g. a webinar on a fixed date) → treat like an event "
 "ticket: \"leisure on a specific date\" (Unconditional). A session that "
@@ -1995,11 +2062,11 @@ msgstr ""
 "evenemangsdatum → \"Tjänst som fullständigt utförts\" (Villkorad, kräver "
 "samtycke)."
 
-#: src/Admin/SettingsPage.php:886
+#: src/Admin/SettingsPage.php:908
 msgid "Services performed immediately"
 msgstr "Tjänster som utförs omedelbart"
 
-#: src/Admin/SettingsPage.php:887
+#: src/Admin/SettingsPage.php:909
 msgid ""
 "A service that begins at once and is fully performed → \"Service fully "
 "performed\" (Art. 59(1)(a), Conditional). The buyer consents at checkout; "
@@ -2011,11 +2078,11 @@ msgstr ""
 "kassan; undantaget gäller bara när tjänsten är fullständigt utförd (delvis → "
 "proportionell avräkning, rätten kvarstår)."
 
-#: src/Admin/SettingsPage.php:891
+#: src/Admin/SettingsPage.php:913
 msgid "Physical goods"
 msgstr "Fysiska varor"
 
-#: src/Admin/SettingsPage.php:892
+#: src/Admin/SettingsPage.php:914
 msgid ""
 "Nothing to do — physical products always keep the 14-day right and always "
 "show the button. Only tag the specific exceptions (custom-made, perishable, "
@@ -2025,23 +2092,23 @@ msgstr ""
 "och visar alltid knappen. Tagga bara de specifika undantagen (skräddarsydda, "
 "färskvaror, förseglad hygien) under det matchande skälet."
 
-#: src/Admin/SettingsPage.php:897
+#: src/Admin/SettingsPage.php:919
 msgid "What do you sell? (quick guide)"
 msgstr "Vad säljer du? (snabbguide)"
 
-#: src/Admin/SettingsPage.php:904
+#: src/Admin/SettingsPage.php:926
 msgid "→ Go to the matching group below"
 msgstr "→ Gå till den matchande gruppen nedan"
 
-#: src/Admin/SettingsPage.php:920
+#: src/Admin/SettingsPage.php:942
 msgid "Advanced (legacy auto-detect + privacy)"
 msgstr "Avancerat (äldre automatisk identifiering + integritet)"
 
-#: src/Admin/SettingsPage.php:923
+#: src/Admin/SettingsPage.php:945
 msgid "Auto-exclude delivered digital (legacy)"
 msgstr "Automatiskt undanta levererat digitalt innehåll (äldre)"
 
-#: src/Admin/SettingsPage.php:923
+#: src/Admin/SettingsPage.php:945
 msgid ""
 "Treat virtual/downloadable items on completed orders as exempt. OFF by "
 "default — the proper path is the \"Digital content with immediate access\" "
@@ -2051,11 +2118,11 @@ msgstr ""
 "undantagna. AV som standard — rätt tillvägagångssätt är skälet \"Digitalt "
 "innehåll med omedelbar åtkomst\" med samtyckesregistrering."
 
-#: src/Admin/SettingsPage.php:925
+#: src/Admin/SettingsPage.php:947
 msgid "Store consumer IP with the consent"
 msgstr "Lagra konsumentens IP-adress med samtycket"
 
-#: src/Admin/SettingsPage.php:925
+#: src/Admin/SettingsPage.php:947
 msgid ""
 "Record the IP address alongside each captured consent as corroborating "
 "evidence. Stored only on the order (anonymised automatically after the "
@@ -2068,101 +2135,99 @@ msgstr ""
 "minimera personuppgifter — den godkända texten, dess hash och tidsstämpeln "
 "kvarstår."
 
-#: src/Admin/SettingsPage.php:945
+#: src/Admin/SettingsPage.php:967
 msgid "Integrations (automations)"
 msgstr "Integrationer (automatiseringar)"
 
-#: src/Admin/SettingsPage.php:946
+#: src/Admin/SettingsPage.php:968
 msgid ""
 "Connect external systems (Zapier, Make, n8n, a CRM or helpdesk) to your "
 "withdrawal requests. Reading is done with a WordPress Application Password; "
 "a webhook can also notify your endpoint the moment a withdrawal is "
 "confirmed. The consumer IP is never exposed — only a row hash, for integrity "
 "checks."
-msgstr "Anslut externa system (Zapier, Make, n8n, ett CRM eller en helpdesk) till dina ångerärenden. Läsning sker med ett WordPress-applikationslösenord; en webhook kan dessutom meddela din endpoint i samma stund som en ångerrätt bekräftas. Konsumentens IP-adress exponeras aldrig — endast en radhash, för integritetskontroller."
-
-#: src/Admin/SettingsPage.php:950
-msgid "Read API"
-msgstr "Läs-API"
-
-#: src/Admin/SettingsPage.php:951
-msgid ""
-"Authenticate with a WordPress Application Password (Users → Profile → "
-"Application Passwords) over HTTPS. The user needs the plugin admin "
-"capability. These endpoints are read-only:"
-msgstr "Autentisera med ett WordPress-applikationslösenord (Användare → Profil → Applikationslösenord) över HTTPS. Användaren behöver pluginets administratörsbehörighet. Dessa endpoints är skrivskyddade:"
-
-#: src/Admin/SettingsPage.php:953
-msgid "list confirmed requests (paginated)."
-msgstr "lista bekräftade ärenden (sidindelat)."
-
-#: src/Admin/SettingsPage.php:954
-msgid "one request (with the consumer email + any partial product selection)."
-msgstr "ett ärende (med konsumentens e-post + eventuellt delvis produkturval)."
-
-#: src/Admin/SettingsPage.php:955
-msgid "per-order withdrawal status."
-msgstr "ångerstatus per order."
-
-#: src/Admin/SettingsPage.php:957
-msgid ""
-"There is no endpoint to create a withdrawal: a withdrawal is the consumer’s "
-"own legal declaration and cannot be filed on their behalf via the API."
-msgstr "Det finns ingen endpoint för att skapa en ångerrätt: en ångerrätt är konsumentens egen rättsliga förklaring och kan inte lämnas in å deras vägnar via API:et."
-
-#: src/Admin/SettingsPage.php:964
-msgid "Webhook on confirmed withdrawal"
-msgstr "Webhook vid bekräftad ångerrätt"
-
-#: src/Admin/SettingsPage.php:966
-msgid ""
-"POST a signed JSON payload to my endpoint when a withdrawal is confirmed."
-msgstr "Skickar (POST) en signerad JSON-nyttolast till min endpoint när en ångerrätt bekräftas."
-
-#: src/Admin/SettingsPage.php:967
-msgid ""
-"Delivered asynchronously, so the consumer is never kept waiting. Payload: "
-"event, request_uid, platform, order_ref, order_number, consumer_email, "
-"status, country, within_window, created_at, row_hash."
-msgstr "Levereras asynkront, så att konsumenten aldrig får vänta. Nyttolast: event, request_uid, platform, order_ref, order_number, consumer_email, status, country, within_window, created_at, row_hash."
+msgstr ""
+"Anslut externa system (Zapier, Make, n8n, ett CRM eller en helpdesk) till "
+"dina ångerärenden. Läsning sker med ett WordPress-applikationslösenord; en "
+"webhook kan dessutom meddela din endpoint i samma stund som en ångerrätt "
+"bekräftas. Konsumentens IP-adress exponeras aldrig — endast en radhash, för "
+"integritetskontroller."
 
 #: src/Admin/SettingsPage.php:97
 msgid "Debug"
 msgstr "Debug"
 
-#: src/Admin/SettingsPage.php:970
+#: src/Admin/SettingsPage.php:972
+msgid "Read API"
+msgstr "Läs-API"
+
+#: src/Admin/SettingsPage.php:973
+msgid ""
+"Authenticate with a WordPress Application Password (Users → Profile → "
+"Application Passwords) over HTTPS. The user needs the plugin admin "
+"capability. These endpoints are read-only:"
+msgstr ""
+"Autentisera med ett WordPress-applikationslösenord (Användare → Profil → "
+"Applikationslösenord) över HTTPS. Användaren behöver pluginets "
+"administratörsbehörighet. Dessa endpoints är skrivskyddade:"
+
+#: src/Admin/SettingsPage.php:975
+msgid "list confirmed requests (paginated)."
+msgstr "lista bekräftade ärenden (sidindelat)."
+
+#: src/Admin/SettingsPage.php:976
+msgid "one request (with the consumer email + any partial product selection)."
+msgstr "ett ärende (med konsumentens e-post + eventuellt delvis produkturval)."
+
+#: src/Admin/SettingsPage.php:977
+msgid "per-order withdrawal status."
+msgstr "ångerstatus per order."
+
+#: src/Admin/SettingsPage.php:979
+msgid ""
+"There is no endpoint to create a withdrawal: a withdrawal is the consumer’s "
+"own legal declaration and cannot be filed on their behalf via the API."
+msgstr ""
+"Det finns ingen endpoint för att skapa en ångerrätt: en ångerrätt är "
+"konsumentens egen rättsliga förklaring och kan inte lämnas in å deras vägnar "
+"via API:et."
+
+#: src/Admin/SettingsPage.php:986
+msgid "Webhook on confirmed withdrawal"
+msgstr "Webhook vid bekräftad ångerrätt"
+
+#: src/Admin/SettingsPage.php:988
+msgid ""
+"POST a signed JSON payload to my endpoint when a withdrawal is confirmed."
+msgstr ""
+"Skickar (POST) en signerad JSON-nyttolast till min endpoint när en ångerrätt "
+"bekräftas."
+
+#: src/Admin/SettingsPage.php:989
+msgid ""
+"Delivered asynchronously, so the consumer is never kept waiting. Payload: "
+"event, request_uid, platform, order_ref, order_number, consumer_email, "
+"status, country, within_window, created_at, row_hash."
+msgstr ""
+"Levereras asynkront, så att konsumenten aldrig får vänta. Nyttolast: event, "
+"request_uid, platform, order_ref, order_number, consumer_email, status, "
+"country, within_window, created_at, row_hash."
+
+#: src/Admin/SettingsPage.php:992
 msgid "Endpoint URL"
 msgstr "Endpoint-URL"
 
-#: src/Admin/SettingsPage.php:972
+#: src/Admin/SettingsPage.php:994
 msgid ""
 "HTTPS recommended. Internal, loopback and cloud-metadata addresses are "
 "refused (SSRF protection)."
-msgstr "HTTPS rekommenderas. Interna adresser, loopback- och molnmetadata-adresser avvisas (SSRF-skydd)."
+msgstr ""
+"HTTPS rekommenderas. Interna adresser, loopback- och molnmetadata-adresser "
+"avvisas (SSRF-skydd)."
 
-#: src/Admin/SettingsPage.php:975
+#: src/Admin/SettingsPage.php:997
 msgid "Signing secret"
 msgstr "Signeringshemlighet"
-
-#: src/Admin/SettingsPage.php:978
-msgid "(stored — leave the field blank to keep it)"
-msgstr "(sparad — lämna fältet tomt för att behålla den)"
-
-#: src/Admin/SettingsPage.php:980
-msgid "Paste your own secret, or tick “Generate” below"
-msgstr "Klistra in din egen hemlighet, eller kryssa i ”Generera” nedan"
-
-#: src/Admin/SettingsPage.php:981
-msgid "Generate a new random secret on save"
-msgstr "Generera en ny slumpmässig hemlighet vid sparande"
-
-#: src/Admin/SettingsPage.php:983
-msgid ""
-"Each delivery is signed: <code>X-WWU-WB-Signature: sha256=HMAC-SHA256(body, "
-"secret)</code>, with <code>X-WWU-WB-Event</code> and a unique <code>X-WWU-WB-"
-"Delivery</code> id. Verify the signature on your side to trust the payload. "
-"The secret is never shown again in full and never written to logs."
-msgstr "Varje leverans signeras: <code>X-WWU-WB-Signature: sha256=HMAC-SHA256(body, secret)</code>, med <code>X-WWU-WB-Event</code> och ett unikt <code>X-WWU-WB-Delivery</code>-id. Verifiera signaturen på din sida för att lita på nyttolasten. Hemligheten visas aldrig mer i sin helhet och skrivs aldrig till loggar."
 
 #: src/Core/Install.php:298 src/Frontend/FluentCartPortal.php:115
 #: src/Frontend/FluentCartPortal.php:142 src/Frontend/WooMyAccount.php:93

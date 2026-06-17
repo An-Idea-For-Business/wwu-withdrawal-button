@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0-alpha.44
+Stable tag: 1.0.0-alpha.45
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -70,6 +70,9 @@ The plugin records withdrawal declarations (name, identified contract, email, IP
 For the conditional Art. 59 exemptions, the plugin also stores the consumer's checkout consent + acknowledgement (the agreed wording, a hash, the date/time and — unless you turn it off — the IP) as evidence to prove the exemption is valid. The lawful basis is **legitimate interest** (GDPR Art. 6(1)(f); defence of legal claims), **not** GDPR consent. The IP lives only on the order (never in the immutable log) and is automatically anonymised once the retention period lapses. A second ready-to-paste privacy clause is generated for this processing.
 
 == Changelog ==
+
+= 1.0.0-alpha.45 =
+* **Withdrawal link in your order e-mails — across all platforms.** The withdrawal link is added **automatically** to WooCommerce customer order e-mails and to the Easy Digital Downloads purchase-receipt e-mail (so customers can reach the withdrawal straight from the e-mail, as the law's Recital 37 suggests). FluentCart doesn't allow plugins to add content to its e-mails automatically, so **Settings → FluentCart** now shows a short, optional one-time guide to drop the `{{wwu.recesso_url}}` shortcode into your FluentCart receipt template (copy-ready, 3 steps). Nothing invasive, nothing required — the withdrawal is always reachable from the account/portal and the public page regardless.
 
 = 1.0.0-alpha.44 =
 * **Connect your withdrawal requests to other tools (automations).** A new **Settings → Integrations** section adds two optional, developer-friendly ways to plug withdrawal requests into Zapier, Make, n8n, a CRM or a helpdesk. (1) A **read-only REST API** to list requests and check an order's withdrawal status, authenticated with a standard WordPress Application Password. (2) An optional **webhook** that sends a signed notification to your endpoint the moment a withdrawal is confirmed. Privacy-first: the consumer's IP address is never exposed — only a verification hash. There is intentionally no way to *create* a withdrawal via the API (a withdrawal is the consumer's own legal act). Passed a dedicated security audit before release. No change to the withdrawal flow itself.
