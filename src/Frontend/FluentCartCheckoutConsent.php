@@ -43,6 +43,10 @@ declare( strict_types=1 );
 
 namespace WWU\WithdrawalButton\Frontend;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use WWU\WithdrawalButton\Core\Services;
 use WWU\WithdrawalButton\Core\Settings;
 use WWU\WithdrawalButton\Domain\ConsentText;
@@ -52,10 +56,6 @@ use WWU\WithdrawalButton\Mail\ExemptionConfirmation;
 use WWU\WithdrawalButton\Platform\FluentCartAdapter;
 use WWU\WithdrawalButton\Security\ClientInfo;
 use WWU\WithdrawalButton\Storage\LogRepository;
-
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 
 /**
  * Checkout-consent capture (FluentCart).

@@ -123,12 +123,8 @@ final class ExemptionNoteRenderer {
 		$refs_str   = implode( ', ', array_unique( $ref_parts ) );
 
 		if ( '' !== $refs_str ) {
-			/*
-			 * translators: 1: comma-separated exception label(s), e.g. "Digital content
-			 * with immediate access"; 2: legal reference(s), e.g. "Art. 59(1)(o) CdC /
-			 * Art. 16(1)(m) CRD".
-			 */
 			$inner = sprintf(
+				/* translators: 1: comma-separated exception label(s), e.g. "Digital content with immediate access"; 2: legal reference(s), e.g. "Art. 59(1)(o) CdC / Art. 16(1)(m) CRD". */
 				esc_html__(
 					'The right of withdrawal does not apply to this order: every item falls under a statutory exception to the 14-day right (%1$s — %2$s), which you expressly agreed to at checkout.',
 					'wwu-withdrawal-button'
@@ -137,11 +133,9 @@ final class ExemptionNoteRenderer {
 				esc_html( $refs_str )
 			);
 		} else {
-			/*
-			 * Fallback for reasons (e.g. 'manual') that carry no legal reference.
-			 * translators: %s: comma-separated exception label(s).
-			 */
+			// Fallback for reasons (e.g. 'manual') that carry no legal reference.
 			$inner = sprintf(
+				/* translators: %s: comma-separated exception label(s). */
 				esc_html__(
 					'The right of withdrawal does not apply to this order: every item falls under a statutory exception to the 14-day right (%s), which you expressly agreed to at checkout.',
 					'wwu-withdrawal-button'

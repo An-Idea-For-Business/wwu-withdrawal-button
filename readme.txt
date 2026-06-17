@@ -8,7 +8,7 @@ Stable tag: 1.1.0
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-The EU online withdrawal button (Art. 11a / Art. 54-bis) for WooCommerce, FluentCart & Easy Digital Downloads: statutory two-step withdrawal, durable-medium receipt, immutable log.
+EU statutory withdrawal button (Art. 11a) for WooCommerce, FluentCart & EDD: two-step flow, durable-medium receipt, tamper-evident log.
 
 Product page & documentation: https://webwakeup.it/wwu-withdrawal-button/
 
@@ -157,7 +157,7 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 == Upgrade Notice ==
 
 = 1.0.0-alpha.43 =
-Adds a consumer-facing "why exempt" note: on orders exempt under Art. 59 the plugin now explains why the withdrawal button is absent (naming the exception + legal reference), instead of showing nothing. Editable, fail-safe, only on genuinely exempt orders. No change to button visibility. No breaking changes.
+Adds a consumer-facing "why exempt" note: on orders exempt under Art. 59, the plugin explains why the withdrawal button is absent (the exception + legal reference) instead of showing nothing. Editable, fail-safe, only on genuinely exempt orders; button visibility unchanged.
 
 = 1.0.0-alpha.42 =
 Adds an optional "which products" checklist to the withdrawal form (partial withdrawal), shown on the receipt and the Requests dashboard. Optional and fail-open — leaving it empty withdraws from the whole order as before. No breaking changes.
@@ -172,7 +172,7 @@ Restores the admin UI styling (the UI Kit is now bundled) and adds Swedish (stat
 Critical fix: the Settings page no longer crashes with a "Class … Settings not found" fatal. Update recommended for everyone. Also includes a mail-safety fix and a WooCommerce/conflict audit.
 
 = 1.0.0-alpha.38 =
-Subscriptions are now handled correctly: the withdrawal button shows on the initial order only and is hidden on renewals (one 14-day right per contract). Two opt-in toggles under Settings → Subscriptions. If you run WooCommerce Subscriptions / FluentCart subscriptions / EDD Recurring, test on staging.
+Subscriptions are handled correctly: the button shows on the initial order only and is hidden on renewals (one 14-day right per contract). Two opt-in toggles under Settings → Subscriptions. If you use WooCommerce/FluentCart/EDD subscriptions, test on staging.
 
 = 1.0.0-alpha.37 =
 FluentCart stores can now use the `{{wwu.recesso_url}}` merge-tag in FluentCart's own e-mails. No change for WooCommerce/EDD. FluentCart users: add the tag to a template and test on staging (FluentCart's own native withdrawal feature is also coming soon).
@@ -199,7 +199,7 @@ Settings/exemptions UI overhaul + completed Italian/FR/ES/DE translations (the e
 Adds FluentCart checkout consent capture for the conditional exemptions (parity with WooCommerce). Test on a staging FluentCart store before production; fail-safe (the button stays) until the field is verified on your setup.
 
 = 1.0.0-alpha.29 =
-Completes the digital/service exemptions: durable-medium confirmation e-mail (required for the digital exemption), configurable consent retention with automatic IP anonymisation, a GDPR privacy clause and a Consent records page. Review the new clause and your retention setting. Test on staging; not yet a stable release.
+Completes the digital/service exemptions: durable-medium confirmation e-mail, configurable consent retention with automatic IP anonymisation, a GDPR privacy clause and a Consent records page. Review the new clause + retention setting. Test on staging; not yet stable.
 
 = 1.0.0-alpha.28 =
 Adds lawful consent capture at checkout for digital-immediate and service-performed exemptions. If you exempt those product types, the button is now hidden only after the consumer ticks the required acknowledgement. Test on staging; not yet a stable release.
