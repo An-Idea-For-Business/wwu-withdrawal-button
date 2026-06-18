@@ -14,17 +14,63 @@ EU statutory withdrawal button (Art. 11a) for WooCommerce, FluentCart & EDD: two
 
 Product page & documentation: https://webwakeup.it/wwu-withdrawal-button/
 
-From 19 June 2026, EU law (Directive (EU) 2023/2673, new Art. 11a of the Consumer Rights Directive; Italy: Art. 54-bis Codice del Consumo) requires online stores to provide a **withdrawal function** that lets consumers withdraw from a distance contract as easily as they concluded it.
+From 19 June 2026, EU law (Directive (EU) 2023/2673, new Art. 11a of the Consumer Rights Directive; Italy: Art. 54-bis Codice del Consumo) requires online stores to provide a **withdrawal function** that lets consumers withdraw from a distance contract as easily as they concluded it. WWU Withdrawal Button adds that function — and everything around it you need to run it and to prove you did it right — to WooCommerce, FluentCart and Easy Digital Downloads.
 
-WWU Withdrawal Button makes a WooCommerce or FluentCart store compliant out of the box:
+= How it works (in plain terms) =
 
-* A prominently displayed, legible **withdrawal button** with the exact statutory wording per language (IT, EN, DE, FR, ES — extensible).
-* A **two-step flow**: withdrawal statement, then a confirmation labelled only with the statutory words. No dark patterns, no mandatory reason.
-* An **acknowledgement of receipt on a durable medium**: immediate email + attached PDF + a permanent verifiable link, with the exact submission date and time.
-* A **tamper-evident immutable log** (append-only, hash-chained, with IP and contract data) anchored to OpenTimestamps for free trusted timestamping, with a pluggable RFC 3161 / eIDAS provider.
-* **WooCommerce (HPOS + legacy), FluentCart and Easy Digital Downloads (3.0+)** support via a common adapter.
-* **Compliance documents**: generates the Annex I-B model withdrawal form and ready clauses for Privacy / Terms / pre-contractual information.
-* Compatible with **Complianz** and **TranslatePress**; **shortcodes**, **blocks**, hooks and template overrides for customisation.
+1. An eligible customer opens their order and clicks the statutory **"Withdraw from contract here"** button — in their account, from a link in the order e-mail, or on a public page (no account needed: they look the order up with its number + e-mail).
+2. A simple **two-step form** appears: they review what they are withdrawing from (optionally ticking only some items — partial withdrawal is allowed), then confirm. No reason required, no hoops.
+3. The instant they confirm, the customer receives an **acknowledgement of receipt on a durable medium** — an e-mail, a PDF copy and a permanent verifiable link — showing exactly what was withdrawn and the precise date and time. The order is flagged "withdrawal requested".
+4. Every step is written to a **tamper-evident, append-only log** (hash-chained and timestamped) so you can prove what happened and when. You then handle the refund as usual — the plugin records that too.
+
+That is the whole customer experience. Everything below exists to make it correct, easy to run, and defensible.
+
+= For your customers =
+
+* A prominently displayed, legible button with the **exact statutory wording per language** (IT, EN, DE, FR, ES, SV — extensible).
+* The button appears where customers actually look: the **account area** (order list, order detail, a dedicated "Right of withdrawal" tab), a **link inside order e-mails**, a **public self-service page** with guest lookup, and anywhere via **shortcodes** or the **Gutenberg block**.
+* A short, reassuring **step-by-step guide** during the flow (timing, refund, returns); the wording and the withdrawal window (≥14 days — you may grant more) are editable.
+* When an order is genuinely exempt, a clear **"why is the button not here" note** explains the specific legal exception, instead of leaving the customer confused.
+* A human-readable **verification certificate** for the receipt (integrity, order, date, hash) — not raw code.
+
+= For you (the merchant) =
+
+* An onboarding **Dashboard** with a setup checklist (one-click fixes), a plain "how it works" walkthrough, and a "where the button appears / why it might not" explainer.
+* A one-click **e-mail delivery test** that detects your SMTP plugin and proves the receipt actually reaches the inbox — the #1 cause of "nothing happened".
+* A **Requests dashboard** to manage every withdrawal: status (open / processed / refunded), a chain-integrity badge, and one-click **mark processed**, **resend receipt** and **open the order to refund** (the refund is logged as proof you met the 14 days). Subscription and partial-withdrawal requests are flagged.
+* A **Compliance page**: a go-live countdown, the statutory labels in use, the document checklist with ready-to-paste clauses, and environment warnings (Complianz / cache / multilingual) to fix.
+* Receipts are **real WooCommerce e-mails** (your logo, colours, header) with a preview, and everything is styleable via a **Custom CSS** field.
+
+= Smart legal handling (so you don't have to think about it) =
+
+* **Subscriptions** — the law gives one 14-day right per contract, so the button shows on the **initial order only** and is hidden on renewals (WooCommerce Subscriptions, FluentCart, EDD Recurring). Fail-safe, with opt-in overrides.
+* **Partial withdrawal** — customers can withdraw from only some items of an order.
+* **Art. 59 exemptions** — tag products or categories by the specific statutory reason (events on a fixed date, digital content with immediate access, a service fully performed…). For the conditional reasons the plugin captures the customer's **express consent at checkout** (WooCommerce classic + block, FluentCart, EDD), stores it as evidence, sends the required durable-medium confirmation, and only then hides the button. **Physical products always keep the right** — never hidden by mistake.
+* **Applicability by country** — EU/EEA consumers only (default) or always; B2B (VAT) orders can be treated as out of scope.
+
+= Evidence, timestamps & integrity =
+
+* The immutable log is **append-only and hash-chained** (HMAC-keyed with your site secret), so tampering is detectable.
+* Free, independently-verifiable **OpenTimestamps** (Bitcoin) anchoring by default; or a **qualified eIDAS RFC 3161** timestamp (a free Sectigo endpoint, or your national authority — Aruba, InfoCert, D-Trust, Universign, FNMT, SwissSign) for stronger "data certa". Failed stamps retry automatically and any not-yet-anchored records are surfaced in the admin.
+
+= Privacy & GDPR =
+
+* The log commits to an **anonymised IP**; the full IP lives separately and is **erased after a configurable retention** (10 years by default).
+* A **Consent records** screen lists and exports the exemption consents (CSV). Two ready-to-paste privacy clauses are generated (withdrawal log + exemption-consent), on a legitimate-interest basis. The uninstaller keeps the evidence log by default (legal hold) unless you opt to erase it.
+
+= Documents & compliance =
+
+* Generates the **Annex I-B model withdrawal form** and ready clauses for **pre-contractual information, Terms & Conditions and Privacy** — and reminds you, clearly, that installing the button is **not enough**: your Terms and pre-contractual withdrawal article must be updated to describe the new button modality (the plugin gives you the exact text to paste).
+
+= Integrations & automation =
+
+* A **read-only REST API** (authenticated with a standard Application Password) to list requests and check an order's withdrawal status, plus an optional **signed webhook** (HMAC-SHA256) fired the moment a withdrawal is confirmed — for Zapier, Make, n8n, a CRM or a helpdesk. Privacy-first: the consumer's IP is never exposed. **33 documented hooks/filters** for developers.
+* Plays nicely with **Complianz**, **TranslatePress** and page-cache plugins (WP Rocket / LiteSpeed / W3TC).
+
+= Platforms & licence =
+
+* **WooCommerce (HPOS + legacy), FluentCart and Easy Digital Downloads (3.0+)** through a common adapter — one plugin for all three. On FluentCart it can step aside automatically if FluentCart ships its own native withdrawal add-on, so customers never see two buttons.
+* **Free and open source** (GPLv3) — no upsell, no tracking, no remote scripts or fonts loaded on your site. Passed a full multi-dimension security audit (0 critical / 0 high).
 
 This plugin is a technical aid to compliance and is **not legal advice**. Have your own counsel review your store's documents.
 
@@ -77,7 +123,7 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 == Changelog ==
 
 = 1.2.0 =
-* **Reminder to update your legal texts — the button is not a substitute.** Installing the withdrawal button does not change your shop's own documents, and EU law (Art. 6 of the Consumer Rights Directive) requires your Terms & Conditions of sale and your pre-contractual information to describe *how* the consumer withdraws — which now includes the new online "withdrawal button". The plugin now states this prominently on the Dashboard and the Compliance page, opens the two clauses you must paste (pre-contractual information + general terms) by default, and the ready-to-paste "How to withdraw" and pre-contractual clauses now name the button explicitly. No change to the withdrawal flow.
+* **Reminder to update your legal texts — the button is not a substitute.** Installing the withdrawal button does not change your shop's own documents, and EU law (Art. 6 of the Consumer Rights Directive) requires your Terms & Conditions of sale and your pre-contractual information to describe *how* the consumer withdraws — which now includes the new online "withdrawal button". The plugin now states this prominently on the Dashboard and the Compliance page, opens the two clauses you must paste (pre-contractual information + general terms) by default, and the ready-to-paste "How to withdraw" and pre-contractual clauses now name the button explicitly. This release also **rewrites the plugin description** to explain, in plain steps, **how the withdrawal flow works** and to showcase the **full feature set** (customer help, merchant cockpit, smart legal handling, automations, privacy tooling). No change to the withdrawal flow itself.
 
 = 1.1.1 =
 * **wordpress.org Plugin Check polish.** Removes the unused UI-kit `clipboard.js` from the package entirely (its filename collided with a WordPress-core library; it was never loaded — only the accordion, badge and utilities components are), and moves the documentation link out of the short-description block. No functional change.

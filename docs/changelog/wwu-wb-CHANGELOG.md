@@ -32,6 +32,24 @@ text to paste. No change to the withdrawal flow, storage, or evidence.
   Terms & pre-contractual withdrawal clause" note.
 - readme.txt changelog + Upgrade Notice.
 
+**Documentation overhaul (same release) — explain how it works + showcase every helpful feature.**
+On user request ("explain better how it works; put all the features that help the user, properly"):
+- `readme.txt` (wp.org) Description rewritten: a plain-language **"How it works (in 4 steps)"** walkthrough
+  + a complete, grouped feature list (For your customers / For you the merchant / Smart legal handling /
+  Evidence & timestamps / Privacy & GDPR / Documents / Integrations & automation / Platforms & licence).
+  Previously the Description was 7 terse bullets that hid the merchant cockpit, requests management,
+  automations, privacy tooling, etc.
+- `README.md` (GitHub): added the same 4-step "How it works" lead + 4 missing feature bullets (merchant
+  cockpit incl. the e-mail delivery test, readable verification certificate, privacy/GDPR by design, the
+  legal-texts reminder); status badge 1.0.0 → 1.2.0; Status section corrected (1.1.1 in wp.org review,
+  1.2.0 ships via SVN after approval).
+- `docs.html` (public docs): new **"Come funziona (in pratica)"** section (4 steps + an at-a-glance
+  summary of the full feature set, each item linking to its detailed section) + sidebar nav entries for it
+  and for the legal-docs section.
+- `landing.html`: added showcase cards for **Automazioni &amp; API**, **Privacy &amp; GDPR by design**
+  and **Gestione richieste** (the requests dashboard) — features that help the user but weren't shown.
+  (landing.html + docs.html live under `_internal/`, outside the repo — republish to webwakeup.it.)
+
 Lint: PHP 0 errors (ClauseLibrary, ComplianceStatusPage, DashboardPage). Smoke tests
 unaffected (they assert clause presence, not wording).
 

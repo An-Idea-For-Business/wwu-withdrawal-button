@@ -14,7 +14,7 @@
 
 <p align="center">
   <a href="#"><img alt="License: GPL v3" src="https://img.shields.io/badge/License-GPLv3-blue.svg"></a>
-  <img alt="Status" src="https://img.shields.io/badge/status-stable%20v1.0.0-brightgreen.svg">
+  <img alt="Status" src="https://img.shields.io/badge/status-stable%20v1.2.0-brightgreen.svg">
   <img alt="Applies from" src="https://img.shields.io/badge/applies%20from-19%20June%202026-critical.svg">
 </p>
 
@@ -32,6 +32,8 @@ This plugin makes a WooCommerce, FluentCart or Easy Digital Downloads store comp
 
 ## What it does
 
+**How it works (the customer's experience):** the customer opens their order and clicks the statutory **"withdraw from contract here"** button — in their account, from a link in the order e-mail, or on a public page with guest lookup (order number + e-mail, no account needed). A **two-step form** appears: they review what they're withdrawing from (optionally only *some* items — partial withdrawal), then confirm — no reason required, no hoops. The instant they confirm they receive an **acknowledgement of receipt on a durable medium** (e-mail + PDF + a permanent verifiable link, with the exact date and time) and the order is flagged *withdrawal requested*. Every step is written to a **tamper-evident, timestamped log**, and you handle the refund as usual (logged too). Everything below makes that flow correct, easy to run, and defensible.
+
 - ✅ **Statutory withdrawal button** in the customer's order area, with the exact legal wording per language (IT `recedere dal contratto qui`, EN `withdraw from contract here`, DE `Vertrag widerrufen`, FR `renoncer au contrat ici`, ES `desistir del contrato aquí`).
 - ✅ **Two-step flow** (statement → `conferma recesso`) — no dark patterns, no mandatory reason, as easy as buying.
 - ✅ **Durable-medium acknowledgement**: immediate email + attached **PDF** + a permanent verifiable link, reproducing the statement content and the precise submission timestamp.
@@ -44,10 +46,14 @@ This plugin makes a WooCommerce, FluentCart or Easy Digital Downloads store comp
 - ✅ **Transparency on exempt orders** (since `1.0.0-alpha.43`) — when an order is exempt under Art. 59, the consumer sees a short note explaining *why* the withdrawal button is absent (the specific statutory exception + legal reference), instead of silence. Editable + fail-safe.
 - ✅ **Configurable FluentCart handling** (since `1.0.0-alpha.41`) — FluentCart is shipping its own native withdrawal add-on; a **Settings → FluentCart** mode (Auto / Always / Off) makes this plugin step aside automatically so customers never see two buttons.
 - ✅ **Automations: read-only REST API + signed webhook** (since `1.0.0-alpha.44`) — read withdrawal requests (Application-Password auth) and receive an HMAC-signed webhook the instant a withdrawal is confirmed, to wire into Zapier / Make / n8n / a CRM. PII-first (the consumer IP is never exposed); no create-withdrawal endpoint by design. [API reference](docs/reference/wwu-wb-rest-api-REFERENCE.md).
+- ✅ **Merchant cockpit (no code needed)** — an onboarding **Dashboard** (setup checklist with one-click fixes + a one-click **e-mail delivery test** that detects your SMTP and proves receipts arrive — the #1 "nothing happened" cause), a **Requests dashboard** to manage every withdrawal (status open / processed / refunded, chain-integrity badge, one-click *mark processed* / *resend receipt* / *open the order to refund* with the refund logged as proof), and a **Compliance page** (go-live countdown, statutory labels in use, ready-to-paste clauses, environment warnings for Complianz / cache / multilingual).
+- ✅ **Readable verification certificate** — the receipt's verifiable link shows a clear certificate (integrity, order, date/time, hash), not raw code; JSON available for whoever wants it.
+- ✅ **Privacy & GDPR by design** — the immutable log commits to an **anonymised IP** while the full IP lives separately and is erased after a configurable retention (10 years by default); a **Consent records** screen lists and exports the Art. 59 exemption consents (CSV); two ready-to-paste privacy clauses are generated (legitimate-interest basis). No trackers, no remote scripts or fonts.
+- ✅ **"Update your legal texts too" reminder** (since `1.2.0`) — installing the button does **not** update your own documents. The Dashboard and Compliance page now prominently remind you to amend the withdrawal article in your **Terms & Conditions and pre-contractual information** to describe the new button modality (Art. 6 CRD), and the generated "How to withdraw" / pre-contractual clauses name the button explicitly — so you have the exact text to paste.
 
 ## Status
 
-🟢 **Stable — `v1.0.0` released.** The full withdrawal flow — statutory button, two-step confirmation, durable-medium acknowledgement (email + PDF + verifiable link), tamper-evident hash-chained log, and the compliance-document generators — ships across WooCommerce, FluentCart and Easy Digital Downloads. Latest: **[`v1.0.0`](../../releases/latest)** (see the [changelog](docs/changelog/wwu-wb-CHANGELOG.md)). Six locales at 100% (IT/EN/DE/FR/ES/SV). A **WordPress.org** directory listing is in submission. See the [roadmap](docs/plans/wwu-wb-roadmap-PLAN.md) for what's next.
+🟢 **Stable.** The full withdrawal flow — statutory button, two-step confirmation, durable-medium acknowledgement (email + PDF + verifiable link), tamper-evident hash-chained log, and the compliance-document generators — ships across WooCommerce, FluentCart and Easy Digital Downloads. Latest stable on GitHub: see the **[latest release](../../releases/latest)** and the [changelog](docs/changelog/wwu-wb-CHANGELOG.md). Six locales (IT/EN/DE/FR/ES/SV). The **`1.1.1`** build is in the **WordPress.org** manual-review queue; once approved it ships to the directory via SVN. The current **`1.2.0`** adds an "update your legal texts too" merchant reminder (your Terms & pre-contractual withdrawal article must describe the new button modality — Art. 6 CRD). See the [roadmap](docs/plans/wwu-wb-roadmap-PLAN.md) for what's next.
 
 ## Installation
 
