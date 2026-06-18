@@ -40,6 +40,16 @@ final class Install {
 	public const CRON_COMPLETE_NETWORK = 'wwu_wb_complete_network_activation';
 
 	/**
+	 * Autoloaded flag option: '1' means a one-time rewrite-rules flush is pending
+	 * on the next wp_loaded (after the WooCommerce My Account endpoint has been
+	 * registered on init). Toggled to '0' once flushed — never deleted, so the
+	 * check stays a cheap autoload-cache read with no extra DB query per request.
+	 *
+	 * @var string
+	 */
+	public const OPTION_FLUSH_PENDING = 'wwu_wb_flush_pending';
+
+	/**
 	 * Activation entry point.
 	 *
 	 * @param bool $network_wide True when "Network Activate" was used on multisite.
@@ -115,15 +125,43 @@ final class Install {
 
 		Migrator::migrate( (int) get_option( Migrator::OPTION_DB_VERSION, 0 ), (int) WWU_WB_SCHEMA_VERSION );
 
-		// Endpoint rewrite rules are registered in the frontend layer (F1+); flushing
-		// here is harmless and ensures they take effect as soon as they exist.
+		// The WooCommerce My Account withdrawal tab is a rewrite endpoint registered
+		// on `init` by the frontend layer. During this activation request the plugin
+		// boot never runs (plugins_loaded has already fired), so the endpoint is NOT
+		// registered and the flush below cannot persist its rule yet. We flush anyway
+		// (harmless) AND set a flag for a one-time deferred flush on the next
+		// wp_loaded, by which point the endpoint exists — otherwise the
+		// "/my-account/<slug>" tab 404s until the admin re-saves permalinks.
 		flush_rewrite_rules( false );
+		update_option( self::OPTION_FLUSH_PENDING, '1' );
 
 		// Daily consent-retention purge (GDPR storage limitation).
 		ConsentRetention::schedule();
 
 		// Invalidate any Complianz blocked-scripts cache so our marker is honoured.
 		\WWU\WithdrawalButton\Compat\Complianz::bust_cache();
+	}
+
+	/**
+	 * One-time deferred rewrite-rules flush, run on wp_loaded after activation.
+	 *
+	 * The activation-time flush in setup_site() runs before the My Account
+	 * endpoint is registered (the plugin boot never runs during activation, as
+	 * plugins_loaded has already fired). This callback fires on the FIRST normal
+	 * request after activation — by wp_loaded the endpoint has been registered on
+	 * init, so flushing here persists its rewrite rule and the
+	 * "/my-account/<slug>" tab resolves instead of returning a 404. Idempotent:
+	 * the flag is flipped to '0' (kept autoloaded, never deleted) so subsequent
+	 * requests are a cache-only no-op with no extra DB query.
+	 *
+	 * @return void
+	 */
+	public static function maybe_deferred_flush(): void {
+		if ( '1' !== (string) get_option( self::OPTION_FLUSH_PENDING, '0' ) ) {
+			return;
+		}
+		flush_rewrite_rules( false );
+		update_option( self::OPTION_FLUSH_PENDING, '0' );
 	}
 
 	/**

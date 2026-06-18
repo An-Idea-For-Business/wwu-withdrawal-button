@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -122,6 +122,10 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 
 == Changelog ==
 
+= 1.2.1 =
+* **Fix — the "Right of withdrawal" account tab no longer returns a 404 on a fresh install.** On WooCommerce the withdrawal tab is a rewrite endpoint; its rewrite rule was not being persisted during activation, so clicking the tab in **My Account** led to a 404 until you re-saved Permalinks. The plugin now performs a one-time rewrite-rules flush on the first page load after activation, so the tab resolves immediately. (If you already hit this: **Settings → Permalinks → Save Changes** also fixes it — no page needs to be created, the slug is a WooCommerce endpoint, not a page.)
+* **New developer filter `wwu_wb_clause_text`** to override the generated legal-clause wording (pre-contractual / terms / privacy) programmatically — applied on both the Compliance page and the `[wwu_wb_info]` shortcode. The built-in clauses are **sample templates**: copy them into your own documents and adapt them to your business (and have your counsel review them).
+
 = 1.2.0 =
 * **Reminder to update your legal texts — the button is not a substitute.** Installing the withdrawal button does not change your shop's own documents, and EU law (Art. 6 of the Consumer Rights Directive) requires your Terms & Conditions of sale and your pre-contractual information to describe *how* the consumer withdraws — which now includes the new online "withdrawal button". The plugin now states this prominently on the Dashboard and the Compliance page, opens the two clauses you must paste (pre-contractual information + general terms) by default, and the ready-to-paste "How to withdraw" and pre-contractual clauses now name the button explicitly. This release also **rewrites the plugin description** to explain, in plain steps, **how the withdrawal flow works** and to showcase the **full feature set** (customer help, merchant cockpit, smart legal handling, automations, privacy tooling). No change to the withdrawal flow itself.
 
@@ -207,6 +211,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.2.1 =
+Fixes the WooCommerce "Right of withdrawal" account tab returning a 404 on a fresh install — a one-time rewrite-rules flush now runs automatically after activation (re-saving Permalinks also fixes it). Adds a wwu_wb_clause_text filter to override the generated legal clauses.
 
 = 1.2.0 =
 Reminder: installing the button does not update your shop's legal texts. Your Terms & Conditions and pre-contractual information must describe the new withdrawal-button modality (Art. 6 CRD). The plugin now flags this and gives you the ready-to-paste clauses. No change to the flow.

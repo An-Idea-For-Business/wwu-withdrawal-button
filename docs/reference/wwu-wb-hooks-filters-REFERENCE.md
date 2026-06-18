@@ -576,6 +576,45 @@ add_filter(
 
 ---
 
+### `wwu_wb_clause_text`
+
+| | |
+|---|---|
+| **Type** | `filter` |
+| **Fire site** | `src/Legal/ClauseLibrary.php` (in `get()`) |
+
+**Signature**
+
+```php
+apply_filters( 'wwu_wb_clause_text', string $text, string $type, string $lang )
+```
+
+| Param | Type | Description |
+|---|---|---|
+| `$text` | `string` | The generated clause body, before the sample-text disclaimer is appended. |
+| `$type` | `string` | Clause type: `precontractual`, `terms`, `privacy` or `consent_privacy`. |
+| `$lang` | `string` | Two-letter language code (e.g. `it`, `en`). |
+
+**Purpose.** Overrides the wording of a generated legal clause. The built-in clauses are read-only **sample templates** (shown on the Compliance page and via the `[wwu_wb_info]` shortcode); this filter lets you inject your own business-specific wording programmatically without editing the plugin, on both surfaces. Since `1.2.1`.
+
+**Example**
+
+```php
+add_filter(
+    'wwu_wb_clause_text',
+    function ( string $text, string $type, string $lang ) {
+        if ( 'terms' === $type && 'it' === $lang ) {
+            return 'Modalità di recesso — Il cliente recede tramite il pulsante «Recedere dal contratto qui» nella propria area ordini, oppure col modulo tipo …';
+        }
+        return $text;
+    },
+    10,
+    3
+);
+```
+
+---
+
 ### `wwu_wb_consent_text`
 
 | | |
@@ -1220,6 +1259,7 @@ add_action(
 | `wwu_wb_admin_capability` | filter | Override the WordPress capability required for all admin/REST access. |
 | `wwu_wb_applicability_decision` | filter | Replace the computed applicability decision for an order. |
 | `wwu_wb_client_ip` | filter | Override the detected client IP used for guest rate-limiting. |
+| `wwu_wb_clause_text` | filter | Override a generated legal clause body (pre-contractual / terms / privacy / consent_privacy). |
 | `wwu_wb_compute_deadline` | filter | Replace the computed withdrawal deadline `DateTimeImmutable`. |
 | `wwu_wb_consent_text` | filter | Replace the statutory consent wording shown at checkout. |
 | `wwu_wb_edd_order_has_vat_number` | filter | Override B2B/VAT detection for EDD orders. |

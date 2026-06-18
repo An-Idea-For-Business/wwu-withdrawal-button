@@ -99,7 +99,7 @@ We document limitations openly. None of these block the legal compliance core �
 | [Legal reference](docs/legal/wwu-wb-legal-reference.md) | Verbatim statutory text (Art. 11a EN+IT, Art. 54-bis, Annex I-B, per-country labels) |
 | [Compliance matrix](docs/legal/wwu-wb-compliance-matrix.md) | Every legal obligation → feature → test |
 | [Exemption-consent evidence note](docs/legal/wwu-wb-exemption-consent-evidence-NOTE.md) | What the law requires for recording the Art. 59 exemption consents (burden of proof, durable-medium confirmation, retention, GDPR basis) — verified against official sources |
-| [Hooks & filters reference](docs/reference/wwu-wb-hooks-filters-REFERENCE.md) | The supported public extension API — 33 hooks (filters + actions) with signatures + examples |
+| [Hooks & filters reference](docs/reference/wwu-wb-hooks-filters-REFERENCE.md) | The supported public extension API — 34 hooks (filters + actions) with signatures + examples |
 | [REST API & webhook reference](docs/reference/wwu-wb-rest-api-REFERENCE.md) | The read-only automations API + signed outbound webhook — endpoints, auth, payload, HMAC verification |
 | [Roadmap](docs/plans/wwu-wb-roadmap-PLAN.md) | Phased implementation plan |
 | [Test checklists](docs/testing/README.md) | End-to-end "try the plugin" evaluator guides (WooCommerce / FluentCart / EDD) + exemption consent-capture checklists — runnable on a staging store by anyone |

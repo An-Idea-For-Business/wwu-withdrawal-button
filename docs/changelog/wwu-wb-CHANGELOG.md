@@ -3,6 +3,36 @@
 All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); the project uses Semantic Versioning.
 
+## [1.2.1] — 2026-06-18 — Fix My Account endpoint 404 on fresh activation + clause filter
+
+Two fixes prompted by a developer's support email (Antonio Costa):
+
+**Fix — the WooCommerce "Right of withdrawal" account tab 404s on a fresh install.**
+The My Account withdrawal tab is a rewrite endpoint (`/my-account/<endpoint_slug>`,
+default `wwu-withdrawal`) registered by `WooMyAccount` on `init` via
+`add_rewrite_endpoint()`. The activation-time `flush_rewrite_rules()` in
+`Install::setup_site()` runs *before* that endpoint is registered — during the
+activation request the plugin boot never runs (`plugins_loaded` has already fired),
+so the endpoint isn't registered and the flush can't persist its rule. Result: the
+tab 404s until the admin re-saves Permalinks. **Root cause is broad (every fresh
+install).** Fix: a one-time **deferred flush** — `Install::setup_site()` sets an
+autoloaded flag `wwu_wb_flush_pending = '1'`; a new `Install::maybe_deferred_flush()`
+hooked on `wp_loaded` (after `init` has registered the endpoint) flushes once and
+flips the flag to `'0'` (kept autoloaded, never deleted → cache-only no-op on later
+requests, zero extra query). Wired in the bootstrap after `Plugin::boot()`. Option
+added to `uninstall.php` cleanup. The slug is a **WooCommerce endpoint, not a page** —
+no page needs to be created; re-saving Permalinks is the manual workaround for
+already-affected installs.
+
+**New developer filter `wwu_wb_clause_text`** (`ClauseLibrary::get()`) — overrides a
+generated legal-clause body (precontractual / terms / privacy / consent_privacy)
+before the sample-text disclaimer is appended, on both the Compliance page and the
+`[wwu_wb_info]` shortcode. The built-in clauses remain read-only sample templates by
+design (copy + adapt them in your own documents); the filter lets developers inject
+custom wording programmatically.
+
+No DB schema change (still version 3). PHP lint clean (4 files).
+
 ## [1.2.0] — 2026-06-18 — "Update your legal texts too" merchant reminder
 
 Prompted by EU consumer lawyer Alessandro Vercellotti's public note: *the button is

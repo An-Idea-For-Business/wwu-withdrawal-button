@@ -71,6 +71,20 @@ final class ClauseLibrary {
 		}
 		$set       = self::CLAUSES[ $type ];
 		$text      = $set[ $lang ] ?? $set['en'];
+
+		/**
+		 * Filter a ready-to-paste legal clause body before the sample-text
+		 * disclaimer is appended. Lets a site replace the default wording with its
+		 * own — applies to both the Compliance admin page and the [wwu_wb_info]
+		 * shortcode output.
+		 *
+		 * @since 1.2.1
+		 * @param string $text The clause body (without the trailing disclaimer).
+		 * @param string $type Clause type: precontractual, terms, privacy or consent_privacy.
+		 * @param string $lang Two-letter language code.
+		 */
+		$text      = (string) apply_filters( 'wwu_wb_clause_text', $text, $type, $lang );
+
 		$review    = self::DISCLAIMER[ $lang ] ?? self::DISCLAIMER['en'];
 		$localised = isset( $set[ $lang ] );
 

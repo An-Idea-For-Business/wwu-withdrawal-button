@@ -41,6 +41,7 @@ function wwu_wb_uninstall_cleanup_site(): void {
 		'wwu_wb_debug',
 		'wwu_wb_webhook',
 		'wwu_wb_db_version',
+		'wwu_wb_flush_pending',
 	);
 	foreach ( $options as $option ) {
 		delete_option( $option );
