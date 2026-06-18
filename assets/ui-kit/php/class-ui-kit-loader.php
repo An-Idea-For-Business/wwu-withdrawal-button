@@ -120,7 +120,6 @@ final class WWU_UI_Kit_Loader {
 
             // ---------- Behaviour helpers ----------
             'ajax'            => array( 'css' => null,                'js' => 'ajax.js',               'needs' => array( 'core' ) ),
-            'clipboard'       => array( 'css' => null,                'js' => 'clipboard.js',          'needs' => array( 'core' ) ),
             'markdown'        => array( 'css' => null,                'js' => 'markdown.js',           'needs' => array( 'core' ) ),
             'focus-trap'      => array( 'css' => null,                'js' => 'focus-trap.js',         'needs' => array( 'core' ) ),
             'roving-tabindex' => array( 'css' => null,                'js' => 'roving-tabindex.js',    'needs' => array( 'core' ) ),
@@ -130,7 +129,7 @@ final class WWU_UI_Kit_Loader {
             'save-state'      => array( 'css' => 'save-state.css',    'js' => 'save-state.js',         'needs' => array( 'core' ) ),
 
             // ---------- Frontend-only ----------
-            'debug-bar'       => array( 'css' => 'debug-bar.css',     'js' => 'debug-bar.js',          'needs' => array( 'core', 'clipboard' ) ),
+            'debug-bar'       => array( 'css' => 'debug-bar.css',     'js' => 'debug-bar.js',          'needs' => array( 'core' ) ),
         );
     }
 

@@ -3,6 +3,22 @@
 All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); the project uses Semantic Versioning.
 
+## [1.1.1] — 2026-06-18 — wordpress.org Plugin Check polish
+
+Final Plugin Check pass before submission. No functional change.
+
+- Remove the unused UI-kit `clipboard.js` from the repo + package (its filename collided
+  with a WP-core library; it was never enqueued — only `accordion`/`badge`/`utilities`
+  are) and drop its loader entry + the `debug-bar` dependency on it. This makes the check
+  pass regardless of how the plugin is installed (repo checkout or built zip).
+- readme: move the "Product page & documentation" line out of the short-description block
+  (the wp.org parser was counting it toward the 150-char short-description limit) into the
+  Description section.
+
+The remaining `WordPress.DB.DirectDatabaseQuery` / `DirectDB.UnescapedDBParameter` notices
+are advisory false positives — every interpolated table name is `$wpdb->prefix` + a class
+constant, never user input.
+
 ## [1.1.0] — 2026-06-18 — Evidence-log hardening (security-audit follow-up)
 
 Closes the three deeper integrity/privacy findings from the 2026-06-17 audit

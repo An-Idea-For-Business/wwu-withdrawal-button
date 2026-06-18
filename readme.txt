@@ -4,15 +4,15 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 EU statutory withdrawal button (Art. 11a) for WooCommerce, FluentCart & EDD: two-step flow, durable-medium receipt, tamper-evident log.
 
-Product page & documentation: https://webwakeup.it/wwu-withdrawal-button/
-
 == Description ==
+
+Product page & documentation: https://webwakeup.it/wwu-withdrawal-button/
 
 From 19 June 2026, EU law (Directive (EU) 2023/2673, new Art. 11a of the Consumer Rights Directive; Italy: Art. 54-bis Codice del Consumo) requires online stores to provide a **withdrawal function** that lets consumers withdraw from a distance contract as easily as they concluded it.
 
@@ -75,6 +75,9 @@ The plugin records withdrawal declarations (name, identified contract, email, IP
 For the conditional Art. 59 exemptions, the plugin also stores the consumer's checkout consent + acknowledgement (the agreed wording, a hash, the date/time and — unless you turn it off — the IP) as evidence to prove the exemption is valid. The lawful basis is **legitimate interest** (GDPR Art. 6(1)(f); defence of legal claims), **not** GDPR consent. The IP lives only on the order (never in the immutable log) and is automatically anonymised once the retention period lapses. A second ready-to-paste privacy clause is generated for this processing.
 
 == Changelog ==
+
+= 1.1.1 =
+* **wordpress.org Plugin Check polish.** Removes the unused UI-kit `clipboard.js` from the package entirely (its filename collided with a WordPress-core library; it was never loaded — only the accordion, badge and utilities components are), and moves the documentation link out of the short-description block. No functional change.
 
 = 1.1.0 =
 * **Evidence-log hardening (security-audit follow-up).** The tamper-evident log is now stronger against a database-level/insider attacker and cleaner under GDPR: each row hash is **HMAC-keyed** with the site secret (so a DB-write attacker without the secret can no longer recompute a forged chain); the hash commits to the **anonymised** IP while the full IP is stored separately and **erased after the retention horizon**; RFC 3161 timestamps now **require HTTPS** and are **bound to the exact submitted digest** (a TSA/MITM cannot return a token for a different hash); failed initial timestamps are **retried automatically**, with any not-yet-anchored records surfaced in the admin. Existing logs keep verifying (each row records its chain version). No change to the withdrawal flow.
