@@ -39,11 +39,17 @@ Write-Host '==> Copying plugin files...'
 $srcLen = $Root.Length + 1
 Get-ChildItem -Path $Root -Recurse -File | ForEach-Object {
 	$rel = $_.FullName.Substring($srcLen)
+	$relUnix = $rel -replace '\\', '/'
 	$top = ($rel -split '[\\/]')[0]
 	$name = $_.Name
 	$skip = $false
 	foreach ($e in $excludes) {
-		if ($top -ieq $e -or $name -ieq $e -or ($e -like '*.dist' -and $name -like '*.dist')) { $skip = $true; break }
+		$eUnix = ($e -replace '\\', '/').TrimEnd('/')
+		# Exclude when the entry matches a top-level dir/file, a bare filename
+		# anywhere, an exact nested path, a nested directory prefix, or *.dist.
+		if ($top -ieq $e -or $name -ieq $e -or
+			$relUnix -ieq $eUnix -or $relUnix -ilike "$eUnix/*" -or
+			($e -like '*.dist' -and $name -like '*.dist')) { $skip = $true; break }
 	}
 	if (-not $skip) {
 		$dest = Join-Path $BuildDir $rel
