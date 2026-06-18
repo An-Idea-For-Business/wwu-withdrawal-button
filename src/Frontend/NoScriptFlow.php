@@ -75,6 +75,7 @@ final class NoScriptFlow {
 				__( 'Withdrawal', 'wwu-withdrawal-button' ),
 				'<p>' . esc_html__( 'Please provide your name and a valid email address.', 'wwu-withdrawal-button' ) . '</p>'
 			);
+			return;
 		}
 
 		$result = Services::instance()->withdrawal->submit_statement( $adapter, $order, $req );
@@ -136,6 +137,7 @@ final class NoScriptFlow {
 
 		if ( is_wp_error( $result ) ) {
 			$this->render_page( __( 'Withdrawal', 'wwu-withdrawal-button' ), '<p>' . esc_html( $result->get_error_message() ) . '</p>' );
+			return;
 		}
 
 		$this->render_page(

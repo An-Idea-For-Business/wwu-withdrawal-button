@@ -2,13 +2,13 @@
 Contributors: mredodos, webwakeup, anideaforbusiness
 Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
-Tested up to: 6.8
+Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-The EU online withdrawal button (Art. 11a / Art. 54-bis) for WooCommerce, FluentCart & Easy Digital Downloads: statutory two-step withdrawal, durable-medium receipt, immutable log.
+EU statutory withdrawal button (Art. 11a) for WooCommerce, FluentCart & EDD: two-step flow, durable-medium receipt, tamper-evident log.
 
 Product page & documentation: https://webwakeup.it/wwu-withdrawal-button/
 
@@ -75,6 +75,12 @@ The plugin records withdrawal declarations (name, identified contract, email, IP
 For the conditional Art. 59 exemptions, the plugin also stores the consumer's checkout consent + acknowledgement (the agreed wording, a hash, the date/time and — unless you turn it off — the IP) as evidence to prove the exemption is valid. The lawful basis is **legitimate interest** (GDPR Art. 6(1)(f); defence of legal claims), **not** GDPR consent. The IP lives only on the order (never in the immutable log) and is automatically anonymised once the retention period lapses. A second ready-to-paste privacy clause is generated for this processing.
 
 == Changelog ==
+
+= 1.1.0 =
+* **Evidence-log hardening (security-audit follow-up).** The tamper-evident log is now stronger against a database-level/insider attacker and cleaner under GDPR: each row hash is **HMAC-keyed** with the site secret (so a DB-write attacker without the secret can no longer recompute a forged chain); the hash commits to the **anonymised** IP while the full IP is stored separately and **erased after the retention horizon**; RFC 3161 timestamps now **require HTTPS** and are **bound to the exact submitted digest** (a TSA/MITM cannot return a token for a different hash); failed initial timestamps are **retried automatically**, with any not-yet-anchored records surfaced in the admin. Existing logs keep verifying (each row records its chain version). No change to the withdrawal flow.
+
+= 1.0.1 =
+* **wordpress.org readiness + security hardening.** Resolves the Plugin Check items for the directory submission: the unused `clipboard.js` UI-kit asset is no longer shipped, `composer.json` is now included alongside the bundled library, the SSRF smoke-test no longer uses a literal localhost host, and "Tested up to" is current. Plus minor hardening from a full security audit: the OpenTimestamps calls now pass through the same SSRF guard as the webhook / RFC 3161 callers (and never follow redirects), and two admin credential fields gain `wp_unslash()`. No functional change to the withdrawal flow.
 
 = 1.0.0 =
 * **First stable release**, for the EU withdrawal-button mandate that applies from **19 June 2026**. Consolidates the full feature set: the statutory two-step withdrawal flow with per-language wording (IT, EN, DE, FR, ES, SV), a durable-medium acknowledgement (email + PDF + verifiable link + OpenTimestamps), a tamper-evident hash-chained log, the Art. 59 exemptions with checkout consent capture and a consumer "why exempt" note, optional partial withdrawal, WooCommerce (HPOS + legacy) / FluentCart / Easy Digital Downloads adapters, the withdrawal link in order e-mails, a read-only REST API + signed webhook for automations, and the Annex I-B model form + ready legal clauses. All six locales fully translated (545/545). No functional change from 1.0.0-alpha.45 — the External services disclosure was clarified and translations finalised for release.
@@ -151,7 +157,7 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 == Upgrade Notice ==
 
 = 1.0.0-alpha.43 =
-Adds a consumer-facing "why exempt" note: on orders exempt under Art. 59 the plugin now explains why the withdrawal button is absent (naming the exception + legal reference), instead of showing nothing. Editable, fail-safe, only on genuinely exempt orders. No change to button visibility. No breaking changes.
+Adds a consumer-facing "why exempt" note: on orders exempt under Art. 59, the plugin explains why the withdrawal button is absent (the exception + legal reference) instead of showing nothing. Editable, fail-safe, only on genuinely exempt orders; button visibility unchanged.
 
 = 1.0.0-alpha.42 =
 Adds an optional "which products" checklist to the withdrawal form (partial withdrawal), shown on the receipt and the Requests dashboard. Optional and fail-open — leaving it empty withdraws from the whole order as before. No breaking changes.
@@ -166,7 +172,7 @@ Restores the admin UI styling (the UI Kit is now bundled) and adds Swedish (stat
 Critical fix: the Settings page no longer crashes with a "Class … Settings not found" fatal. Update recommended for everyone. Also includes a mail-safety fix and a WooCommerce/conflict audit.
 
 = 1.0.0-alpha.38 =
-Subscriptions are now handled correctly: the withdrawal button shows on the initial order only and is hidden on renewals (one 14-day right per contract). Two opt-in toggles under Settings → Subscriptions. If you run WooCommerce Subscriptions / FluentCart subscriptions / EDD Recurring, test on staging.
+Subscriptions are handled correctly: the button shows on the initial order only and is hidden on renewals (one 14-day right per contract). Two opt-in toggles under Settings → Subscriptions. If you use WooCommerce/FluentCart/EDD subscriptions, test on staging.
 
 = 1.0.0-alpha.37 =
 FluentCart stores can now use the `{{wwu.recesso_url}}` merge-tag in FluentCart's own e-mails. No change for WooCommerce/EDD. FluentCart users: add the tag to a template and test on staging (FluentCart's own native withdrawal feature is also coming soon).
@@ -193,7 +199,7 @@ Settings/exemptions UI overhaul + completed Italian/FR/ES/DE translations (the e
 Adds FluentCart checkout consent capture for the conditional exemptions (parity with WooCommerce). Test on a staging FluentCart store before production; fail-safe (the button stays) until the field is verified on your setup.
 
 = 1.0.0-alpha.29 =
-Completes the digital/service exemptions: durable-medium confirmation e-mail (required for the digital exemption), configurable consent retention with automatic IP anonymisation, a GDPR privacy clause and a Consent records page. Review the new clause and your retention setting. Test on staging; not yet a stable release.
+Completes the digital/service exemptions: durable-medium confirmation e-mail, configurable consent retention with automatic IP anonymisation, a GDPR privacy clause and a Consent records page. Review the new clause + retention setting. Test on staging; not yet stable.
 
 = 1.0.0-alpha.28 =
 Adds lawful consent capture at checkout for digital-immediate and service-performed exemptions. If you exempt those product types, the button is now hidden only after the consumer ticks the required acknowledgement. Test on staging; not yet a stable release.

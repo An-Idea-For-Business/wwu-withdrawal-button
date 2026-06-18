@@ -1098,7 +1098,7 @@ final class SettingsPage {
 			$rfc3161['endpoint'] = '';
 		}
 		$rfc3161['user']     = sanitize_text_field( (string) ( $_POST['rfc3161_user'] ?? '' ) );
-		$new_pass            = (string) ( $_POST['rfc3161_pass'] ?? '' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Basic-auth secret kept verbatim.
+		$new_pass            = (string) wp_unslash( $_POST['rfc3161_pass'] ?? '' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Basic-auth secret kept verbatim.
 		if ( '' !== $new_pass ) {
 			$rfc3161['pass'] = $new_pass;
 		}
@@ -1120,7 +1120,7 @@ final class SettingsPage {
 		$webhook['url'] = $webhook_url;
 
 		$current_secret = (string) ( $webhook['secret'] ?? '' );
-		$posted_secret  = trim( (string) ( $_POST['webhook_secret'] ?? '' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- HMAC key kept verbatim; capped below.
+		$posted_secret  = trim( (string) wp_unslash( $_POST['webhook_secret'] ?? '' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- HMAC key kept verbatim; capped below.
 		if ( Sanitizer::bool( $_POST['webhook_regenerate'] ?? '' ) ) {
 			$webhook['secret'] = Webhook::generate_secret();
 		} elseif ( '' !== $posted_secret ) {

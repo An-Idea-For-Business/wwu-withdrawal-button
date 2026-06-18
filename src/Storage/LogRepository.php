@@ -71,16 +71,24 @@ final class LogRepository {
 				$prev_hash = LogChain::genesis();
 			}
 
+			// IP handling (chain v2 / GDPR storage limitation): the hash commits to
+			// the ANONYMISED IP (data-minimised, retained permanently), while the
+			// FULL IP is stored separately in ip_full — kept for the legal window,
+			// then blanked by the retention purge. ip_full is NOT part of the hashed
+			// evidence, so erasing it later never breaks the chain.
+			$raw_ip  = (string) ( $row['ip_address'] ?? '' );
+			$anon_ip = \WWU\WithdrawalButton\Security\ClientInfo::anonymize_ip( $raw_ip );
+
 			$evidence = array(
 				'request_uid' => (string) ( $row['request_uid'] ?? '' ),
 				'platform'    => (string) ( $row['platform'] ?? '' ),
 				'order_ref'   => (string) ( $row['order_ref'] ?? '' ),
 				'event'       => (string) ( $row['event'] ?? '' ),
 				'payload'     => $payload,
-				'ip_address'  => (string) ( $row['ip_address'] ?? '' ),
+				'ip_address'  => $anon_ip,
 				'created_at'  => $created_at,
 			);
-			$row_hash = LogChain::compute( $prev_hash, $evidence );
+			$row_hash = LogChain::compute( $prev_hash, $evidence, LogChain::VERSION );
 
 			$ok = $wpdb->insert(
 				$table,
@@ -91,13 +99,15 @@ final class LogRepository {
 					'customer_email' => (string) ( $row['customer_email'] ?? '' ),
 					'event'          => $evidence['event'],
 					'payload_json'   => (string) wp_json_encode( $payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ),
-					'ip_address'     => $evidence['ip_address'],
+					'ip_address'     => $anon_ip,
+					'ip_full'        => $raw_ip,
 					'prev_hash'      => $prev_hash,
 					'row_hash'       => $row_hash,
+					'chain_version'  => LogChain::VERSION,
 					'ots_proof_id'   => isset( $row['ots_proof_id'] ) ? (int) $row['ots_proof_id'] : null,
 					'created_at'     => $created_at,
 				),
-				array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s' )
+				array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s' )
 			);
 
 			$id = $ok ? (int) $wpdb->insert_id : 0;
@@ -214,7 +224,11 @@ final class LogRepository {
 			'ip_address'  => (string) ( $row['ip_address'] ?? '' ),
 			'created_at'  => (string) ( $row['created_at'] ?? '' ),
 		);
-		$computed = LogChain::compute( (string) ( $row['prev_hash'] ?? '' ), $evidence );
+		// Verify with the formula the row was written under (1 = legacy SHA-256,
+		// 2+ = HMAC). Rows are fetched with SELECT *, so chain_version is present; a
+		// row that predates the column defaults to 1.
+		$version  = isset( $row['chain_version'] ) ? (int) $row['chain_version'] : 1;
+		$computed = LogChain::compute( (string) ( $row['prev_hash'] ?? '' ), $evidence, $version );
 		return hash_equals( $computed, (string) ( $row['row_hash'] ?? '' ) );
 	}
 
@@ -247,7 +261,7 @@ final class LogRepository {
 	public function verify_chain( int $limit = 0 ): int {
 		global $wpdb;
 		$table = LogTable::name();
-		$sql   = "SELECT id, request_uid, platform, order_ref, event, payload_json, ip_address, prev_hash, row_hash, created_at FROM {$table} ORDER BY id ASC";
+		$sql   = "SELECT id, request_uid, platform, order_ref, event, payload_json, ip_address, prev_hash, row_hash, chain_version, created_at FROM {$table} ORDER BY id ASC";
 		if ( $limit > 0 ) {
 			$sql .= ' LIMIT ' . (int) $limit;
 		}
@@ -271,7 +285,7 @@ final class LogRepository {
 				'ip_address'  => (string) $row['ip_address'],
 				'created_at'  => (string) $row['created_at'],
 			);
-			$computed = LogChain::compute( (string) $row['prev_hash'], $evidence );
+			$computed = LogChain::compute( (string) $row['prev_hash'], $evidence, isset( $row['chain_version'] ) ? (int) $row['chain_version'] : 1 );
 			if ( ! hash_equals( $computed, (string) $row['row_hash'] ) ) {
 				return (int) $row['id'];
 			}

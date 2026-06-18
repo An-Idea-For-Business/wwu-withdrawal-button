@@ -8,15 +8,19 @@
  * (Italy: ordinary 10 years, art. 2946 c.c.), so the merchant-configurable
  * `wwu_wb_settings['retention_years']` (default 10) drives it.
  *
- * What is purged: the personal data on the order meta `_wwu_wb_consent` — the
- * stored IP is anonymised once the horizon passes. The verbatim wording + its
- * SHA-256 hash are KEPT (they let the trader reconstruct exactly what was agreed
- * and are not, by themselves, identifying). The append-only hash-chained immutable
- * log is NEVER rewritten — it deliberately holds no IP for the consent events, so
- * there is nothing to purge there and the chain stays verifiable.
+ * What is purged:
+ *   - Order-meta consent records (`_wwu_wb_consent`): the stored IP is anonymised
+ *     once the horizon passes. The verbatim wording + its SHA-256 hash are KEPT
+ *     (they let the trader reconstruct what was agreed and are not, alone,
+ *     identifying).
+ *   - Immutable log: the NON-HASHED PII columns — the full IP (`ip_full`) and
+ *     `customer_email` — are blanked on withdrawal-event rows past the horizon. The
+ *     hashed evidence commits only to the ANONYMISED IP, so the chain is never
+ *     rewritten and stays verifiable. (The full IP is retained until the horizon for
+ *     legal evidence, then erased per GDPR storage limitation.)
  *
- * Consent is captured on WooCommerce today, so the sweep runs over WooCommerce
- * orders; it is a no-op when WooCommerce is absent.
+ * The log sweep is platform-agnostic; the consent-record sweep runs over WooCommerce
+ * orders (consent is captured on WooCommerce today) and is a no-op without it.
  *
  * @package WWU\WithdrawalButton
  *
@@ -87,16 +91,21 @@ final class ConsentRetention {
 	 * @return void
 	 */
 	public function purge(): void {
-		if ( ! function_exists( 'wc_get_orders' ) ) {
-			return; // Consent is captured on WooCommerce only (today).
-		}
-
 		// Record that the sweep ran (for the exemptions status panel).
 		update_option( 'wwu_wb_consent_last_purge', gmdate( 'c' ), false );
 
 		$years  = (int) ( Settings::main()['retention_years'] ?? 10 );
 		$years  = max( 1, min( 30, $years ) );
 		$cutoff = time() - ( $years * YEAR_IN_SECONDS );
+
+		// Immutable log: erase the non-hashed PII columns (full IP + customer email)
+		// on rows past the horizon. Platform-agnostic, so it runs even when
+		// WooCommerce is absent (the log can hold FluentCart / EDD rows too).
+		$this->purge_log( $cutoff );
+
+		if ( ! function_exists( 'wc_get_orders' ) ) {
+			return; // Consent records are captured on WooCommerce only (today).
+		}
 
 		$order_ids = wc_get_orders(
 			array(
@@ -163,6 +172,56 @@ final class ConsentRetention {
 
 		// If the batch was full there may be more — run again shortly.
 		if ( count( $order_ids ) >= self::BATCH ) {
+			wp_schedule_single_event( time() + ( 5 * MINUTE_IN_SECONDS ), self::CRON_HOOK );
+		}
+	}
+
+	/**
+	 * Erase the non-hashed PII columns on immutable-log rows past the retention
+	 * horizon (GDPR Art. 5(1)(e) storage limitation).
+	 *
+	 * ONLY `ip_full` (the full IP, never part of the hash) and `customer_email`
+	 * (also never hashed) are blanked. The hashed evidence — which commits to the
+	 * ANONYMISED IP and the event/contract data — is never touched, so the chain
+	 * stays verifiable. Bounded per run; re-queues if the batch was full.
+	 *
+	 * @param int $cutoff Unix timestamp; rows created before it are purged.
+	 * @return void
+	 */
+	private function purge_log( int $cutoff ): void {
+		global $wpdb;
+		$table      = \WWU\WithdrawalButton\Storage\Database\LogTable::name();
+		$cutoff_gmt = gmdate( 'Y-m-d H:i:s', $cutoff );
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery -- table name is constant-derived; all values are bound.
+		$ids = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT id FROM {$table} WHERE created_at < %s AND ( ip_full <> '' OR customer_email <> '' ) ORDER BY id ASC LIMIT %d",
+				$cutoff_gmt,
+				self::BATCH
+			)
+		);
+		if ( empty( $ids ) || ! is_array( $ids ) ) {
+			return;
+		}
+
+		foreach ( $ids as $id ) {
+			$wpdb->update(
+				$table,
+				array(
+					'ip_full'        => '',
+					'customer_email' => '',
+				),
+				array( 'id' => (int) $id ),
+				array( '%s', '%s' ),
+				array( '%d' )
+			);
+		}
+
+		Debug::log( 'retention', 'log.purged', array( 'count' => count( $ids ), 'cutoff_gmt' => $cutoff_gmt ) );
+
+		// More may remain — nudge a follow-up run (the daily cron continues anyway).
+		if ( count( $ids ) >= self::BATCH ) {
 			wp_schedule_single_event( time() + ( 5 * MINUTE_IN_SECONDS ), self::CRON_HOOK );
 		}
 	}

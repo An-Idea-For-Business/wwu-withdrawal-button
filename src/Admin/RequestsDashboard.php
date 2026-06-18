@@ -88,6 +88,25 @@ final class RequestsDashboard {
 			) . '</span></p>';
 		}
 
+		// Timestamp-anchor status: surface confirmed rows that still lack an external
+		// timestamp proof (e.g. calendars/TSA were unreachable at confirm time — the
+		// hourly cron retries them). 0 when the timestamp provider is 'none'.
+		$unanchored = ( new \WWU\WithdrawalButton\Timestamp\TimestampService() )->count_unanchored();
+		if ( $unanchored > 0 ) {
+			echo '<p><span class="wwu-wb-badge">' . esc_html(
+				sprintf(
+					/* translators: %d: number of confirmed records. */
+					_n(
+						'Timestamp: %d confirmed record is not yet externally anchored — the hourly job retries automatically.',
+						'Timestamp: %d confirmed records are not yet externally anchored — the hourly job retries automatically.',
+						$unanchored,
+						'wwu-withdrawal-button'
+					),
+					$unanchored
+				)
+			) . '</span></p>';
+		}
+
 		if ( empty( $rows ) ) {
 			echo '<p>' . esc_html__( 'No withdrawal requests yet.', 'wwu-withdrawal-button' ) . '</p></div>';
 			return;

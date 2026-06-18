@@ -76,15 +76,24 @@ final class OpenTimestampsProvider implements TimestampProvider {
 		$commitment = hash( 'sha256', $digest . $nonce, true ); // 32 raw bytes.
 
 		foreach ( $this->calendars() as $base ) {
+			$url = trailingslashit( $base ) . 'digest';
+			// SSRF guard: a filter (wwu_wb_ots_calendars) can repoint the calendar list,
+			// so re-validate at request time and never follow redirects (parity with the
+			// webhook + RFC 3161 callers).
+			if ( ! \WWU\WithdrawalButton\Security\OutboundUrlGuard::is_safe_url( $url ) ) {
+				continue;
+			}
 			$response = wp_remote_post(
-				trailingslashit( $base ) . 'digest',
+				$url,
 				array(
-					'body'    => $commitment,
-					'headers' => array(
+					'body'               => $commitment,
+					'headers'            => array(
 						'Accept'       => 'application/vnd.opentimestamps.v1',
 						'Content-Type' => 'application/octet-stream',
 					),
-					'timeout' => 10,
+					'timeout'            => 10,
+					'redirection'        => 0,
+					'reject_unsafe_urls' => true,
 				)
 			);
 			if ( ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response ) ) {
@@ -115,11 +124,17 @@ final class OpenTimestampsProvider implements TimestampProvider {
 		$commitment_hex = strtolower( bin2hex( hash( 'sha256', $digest . $nonce, true ) ) );
 
 		foreach ( $this->calendars() as $base ) {
+			$url = trailingslashit( $base ) . 'timestamp/' . $commitment_hex;
+			if ( ! \WWU\WithdrawalButton\Security\OutboundUrlGuard::is_safe_url( $url ) ) {
+				continue;
+			}
 			$response = wp_remote_get(
-				trailingslashit( $base ) . 'timestamp/' . $commitment_hex,
+				$url,
 				array(
-					'headers' => array( 'Accept' => 'application/vnd.opentimestamps.v1' ),
-					'timeout' => 10,
+					'headers'            => array( 'Accept' => 'application/vnd.opentimestamps.v1' ),
+					'timeout'            => 10,
+					'redirection'        => 0,
+					'reject_unsafe_urls' => true,
 				)
 			);
 			if ( is_wp_error( $response ) ) {

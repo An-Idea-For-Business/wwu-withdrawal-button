@@ -12,11 +12,19 @@
  * DER structure) so there is no dependency on the `openssl ts` CLI (often
  * disabled on shared hosting) and no extra library.
  *
- * Works with any RFC 3161 TSA by configuration (endpoint + optional Basic auth):
- *   - free, no account:  http://timestamp.sectigo.com  (and /qualified = eIDAS)
- *                        http://timestamp.digicert.com
+ * Works with any RFC 3161 TSA by configuration (endpoint + optional Basic auth).
+ * HTTPS is required by default — the token is bound to our digest here but its
+ * signature is verified out-of-band, so a plaintext channel would be unsafe:
+ *   - free, no account:  https://timestamp.sectigo.com  (and /qualified = eIDAS)
+ *                        https://timestamp.digicert.com
  *   - eIDAS qualified QTSPs (account): Aruba, InfoCert, D-Trust, Universign,
  *     FNMT, SwissSign … — same protocol, just an authenticated endpoint.
+ *
+ * Verification model: the returned token is bound to our exact messageImprint
+ * digest (and checked for our nonce) at stamp time, and retained verbatim. Full
+ * TSA certificate-chain signature verification is delegated to an external /
+ * qualified verifier at audit time — the token is self-contained and independently
+ * verifiable.
  *
  * @package WWU\WithdrawalButton
  */
@@ -133,6 +141,21 @@ final class Rfc3161Provider implements TimestampProvider {
 			return null;
 		}
 
+		// Bind the token to OUR request: its TSTInfo must carry the exact
+		// messageImprint digest we submitted, so a TSA/MITM cannot hand back a token
+		// for a different hash. The 32-byte digest is a definitive, unique marker, so
+		// a substring check on the DER is robust. (The TSA signature itself is
+		// verified out-of-band against the retained token.)
+		if ( false === strpos( $body, $digest ) ) {
+			Debug::warn( 'timestamp', 'rfc3161.imprint_mismatch', array() );
+			return null;
+		}
+		// Defence-in-depth: the token should also echo our nonce (anti-replay). Warn
+		// but do not reject — some TSAs re-encode the integer.
+		if ( false === strpos( $body, $this->positive_int_bytes( $nonce ) ) ) {
+			Debug::warn( 'timestamp', 'rfc3161.nonce_not_echoed', array() );
+		}
+
 		Debug::info( 'timestamp', 'rfc3161.stamped', array( 'bytes' => strlen( $body ) ) );
 
 		return array(
@@ -166,7 +189,11 @@ final class Rfc3161Provider implements TimestampProvider {
 			return false;
 		}
 		$scheme = strtolower( (string) wp_parse_url( $this->endpoint, PHP_URL_SCHEME ) );
-		if ( 'http' !== $scheme && 'https' !== $scheme ) {
+		// Require HTTPS by default: the TSA signature is verified out-of-band (see
+		// stamp()), so a plaintext channel would let a MITM substitute the response.
+		// A merchant with a legacy http-only TSA can opt back in via the filter.
+		$allow_http = (bool) apply_filters( 'wwu_wb_rfc3161_allow_insecure_http', false );
+		if ( 'https' !== $scheme && ! ( 'http' === $scheme && $allow_http ) ) {
 			return false;
 		}
 		if ( false === wp_http_validate_url( $this->endpoint ) ) {

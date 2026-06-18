@@ -13,7 +13,6 @@
 .gitignore
 .gitattributes
 .distignore
-composer.json
 composer.lock
 phpcs.xml.dist
 *.dist
@@ -23,3 +22,6 @@ CODE_OF_CONDUCT.md
 SECURITY.md
 MASTER-wwu-wb.md
 .editorconfig
+
+# Unused UI Kit asset whose filename collides with a WP-core library (Plugin Check: library_core_files).
+assets/ui-kit/js/clipboard.js

@@ -14,7 +14,7 @@
 
 <p align="center">
   <a href="#"><img alt="License: GPL v3" src="https://img.shields.io/badge/License-GPLv3-blue.svg"></a>
-  <img alt="Status" src="https://img.shields.io/badge/status-alpha%20(building)-orange.svg">
+  <img alt="Status" src="https://img.shields.io/badge/status-stable%20v1.0.0-brightgreen.svg">
   <img alt="Applies from" src="https://img.shields.io/badge/applies%20from-19%20June%202026-critical.svg">
 </p>
 
@@ -47,7 +47,33 @@ This plugin makes a WooCommerce, FluentCart or Easy Digital Downloads store comp
 
 ## Status
 
-🟢 **MVP feature-complete, in live testing.** The full withdrawal flow — statutory button, two-step confirmation, durable-medium acknowledgement (email + PDF + verifiable link), tamper-evident hash-chained log, and the compliance-document generators — is **built and shipping** across WooCommerce, FluentCart and Easy Digital Downloads. Current pre-release: **`1.0.0-alpha.44`** (see [Releases](../../releases) and the [changelog](docs/changelog/wwu-wb-CHANGELOG.md)). Recent additions: partial withdrawal — choose which products (alpha.42), a consumer "why exempt" transparency note (alpha.43), and an automations layer — read-only REST API + signed outbound webhook (alpha.44). Six locales at 100% (IT/EN/DE/FR/ES/SV). See the [roadmap](docs/plans/wwu-wb-roadmap-PLAN.md) for what's next.
+🟢 **Stable — `v1.0.0` released.** The full withdrawal flow — statutory button, two-step confirmation, durable-medium acknowledgement (email + PDF + verifiable link), tamper-evident hash-chained log, and the compliance-document generators — ships across WooCommerce, FluentCart and Easy Digital Downloads. Latest: **[`v1.0.0`](../../releases/latest)** (see the [changelog](docs/changelog/wwu-wb-CHANGELOG.md)). Six locales at 100% (IT/EN/DE/FR/ES/SV). A **WordPress.org** directory listing is in submission. See the [roadmap](docs/plans/wwu-wb-roadmap-PLAN.md) for what's next.
+
+## Installation
+
+The plugin isn't on the WordPress.org directory **yet** (submission in progress) — install it from the release ZIP:
+
+1. Download **`wwu-withdrawal-button.zip`** from the [latest release](../../releases/latest).
+2. In your WordPress admin, go to **Plugins → Add New → Upload Plugin**.
+3. Select the ZIP → **Install Now** → **Activate**.
+4. Make sure **WooCommerce**, **FluentCart** and/or **Easy Digital Downloads** is active (at least one).
+5. Open **Withdrawal Button → Settings**, enable the function, and choose your applicability mode (EU/EEA only is the default).
+6. From the **Compliance** page, publish the generated **Annex I‑B model form** and update your Privacy / Terms / pre‑contractual information.
+
+**Requirements:** WordPress 5.8+, PHP 7.4+ (tested up to WordPress 7.0). Updating later: deactivate the old version and upload the new ZIP the same way — your settings and the evidence log are preserved.
+
+<details>
+<summary>Installing from source (developers)</summary>
+
+The repository ships without the compiled PDF library. Build the bundled `vendor/` (Dompdf) first — otherwise the durable medium falls back to **email‑only** (still compliant; the e‑mail carries the full acknowledgement):
+
+```bash
+composer install --no-dev --optimize-autoloader
+bash bin/build.sh   # → dist/wwu-withdrawal-button.zip (needs rsync + zip)
+```
+
+`bin/build.sh` applies `.distignore`, so the ZIP excludes dev files (`_internal/`, `docs/`, `tests/`, `bin/`, …) and bundles `vendor/`.
+</details>
 
 ## Known issues & limitations
 

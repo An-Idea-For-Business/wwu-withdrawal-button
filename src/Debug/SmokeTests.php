@@ -475,6 +475,32 @@ final class SmokeTests {
 
 		$tests[] = $this->assert( 'log.genesis_stable', \WWU\WithdrawalButton\Storage\LogChain::genesis() === $prev, 'Genesis hash is stable per site.' );
 
+		// Chain v2: the row hash is keyed (HMAC) and differs from the legacy v1
+		// (unkeyed SHA-256) form; the default version is the current one.
+		$h_v1 = \WWU\WithdrawalButton\Storage\LogChain::compute( $prev, $ev_a, 1 );
+		$h_v2 = \WWU\WithdrawalButton\Storage\LogChain::compute( $prev, $ev_a, 2 );
+		$tests[] = $this->assert(
+			'log.v2_keyed',
+			$h_v1 !== $h_v2 && $h_a === $h_v2,
+			'v2 row hash is HMAC-keyed (differs from v1) and is the current default.'
+		);
+
+		// IP anonymisation for the hashed evidence (full IP kept separately).
+		$tests[] = $this->assert(
+			'log.ip_anonymized',
+			'203.0.113.0' === \WWU\WithdrawalButton\Security\ClientInfo::anonymize_ip( '203.0.113.45' )
+				&& '' === \WWU\WithdrawalButton\Security\ClientInfo::anonymize_ip( '' ),
+			'IPv4 is anonymised (last octet zeroed); empty stays empty.'
+		);
+
+		// Schema v3: the new columns exist (ip_full purgeable + per-row chain_version).
+		global $wpdb;
+		$log_table = \WWU\WithdrawalButton\Storage\Database\LogTable::name();
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery -- table name is constant-derived; read-only column introspection.
+		$cols   = (array) $wpdb->get_col( "SHOW COLUMNS FROM {$log_table}" );
+		$has_v3 = in_array( 'ip_full', $cols, true ) && in_array( 'chain_version', $cols, true );
+		$tests[] = $this->assert( 'log.schema_v3_columns', $has_v3, 'Log table has ip_full + chain_version (schema v3).' );
+
 		// Verify the live chain is intact (0 = no broken row).
 		$broken = ( new \WWU\WithdrawalButton\Storage\LogRepository() )->verify_chain();
 		$tests[] = $this->assert( 'log.chain_intact', 0 === $broken, 0 === $broken ? 'Live chain intact.' : 'Chain broken at row ' . $broken . '.' );
@@ -868,6 +894,20 @@ final class SmokeTests {
 			$tests[] = $this->assert( 'rfc3161.reflection', false, 'Reflection check failed: ' . $e->getMessage() );
 		}
 
+		// HTTPS is required by default (the TSA signature is verified out-of-band).
+		try {
+			$http_prov = new \WWU\WithdrawalButton\Timestamp\Rfc3161Provider( array( 'endpoint' => 'http://timestamp.example.com' ) );
+			$valid     = new \ReflectionMethod( $http_prov, 'endpoint_is_valid' );
+			$valid->setAccessible( true );
+			$tests[] = $this->assert( 'rfc3161.https_required', false === $valid->invoke( $http_prov ), 'A plaintext http TSA endpoint is rejected by default.' );
+		} catch ( \Throwable $e ) {
+			$tests[] = $this->assert( 'rfc3161.https_required', false, 'Reflection check failed: ' . $e->getMessage() );
+		}
+
+		// Un-anchored confirmed-row count (surfaced in admin; cron retries them).
+		$unanchored = ( new \WWU\WithdrawalButton\Timestamp\TimestampService() )->count_unanchored();
+		$tests[] = $this->assert( 'timestamp.unanchored_count', is_int( $unanchored ) && $unanchored >= 0, 'Un-anchored confirmed-row count is a non-negative int (got ' . var_export( $unanchored, true ) . ').' );
+
 		// Return the flat test array like every other suite — run() wraps it in
 		// { name, tests }. Returning the wrapped shape here double-wrapped it, so
 		// the JSON `tests` became an object and the Inspector's forEach threw.
@@ -1129,9 +1169,9 @@ final class SmokeTests {
 			'OutboundUrlGuard rejects the cloud-metadata address.'
 		);
 		$tests[] = $this->assert(
-			'automations.ssrf_blocks_loopback',
-			false === $guard::is_safe_url( 'http://localhost/hook' ) && false === $guard::is_safe_url( 'http://[::1]/hook' ),
-			'OutboundUrlGuard rejects loopback hosts (IPv4 + IPv6).'
+			'automations.ssrf_blocks_private_loopback',
+			false === $guard::is_safe_url( 'http://10.0.0.1/hook' ) && false === $guard::is_safe_url( 'http://[::1]/hook' ),
+			'OutboundUrlGuard rejects private + loopback hosts (IPv4 + IPv6).'
 		);
 
 		// Reader: unknown lookups return null (read-only, no writes).

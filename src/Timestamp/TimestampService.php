@@ -96,37 +96,56 @@ final class TimestampService {
 			return;
 		}
 
+		// If the calendars/TSA are unreachable now, the upgrade cron retries the
+		// initial stamp later (retry_unstamped), so a confirmed row is never left
+		// un-anchored forever because of a transient network failure.
+		$this->stamp_and_link( $provider, $log_id, $row_hash );
+	}
+
+	/**
+	 * Stamp a log row's hash with the provider and link the proof back to the row.
+	 *
+	 * Shared by the initial stamp (maybe_stamp) and the cron retry (retry_unstamped).
+	 *
+	 * @param TimestampProvider $provider Provider.
+	 * @param int               $log_id   Log row id.
+	 * @param string            $row_hash The row hash to stamp.
+	 * @return bool True when a proof was obtained and linked.
+	 */
+	private function stamp_and_link( TimestampProvider $provider, int $log_id, string $row_hash ): bool {
 		$stamp = $provider->stamp( $row_hash );
 		if ( null === $stamp ) {
-			return; // calendars unreachable; the chain alone still stands. Cron does not retry stamping.
+			return false; // unreachable now; the upgrade cron will retry.
 		}
 
 		$repo = new TimestampRepository();
 		$id   = $repo->insert( $log_id, $row_hash, $stamp['nonce_hex'], $provider->key(), $stamp['proof_blob'] );
-
-		if ( $id > 0 ) {
-			// Link the proof back to the log row.
-			global $wpdb;
-			$wpdb->update( LogTable::name(), array( 'ots_proof_id' => $id ), array( 'id' => $log_id ), array( '%d' ), array( '%d' ) );
-
-			// Synchronous providers (RFC 3161) return a final proof immediately —
-			// confirm it now so the upgrade cron skips it. Asynchronous providers
-			// (OpenTimestamps) stay pending until a Bitcoin block confirms.
-			if ( empty( $stamp['pending'] ) ) {
-				$repo->mark_confirmed( $id, (string) $stamp['proof_blob'], null );
-			}
-
-			Debug::info( 'timestamp', 'stamped', array( 'log_id' => $log_id, 'provider' => $provider->key(), 'pending' => ! empty( $stamp['pending'] ) ) );
-
-			/**
-			 * Fires when a log row's hash has been submitted for timestamping.
-			 *
-			 * @param int    $log_id   Log row id.
-			 * @param string $row_hash The stamped hash.
-			 * @param string $provider Provider key.
-			 */
-			do_action( 'wwu_wb_timestamp_anchored', $log_id, $row_hash, $provider->key() );
+		if ( $id <= 0 ) {
+			return false;
 		}
+
+		// Link the proof back to the log row.
+		global $wpdb;
+		$wpdb->update( LogTable::name(), array( 'ots_proof_id' => $id ), array( 'id' => $log_id ), array( '%d' ), array( '%d' ) );
+
+		// Synchronous providers (RFC 3161) return a final proof immediately — confirm
+		// it now so the upgrade cron skips it. Asynchronous providers (OpenTimestamps)
+		// stay pending until a Bitcoin block confirms.
+		if ( empty( $stamp['pending'] ) ) {
+			$repo->mark_confirmed( $id, (string) $stamp['proof_blob'], null );
+		}
+
+		Debug::info( 'timestamp', 'stamped', array( 'log_id' => $log_id, 'provider' => $provider->key(), 'pending' => ! empty( $stamp['pending'] ) ) );
+
+		/**
+		 * Fires when a log row's hash has been submitted for timestamping.
+		 *
+		 * @param int    $log_id   Log row id.
+		 * @param string $row_hash The stamped hash.
+		 * @param string $provider Provider key.
+		 */
+		do_action( 'wwu_wb_timestamp_anchored', $log_id, $row_hash, $provider->key() );
+		return true;
 	}
 
 	/**
@@ -147,6 +166,61 @@ final class TimestampService {
 				Debug::info( 'timestamp', 'confirmed', array( 'id' => (int) $stamp['id'] ) );
 			}
 		}
+
+		// Retry confirmed rows whose INITIAL stamp failed (e.g. the calendars/TSA were
+		// unreachable at confirm time), so a transient outage never leaves evidence
+		// permanently un-anchored.
+		$this->retry_unstamped( $provider, 10 );
+	}
+
+	/**
+	 * Re-attempt the initial stamp for confirmed log rows that still have no proof.
+	 *
+	 * @param TimestampProvider $provider Provider.
+	 * @param int               $limit    Max rows to retry per run.
+	 * @return void
+	 */
+	private function retry_unstamped( TimestampProvider $provider, int $limit ): void {
+		global $wpdb;
+		$table = LogTable::name();
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery -- table name is constant-derived; values bound.
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT id, row_hash FROM {$table} WHERE event = %s AND ots_proof_id IS NULL ORDER BY id ASC LIMIT %d",
+				'confirmed',
+				max( 1, $limit )
+			),
+			ARRAY_A
+		);
+		if ( ! is_array( $rows ) ) {
+			return;
+		}
+		foreach ( $rows as $r ) {
+			$row_hash = (string) ( $r['row_hash'] ?? '' );
+			if ( '' !== $row_hash && $this->stamp_and_link( $provider, (int) $r['id'], $row_hash ) ) {
+				Debug::info( 'timestamp', 'retry.stamped', array( 'log_id' => (int) $r['id'] ) );
+			}
+		}
+	}
+
+	/**
+	 * Count confirmed log rows that still have no timestamp proof (un-anchored).
+	 *
+	 * Surfaced in admin so the merchant can see whether any evidence lacks an
+	 * external anchor. Returns 0 when the provider is 'none' (anchoring off by intent).
+	 *
+	 * @return int
+	 */
+	public function count_unanchored(): int {
+		if ( 'none' === $this->provider()->key() ) {
+			return 0;
+		}
+		global $wpdb;
+		$table = LogTable::name();
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery -- table name is constant-derived; values bound.
+		return (int) $wpdb->get_var(
+			$wpdb->prepare( "SELECT COUNT(*) FROM {$table} WHERE event = %s AND ots_proof_id IS NULL", 'confirmed' )
+		);
 	}
 
 	/**
