@@ -707,6 +707,26 @@ final class SmokeTests {
 		$tests[] = $this->assert( 'consent.clause_it', '' !== trim( (string) $cl::get( 'consent_privacy', 'it' ) ), 'IT exemption-consent privacy clause is present.' );
 		$tests[] = $this->assert( 'consent.clause_en', '' !== trim( (string) $cl::get( 'consent_privacy', 'en' ) ), 'EN exemption-consent privacy clause is present.' );
 
+		// ClauseLibrary override (Settings → Legal clauses): a saved override is
+		// returned verbatim (no disclaimer), has_override() flips, and default_text()
+		// still returns the built-in template. The option is restored BEFORE asserting
+		// so a failing assertion never leaks test data into the merchant's clauses.
+		$clause_opt    = $cl::OPTION;
+		$clause_backup = get_option( $clause_opt, null );
+		$marker        = 'WWU_WB_SMOKE_OVERRIDE_' . wp_generate_password( 6, false );
+		update_option( $clause_opt, array( 'terms' => array( 'it' => $marker ) ), false );
+		$got = (string) $cl::get( 'terms', 'it' );
+		$has = (bool) $cl::has_override( 'terms', 'it' );
+		$def = (string) $cl::default_text( 'terms', 'it' );
+		if ( null === $clause_backup ) {
+			delete_option( $clause_opt );
+		} else {
+			update_option( $clause_opt, $clause_backup, false );
+		}
+		$tests[] = $this->assert( 'clauses.override_verbatim', $marker === $got, 'A saved clause override is returned verbatim (no disclaimer appended).' );
+		$tests[] = $this->assert( 'clauses.has_override', true === $has, 'has_override() reports a saved override.' );
+		$tests[] = $this->assert( 'clauses.default_text_is_template', '' !== trim( $def ) && $def !== $marker, 'default_text() returns the built-in template, not the override.' );
+
 		// ExemptionConfirmation: no-op guards (no email / no entries → no send, no side effects).
 		$ec      = '\\WWU\\WithdrawalButton\\Mail\\ExemptionConfirmation';
 		$tests[] = $this->assert( 'consent.confirmation_guard_no_email', false === $ec::send_for_order( 'woocommerce', '1', '', '#1', array( array( 'reason_id' => '59_o' ) ) ), 'Confirmation is not sent without a valid e-mail.' );

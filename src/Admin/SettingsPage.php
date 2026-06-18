@@ -90,6 +90,7 @@ final class SettingsPage {
 		$this->render_subscriptions_section( $settings );
 		$this->render_platforms_section( $settings );
 		$this->render_guidance_section( $settings );
+		$this->render_clauses_section( $settings );
 		$this->render_exemptions_section();
 		$this->render_receipt_section( $settings );
 		$this->render_integrations_section();
@@ -376,6 +377,58 @@ final class SettingsPage {
 		echo esc_html__( 'The right of withdrawal does not apply to this order: every item falls under a statutory exception to the 14-day right (Digital content with immediate access — Art. 16(1)(m) CRD / Art. 59(1)(o) CdC), which you expressly agreed to at checkout.', 'wwu-withdrawal-button' );
 		echo '</blockquote></details>';
 		echo '</td></tr>';
+
+		echo '</tbody></table>';
+	}
+
+	/**
+	 * Render the "Legal clauses" section: editable overrides for the ready-to-paste
+	 * pre-contractual / terms / privacy clauses, for the current admin language.
+	 * An empty field uses the built-in sample template; saved text replaces it
+	 * everywhere (Compliance page + [wwu_wb_info] shortcode), without the
+	 * "sample text" disclaimer. Stored in the wwu_wb_clauses option per type+lang.
+	 *
+	 * @param array $settings Current settings (unused; reads its own option).
+	 * @return void
+	 */
+	private function render_clauses_section( array $settings ): void {
+		unset( $settings );
+		$lang      = strtolower( substr( determine_locale(), 0, 2 ) );
+		$overrides = (array) get_option( \WWU\WithdrawalButton\Legal\ClauseLibrary::OPTION, array() );
+
+		$labels = array(
+			'precontractual'  => __( 'Pre-contractual information', 'wwu-withdrawal-button' ),
+			'terms'           => __( 'General terms ("How to withdraw")', 'wwu-withdrawal-button' ),
+			'privacy'         => __( 'Privacy policy (withdrawal log)', 'wwu-withdrawal-button' ),
+			'consent_privacy' => __( 'Privacy policy (exemption-consent evidence)', 'wwu-withdrawal-button' ),
+		);
+
+		echo '<h2>' . esc_html__( 'Legal clauses', 'wwu-withdrawal-button' ) . '</h2>';
+		echo '<p class="description" style="max-width:60em;">' . esc_html(
+			sprintf(
+				/* translators: %s: two-letter language code. */
+				__( 'Customise the ready-to-paste legal clauses (language: %s). Leave a field empty to use the built-in sample template. When you type your own wording it replaces the default everywhere — the Compliance page and the [wwu_wb_info] shortcode — and the "sample text" note is dropped. This is your own text: have your lawyer review it.', 'wwu-withdrawal-button' ),
+				strtoupper( $lang )
+			)
+		) . '</p>';
+		echo '<table class="form-table" role="presentation"><tbody>';
+
+		foreach ( \WWU\WithdrawalButton\Legal\ClauseLibrary::types() as $type ) {
+			$label   = isset( $labels[ $type ] ) ? $labels[ $type ] : $type;
+			$current = isset( $overrides[ $type ][ $lang ] ) ? (string) $overrides[ $type ][ $lang ] : '';
+			$default = \WWU\WithdrawalButton\Legal\ClauseLibrary::default_text( $type, $lang );
+
+			echo '<tr><th scope="row">' . esc_html( $label );
+			if ( '' !== trim( $current ) ) {
+				echo ' <span class="wwu-wb-badge wwu-wb-badge--ok" style="font-weight:400;">' . esc_html__( 'customised', 'wwu-withdrawal-button' ) . '</span>';
+			}
+			echo '</th><td>';
+			echo '<textarea name="wwu_wb_clauses[' . esc_attr( $type ) . ']" rows="5" class="large-text" placeholder="' . esc_attr__( 'Leave empty to use the built-in sample template.', 'wwu-withdrawal-button' ) . '">' . esc_textarea( $current ) . '</textarea>';
+			echo '<details style="margin-top:6px;"><summary style="cursor:pointer;color:#2271b1;">' . esc_html__( 'Show the built-in default (copy it to start from there)', 'wwu-withdrawal-button' ) . '</summary>';
+			echo '<textarea readonly rows="5" class="large-text" style="margin-top:6px;background:#f6f7f7;">' . esc_textarea( $default ) . '</textarea>';
+			echo '</details>';
+			echo '</td></tr>';
+		}
 
 		echo '</tbody></table>';
 	}
@@ -1046,6 +1099,25 @@ final class SettingsPage {
 		$new_slug                    = sanitize_title( (string) ( $_POST['endpoint_slug'] ?? 'wwu-withdrawal' ) );
 		$settings['endpoint_slug']   = '' !== $new_slug ? $new_slug : 'wwu-withdrawal';
 		update_option( 'wwu_wb_settings', $settings );
+
+		// Legal clause overrides (Settings -> Legal clauses), per type for the current
+		// admin language. An empty field reverts that clause to the built-in template;
+		// other languages' overrides are preserved.
+		$clause_lang    = strtolower( substr( determine_locale(), 0, 2 ) );
+		$clauses        = (array) get_option( \WWU\WithdrawalButton\Legal\ClauseLibrary::OPTION, array() );
+		$posted_clauses = ( isset( $_POST['wwu_wb_clauses'] ) && is_array( $_POST['wwu_wb_clauses'] ) ) ? (array) wp_unslash( $_POST['wwu_wb_clauses'] ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- each field is sanitized below.
+		foreach ( \WWU\WithdrawalButton\Legal\ClauseLibrary::types() as $clause_type ) {
+			$value = isset( $posted_clauses[ $clause_type ] ) ? sanitize_textarea_field( (string) $posted_clauses[ $clause_type ] ) : '';
+			if ( '' === trim( $value ) ) {
+				unset( $clauses[ $clause_type ][ $clause_lang ] );
+				if ( isset( $clauses[ $clause_type ] ) && empty( $clauses[ $clause_type ] ) ) {
+					unset( $clauses[ $clause_type ] );
+				}
+			} else {
+				$clauses[ $clause_type ][ $clause_lang ] = $value;
+			}
+		}
+		update_option( \WWU\WithdrawalButton\Legal\ClauseLibrary::OPTION, $clauses, false );
 
 		// Applicability.
 		$applicability = array(

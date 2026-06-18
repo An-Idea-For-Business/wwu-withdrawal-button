@@ -62,12 +62,26 @@ final class ComplianceStatusPage {
 		echo '<p><strong>' . esc_html__( 'Annex I-B model form shortcode:', 'wwu-withdrawal-button' ) . '</strong> <code>[wwu_wb_model_form lang="it"]</code></p>';
 		echo '<p><strong>' . esc_html__( 'Pre-contractual info shortcode:', 'wwu-withdrawal-button' ) . '</strong> <code>[wwu_wb_info type="precontractual" lang="it"]</code></p>';
 
+		// The clauses below are read-only previews of the text in use. The merchant
+		// edits them (no code) in Settings -> Legal clauses; overrides flow back here
+		// and into the [wwu_wb_info] shortcode automatically.
+		echo '<p class="description">' . wp_kses_post(
+			sprintf(
+				/* translators: %s: Settings page URL. */
+				__( 'The texts below are the ones in use. To replace them with your own wording (no code needed), edit them in <a href="%s">Settings &rarr; Legal clauses</a> — your version then appears here and wherever the <code>[wwu_wb_info]</code> shortcode is used.', 'wwu-withdrawal-button' ),
+				esc_url( admin_url( 'admin.php?page=' . AdminController::SETTINGS_SLUG ) )
+			)
+		) . '</p>';
+
 		$lang = strtolower( substr( determine_locale(), 0, 2 ) );
 		foreach ( array( 'precontractual', 'terms', 'privacy', 'consent_privacy' ) as $type ) {
 			// Open the two clauses the merchant must paste into their sale documents
 			// (pre-contractual info + general terms) so they are not overlooked.
-			$open = in_array( $type, array( 'precontractual', 'terms' ), true );
-			echo '<details class="wwu-wb-clause"' . ( $open ? ' open' : '' ) . '><summary>' . esc_html( $this->clause_label( $type ) ) . '</summary>';
+			$open  = in_array( $type, array( 'precontractual', 'terms' ), true );
+			$badge = ClauseLibrary::has_override( $type, $lang )
+				? ' <span class="wwu-wb-badge wwu-wb-badge--ok">' . esc_html__( 'customised', 'wwu-withdrawal-button' ) . '</span>'
+				: '';
+			echo '<details class="wwu-wb-clause"' . ( $open ? ' open' : '' ) . '><summary>' . esc_html( $this->clause_label( $type ) ) . wp_kses_post( $badge ) . '</summary>';
 			echo '<textarea readonly rows="6" style="width:100%;">' . esc_textarea( ClauseLibrary::get( $type, $lang ) ) . '</textarea>';
 			echo '</details>';
 		}
