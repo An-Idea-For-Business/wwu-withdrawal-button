@@ -24,12 +24,21 @@ added to `uninstall.php` cleanup. The slug is a **WooCommerce endpoint, not a pa
 no page needs to be created; re-saving Permalinks is the manual workaround for
 already-affected installs.
 
-**New developer filter `wwu_wb_clause_text`** (`ClauseLibrary::get()`) — overrides a
-generated legal-clause body (precontractual / terms / privacy / consent_privacy)
-before the sample-text disclaimer is appended, on both the Compliance page and the
-`[wwu_wb_info]` shortcode. The built-in clauses remain read-only sample templates by
-design (copy + adapt them in your own documents); the filter lets developers inject
-custom wording programmatically.
+**Editable legal clauses (Settings → Legal clauses) + `wwu_wb_clause_text` filter.**
+Prompted by the same support email — Antonio asked whether the clause texts could be
+edited. They now can, two ways. **No-code:** a new `SettingsPage::render_clauses_section()`
+adds a **Settings → Legal clauses** section with an editable textarea per type
+(precontractual / terms / privacy / consent_privacy) for the current admin language,
+plus a "show the built-in default" toggle to copy the original as a starting point.
+Saved to the new autoload:no option `wwu_wb_clauses` (shape `[type][lang]`; per-language,
+other languages preserved; an empty field reverts to the built-in template).
+`ClauseLibrary::get()` returns a saved override **verbatim** — no sample-text disclaimer,
+no `[EN]` prefix — short-circuiting the template path; the Compliance page shows a
+"customised" badge + a pointer to the section; the option is added to `uninstall.php`
+cleanup. **Code:** `ClauseLibrary::get()` also runs the body through
+`apply_filters( 'wwu_wb_clause_text', $text, $type, $lang )` on both the override and
+default paths (Compliance page + `[wwu_wb_info]` shortcode). New `ClauseLibrary` API:
+`OPTION`, `has_override()`, `default_text()`. Hooks reference 33 → 34.
 
 No DB schema change (still version 3). PHP lint clean (4 files).
 

@@ -24,6 +24,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class ClauseLibrary {
 
 	/**
+	 * Option holding merchant clause overrides, shape `[ type => [ lang => text ] ]`.
+	 * Autoload:no — read only when a clause is rendered (Compliance page or the
+	 * [wwu_wb_info] shortcode). Empty / absent means the built-in template is used.
+	 *
+	 * @var string
+	 */
+	public const OPTION = 'wwu_wb_clauses';
+
+	/**
 	 * Clause text keyed by type then language.
 	 *
 	 * @var array<string,array<string,string>>
@@ -69,6 +78,15 @@ final class ClauseLibrary {
 		if ( ! isset( self::CLAUSES[ $type ] ) ) {
 			return '';
 		}
+
+		// A merchant override (Settings -> Legal clauses) is the merchant's own,
+		// reviewed wording: return it verbatim, WITHOUT the "sample text" disclaimer
+		// or the [EN] prefix. Still filterable for developers.
+		$override = self::override( $type, $lang );
+		if ( '' !== $override ) {
+			return (string) apply_filters( 'wwu_wb_clause_text', $override, $type, $lang );
+		}
+
 		$set       = self::CLAUSES[ $type ];
 		$text      = $set[ $lang ] ?? $set['en'];
 
@@ -99,5 +117,50 @@ final class ClauseLibrary {
 	 */
 	public static function types(): array {
 		return array_keys( self::CLAUSES );
+	}
+
+	/**
+	 * Merchant override for a clause, or '' when none is saved.
+	 *
+	 * @param string $type Clause type (a known CLAUSES key).
+	 * @param string $lang Two-letter language code.
+	 * @return string
+	 */
+	private static function override( string $type, string $lang ): string {
+		$all = get_option( self::OPTION, array() );
+		if ( is_array( $all ) && isset( $all[ $type ][ $lang ] ) ) {
+			return trim( (string) $all[ $type ][ $lang ] );
+		}
+		return '';
+	}
+
+	/**
+	 * Whether a merchant override is saved for a clause (used for admin badges).
+	 *
+	 * @param string $type Clause type.
+	 * @param string $lang Language code (normalised to two letters).
+	 * @return bool
+	 */
+	public static function has_override( string $type, string $lang ): bool {
+		return '' !== self::override( $type, strtolower( substr( $lang, 0, 2 ) ) );
+	}
+
+	/**
+	 * The built-in sample clause body for a type+lang, ALWAYS ignoring any merchant
+	 * override and without the trailing disclaimer. Used to show "the default" in
+	 * the admin so a merchant can copy it as a starting point.
+	 *
+	 * @param string $type Clause type.
+	 * @param string $lang Language code.
+	 * @return string
+	 */
+	public static function default_text( string $type, string $lang ): string {
+		$lang = strtolower( substr( $lang, 0, 2 ) );
+		if ( ! isset( self::CLAUSES[ $type ] ) ) {
+			return '';
+		}
+		$set    = self::CLAUSES[ $type ];
+		$prefix = isset( $set[ $lang ] ) ? '' : '[EN — translate/localise] ';
+		return $prefix . ( $set[ $lang ] ?? $set['en'] );
 	}
 }

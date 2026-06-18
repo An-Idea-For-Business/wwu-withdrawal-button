@@ -595,7 +595,7 @@ apply_filters( 'wwu_wb_clause_text', string $text, string $type, string $lang )
 | `$type` | `string` | Clause type: `precontractual`, `terms`, `privacy` or `consent_privacy`. |
 | `$lang` | `string` | Two-letter language code (e.g. `it`, `en`). |
 
-**Purpose.** Overrides the wording of a generated legal clause. The built-in clauses are read-only **sample templates** (shown on the Compliance page and via the `[wwu_wb_info]` shortcode); this filter lets you inject your own business-specific wording programmatically without editing the plugin, on both surfaces. Since `1.2.1`.
+**Purpose.** Overrides the wording of a generated legal clause programmatically, on both the Compliance page and the `[wwu_wb_info]` shortcode. For a **no-code** alternative, edit the clauses in **Settings → Legal clauses** (the same override, saved per type + language in the `wwu_wb_clauses` option); this filter runs on top of any saved override. Since `1.2.1`.
 
 **Example**
 
