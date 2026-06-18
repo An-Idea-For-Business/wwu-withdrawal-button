@@ -3,6 +3,38 @@
 All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); the project uses Semantic Versioning.
 
+## [1.2.0] — 2026-06-18 — "Update your legal texts too" merchant reminder
+
+Prompted by EU consumer lawyer Alessandro Vercellotti's public note: *the button is
+mandatory, but the Terms & Conditions of sale must also be amended in the withdrawal
+article to provide for the new button modality.* He is right — Art. 6 of the Consumer
+Rights Directive requires the trader to inform the consumer **how** to exercise the
+withdrawal, and that information now has to include the online button. Installing the
+plugin adds the button; it does not (and cannot) edit the merchant's own published
+documents. This release makes that impossible to miss and gives the merchant the exact
+text to paste. No change to the withdrawal flow, storage, or evidence.
+
+**Plugin (admin):**
+- `DashboardPage` — new prominent reminder card right after the setup checklist:
+  *"Installing the button is not enough — update your legal texts too"* + a button
+  linking to the Compliance page where the ready-to-paste clauses live.
+- `ComplianceStatusPage` — a `notice-warning` callout at the top of "Documents to
+  update" stating the same point, and the two clauses the merchant must paste
+  (pre-contractual information + general terms) now render **open by default** so they
+  are not overlooked inside the collapsed list.
+- `ClauseLibrary` — the `terms` ("How to withdraw") clause now **names the button
+  explicitly** ("the dedicated online withdrawal button / l'apposito pulsante di recesso
+  online — 'Recedere dal contratto qui'"), throughout the withdrawal period, alongside
+  the Annex I-B model form. IT + EN. The `precontractual` clause already named it.
+
+**Docs + web:**
+- Marketing landing + documentation pages updated with a "you must also update your
+  Terms & pre-contractual withdrawal clause" note.
+- readme.txt changelog + Upgrade Notice.
+
+Lint: PHP 0 errors (ClauseLibrary, ComplianceStatusPage, DashboardPage). Smoke tests
+unaffected (they assert clause presence, not wording).
+
 ## [1.1.1] — 2026-06-18 — wordpress.org Plugin Check polish
 
 Final Plugin Check pass before submission. No functional change.

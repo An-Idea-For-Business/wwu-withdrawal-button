@@ -2297,3 +2297,19 @@ msgstr "Verificato il %s."
 msgid "WWU Withdrawal Button requires PHP %1$s or higher. You are running PHP %2$s."
 msgstr "WWU Withdrawal Button richiede PHP %1$s o versione superiore. Stai utilizzando PHP %2$s."
 
+
+#: src/Admin/ComplianceStatusPage.php:56 src/Admin/DashboardPage.php:256
+msgid "Installing the button is not enough — update your legal texts too."
+msgstr "Installare il pulsante non basta: aggiorna anche i tuoi testi legali."
+
+#: src/Admin/ComplianceStatusPage.php:57
+msgid "EU law requires your Terms & Conditions of sale and your pre-contractual information to describe how the consumer withdraws — and that now includes the new online \"withdrawal button\". Edit the withdrawal article in your own documents to mention it: copy the ready-to-paste clauses below. The plugin adds the button, but it cannot change your published terms for you."
+msgstr "La legge UE impone che le tue Condizioni di vendita e le informazioni precontrattuali descrivano come il consumatore esercita il recesso — e questo ora include il nuovo «pulsante di recesso» online. Modifica l'articolo sul recesso nei tuoi documenti per citarlo: copia qui sotto le clausole pronte da incollare. Il plugin aggiunge il pulsante, ma non può modificare al posto tuo i tuoi documenti pubblicati."
+
+#: src/Admin/DashboardPage.php:257
+msgid "EU law requires your Terms & Conditions of sale and your pre-contractual information to describe how the consumer withdraws — and that now includes the new online \"withdrawal button\". Edit the withdrawal article in your own documents to mention it. The plugin generates ready-to-paste clauses, but it cannot change your published terms for you."
+msgstr "La legge UE impone che le tue Condizioni di vendita e le informazioni precontrattuali descrivano come il consumatore esercita il recesso — e questo ora include il nuovo «pulsante di recesso» online. Modifica l'articolo sul recesso nei tuoi documenti per citarlo. Il plugin genera le clausole pronte da incollare, ma non può modificare al posto tuo i tuoi documenti pubblicati."
+
+#: src/Admin/DashboardPage.php:258
+msgid "Get the ready-to-paste clauses"
+msgstr "Ottieni le clausole pronte da incollare"

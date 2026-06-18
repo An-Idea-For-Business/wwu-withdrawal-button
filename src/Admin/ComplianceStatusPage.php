@@ -47,6 +47,16 @@ final class ComplianceStatusPage {
 
 		// Documents checklist + clauses.
 		echo '<h2>' . esc_html__( 'Documents to update (requirement 6)', 'wwu-withdrawal-button' ) . '</h2>';
+
+		// Lawyer's reminder (A. Vercellotti): the button does not replace updating
+		// the withdrawal article in the merchant's own legal texts. Art. 6 CRD still
+		// requires informing the consumer HOW to withdraw — which now includes the
+		// online button. Make this impossible to miss before listing the clauses.
+		echo '<div class="notice notice-warning inline" style="margin:.5em 0 1em;">';
+		echo '<p style="margin-top:.6em;"><strong>' . esc_html__( 'Installing the button is not enough — update your legal texts too.', 'wwu-withdrawal-button' ) . '</strong></p>';
+		echo '<p>' . esc_html__( 'EU law requires your Terms & Conditions of sale and your pre-contractual information to describe how the consumer withdraws — and that now includes the new online "withdrawal button". Edit the withdrawal article in your own documents to mention it: copy the ready-to-paste clauses below. The plugin adds the button, but it cannot change your published terms for you.', 'wwu-withdrawal-button' ) . '</p>';
+		echo '</div>';
+
 		echo '<p>' . esc_html__( 'The withdrawal button is additional to the Annex I-B model form, which stays mandatory. Update these documents and place the model form in your pre-contractual information.', 'wwu-withdrawal-button' ) . '</p>';
 
 		echo '<p><strong>' . esc_html__( 'Annex I-B model form shortcode:', 'wwu-withdrawal-button' ) . '</strong> <code>[wwu_wb_model_form lang="it"]</code></p>';
@@ -54,7 +64,10 @@ final class ComplianceStatusPage {
 
 		$lang = strtolower( substr( determine_locale(), 0, 2 ) );
 		foreach ( array( 'precontractual', 'terms', 'privacy', 'consent_privacy' ) as $type ) {
-			echo '<details class="wwu-wb-clause"><summary>' . esc_html( $this->clause_label( $type ) ) . '</summary>';
+			// Open the two clauses the merchant must paste into their sale documents
+			// (pre-contractual info + general terms) so they are not overlooked.
+			$open = in_array( $type, array( 'precontractual', 'terms' ), true );
+			echo '<details class="wwu-wb-clause"' . ( $open ? ' open' : '' ) . '><summary>' . esc_html( $this->clause_label( $type ) ) . '</summary>';
 			echo '<textarea readonly rows="6" style="width:100%;">' . esc_textarea( ClauseLibrary::get( $type, $lang ) ) . '</textarea>';
 			echo '</details>';
 		}

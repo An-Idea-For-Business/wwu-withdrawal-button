@@ -146,6 +146,10 @@ final class DashboardPage {
 
 		$this->render_test_email_box( $mail );
 
+		// Documents reminder — the button alone does not update the merchant's
+		// own legal texts; surface this prominently on the landing page.
+		$this->render_documents_reminder();
+
 		// --- How it works ---
 		echo '<h2>' . esc_html__( 'How it works', 'wwu-withdrawal-button' ) . '</h2>';
 		echo '<ol style="max-width:880px;line-height:1.7;">';
@@ -233,6 +237,25 @@ final class DashboardPage {
 		wp_nonce_field( self::TEST_EMAIL_NONCE );
 		echo '<button type="submit" class="button">' . esc_html__( 'Send test email', 'wwu-withdrawal-button' ) . '</button>';
 		echo '</form>';
+		echo '</div>';
+	}
+
+	/**
+	 * Prominent reminder that installing the button is not enough: the merchant
+	 * must also update the withdrawal article in their own Terms & Conditions and
+	 * pre-contractual information so it describes the new "withdrawal button"
+	 * modality. Art. 6 CRD requires informing the consumer how to withdraw; the
+	 * ready-to-paste clauses live on the Compliance page.
+	 *
+	 * @return void
+	 */
+	private function render_documents_reminder(): void {
+		$compliance = admin_url( 'admin.php?page=' . AdminController::COMPLIANCE_SLUG );
+
+		echo '<div class="notice notice-warning inline" style="max-width:880px;margin:1.5em 0;padding:.4em 1.2em 1em;">';
+		echo '<p style="margin-bottom:.4em;"><strong>' . esc_html__( 'Installing the button is not enough — update your legal texts too.', 'wwu-withdrawal-button' ) . '</strong></p>';
+		echo '<p style="margin-top:0;">' . esc_html__( 'EU law requires your Terms & Conditions of sale and your pre-contractual information to describe how the consumer withdraws — and that now includes the new online "withdrawal button". Edit the withdrawal article in your own documents to mention it. The plugin generates ready-to-paste clauses, but it cannot change your published terms for you.', 'wwu-withdrawal-button' ) . '</p>';
+		echo '<p style="margin-bottom:.4em;"><a class="button button-secondary" href="' . esc_url( $compliance ) . '">' . esc_html__( 'Get the ready-to-paste clauses', 'wwu-withdrawal-button' ) . '</a></p>';
 		echo '</div>';
 	}
 

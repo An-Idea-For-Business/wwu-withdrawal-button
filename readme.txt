@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.1.1
+Stable tag: 1.2.0
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -75,6 +75,9 @@ The plugin records withdrawal declarations (name, identified contract, email, IP
 For the conditional Art. 59 exemptions, the plugin also stores the consumer's checkout consent + acknowledgement (the agreed wording, a hash, the date/time and — unless you turn it off — the IP) as evidence to prove the exemption is valid. The lawful basis is **legitimate interest** (GDPR Art. 6(1)(f); defence of legal claims), **not** GDPR consent. The IP lives only on the order (never in the immutable log) and is automatically anonymised once the retention period lapses. A second ready-to-paste privacy clause is generated for this processing.
 
 == Changelog ==
+
+= 1.2.0 =
+* **Reminder to update your legal texts — the button is not a substitute.** Installing the withdrawal button does not change your shop's own documents, and EU law (Art. 6 of the Consumer Rights Directive) requires your Terms & Conditions of sale and your pre-contractual information to describe *how* the consumer withdraws — which now includes the new online "withdrawal button". The plugin now states this prominently on the Dashboard and the Compliance page, opens the two clauses you must paste (pre-contractual information + general terms) by default, and the ready-to-paste "How to withdraw" and pre-contractual clauses now name the button explicitly. No change to the withdrawal flow.
 
 = 1.1.1 =
 * **wordpress.org Plugin Check polish.** Removes the unused UI-kit `clipboard.js` from the package entirely (its filename collided with a WordPress-core library; it was never loaded — only the accordion, badge and utilities components are), and moves the documentation link out of the short-description block. No functional change.
@@ -158,6 +161,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.2.0 =
+Reminder: installing the button does not update your shop's legal texts. Your Terms & Conditions and pre-contractual information must describe the new withdrawal-button modality (Art. 6 CRD). The plugin now flags this and gives you the ready-to-paste clauses. No change to the flow.
 
 = 1.0.0-alpha.43 =
 Adds a consumer-facing "why exempt" note: on orders exempt under Art. 59, the plugin explains why the withdrawal button is absent (the exception + legal reference) instead of showing nothing. Editable, fail-safe, only on genuinely exempt orders; button visibility unchanged.
