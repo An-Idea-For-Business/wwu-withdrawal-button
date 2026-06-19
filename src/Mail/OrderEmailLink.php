@@ -74,7 +74,7 @@ final class OrderEmailLink {
 		$label = Services::instance()->labels->withdraw_label( $order->country, '' !== $order->locale ? $order->locale : determine_locale() );
 
 		if ( $plain_text ) {
-			echo "\n" . esc_html( $label ) . ': ' . esc_url_raw( $url ) . "\n";
+			echo "\n" . esc_html( $label ) . ': ' . esc_url( $url ) . "\n";
 			return;
 		}
 

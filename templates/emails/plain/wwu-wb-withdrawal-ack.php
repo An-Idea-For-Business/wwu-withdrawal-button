@@ -39,10 +39,10 @@ echo esc_html__( 'Addressee (trader):', 'wwu-withdrawal-button' ) . ' '
 	. "\n\n";
 
 if ( ! empty( $data['download_url'] ) ) {
-	echo esc_html__( 'Download your receipt (PDF):', 'wwu-withdrawal-button' ) . ' ' . esc_url_raw( (string) $data['download_url'] ) . "\n";
+	echo esc_html__( 'Download your receipt (PDF):', 'wwu-withdrawal-button' ) . ' ' . esc_url( (string) $data['download_url'] ) . "\n";
 }
 if ( ! empty( $data['verify_url'] ) ) {
-	echo esc_html__( 'Verify this receipt:', 'wwu-withdrawal-button' ) . ' ' . esc_url_raw( (string) $data['verify_url'] ) . "\n";
+	echo esc_html__( 'Verify this receipt:', 'wwu-withdrawal-button' ) . ' ' . esc_url( (string) $data['verify_url'] ) . "\n";
 }
 
 if ( '' !== (string) $additional_content ) {

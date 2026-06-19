@@ -3,6 +3,21 @@
 All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); the project uses Semantic Versioning.
 
+## [1.2.4] — 2026-06-19 — WordPress.org pre-review hardening + display-name refinement
+
+Addresses the WordPress.org plugin-directory pre-review (Review ID `AUTOPREREVIEW … TRM-OWN-LIC`). **No functional change** to the withdrawal flow, storage or evidence log; **slug + text domain unchanged** (`wwu-withdrawal-button`).
+
+**Ownership / trademark.** "WWU" is **our own brand** (WebWakeUp), not a third party's mark; ownership is verified by moving the WordPress.org account to an `@webwakeup.it` address. The display name is refined from "WWU Withdrawal Button" to **"WWU Right of Withdrawal for WooCommerce, FluentCart, EDD & more"** — more distinctive (drops the generic "Button", which collides with crypto withdrawal-button plugins; uses the statutory term) while keeping the `wwu-withdrawal-button` slug, so the text domain and all six translations are untouched.
+
+**Code hardening (reviewer items):**
+- `GuestAccess::check_rate_limit()` wraps `$_SERVER['REMOTE_ADDR']` in `sanitize_text_field( wp_unslash( … ) )`.
+- The three plain-text-e-mail URL outputs switch from `esc_url_raw()` to `esc_url()` (`OrderEmailLink::render`, `wwu-wb-withdrawal-ack.php`). The receipt URLs are single-parameter (`?t=<40-hex>`), so there is no `&`-encoding concern.
+- `WithdrawalRoute` declares `permission_callback => '__return_true'` **explicitly** on each public endpoint (it was previously set via a shared `$args` the static scanner couldn't see), with a comment documenting these are intentionally public (guest withdrawal) and protected in-callback by nonce + per-IP rate limit + order-ref/e-mail verification.
+- Removed `load_plugin_textdomain()` and its `init` hook — unnecessary since WP 4.6, which loads the bundled `/languages` `.mo` just-in-time (and language packs once hosted).
+- `readme.txt` **External services** section expanded: the optional RFC 3161 / eIDAS authority is OFF by default and is a provider the merchant chooses + contracts with directly (Sectigo / Aruba / InfoCert / …), whose own ToS + privacy apply.
+
+**Explained to the reviewer, not defects:** the plugin is 100% free and fully functional (no trialware / locked features); the inline `<style>` blocks live in standalone HTML responses (no-JS flow, receipt-verification page) and the Dompdf PDF, where enqueuing does not apply; the public REST endpoints are intentionally public with in-callback protection.
+
 ## [1.2.3] — 2026-06-19 — Detailed mail-failure reason (no more generic "email failed")
 
 Follow-up to the 1.2.2 e-mail-send hardening. 1.2.2 stopped the crash; the failure
