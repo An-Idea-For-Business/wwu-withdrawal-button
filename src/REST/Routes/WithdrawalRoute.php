@@ -49,22 +49,40 @@ final class WithdrawalRoute extends AbstractRoute {
 	 * @return void
 	 */
 	public function register(): void {
-		$args = array( 'permission_callback' => '__return_true' );
+		// These endpoints are PUBLIC by design: a consumer (typically a guest, with no
+		// account) must be able to look up their order and file a withdrawal. They are
+		// protected inside each callback by a nonce + a per-IP rate limit (see
+		// GuestAccess) and by order-reference + e-mail verification, not by login. The
+		// permission_callback is declared explicitly on every route below.
+		register_rest_route(
+			WWU_WB_REST_NAMESPACE,
+			'/withdrawal/lookup',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'lookup' ),
+				'permission_callback' => '__return_true',
+			)
+		);
 
-		register_rest_route( WWU_WB_REST_NAMESPACE, '/withdrawal/lookup', array_merge( $args, array(
-			'methods'  => 'POST',
-			'callback' => array( $this, 'lookup' ),
-		) ) );
+		register_rest_route(
+			WWU_WB_REST_NAMESPACE,
+			'/withdrawal/statement',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'statement' ),
+				'permission_callback' => '__return_true',
+			)
+		);
 
-		register_rest_route( WWU_WB_REST_NAMESPACE, '/withdrawal/statement', array_merge( $args, array(
-			'methods'  => 'POST',
-			'callback' => array( $this, 'statement' ),
-		) ) );
-
-		register_rest_route( WWU_WB_REST_NAMESPACE, '/withdrawal/confirm', array_merge( $args, array(
-			'methods'  => 'POST',
-			'callback' => array( $this, 'confirm' ),
-		) ) );
+		register_rest_route(
+			WWU_WB_REST_NAMESPACE,
+			'/withdrawal/confirm',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'confirm' ),
+				'permission_callback' => '__return_true',
+			)
+		);
 	}
 
 	/**

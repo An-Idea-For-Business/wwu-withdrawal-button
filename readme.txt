@@ -1,10 +1,10 @@
-=== WWU Withdrawal Button ===
+=== WWU Right of Withdrawal ===
 Contributors: mredodos, webwakeup, anideaforbusiness
 Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.2.3
+Stable tag: 1.2.4
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -109,7 +109,7 @@ This plugin connects to the **OpenTimestamps** public calendar servers to obtain
 
 **Optional** services, all **off by default** and used only if you turn them on:
 
-- **RFC 3161 / eIDAS timestamp authority** — if you switch the timestamp provider away from OpenTimestamps, the same one-way SHA-256 hash (no personal data) is sent instead to the timestamp-authority URL you configure.
+- **RFC 3161 / eIDAS timestamp authority** — OFF by default; OpenTimestamps is used unless you opt in. If you switch the timestamp provider to an RFC 3161 authority, the same one-way SHA-256 hash (no personal data) is sent to the authority URL **you** configure. This is a provider you choose and contract with directly (examples: a free Sectigo endpoint, or a national authority such as Aruba, InfoCert, D-Trust, Universign, FNMT, SwissSign); please review that provider's own terms of service and privacy policy. The plugin makes no such call until you enable it.
 - **Outbound webhook** (Settings → Integrations) — if enabled, the plugin sends a signed POST to the endpoint URL **you** specify whenever a withdrawal is confirmed. The payload carries a verification hash and contract reference, never the consumer's IP address.
 
 No other external services are used. The plugin does not load remote scripts, fonts or trackers on your site.
@@ -121,6 +121,9 @@ The plugin records withdrawal declarations (name, identified contract, email, IP
 For the conditional Art. 59 exemptions, the plugin also stores the consumer's checkout consent + acknowledgement (the agreed wording, a hash, the date/time and — unless you turn it off — the IP) as evidence to prove the exemption is valid. The lawful basis is **legitimate interest** (GDPR Art. 6(1)(f); defence of legal claims), **not** GDPR consent. The IP lives only on the order (never in the immutable log) and is automatically anonymised once the retention period lapses. A second ready-to-paste privacy clause is generated for this processing.
 
 == Changelog ==
+
+= 1.2.4 =
+* **Housekeeping + WordPress.org compliance hardening.** Display name refined to "WWU Right of Withdrawal" (the plugin slug is unchanged, so nothing breaks on update). Additional input sanitisation on the rate-limiter, URL escaping tightened in the plain-text e-mails, explicit REST permission callbacks declared on the public withdrawal endpoints, and the now-unneeded textdomain loader removed (WordPress loads translations automatically since 4.6). No change to the withdrawal flow, your data or the evidence log.
 
 = 1.2.3 =
 * **Acknowledgement e-mail failures now report the exact reason, not a generic message.** Building on the 1.2.2 fix: when the acknowledgement e-mail cannot be sent, the plugin now captures the specific reason from the mail transport — the SMTP plugin's own error (for example "Could not authenticate" or "Could not connect to host") or the thrown exception's message — and shows it in the admin "e-mail failed" notice and records it in the tamper-evident log, instead of a generic "email failed". Diagnosing an SMTP misconfiguration (WP Mail SMTP, FluentSMTP, a provider mailer) is now immediate, without digging through the PHP error log. The withdrawal is still always recorded and the consumer always reaches their confirmation page.
@@ -218,6 +221,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.2.4 =
+Housekeeping + WordPress.org compliance hardening (input sanitisation, output escaping, explicit REST permission callbacks). The display name is now "WWU Right of Withdrawal"; the slug is unchanged. No change to the withdrawal flow or your data.
 
 = 1.2.3 =
 Follow-up to the 1.2.2 e-mail fix: a failed acknowledgement e-mail now shows the exact transport reason (for example the SMTP plugin's "Could not authenticate") in the admin notice and the immutable log, instead of a generic "email failed", so an SMTP misconfiguration is obvious at a glance.

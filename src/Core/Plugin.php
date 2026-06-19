@@ -103,8 +103,6 @@ final class Plugin {
 	 * @return void
 	 */
 	private function register_hooks(): void {
-		add_action( 'init', array( $this, 'load_textdomain' ) );
-
 		// Multisite lifecycle.
 		add_action( 'wp_initialize_site', array( Install::class, 'provision_new_site' ), 20 );
 		add_action( Install::CRON_COMPLETE_NETWORK, array( Install::class, 'complete_network_activation' ) );
@@ -205,18 +203,13 @@ final class Plugin {
 		}
 	}
 
-	/**
-	 * Load the plugin text domain for translations.
-	 *
-	 * @return void
+	/*
+	 * Translations are loaded automatically by WordPress: the plugin's bundled .mo
+	 * files (under the Domain Path "/languages") are loaded just-in-time since WP 4.6,
+	 * and language packs from translate.wordpress.org once the plugin is hosted there.
+	 * An explicit textdomain-loader call is therefore no longer needed (the plugin
+	 * requires WP 5.8+).
 	 */
-	public function load_textdomain(): void {
-		load_plugin_textdomain(
-			'wwu-withdrawal-button',
-			false,
-			dirname( WWU_WB_PLUGIN_BASENAME ) . '/languages'
-		);
-	}
 
 	/**
 	 * Accessor for the REST API service.

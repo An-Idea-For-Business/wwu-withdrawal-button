@@ -69,7 +69,7 @@ final class GuestAccess {
 	 * @return bool True if within limit, false if exceeded.
 	 */
 	public static function check_rate_limit(): bool {
-		$ip      = isset( $_SERVER['REMOTE_ADDR'] ) ? (string) wp_unslash( $_SERVER['REMOTE_ADDR'] ) : '';
+		$ip      = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
 		$key     = 'wwu_wb_rl_' . md5( $ip );
 		$max     = (int) apply_filters( 'wwu_wb_rate_limit_max_attempts', 10 );
 		$window  = (int) apply_filters( 'wwu_wb_rate_limit_window_seconds', 300 );
