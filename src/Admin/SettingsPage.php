@@ -275,7 +275,13 @@ final class SettingsPage {
 		} elseif ( $fc_native ) {
 			echo '<div class="wwu-ui-notice info" style="margin:12px 0;max-width:860px;"><p style="margin:0;">' . esc_html__( "FluentCart's own withdrawal add-on was detected. In Auto mode this plugin steps aside on FluentCart orders, so customers see a single withdrawal button.", 'wwu-withdrawal-button' ) . '</p></div>';
 		} else {
-			echo '<div class="wwu-ui-notice info" style="margin:12px 0;max-width:860px;"><p style="margin:0;">' . esc_html__( 'FluentCart is active and this plugin handles its withdrawal button. If FluentCart later ships its own withdrawal add-on, Auto mode steps aside automatically.', 'wwu-withdrawal-button' ) . '</p></div>';
+			echo '<div class="wwu-ui-notice warning" style="margin:12px 0;max-width:860px;"><p style="margin:0 0 6px;"><strong>' . esc_html__( 'FluentCart now ships its own native withdrawal add-on (since FluentCart 1.4.2).', 'wwu-withdrawal-button' ) . '</strong></p><p style="margin:0;">' . wp_kses_post(
+				sprintf(
+					/* translators: %s: filter name wrapped in <code>. */
+					__( 'This plugin does not yet auto-detect it. If you have enabled FluentCart\'s "customer rights" add-on, set the handling below to <strong>Off</strong> (or have your developer return true from the %s filter) so customers do not see two withdrawal flows on FluentCart orders. Automatic detection will ship in an update. Your WooCommerce and EDD handling is unaffected.', 'wwu-withdrawal-button' ),
+					'<code>wwu_wb_fluentcart_native_active</code>'
+				)
+			) . '</p></div>';
 		}
 
 		echo '<table class="form-table" role="presentation"><tbody>';
@@ -296,7 +302,13 @@ final class SettingsPage {
 		echo '<p class="description" style="max-width:760px;">' . esc_html__( 'Controls our consumer-facing FluentCart surfaces only: the portal button, the checkout consent capture, the withdrawal e-mail link, and the public form. The admin Requests dashboard and any in-flight confirmation always keep working, so existing requests are never stranded.', 'wwu-withdrawal-button' ) . '</p>';
 
 		echo '<details class="wwu-wb-clause"><summary><strong>' . esc_html__( 'Show example', 'wwu-withdrawal-button' ) . '</strong></summary>';
-		echo '<p class="description" style="max-width:760px;margin-top:8px;">' . esc_html__( 'FluentCart announced a dedicated withdrawal add-on. When you install it, leave this on Auto: this plugin detects it and hides its own FluentCart button so customers see only one. Pick Off to disable our FluentCart handling now, or Always to keep ours regardless of any add-on.', 'wwu-withdrawal-button' ) . '</p>';
+		echo '<p class="description" style="max-width:760px;margin-top:8px;">' . wp_kses_post(
+			sprintf(
+				/* translators: %s: filter name wrapped in <code>. */
+				__( 'FluentCart shipped a dedicated withdrawal add-on ("customer rights") in 1.4.2. Automatic detection is not wired into this plugin yet, so for now: if you use FluentCart\'s add-on, pick <strong>Off</strong> here (or return true from the %s filter) to avoid two flows; pick <strong>Always</strong> to keep ours regardless. A future update will detect the add-on so Auto can step aside on its own.', 'wwu-withdrawal-button' ),
+				'<code>wwu_wb_fluentcart_native_active</code>'
+			)
+		) . '</p>';
 		echo '</details>';
 
 		echo '</td></tr>';

@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -122,6 +122,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 
 == Changelog ==
 
+= 1.2.2 =
+* **FluentCart now has its own native withdrawal add-on — clearer guidance.** As of **FluentCart 1.4.2** (June 2026), FluentCart ships a first-party EU "right of withdrawal" feature ("customer rights"). If you enable it **and** keep this plugin handling FluentCart, customers could see two withdrawal flows. **Settings → FluentCart** now states this clearly and tells you what to do: set the FluentCart handling to **Off** (or have a developer return true from the `wwu_wb_fluentcart_native_active` filter) so only one flow shows. Automatic detection of FluentCart's add-on will arrive in a later update. Your WooCommerce and EDD handling is unaffected.
+
 = 1.2.1 =
 * **Fix — the "Right of withdrawal" account tab no longer returns a 404 on a fresh install.** On WooCommerce the withdrawal tab is a rewrite endpoint; its rewrite rule was not being persisted during activation, so clicking the tab in **My Account** led to a 404 until you re-saved Permalinks. The plugin now performs a one-time rewrite-rules flush on the first page load after activation, so the tab resolves immediately. (If you already hit this: **Settings → Permalinks → Save Changes** also fixes it — no page needs to be created, the slug is a WooCommerce endpoint, not a page.)
 * **Edit the legal clauses from the admin — no code needed.** A new **Settings → Legal clauses** section lets you replace the built-in pre-contractual / terms / privacy / exemption-consent clauses with your own wording. Your text then appears on the Compliance page and wherever the `[wwu_wb_info]` shortcode is used (and the "sample text" note is dropped). Leave a field empty to keep the built-in template; a "Show the built-in default" toggle lets you copy the original as a starting point. Developers can also override programmatically with the new `wwu_wb_clause_text` filter. The built-in clauses are sample templates — adapt them to your business and have your counsel review them.
@@ -211,6 +214,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.2.2 =
+FluentCart 1.4.2 ships its own native EU withdrawal add-on. If you enable it, set this plugin's FluentCart handling to Off (Settings → FluentCart) so customers don't see two withdrawal flows. The settings now explain this; automatic detection comes in a later update. WooCommerce/EDD unaffected.
 
 = 1.2.1 =
 Fixes the WooCommerce "Right of withdrawal" account tab returning a 404 on a fresh install — a one-time rewrite flush now runs automatically after activation (re-saving Permalinks also fixes it). You can now also edit the legal clauses from Settings → Legal clauses (no code), plus a wwu_wb_clause_text filter.

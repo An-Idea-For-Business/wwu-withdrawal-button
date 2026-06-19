@@ -3,6 +3,34 @@
 All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); the project uses Semantic Versioning.
 
+## [1.2.2] — 2026-06-18 — FluentCart native withdrawal add-on: coexistence guidance
+
+FluentCart **1.4.2** (June 2026) shipped its own first-party EU right-of-withdrawal
+feature — the **"FluentCart customer rights"** add-on (public no-login page, two-step
+statutory flow with timestamped acknowledgement, item/quantity selection with tax-aware
+estimated refund, subscription withdrawal, duplicate-request guard, admin Withdrawal
+Requests page, automated e-mails). This is the native add-on FluentCart had told us was
+coming (2026-06-15) — the overlap we anticipated with the `fluentcart_mode` Auto-defer
+design.
+
+**Gap:** `FluentCartAdapter::native_addon_active()` is still a placeholder returning
+`false` (no published detection signal when it was written), so Auto mode does **not**
+yet auto-defer — a merchant running both could see two withdrawal flows on FluentCart.
+The `wwu_wb_fluentcart_native_active` filter and the **Off** mode are the current manual
+overrides.
+
+**This release (interim, no fragile guessing):** the **Settings → FluentCart** copy is
+corrected — the previous "*if* FluentCart *later* ships an add-on, Auto steps aside
+automatically" notice (now wrong) becomes a `notice-warning` stating the add-on exists
+(FluentCart 1.4.2+), that auto-detection isn't wired yet, and what to do (set **Off**, or
+return true from `wwu_wb_fluentcart_native_active`) so customers don't see two flows. The
+"Show example" help is updated likewise. No detection logic is guessed.
+
+**Next:** asked the FluentCart team for the canonical detection signal (class / constant /
+plugin slug) for the customer-rights add-on; once received, `native_addon_active()` gets
+a one-line real check so Auto truly auto-defers. WooCommerce + EDD handling unaffected.
+README status badge bumped to 1.2.2. PHP lint clean; no DB change.
+
 ## [1.2.1] — 2026-06-18 — Fix My Account endpoint 404 on fresh activation + clause filter
 
 Two fixes prompted by a developer's support email (Antonio Costa):
