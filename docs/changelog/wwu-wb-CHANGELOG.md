@@ -3,8 +3,32 @@
 All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); the project uses Semantic Versioning.
 
-## [1.2.2] — 2026-06-18 — FluentCart native withdrawal add-on: coexistence guidance
+## [1.2.2] — 2026-06-18 — Critical e-mail-send hardening + FluentCart coexistence + smoke fix
 
+**Critical fix — a fatal "critical error" when sending the acknowledgement e-mail.**
+Reported by a merchant running WP Mail SMTP (free) across several WooCommerce sites. On
+withdrawal confirmation, and on the admin "Resend e-mail" action, an exception raised
+INSIDE `wp_mail()` by an SMTP plugin (WP Mail SMTP, FluentSMTP, a provider mailer), or a
+`\Error` from Dompdf on PHP 8, escaped and crashed the request. WordPress's own
+`wp_mail()` only catches `\PHPMailer\PHPMailer\Exception`; any other `\Throwable`
+propagated up through `do_action('wwu_wb_withdrawal_confirmed')` to the REST / no-JS
+confirm handler, producing a white-screen fatal even though the withdrawal had already
+been recorded. Fix: the send path is now exception-safe end to end. `Mailer::send_html()`
+wraps `wp_mail()` in `try/catch(\Throwable)` (returns false, logs
+`durable_medium:mail.exception` + `error_log`); the WooCommerce `WC_Email` delivery route
+is wrapped and falls through to the standalone mailer on a throw; and the optional PDF
+block is wrapped so a Dompdf error just skips the attachment. A send failure now degrades
+into the existing `receipt_failed` path (admin notice + resend) instead of a fatal, and
+the consumer always reaches their confirmation page. After updating, the actual SMTP
+cause is visible in the PHP error log + the admin "e-mail failed" notice.
+
+**Smoke test fix.** The `withdrawal_request` suite built its fixtures with `order_id` (a
+key `WithdrawalRequest::from_input()` ignores — it reads `order_ref`), so the
+`is_valid_unaffected` assertion saw an empty `order_ref` and went red. Changed the four
+fixtures to `order_ref`. No plugin-code change: `is_valid()` was always correct (the live
+flow passes `order_ref`, which is why real withdrawals worked).
+
+**FluentCart native withdrawal add-on: coexistence guidance.**
 FluentCart **1.4.2** (June 2026) shipped its own first-party EU right-of-withdrawal
 feature — the **"FluentCart customer rights"** add-on (public no-login page, two-step
 statutory flow with timestamped acknowledgement, item/quantity selection with tax-aware

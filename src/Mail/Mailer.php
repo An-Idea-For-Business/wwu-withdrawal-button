@@ -36,14 +36,25 @@ final class Mailer {
 		};
 		add_filter( 'wp_mail_content_type', $set_html );
 
-		// try/finally guarantees the global filter is removed even if wp_mail() — or a
-		// third-party hook firing inside it (phpmailer_init, wp_mail, etc.) — throws.
-		// Without it a thrown exception would leave wp_mail_content_type forced to
-		// text/html for the rest of the request, turning OTHER plugins' plain-text
-		// emails into HTML. Conflict-safety: never leak a global mail filter.
+		// try / catch / finally:
+		// - finally removes the global content-type filter so a thrown send never leaves
+		//   wp_mail_content_type forced to text/html for the rest of the request (which
+		//   would turn OTHER plugins' plain-text emails into HTML).
+		// - catch keeps an exception raised INSIDE wp_mail() from escaping and crashing
+		//   the request. WordPress's own wp_mail() only catches
+		//   \PHPMailer\PHPMailer\Exception; an SMTP plugin (WP Mail SMTP, FluentSMTP, a
+		//   provider mailer) can raise a different exception type, or a PHP \Error on
+		//   8.x, which wp_mail() does NOT swallow. Here a failed send degrades to false;
+		//   the caller records the failure and the merchant can resend. The withdrawal
+		//   itself is already recorded, so the consumer never sees a "critical error".
 		$headers = array();
+		$sent    = false;
 		try {
 			$sent = wp_mail( $to, $subject, $html, $headers, $attachments );
+		} catch ( \Throwable $e ) {
+			\WWU\WithdrawalButton\Debug\Debug::error( 'durable_medium', 'mail.exception', array( 'error' => $e->getMessage() ) );
+			error_log( '[WWU Withdrawal Button] wp_mail threw during send: ' . $e->getMessage() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			$sent = false;
 		} finally {
 			remove_filter( 'wp_mail_content_type', $set_html );
 		}

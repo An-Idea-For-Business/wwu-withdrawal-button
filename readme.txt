@@ -123,6 +123,7 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 == Changelog ==
 
 = 1.2.2 =
+* **Critical fix: no more "critical error" when sending the acknowledgement e-mail.** When a consumer confirmed a withdrawal (and when an admin clicked "Resend e-mail"), an exception raised inside WordPress's `wp_mail()` by an SMTP plugin (for example WP Mail SMTP or FluentSMTP), or a PDF/Dompdf error on PHP 8, could escape and crash the whole request with a fatal "critical error" even though the withdrawal itself was already recorded. The e-mail path is now exception-safe on both delivery routes (the standalone mailer and the WooCommerce e-mail) and for the optional PDF: a send failure degrades gracefully (it is logged, the admin gets a "resend" notice, the consumer still sees their confirmation page) instead of taking down the page. After updating, check your SMTP plugin's settings or log for the underlying cause.
 * **FluentCart now has its own native withdrawal add-on — clearer guidance.** As of **FluentCart 1.4.2** (June 2026), FluentCart ships a first-party EU "right of withdrawal" feature ("customer rights"). If you enable it **and** keep this plugin handling FluentCart, customers could see two withdrawal flows. **Settings → FluentCart** now states this clearly and tells you what to do: set the FluentCart handling to **Off** (or have a developer return true from the `wwu_wb_fluentcart_native_active` filter) so only one flow shows. Automatic detection of FluentCart's add-on will arrive in a later update. Your WooCommerce and EDD handling is unaffected.
 
 = 1.2.1 =
@@ -216,7 +217,7 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 == Upgrade Notice ==
 
 = 1.2.2 =
-FluentCart 1.4.2 ships its own native EU withdrawal add-on. If you enable it, set this plugin's FluentCart handling to Off (Settings → FluentCart) so customers don't see two withdrawal flows. The settings now explain this; automatic detection comes in a later update. WooCommerce/EDD unaffected.
+Critical: fixes a fatal "critical error" when sending the acknowledgement e-mail (on confirmation and admin resend), caused by an SMTP plugin like WP Mail SMTP throwing inside wp_mail. The send now fails gracefully instead of crashing. Also: set FluentCart handling to Off if you use FluentCart's new native add-on.
 
 = 1.2.1 =
 Fixes the WooCommerce "Right of withdrawal" account tab returning a 404 on a fresh install — a one-time rewrite flush now runs automatically after activation (re-saving Permalinks also fixes it). You can now also edit the legal clauses from Settings → Legal clauses (no code), plus a wwu_wb_clause_text filter.

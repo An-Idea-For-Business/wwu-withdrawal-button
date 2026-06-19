@@ -950,7 +950,7 @@ final class SmokeTests {
 		/* (a) Normal products array round-trips via to_array(). */
 		$req_a = $class::from_input(
 			array(
-				'order_id' => '99',
+				'order_ref' => '99',
 				'name'     => 'Jane',
 				'email'    => 'jane@example.com',
 				'country'  => 'IT',
@@ -971,7 +971,7 @@ final class SmokeTests {
 		}, range( 1, 75 ) );
 		$req_b   = $class::from_input(
 			array(
-				'order_id' => '99',
+				'order_ref' => '99',
 				'name'     => 'Jane',
 				'email'    => 'jane@example.com',
 				'country'  => 'IT',
@@ -990,7 +990,7 @@ final class SmokeTests {
 		$long_name = str_repeat( 'X', 300 );
 		$req_c     = $class::from_input(
 			array(
-				'order_id' => '99',
+				'order_ref' => '99',
 				'name'     => 'Jane',
 				'email'    => 'jane@example.com',
 				'country'  => 'IT',
@@ -1009,7 +1009,7 @@ final class SmokeTests {
 		/* (d) Absent/empty products → to_array()['products'] === [] and is_valid() is still true. */
 		$req_d = $class::from_input(
 			array(
-				'order_id' => '99',
+				'order_ref' => '99',
 				'name'     => 'Jane',
 				'email'    => 'jane@example.com',
 				'country'  => 'IT',

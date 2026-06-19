@@ -78,9 +78,17 @@ final class ConfirmationDispatcher {
 		// extra warn-log + filesystem round-trip when it can't produce anything.
 		$pdf_path = '';
 		if ( ! empty( $settings['send_pdf'] ) && PdfBuilder::is_available() ) {
-			$pdf_html  = Template::render( 'pdf/receipt-pdf.php', $data );
-			$pdf_bytes = ( new PdfBuilder() )->render( $pdf_html );
-			$pdf_path  = ( new ReceiptStore() )->save( $request_uid, $pdf_bytes );
+			try {
+				$pdf_html  = Template::render( 'pdf/receipt-pdf.php', $data );
+				$pdf_bytes = ( new PdfBuilder() )->render( $pdf_html );
+				$pdf_path  = ( new ReceiptStore() )->save( $request_uid, $pdf_bytes );
+			} catch ( \Throwable $e ) {
+				// The PDF is an OPTIONAL extra copy; a renderer / filesystem error (e.g.
+				// Dompdf raising on PHP 8 or hitting the memory limit) must never block
+				// the legally-required acknowledgement email. Skip the attachment.
+				Debug::warn( 'durable_medium', 'receipt.pdf_failed', array( 'request_uid' => $request_uid, 'error' => $e->getMessage() ) );
+				$pdf_path = '';
+			}
 		}
 
 		// Consumer email.
@@ -119,10 +127,18 @@ final class ConfirmationDispatcher {
 		// goes out — the WC toggle controls styling, never whether it is sent.
 		$sent = false;
 		if ( 'woocommerce' === $order->platform && function_exists( 'WC' ) && WC() && method_exists( WC(), 'mailer' ) ) {
-			$wc_emails = WC()->mailer()->get_emails();
-			$key       = \WWU\WithdrawalButton\Mail\WooAckEmail::CLASS_KEY;
-			if ( isset( $wc_emails[ $key ] ) && method_exists( $wc_emails[ $key ], 'trigger' ) ) {
-				$sent = (bool) $wc_emails[ $key ]->trigger( $data, (string) $email['to'], (array) $email['attachments'] );
+			try {
+				$wc_emails = WC()->mailer()->get_emails();
+				$key       = \WWU\WithdrawalButton\Mail\WooAckEmail::CLASS_KEY;
+				if ( isset( $wc_emails[ $key ] ) && method_exists( $wc_emails[ $key ], 'trigger' ) ) {
+					$sent = (bool) $wc_emails[ $key ]->trigger( $data, (string) $email['to'], (array) $email['attachments'] );
+				}
+			} catch ( \Throwable $e ) {
+				// A WC_Email (or an SMTP plugin raising inside wp_mail) that throws must
+				// not crash the confirmation; log it and fall through to the standalone
+				// mailer below, which is itself exception-safe.
+				Debug::warn( 'durable_medium', 'receipt.wc_email_threw', array( 'request_uid' => $request_uid, 'error' => $e->getMessage() ) );
+				$sent = false;
 			}
 		}
 
