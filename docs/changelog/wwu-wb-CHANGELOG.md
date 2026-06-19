@@ -3,6 +3,18 @@
 All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); the project uses Semantic Versioning.
 
+## [1.2.6] — 2026-06-19 — Complete the Italian translation (recent admin strings)
+
+User report: the **Legal clauses** Settings section (and other recent strings) displayed in English on an Italian site. Root cause: the `.pot` had not been regenerated since the 1.2.1 editable-clauses work, so strings added in 1.2.1–1.2.5 (the clauses editor, `Notification email(s)`, the Compliance legal-texts reminders, the FluentCart e-mail helper, `Reported reason: %s`, etc.) were `__()`-wrapped but absent from the translation catalogue → WordPress fell back to the English source.
+
+**What changed (translations only, no code):**
+- Regenerated `languages/wwu-withdrawal-button.pot` via `wwu-tools/wwu-generate-pot.php` (110 files scanned, **562 unique strings**, up from ~550).
+- `msgmerge`d the new template into `wwu-withdrawal-button-it_IT.po` and translated the **29** newly-surfaced merchant-facing strings; recompiled `it_IT.mo` with Poedit's `msgfmt`. IT now at **554 translated / 8 untranslated**, where the 8 remaining are intentional English (proper nouns + dev-tool labels: `FluentCart`, `IP`, `WWU Withdrawal Button`, `Dashboard`, `Debug`, `Debug Inspector`, `Snapshot`).
+
+**Known follow-ups:**
+- The **de_DE / es_ES / fr_FR / sv_SE** catalogues need the same recent strings translated (they currently English-fall-back). `sv_SE` is already pending native review.
+- The two **FluentCart Settings notices** were translated faithfully but still describe the pre-1.2.5 "no auto-detection yet — set Off manually" behaviour; now that 1.2.5 wired auto-detection, that copy (EN source + IT) should be refreshed in a follow-up.
+
 ## [1.2.5] — 2026-06-19 — PHP 7.4 fix (Dompdf 2.x) + multi-recipient notification e-mail
 
 **PHP 7.4 compatibility — Dompdf downgraded to 2.x.** Reported as issue #31. The bundled PDF engine was `dompdf/dompdf: ^3.1` (resolved v3.1.5), whose dependency tree (`sabberworm/php-css-parser` 9.x, `thecodingmachine/safe`) requires **PHP ≥ 8.1**, and Dompdf 3.x itself uses 8.1 syntax. This contradicted the plugin's declared `Requires PHP: 7.4`: on a PHP 7.4 site, Composer's generated `vendor/composer/platform_check.php` throws *"Your Composer dependencies require a PHP version >= 8.1.0"*, surfaced near the PDF-attachment option on the settings page. Fix: pin `dompdf/dompdf` to `^2.0` (resolved **v2.0.8**, tree PHP 7.1+); `composer.lock` regenerated — `thecodingmachine/safe` + the 3.x font/svg libs dropped, css-parser downgraded to 8.x. The `PdfBuilder` API (`Options`/`loadHtml`/`setPaper`/`render`/`output`) is identical in 2.x — verified by a standalone render producing a valid `%PDF-1.7`. `vendor/` is not committed (it is built from the lock at package time), so the fix is `composer.json` + `composer.lock`; the shipped `platform_check.php` now requires ≤ 7.4.
