@@ -177,7 +177,7 @@ msgstr "Inga samtyckesposter än."
 #: templates/pdf/receipt-pdf.php:48
 #: templates/public/verify-receipt.php:66
 msgid "Order"
-msgstr ""
+msgstr "Beställning"
 
 #: src/Admin/ConsentRecordsPage.php:117
 #: templates/myaccount/withdrawal-list.php:73
@@ -546,7 +546,7 @@ msgstr "I tid"
 
 #: src/Admin/RequestsDashboard.php:103
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: src/Admin/RequestsDashboard.php:104
 msgid "Evidence"
@@ -875,31 +875,31 @@ msgstr "FluentCart har aviserat ett särskilt tillägg för frånträde. När du
 
 #: src/Admin/SettingsPage.php:312
 msgid "Add the withdrawal link to FluentCart e-mails (optional)"
-msgstr ""
+msgstr "Lägg till ångerrätten i FluentCart-e-postmeddelanden (valfritt)"
 
 #: src/Admin/SettingsPage.php:313
 msgid "WooCommerce and Easy Digital Downloads order e-mails get the withdrawal link automatically. FluentCart does not let plugins add content to its e-mails automatically, so to include the link in your FluentCart order e-mails add this shortcode once to your receipt template:"
-msgstr ""
+msgstr "WooCommerce och Easy Digital Downloads lägger automatiskt till ångerlänken i orderbekräftelser. FluentCart tillåter inte att tillägg lägger till innehåll i dess e-postmeddelanden automatiskt. För att inkludera länken i dina FluentCart-orderbekräftelser lägger du till denna shortcode en gång i din kvittomall:"
 
 #: src/Admin/SettingsPage.php:315
 msgid "How to add it (3 steps)"
-msgstr ""
+msgstr "Hur du lägger till den (3 steg)"
 
 #: src/Admin/SettingsPage.php:317
 msgid "In FluentCart open Settings → Emails and edit your order receipt / order confirmation notification."
-msgstr ""
+msgstr "Öppna Inställningar → E-post i FluentCart och redigera ditt kvitto/orderbekräftelsemeddelande."
 
 #: src/Admin/SettingsPage.php:318
 msgid "Switch the body to \"Customized Body\", then use the shortcode picker ({;}) above the editor — or simply paste the shortcode above where you want the link to appear."
-msgstr ""
+msgstr "Byt brödtext till \"Customized Body\", använd sedan shortcode-väljaren ({;}) ovanför redigeraren — eller klistra in shortcoden ovan där du vill att länken ska visas."
 
 #: src/Admin/SettingsPage.php:319
 msgid "Save. FluentCart replaces the shortcode with the consumer's personal, pre-authenticated withdrawal link when the e-mail is sent."
-msgstr ""
+msgstr "Spara. FluentCart ersätter shortcoden med konsumentens personliga, förautentiserade ångerlänk när e-postmeddelandet skickas."
 
 #: src/Admin/SettingsPage.php:321
 msgid "Optional: customers can always reach the withdrawal from the FluentCart \"Right of withdrawal\" portal page and the public form, regardless of the e-mail."
-msgstr ""
+msgstr "Valfritt: kunder kan alltid nå ångerrätten via FluentCarts portalsida \"Right of withdrawal\" och det publika formuläret, oberoende av e-postmeddelandet."
 
 #: src/Admin/SettingsPage.php:355
 msgid "Consumer guidance"
@@ -2299,17 +2299,17 @@ msgstr "WWU Withdrawal Button kräver PHP %1$s eller högre. Du kör PHP %2$s."
 
 #: src/Admin/ComplianceStatusPage.php:56 src/Admin/DashboardPage.php:256
 msgid "Installing the button is not enough — update your legal texts too."
-msgstr ""
+msgstr "Det räcker inte att installera knappen — uppdatera dina juridiska texter också."
 
 #: src/Admin/ComplianceStatusPage.php:57
 msgid "EU law requires your Terms & Conditions of sale and your pre-contractual information to describe how the consumer withdraws — and that now includes the new online \"withdrawal button\". Edit the withdrawal article in your own documents to mention it: copy the ready-to-paste clauses below. The plugin adds the button, but it cannot change your published terms for you."
-msgstr ""
+msgstr "EU-lagstiftningen kräver att dina försäljningsvillkor och din förhandsinformation beskriver hur konsumenten utövar ångerrätten — och det inkluderar nu den nya digitala \"ångerknappen\". Redigera avsnittet om ångerrätt i dina egna dokument och nämn den: kopiera de färdiga klausulerna nedan. Tillägget lägger till knappen, men kan inte ändra dina publicerade villkor åt dig."
 
 #: src/Admin/DashboardPage.php:257
 msgid "EU law requires your Terms & Conditions of sale and your pre-contractual information to describe how the consumer withdraws — and that now includes the new online \"withdrawal button\". Edit the withdrawal article in your own documents to mention it. The plugin generates ready-to-paste clauses, but it cannot change your published terms for you."
-msgstr ""
+msgstr "EU-lagstiftningen kräver att dina försäljningsvillkor och din förhandsinformation beskriver hur konsumenten utövar ångerrätten — och det inkluderar nu den nya digitala \"ångerknappen\". Redigera avsnittet om ångerrätt i dina egna dokument och nämn den. Tillägget genererar färdiga klausuler att kopiera, men kan inte ändra dina publicerade villkor åt dig."
 
 #: src/Admin/DashboardPage.php:258
 msgid "Get the ready-to-paste clauses"
-msgstr ""
+msgstr "Hämta de färdiga klausulerna"
 

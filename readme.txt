@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.2.5
+Stable tag: 1.2.6
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -122,6 +122,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 
 == Changelog ==
 
+= 1.2.6 =
+* **Translations completed for all bundled locales.** Several admin strings added in recent releases — the "Legal clauses" editor, the "Notification email(s)" field, the legal-texts reminders on the Compliance page and the FluentCart e-mail helper — were showing in English because they had not been translated yet. All five bundled language files (Italian, German, French, Spanish, Swedish) are now complete for these strings, so those screens display in your language. (The Swedish strings were machine-assisted and are pending a native review.)
+
 = 1.2.5 =
 * **PHP 7.4 compatibility fixed (PDF library).** The bundled PDF engine (Dompdf) had been updated to a 3.x release that requires PHP 8.1, which contradicted the plugin's "Requires PHP 7.4" and produced a Composer "platform" error near the PDF option on PHP 7.4 sites. Dompdf is now pinned to the 7.4-compatible 2.x line (PHP 7.1+), so the plugin runs on PHP 7.4 again with no change to the PDF receipts. (Thanks to the reporter of issue #31.)
 * **Notification e-mail now accepts multiple recipients.** Settings → "Notification email(s)" accepts several addresses separated by commas, so the "new withdrawal request" alert can reach more than one person. The first address is also shown to the customer as the shop contact. A single address keeps working exactly as before.
@@ -226,6 +229,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.2.6 =
+Completes the bundled translations (Italian, German, French, Spanish, Swedish) for recent admin strings that were still showing in English: the Legal clauses editor, the Notification email(s) field, the Compliance legal-texts reminders and the FluentCart e-mail helper. (Swedish is machine-assisted, pending native review.)
 
 = 1.2.5 =
 Fixes PHP 7.4 compatibility: the bundled PDF library (Dompdf) had been requiring PHP 8.1 and showed a Composer platform error on PHP 7.4 sites; it is now pinned to the 7.4-compatible 2.x line. Also: the notification e-mail field now accepts multiple comma-separated recipients.

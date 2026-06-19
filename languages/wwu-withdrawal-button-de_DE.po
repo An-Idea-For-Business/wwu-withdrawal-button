@@ -85,7 +85,7 @@ msgstr "Einwilligungsprotokolle"
 #: src/Admin/AdminController.php:203
 #: src/Admin/ComplianceStatusPage.php:43
 msgid "Compliance"
-msgstr ""
+msgstr "Konformität"
 
 #: src/Admin/AdminController.php:211
 #: src/Admin/AdminController.php:212
@@ -546,7 +546,7 @@ msgstr "Fristgerecht"
 
 #: src/Admin/RequestsDashboard.php:103
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: src/Admin/RequestsDashboard.php:104
 msgid "Evidence"
@@ -875,31 +875,31 @@ msgstr "FluentCart hat ein eigenes Widerrufs-Add-on angekündigt. Wenn Sie es in
 
 #: src/Admin/SettingsPage.php:312
 msgid "Add the withdrawal link to FluentCart e-mails (optional)"
-msgstr ""
+msgstr "Fügen Sie den Widerrufs-Link zu FluentCart-E-Mails hinzu (optional)"
 
 #: src/Admin/SettingsPage.php:313
 msgid "WooCommerce and Easy Digital Downloads order e-mails get the withdrawal link automatically. FluentCart does not let plugins add content to its e-mails automatically, so to include the link in your FluentCart order e-mails add this shortcode once to your receipt template:"
-msgstr ""
+msgstr "WooCommerce- und Easy Digital Downloads-Bestellungs-E-Mails erhalten den Widerrufs-Link automatisch. FluentCart erlaubt es Plugins nicht, Inhalte automatisch zu seinen E-Mails hinzuzufügen. Um den Link in Ihre FluentCart-Bestellungs-E-Mails einzubinden, fügen Sie diesen Shortcode einmalig in Ihre Quittungsvorlage ein:"
 
 #: src/Admin/SettingsPage.php:315
 msgid "How to add it (3 steps)"
-msgstr ""
+msgstr "So fügen Sie ihn hinzu (3 Schritte)"
 
 #: src/Admin/SettingsPage.php:317
 msgid "In FluentCart open Settings → Emails and edit your order receipt / order confirmation notification."
-msgstr ""
+msgstr "Öffnen Sie in FluentCart Einstellungen → E-Mails und bearbeiten Sie Ihre Bestellquittung / Bestellbestätigung."
 
 #: src/Admin/SettingsPage.php:318
 msgid "Switch the body to \"Customized Body\", then use the shortcode picker ({;}) above the editor — or simply paste the shortcode above where you want the link to appear."
-msgstr ""
+msgstr "Wechseln Sie den Textkörper auf „Customized Body“ und verwenden Sie dann die Shortcode-Auswahl ({;}) über dem Editor — oder fügen Sie den obigen Shortcode einfach dort ein, wo der Link erscheinen soll."
 
 #: src/Admin/SettingsPage.php:319
 msgid "Save. FluentCart replaces the shortcode with the consumer's personal, pre-authenticated withdrawal link when the e-mail is sent."
-msgstr ""
+msgstr "Speichern Sie. FluentCart ersetzt den Shortcode beim Versand der E-Mail durch den persönlichen, vorausgefüllten Widerrufs-Link des Verbrauchers."
 
 #: src/Admin/SettingsPage.php:321
 msgid "Optional: customers can always reach the withdrawal from the FluentCart \"Right of withdrawal\" portal page and the public form, regardless of the e-mail."
-msgstr ""
+msgstr "Optional: Kunden können den Widerruf jederzeit über die FluentCart-Portalseite „Widerrufsrecht“ und das öffentliche Formular einleiten, unabhängig von der E-Mail."
 
 #: src/Admin/SettingsPage.php:355
 msgid "Consumer guidance"
@@ -1259,7 +1259,7 @@ msgstr "CSS-Variablen (schnelle Anpassungen)"
 
 #: src/Admin/SettingsPage.php:631
 msgid "Variable"
-msgstr ""
+msgstr "Variable"
 
 #: src/Admin/SettingsPage.php:631
 msgid "Default"
@@ -2299,17 +2299,17 @@ msgstr "WWU Widerrufsschaltfläche erfordert PHP %1$s oder höher. Sie verwenden
 
 #: src/Admin/ComplianceStatusPage.php:56 src/Admin/DashboardPage.php:256
 msgid "Installing the button is not enough — update your legal texts too."
-msgstr ""
+msgstr "Die Installation der Schaltfläche genügt nicht — aktualisieren Sie auch Ihre Rechtstexte."
 
 #: src/Admin/ComplianceStatusPage.php:57
 msgid "EU law requires your Terms & Conditions of sale and your pre-contractual information to describe how the consumer withdraws — and that now includes the new online \"withdrawal button\". Edit the withdrawal article in your own documents to mention it: copy the ready-to-paste clauses below. The plugin adds the button, but it cannot change your published terms for you."
-msgstr ""
+msgstr "Das EU-Recht verlangt, dass Ihre Allgemeinen Geschäftsbedingungen und Ihre vorvertraglichen Informationen beschreiben, wie der Verbraucher widerrufen kann — und dazu gehört jetzt auch der neue Online-„Widerrufs-Button“. Bearbeiten Sie den Widerrufsartikel in Ihren eigenen Dokumenten entsprechend: Kopieren Sie die unten aufgeführten einfügebereiten Klauseln. Das Plugin fügt die Schaltfläche ein, kann Ihre veröffentlichten AGB jedoch nicht für Sie ändern."
 
 #: src/Admin/DashboardPage.php:257
 msgid "EU law requires your Terms & Conditions of sale and your pre-contractual information to describe how the consumer withdraws — and that now includes the new online \"withdrawal button\". Edit the withdrawal article in your own documents to mention it. The plugin generates ready-to-paste clauses, but it cannot change your published terms for you."
-msgstr ""
+msgstr "Das EU-Recht verlangt, dass Ihre Allgemeinen Geschäftsbedingungen und Ihre vorvertraglichen Informationen beschreiben, wie der Verbraucher widerrufen kann — und dazu gehört jetzt auch der neue Online-„Widerrufs-Button“. Bearbeiten Sie den Widerrufsartikel in Ihren eigenen Dokumenten entsprechend. Das Plugin erstellt einfügebereite Klauseln, kann Ihre veröffentlichten AGB jedoch nicht für Sie ändern."
 
 #: src/Admin/DashboardPage.php:258
 msgid "Get the ready-to-paste clauses"
-msgstr ""
+msgstr "Holen Sie sich die einfügebereiten Klauseln"
 

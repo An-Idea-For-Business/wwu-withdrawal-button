@@ -33,7 +33,7 @@ msgstr "Interrogation : désactivée"
 #: src/Admin/AdminAssets.php:71
 #: src/Admin/InspectorPage.php:57
 msgid "Pause"
-msgstr ""
+msgstr "Pause"
 
 #: src/Admin/AdminAssets.php:72
 msgid "Resume"
@@ -182,7 +182,7 @@ msgstr "Commande"
 #: src/Admin/ConsentRecordsPage.php:117
 #: templates/myaccount/withdrawal-list.php:73
 msgid "Date"
-msgstr ""
+msgstr "Date"
 
 #: src/Admin/ConsentRecordsPage.php:118
 msgid "Customer"
@@ -268,7 +268,7 @@ msgstr "Plateforme e-commerce détectée"
 
 #: src/Admin/DashboardPage.php:103
 msgid "active."
-msgstr ""
+msgstr "actif."
 
 #: src/Admin/DashboardPage.php:103
 msgid "Activate WooCommerce or FluentCart."
@@ -554,7 +554,7 @@ msgstr "Preuve"
 
 #: src/Admin/RequestsDashboard.php:105
 msgid "Actions"
-msgstr ""
+msgstr "Actions"
 
 #: src/Admin/RequestsDashboard.php:126
 #: templates/public/verify-receipt.php:73
@@ -701,7 +701,7 @@ msgstr "Collecter les diagnostics d'exécution et exposer les points de terminai
 
 #: src/Admin/SettingsPage.php:105
 msgid "Audience"
-msgstr ""
+msgstr "Audience"
 
 #: src/Admin/SettingsPage.php:108
 msgid "All admins"
@@ -875,31 +875,31 @@ msgstr "FluentCart a annoncé un add-on de rétractation dédié. Lorsque vous l
 
 #: src/Admin/SettingsPage.php:312
 msgid "Add the withdrawal link to FluentCart e-mails (optional)"
-msgstr ""
+msgstr "Ajouter le lien de rétractation aux e-mails FluentCart (facultatif)"
 
 #: src/Admin/SettingsPage.php:313
 msgid "WooCommerce and Easy Digital Downloads order e-mails get the withdrawal link automatically. FluentCart does not let plugins add content to its e-mails automatically, so to include the link in your FluentCart order e-mails add this shortcode once to your receipt template:"
-msgstr ""
+msgstr "WooCommerce et Easy Digital Downloads ajoutent automatiquement le lien de rétractation aux e-mails de commande. FluentCart ne permet pas aux plugins d'ajouter du contenu à ses e-mails automatiquement. Pour inclure le lien dans vos e-mails de commande FluentCart, ajoutez une fois ce shortcode à votre modèle de reçu :"
 
 #: src/Admin/SettingsPage.php:315
 msgid "How to add it (3 steps)"
-msgstr ""
+msgstr "Comment l'ajouter (3 étapes)"
 
 #: src/Admin/SettingsPage.php:317
 msgid "In FluentCart open Settings → Emails and edit your order receipt / order confirmation notification."
-msgstr ""
+msgstr "Dans FluentCart, ouvrez Paramètres → E-mails et modifiez votre notification de reçu de commande / confirmation de commande."
 
 #: src/Admin/SettingsPage.php:318
 msgid "Switch the body to \"Customized Body\", then use the shortcode picker ({;}) above the editor — or simply paste the shortcode above where you want the link to appear."
-msgstr ""
+msgstr "Passez le corps en « Corps personnalisé », puis utilisez le sélecteur de shortcode ({;}) au-dessus de l'éditeur — ou collez simplement le shortcode ci-dessus à l'endroit où vous souhaitez faire apparaître le lien."
 
 #: src/Admin/SettingsPage.php:319
 msgid "Save. FluentCart replaces the shortcode with the consumer's personal, pre-authenticated withdrawal link when the e-mail is sent."
-msgstr ""
+msgstr "Enregistrez. FluentCart remplace le shortcode par le lien de rétractation personnel et pré-authentifié du consommateur lors de l'envoi de l'e-mail."
 
 #: src/Admin/SettingsPage.php:321
 msgid "Optional: customers can always reach the withdrawal from the FluentCart \"Right of withdrawal\" portal page and the public form, regardless of the e-mail."
-msgstr ""
+msgstr "Facultatif : les clients peuvent toujours accéder à la rétractation depuis la page du portail « Droit de rétractation » de FluentCart et depuis le formulaire public, indépendamment de l'e-mail."
 
 #: src/Admin/SettingsPage.php:355
 msgid "Consumer guidance"
@@ -1087,7 +1087,7 @@ msgstr "Prestataires d'horodatage — lequel choisir"
 
 #: src/Admin/SettingsPage.php:495
 msgid "site"
-msgstr ""
+msgstr "site"
 
 #: src/Admin/SettingsPage.php:498
 msgid "Any RFC 3161 authority works — paste its endpoint above and add credentials if it is account-based. Running OpenTimestamps and an RFC 3161 token together gives two independent proofs."
@@ -1259,7 +1259,7 @@ msgstr "Variables CSS (remplacements rapides)"
 
 #: src/Admin/SettingsPage.php:631
 msgid "Variable"
-msgstr ""
+msgstr "Variable"
 
 #: src/Admin/SettingsPage.php:631
 msgid "Default"
@@ -1295,7 +1295,7 @@ msgstr "Paramètres enregistrés."
 
 #: src/Admin/SettingsPage.php:671
 msgid "Exemptions (Art. 59)"
-msgstr ""
+msgstr "Exemptions (Art. 59)"
 
 #: src/Admin/SettingsPage.php:672
 msgid "The right of withdrawal applies <strong>by default to every product</strong>, including digital goods and services. <strong>Physical products never need consent</strong> — the 14-day right just applies and no checkbox is ever shown for them. Only the <strong>two conditional exemptions</strong> (digital content with immediate access; a service fully performed) remove the right, and only when the consumer gives <strong>prior express consent</strong> AND <strong>acknowledges losing the right</strong>. Tag a product or category under a specific reason below by entering product IDs and/or category IDs (comma-separated)."
@@ -2186,7 +2186,7 @@ msgstr "Choisissez une commande dont vous souhaitez vous rétracter :"
 
 #: templates/myaccount/withdrawal-list.php:74
 msgid "Action"
-msgstr ""
+msgstr "Action"
 
 #: templates/partials/consumer-guidance.php:45
 msgid "You can withdraw from this contract within %d days, without giving any reason. It takes two short steps and we will email you a confirmation straight away."
@@ -2299,17 +2299,17 @@ msgstr "WWU Withdrawal Button nécessite PHP %1$s ou supérieur. Vous utilisez P
 
 #: src/Admin/ComplianceStatusPage.php:56 src/Admin/DashboardPage.php:256
 msgid "Installing the button is not enough — update your legal texts too."
-msgstr ""
+msgstr "Installer le bouton ne suffit pas — mettez également à jour vos textes légaux."
 
 #: src/Admin/ComplianceStatusPage.php:57
 msgid "EU law requires your Terms & Conditions of sale and your pre-contractual information to describe how the consumer withdraws — and that now includes the new online \"withdrawal button\". Edit the withdrawal article in your own documents to mention it: copy the ready-to-paste clauses below. The plugin adds the button, but it cannot change your published terms for you."
-msgstr ""
+msgstr "La loi européenne exige que vos Conditions Générales de Vente et vos informations précontractuelles décrivent comment le consommateur se rétracte — et cela inclut désormais le nouveau « bouton de rétractation » en ligne. Modifiez l'article sur la rétractation dans vos propres documents pour le mentionner : copiez les clauses prêtes à coller ci-dessous. Le plugin ajoute le bouton, mais il ne peut pas modifier vos conditions publiées à votre place."
 
 #: src/Admin/DashboardPage.php:257
 msgid "EU law requires your Terms & Conditions of sale and your pre-contractual information to describe how the consumer withdraws — and that now includes the new online \"withdrawal button\". Edit the withdrawal article in your own documents to mention it. The plugin generates ready-to-paste clauses, but it cannot change your published terms for you."
-msgstr ""
+msgstr "La loi européenne exige que vos Conditions Générales de Vente et vos informations précontractuelles décrivent comment le consommateur se rétracte — et cela inclut désormais le nouveau « bouton de rétractation » en ligne. Modifiez l'article sur la rétractation dans vos propres documents pour le mentionner. Le plugin génère des clauses prêtes à coller, mais il ne peut pas modifier vos conditions publiées à votre place."
 
 #: src/Admin/DashboardPage.php:258
 msgid "Get the ready-to-paste clauses"
-msgstr ""
+msgstr "Obtenir les clauses prêtes à coller"
 
