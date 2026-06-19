@@ -875,31 +875,31 @@ msgstr "FluentCart ha anunciado un complemento de desistimiento específico. Cua
 
 #: src/Admin/SettingsPage.php:312
 msgid "Add the withdrawal link to FluentCart e-mails (optional)"
-msgstr ""
+msgstr "Añadir el enlace de desistimiento a los correos electrónicos de FluentCart (opcional)"
 
 #: src/Admin/SettingsPage.php:313
 msgid "WooCommerce and Easy Digital Downloads order e-mails get the withdrawal link automatically. FluentCart does not let plugins add content to its e-mails automatically, so to include the link in your FluentCart order e-mails add this shortcode once to your receipt template:"
-msgstr ""
+msgstr "Los correos electrónicos de pedidos de WooCommerce y Easy Digital Downloads incluyen automáticamente el enlace de desistimiento. FluentCart no permite que los plugins añadan contenido a sus correos de forma automática, por lo que para incluir el enlace en sus correos de pedidos de FluentCart añada este shortcode una vez en la plantilla del recibo:"
 
 #: src/Admin/SettingsPage.php:315
 msgid "How to add it (3 steps)"
-msgstr ""
+msgstr "Cómo añadirlo (3 pasos)"
 
 #: src/Admin/SettingsPage.php:317
 msgid "In FluentCart open Settings → Emails and edit your order receipt / order confirmation notification."
-msgstr ""
+msgstr "En FluentCart, vaya a Configuración → Correos electrónicos y edite la notificación de recibo de pedido o confirmación de pedido."
 
 #: src/Admin/SettingsPage.php:318
 msgid "Switch the body to \"Customized Body\", then use the shortcode picker ({;}) above the editor — or simply paste the shortcode above where you want the link to appear."
-msgstr ""
+msgstr "Cambie el cuerpo al modo \"Customized Body\", luego use el selector de shortcodes ({;}) situado encima del editor, o simplemente pegue el shortcode donde desee que aparezca el enlace."
 
 #: src/Admin/SettingsPage.php:319
 msgid "Save. FluentCart replaces the shortcode with the consumer's personal, pre-authenticated withdrawal link when the e-mail is sent."
-msgstr ""
+msgstr "Guarde los cambios. FluentCart reemplazará el shortcode por el enlace de desistimiento personal y preautenticado del consumidor en el momento del envío del correo."
 
 #: src/Admin/SettingsPage.php:321
 msgid "Optional: customers can always reach the withdrawal from the FluentCart \"Right of withdrawal\" portal page and the public form, regardless of the e-mail."
-msgstr ""
+msgstr "Opcional: los clientes siempre pueden acceder al desistimiento desde la página del portal \"Right of withdrawal\" de FluentCart y desde el formulario público, independientemente del correo electrónico."
 
 #: src/Admin/SettingsPage.php:355
 msgid "Consumer guidance"
@@ -1259,7 +1259,7 @@ msgstr "Variables CSS (modificaciones rápidas)"
 
 #: src/Admin/SettingsPage.php:631
 msgid "Variable"
-msgstr ""
+msgstr "Variable"
 
 #: src/Admin/SettingsPage.php:631
 msgid "Default"
@@ -1341,7 +1341,7 @@ msgstr[1] "%d configurados"
 
 #: src/Admin/SettingsPage.php:74
 msgid "General"
-msgstr ""
+msgstr "General"
 
 #: src/Admin/SettingsPage.php:76
 msgid "Enable withdrawal function"
@@ -2299,17 +2299,17 @@ msgstr "WWU Withdrawal Button requiere PHP %1$s o superior. Está ejecutando PHP
 
 #: src/Admin/ComplianceStatusPage.php:56 src/Admin/DashboardPage.php:256
 msgid "Installing the button is not enough — update your legal texts too."
-msgstr ""
+msgstr "Instalar el botón no es suficiente: actualice también sus textos legales."
 
 #: src/Admin/ComplianceStatusPage.php:57
 msgid "EU law requires your Terms & Conditions of sale and your pre-contractual information to describe how the consumer withdraws — and that now includes the new online \"withdrawal button\". Edit the withdrawal article in your own documents to mention it: copy the ready-to-paste clauses below. The plugin adds the button, but it cannot change your published terms for you."
-msgstr ""
+msgstr "La normativa de la UE exige que sus Condiciones Generales de Venta y su información precontractual describan el procedimiento de desistimiento del consumidor, lo que ahora incluye el nuevo \"botón de desistimiento\" en línea. Edite el artículo sobre desistimiento en sus propios documentos para mencionarlo: copie las cláusulas listas para pegar que se muestran a continuación. El plugin añade el botón, pero no puede modificar sus condiciones publicadas por usted."
 
 #: src/Admin/DashboardPage.php:257
 msgid "EU law requires your Terms & Conditions of sale and your pre-contractual information to describe how the consumer withdraws — and that now includes the new online \"withdrawal button\". Edit the withdrawal article in your own documents to mention it. The plugin generates ready-to-paste clauses, but it cannot change your published terms for you."
-msgstr ""
+msgstr "La normativa de la UE exige que sus Condiciones Generales de Venta y su información precontractual describan el procedimiento de desistimiento del consumidor, lo que ahora incluye el nuevo \"botón de desistimiento\" en línea. Edite el artículo sobre desistimiento en sus propios documentos para mencionarlo. El plugin genera cláusulas listas para pegar, pero no puede modificar sus condiciones publicadas por usted."
 
 #: src/Admin/DashboardPage.php:258
 msgid "Get the ready-to-paste clauses"
-msgstr ""
+msgstr "Obtener las cláusulas listas para pegar"
 

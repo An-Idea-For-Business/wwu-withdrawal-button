@@ -3,7 +3,7 @@
 All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); the project uses Semantic Versioning.
 
-## [1.2.6] — 2026-06-19 — Complete the Italian translation (recent admin strings)
+## [1.2.6] — 2026-06-19 — Complete the bundled translations (IT/DE/FR/ES/SV)
 
 User report: the **Legal clauses** Settings section (and other recent strings) displayed in English on an Italian site. Root cause: the `.pot` had not been regenerated since the 1.2.1 editable-clauses work, so strings added in 1.2.1–1.2.5 (the clauses editor, `Notification email(s)`, the Compliance legal-texts reminders, the FluentCart e-mail helper, `Reported reason: %s`, etc.) were `__()`-wrapped but absent from the translation catalogue → WordPress fell back to the English source.
 
@@ -12,7 +12,7 @@ User report: the **Legal clauses** Settings section (and other recent strings) d
 - `msgmerge`d the new template into `wwu-withdrawal-button-it_IT.po` and translated the **29** newly-surfaced merchant-facing strings; recompiled `it_IT.mo` with Poedit's `msgfmt`. IT now at **554 translated / 8 untranslated**, where the 8 remaining are intentional English (proper nouns + dev-tool labels: `FluentCart`, `IP`, `WWU Withdrawal Button`, `Dashboard`, `Debug`, `Debug Inspector`, `Snapshot`).
 
 **Known follow-ups:**
-- The **de_DE / es_ES / fr_FR / sv_SE** catalogues need the same recent strings translated (they currently English-fall-back). `sv_SE` is already pending native review.
+- **de_DE / es_ES / fr_FR / sv_SE** are now also complete for these strings — translated by four parallel Sonnet sub-agents (one per locale) that returned a JSON map, applied + recompiled by a gettext applier. The German agent mis-numbered + emitted malformed JSON, so DE was rebuilt by hand from the agent's (good) German; ES/FR/SV were verified aligned and applied as-is. Per-locale: de 544/5, es 546/3, fr 546/3, sv 543/6 (the remaining few are intentional English: FluentCart, IP, WWU Withdrawal Button, Dashboard, Debug, Snapshot). **Swedish is machine-assisted and still pending Daniel's native review.**
 - The two **FluentCart Settings notices** were translated faithfully but still describe the pre-1.2.5 "no auto-detection yet — set Off manually" behaviour; now that 1.2.5 wired auto-detection, that copy (EN source + IT) should be refreshed in a follow-up.
 
 ## [1.2.5] — 2026-06-19 — PHP 7.4 fix (Dompdf 2.x) + multi-recipient notification e-mail
