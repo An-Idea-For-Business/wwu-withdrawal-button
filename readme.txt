@@ -1,4 +1,4 @@
-=== WWU Right of Withdrawal for All the Famous Ecommerce Platforms ===
+=== WWU Right of Withdrawal for Popular Ecommerce Platforms ===
 Contributors: mredodos, webwakeup, anideaforbusiness
 Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8

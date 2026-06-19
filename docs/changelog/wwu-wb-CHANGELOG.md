@@ -11,7 +11,7 @@ All notable changes to this project are documented here. Format loosely follows
 
 **FluentCart coexistence auto-detection wired.** FluentCart confirmed (2026-06-19) the stable signal for their free "Customer Rights" add-on (slug `fluent-cart-customer-rights`): the constant `FLUENT_CART_CUSTOMER_RIGHTS_PLUGIN_PATH`, defined on `plugins_loaded:20` as their double-load guard (won't be removed). `FluentCartAdapter::native_addon_active()` — until now a placeholder returning `false` — now returns `defined( 'FLUENT_CART_CUSTOMER_RIGHTS_PLUGIN_PATH' ) || class_exists( 'FluentCartCustomerRights' )`, still wrapped in the `wwu_wb_fluentcart_native_active` filter. So `fluentcart_mode = auto` (the default) genuinely auto-defers to FluentCart's native add-on now — the two-flows risk is gone without a manual "Off".
 
-**Display name corrected for WordPress.org.** The directory rejected "WWU Right of Withdrawal for WooCommerce, …" because the restricted term **WooCommerce** may not appear in a plugin display name. The name is now **"WWU Right of Withdrawal for All the Famous Ecommerce Platforms"** — a generic, trademark-free descriptor; the supported platforms stay named in the description + tags. Slug + text domain unchanged.
+**Display name corrected for WordPress.org.** The directory rejected "WWU Right of Withdrawal for WooCommerce, …" because the restricted term **WooCommerce** may not appear in a plugin display name. The name is now **"WWU Right of Withdrawal for Popular Ecommerce Platforms"** — a generic, trademark-free descriptor; the supported platforms stay named in the description + tags. Slug + text domain unchanged.
 
 No DB or schema change. PHP lint clean.
 
