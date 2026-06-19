@@ -145,11 +145,23 @@ final class AdminController {
 		if ( ! current_user_can( \WWU\WithdrawalButton\REST\Authentication::capability() ) ) {
 			return;
 		}
-		$uid = get_transient( 'wwu_wb_mail_failed' );
-		if ( ! $uid ) {
+		$failed = get_transient( 'wwu_wb_mail_failed' );
+		if ( empty( $failed ) ) {
 			return;
 		}
-		echo '<div class="notice notice-error is-dismissible"><p>' . esc_html__( 'WWU Withdrawal Button: a withdrawal acknowledgement email could not be sent. The consumer is legally entitled to receive it. Check your site\'s email/SMTP configuration and resend from the Requests page.', 'wwu-withdrawal-button' ) . '</p></div>';
+		// The dispatcher stores array{uid, reason}; tolerate a bare uid string from an
+		// acknowledgement that failed before this build (back-compat).
+		$reason = is_array( $failed ) ? trim( (string) ( $failed['reason'] ?? '' ) ) : '';
+
+		$message = __( 'WWU Withdrawal Button: a withdrawal acknowledgement email could not be sent. The consumer is legally entitled to receive it. Check your site\'s email/SMTP configuration and resend from the Requests page.', 'wwu-withdrawal-button' );
+		if ( '' !== $reason ) {
+			$message .= ' ' . sprintf(
+				/* translators: %s: the specific error reported by the mail transport (e.g. an SMTP plugin). */
+				__( 'Reported reason: %s', 'wwu-withdrawal-button' ),
+				$reason
+			);
+		}
+		echo '<div class="notice notice-error is-dismissible"><p>' . esc_html( $message ) . '</p></div>';
 	}
 
 	/**

@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -122,6 +122,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 
 == Changelog ==
 
+= 1.2.3 =
+* **Acknowledgement e-mail failures now report the exact reason, not a generic message.** Building on the 1.2.2 fix: when the acknowledgement e-mail cannot be sent, the plugin now captures the specific reason from the mail transport — the SMTP plugin's own error (for example "Could not authenticate" or "Could not connect to host") or the thrown exception's message — and shows it in the admin "e-mail failed" notice and records it in the tamper-evident log, instead of a generic "email failed". Diagnosing an SMTP misconfiguration (WP Mail SMTP, FluentSMTP, a provider mailer) is now immediate, without digging through the PHP error log. The withdrawal is still always recorded and the consumer always reaches their confirmation page.
+
 = 1.2.2 =
 * **Critical fix: no more "critical error" when sending the acknowledgement e-mail.** When a consumer confirmed a withdrawal (and when an admin clicked "Resend e-mail"), an exception raised inside WordPress's `wp_mail()` by an SMTP plugin (for example WP Mail SMTP or FluentSMTP), or a PDF/Dompdf error on PHP 8, could escape and crash the whole request with a fatal "critical error" even though the withdrawal itself was already recorded. The e-mail path is now exception-safe on both delivery routes (the standalone mailer and the WooCommerce e-mail) and for the optional PDF: a send failure degrades gracefully (it is logged, the admin gets a "resend" notice, the consumer still sees their confirmation page) instead of taking down the page. After updating, check your SMTP plugin's settings or log for the underlying cause.
 * **FluentCart now has its own native withdrawal add-on — clearer guidance.** As of **FluentCart 1.4.2** (June 2026), FluentCart ships a first-party EU "right of withdrawal" feature ("customer rights"). If you enable it **and** keep this plugin handling FluentCart, customers could see two withdrawal flows. **Settings → FluentCart** now states this clearly and tells you what to do: set the FluentCart handling to **Off** (or have a developer return true from the `wwu_wb_fluentcart_native_active` filter) so only one flow shows. Automatic detection of FluentCart's add-on will arrive in a later update. Your WooCommerce and EDD handling is unaffected.
@@ -215,6 +218,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.2.3 =
+Follow-up to the 1.2.2 e-mail fix: a failed acknowledgement e-mail now shows the exact transport reason (for example the SMTP plugin's "Could not authenticate") in the admin notice and the immutable log, instead of a generic "email failed", so an SMTP misconfiguration is obvious at a glance.
 
 = 1.2.2 =
 Critical: fixes a fatal "critical error" when sending the acknowledgement e-mail (on confirmation and admin resend), caused by an SMTP plugin like WP Mail SMTP throwing inside wp_mail. The send now fails gracefully instead of crashing. Also: set FluentCart handling to Off if you use FluentCart's new native add-on.

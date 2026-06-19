@@ -125,7 +125,8 @@ final class ConfirmationDispatcher {
 		// the WC email is missing, or the merchant disabled it, we fall back to the
 		// plain standalone mailer so the legally-required acknowledgement always
 		// goes out — the WC toggle controls styling, never whether it is sent.
-		$sent = false;
+		$sent        = false;
+		$fail_reason = '';
 		if ( 'woocommerce' === $order->platform && function_exists( 'WC' ) && WC() && method_exists( WC(), 'mailer' ) ) {
 			try {
 				$wc_emails = WC()->mailer()->get_emails();
@@ -135,9 +136,10 @@ final class ConfirmationDispatcher {
 				}
 			} catch ( \Throwable $e ) {
 				// A WC_Email (or an SMTP plugin raising inside wp_mail) that throws must
-				// not crash the confirmation; log it and fall through to the standalone
-				// mailer below, which is itself exception-safe.
-				Debug::warn( 'durable_medium', 'receipt.wc_email_threw', array( 'request_uid' => $request_uid, 'error' => $e->getMessage() ) );
+				// not crash the confirmation; capture the reason, log it and fall through
+				// to the standalone mailer below, which is itself exception-safe.
+				$fail_reason = $e->getMessage();
+				Debug::warn( 'durable_medium', 'receipt.wc_email_threw', array( 'request_uid' => $request_uid, 'error' => $fail_reason ) );
 				$sent = false;
 			}
 		}
@@ -145,13 +147,20 @@ final class ConfirmationDispatcher {
 		$mailer = new Mailer();
 		if ( ! $sent ) {
 			$sent = $mailer->send_html( (string) $email['to'], (string) $email['subject'], (string) $email['html'], (array) $email['attachments'] );
+			// The standalone mailer's reason (SMTP message / exception) is the most
+			// relevant when it was the actual send that failed.
+			if ( ! $sent && '' !== $mailer->last_error() ) {
+				$fail_reason = $mailer->last_error();
+			}
 		}
 
 		if ( ! $sent ) {
 			// The acknowledgement MUST reach the consumer (Art. 11a(4)). Record the
-			// failure in the immutable log and flag an admin notice for follow-up.
-			Debug::error( 'durable_medium', 'receipt.email_failed', array( 'request_uid' => $request_uid ) );
-			set_transient( 'wwu_wb_mail_failed', $request_uid, WEEK_IN_SECONDS );
+			// failure in the immutable log + flag a DETAILED admin notice for follow-up:
+			// the captured SMTP/transport reason, not a generic "email failed".
+			$reason = '' !== $fail_reason ? $fail_reason : 'The mail transport reported no specific error (check the SMTP plugin + PHP error log).';
+			Debug::error( 'durable_medium', 'receipt.email_failed', array( 'request_uid' => $request_uid, 'reason' => $reason ) );
+			set_transient( 'wwu_wb_mail_failed', array( 'uid' => $request_uid, 'reason' => $reason ), WEEK_IN_SECONDS );
 			$log_repo->append(
 				array(
 					'request_uid'    => $request_uid,
@@ -159,7 +168,7 @@ final class ConfirmationDispatcher {
 					'order_ref'      => $order->order_ref,
 					'customer_email' => $req->email,
 					'event'          => 'receipt_failed',
-					'payload'        => array( 'reason' => 'wp_mail_returned_false' ),
+					'payload'        => array( 'reason' => $reason ),
 				)
 			);
 		}

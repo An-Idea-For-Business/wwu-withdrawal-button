@@ -3,6 +3,42 @@
 All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); the project uses Semantic Versioning.
 
+## [1.2.3] — 2026-06-19 — Detailed mail-failure reason (no more generic "email failed")
+
+Follow-up to the 1.2.2 e-mail-send hardening. 1.2.2 stopped the crash; the failure
+itself, however, was still reported generically (`wp_mail_returned_false` in the log, a
+fixed "could not be sent" admin notice). This release surfaces the **specific** reason so
+an SMTP misconfiguration is diagnosable at a glance.
+
+**What changed.**
+
+- `Mailer::send_html()` now captures the real failure reason and exposes it via a new
+  `Mailer::last_error()`:
+  - **wp_mail() returns false** → it hooks `wp_mail_failed` for the duration of the send
+    and reads the `WP_Error` message WordPress emits there (the transport's own message,
+    e.g. *"Could not authenticate"*, *"Could not connect to host smtp.…"*).
+  - **wp_mail() throws** (the 1.2.2 case) → the `catch ( \Throwable )` records
+    `$e->getMessage()`.
+  - The reason is trimmed + capped to 300 chars (`Mailer::cap()`), so it never bloats the
+    append-only log or the admin transient.
+- `ConfirmationDispatcher::dispatch()` threads the reason through: a `$fail_reason` is
+  captured from the WooCommerce `WC_Email` route's `catch`, then (most relevant) from
+  `Mailer::last_error()` when the standalone send is the one that failed. On failure it
+  now writes the reason into both the immutable `receipt_failed` log payload **and** the
+  `wwu_wb_mail_failed` transient (now `array{uid, reason}` instead of a bare uid).
+- `AdminController::maybe_mail_failure_notice()` reads the transient (back-compatible with
+  a bare-string uid from a 1.2.2 failure) and appends **"Reported reason: …"** to the
+  admin notice when a reason is present.
+
+**Why.** The reporting merchant runs WP Mail SMTP across several sites; a detailed reason
+turns "the e-mail failed" into "the SMTP host rejected auth", which is actionable without
+opening the PHP error log. The legal guarantee is unchanged: the withdrawal is always
+recorded, the consumer always reaches the confirmation page, the failure is always
+logged + resendable.
+
+PHP lint clean (3 files). No DB or schema change; the transient shape change is
+back-compatible.
+
 ## [1.2.2] — 2026-06-18 — Critical e-mail-send hardening + FluentCart coexistence + smoke fix
 
 **Critical fix — a fatal "critical error" when sending the acknowledgement e-mail.**
