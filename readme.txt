@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -122,6 +122,10 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 
 == Changelog ==
 
+= 1.2.2 =
+* **Critical fix: no more "critical error" when sending the acknowledgement e-mail.** When a consumer confirmed a withdrawal (and when an admin clicked "Resend e-mail"), an exception raised inside WordPress's `wp_mail()` by an SMTP plugin (for example WP Mail SMTP or FluentSMTP), or a PDF/Dompdf error on PHP 8, could escape and crash the whole request with a fatal "critical error" even though the withdrawal itself was already recorded. The e-mail path is now exception-safe on both delivery routes (the standalone mailer and the WooCommerce e-mail) and for the optional PDF: a send failure degrades gracefully (it is logged, the admin gets a "resend" notice, the consumer still sees their confirmation page) instead of taking down the page. After updating, check your SMTP plugin's settings or log for the underlying cause.
+* **FluentCart now has its own native withdrawal add-on — clearer guidance.** As of **FluentCart 1.4.2** (June 2026), FluentCart ships a first-party EU "right of withdrawal" feature ("customer rights"). If you enable it **and** keep this plugin handling FluentCart, customers could see two withdrawal flows. **Settings → FluentCart** now states this clearly and tells you what to do: set the FluentCart handling to **Off** (or have a developer return true from the `wwu_wb_fluentcart_native_active` filter) so only one flow shows. Automatic detection of FluentCart's add-on will arrive in a later update. Your WooCommerce and EDD handling is unaffected.
+
 = 1.2.1 =
 * **Fix — the "Right of withdrawal" account tab no longer returns a 404 on a fresh install.** On WooCommerce the withdrawal tab is a rewrite endpoint; its rewrite rule was not being persisted during activation, so clicking the tab in **My Account** led to a 404 until you re-saved Permalinks. The plugin now performs a one-time rewrite-rules flush on the first page load after activation, so the tab resolves immediately. (If you already hit this: **Settings → Permalinks → Save Changes** also fixes it — no page needs to be created, the slug is a WooCommerce endpoint, not a page.)
 * **Edit the legal clauses from the admin — no code needed.** A new **Settings → Legal clauses** section lets you replace the built-in pre-contractual / terms / privacy / exemption-consent clauses with your own wording. Your text then appears on the Compliance page and wherever the `[wwu_wb_info]` shortcode is used (and the "sample text" note is dropped). Leave a field empty to keep the built-in template; a "Show the built-in default" toggle lets you copy the original as a starting point. Developers can also override programmatically with the new `wwu_wb_clause_text` filter. The built-in clauses are sample templates — adapt them to your business and have your counsel review them.
@@ -211,6 +215,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.2.2 =
+Critical: fixes a fatal "critical error" when sending the acknowledgement e-mail (on confirmation and admin resend), caused by an SMTP plugin like WP Mail SMTP throwing inside wp_mail. The send now fails gracefully instead of crashing. Also: set FluentCart handling to Off if you use FluentCart's new native add-on.
 
 = 1.2.1 =
 Fixes the WooCommerce "Right of withdrawal" account tab returning a 404 on a fresh install — a one-time rewrite flush now runs automatically after activation (re-saving Permalinks also fixes it). You can now also edit the legal clauses from Settings → Legal clauses (no code), plus a wwu_wb_clause_text filter.

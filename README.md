@@ -14,7 +14,7 @@
 
 <p align="center">
   <a href="#"><img alt="License: GPL v3" src="https://img.shields.io/badge/License-GPLv3-blue.svg"></a>
-  <img alt="Status" src="https://img.shields.io/badge/status-stable%20v1.2.0-brightgreen.svg">
+  <img alt="Status" src="https://img.shields.io/badge/status-stable%20v1.2.2-brightgreen.svg">
   <img alt="Applies from" src="https://img.shields.io/badge/applies%20from-19%20June%202026-critical.svg">
 </p>
 
@@ -53,7 +53,7 @@ This plugin makes a WooCommerce, FluentCart or Easy Digital Downloads store comp
 
 ## Status
 
-🟢 **Stable.** The full withdrawal flow — statutory button, two-step confirmation, durable-medium acknowledgement (email + PDF + verifiable link), tamper-evident hash-chained log, and the compliance-document generators — ships across WooCommerce, FluentCart and Easy Digital Downloads. Latest stable on GitHub: see the **[latest release](../../releases/latest)** and the [changelog](docs/changelog/wwu-wb-CHANGELOG.md). Six locales (IT/EN/DE/FR/ES/SV). The **`1.1.1`** build is in the **WordPress.org** manual-review queue; once approved it ships to the directory via SVN. The current **`1.2.0`** adds an "update your legal texts too" merchant reminder (your Terms & pre-contractual withdrawal article must describe the new button modality — Art. 6 CRD). See the [roadmap](docs/plans/wwu-wb-roadmap-PLAN.md) for what's next.
+🟢 **Stable.** The full withdrawal flow — statutory button, two-step confirmation, durable-medium acknowledgement (email + PDF + verifiable link), tamper-evident hash-chained log, and the compliance-document generators — ships across WooCommerce, FluentCart and Easy Digital Downloads. Latest stable on GitHub: see the **[latest release](../../releases/latest)** and the [changelog](docs/changelog/wwu-wb-CHANGELOG.md). Six locales (IT/EN/DE/FR/ES/SV). The **`1.1.1`** build is in the **WordPress.org** manual-review queue; once approved the latest version ships to the directory via SVN. Recent: **`1.2.0`** added an "update your legal texts too" merchant reminder (Art. 6 CRD); **`1.2.1`** fixed the My Account tab 404 on fresh installs + made the legal clauses editable from Settings; **`1.2.2`** adds coexistence guidance now that **FluentCart 1.4.2** ships its own native withdrawal add-on. See the [roadmap](docs/plans/wwu-wb-roadmap-PLAN.md) for what's next.
 
 ## Installation
 
