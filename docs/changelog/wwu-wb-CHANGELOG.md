@@ -7,7 +7,7 @@ All notable changes to this project are documented here. Format loosely follows
 
 Addresses the WordPress.org plugin-directory pre-review (Review ID `AUTOPREREVIEW … TRM-OWN-LIC`). **No functional change** to the withdrawal flow, storage or evidence log; **slug + text domain unchanged** (`wwu-withdrawal-button`).
 
-**Ownership / trademark.** "WWU" is **our own brand** (WebWakeUp), not a third party's mark; ownership is verified by moving the WordPress.org account to an `@webwakeup.it` address. The display name is refined from "WWU Withdrawal Button" to **"WWU Right of Withdrawal"** — more distinctive (drops the generic "Button", which collides with crypto withdrawal-button plugins; uses the statutory term) while keeping the `wwu-withdrawal-button` slug, so the text domain and all six translations are untouched.
+**Ownership / trademark.** "WWU" is **our own brand** (WebWakeUp), not a third party's mark; ownership is verified by moving the WordPress.org account to an `@webwakeup.it` address. The display name is refined from "WWU Withdrawal Button" to **"WWU Right of Withdrawal for WooCommerce, FluentCart, EDD & more"** — more distinctive (drops the generic "Button", which collides with crypto withdrawal-button plugins; uses the statutory term) while keeping the `wwu-withdrawal-button` slug, so the text domain and all six translations are untouched.
 
 **Code hardening (reviewer items):**
 - `GuestAccess::check_rate_limit()` wraps `$_SERVER['REMOTE_ADDR']` in `sanitize_text_field( wp_unslash( … ) )`.

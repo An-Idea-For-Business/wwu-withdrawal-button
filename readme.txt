@@ -1,4 +1,4 @@
-=== WWU Right of Withdrawal ===
+=== WWU Right of Withdrawal for WooCommerce, FluentCart, EDD & more ===
 Contributors: mredodos, webwakeup, anideaforbusiness
 Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
@@ -123,7 +123,7 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 == Changelog ==
 
 = 1.2.4 =
-* **Housekeeping + WordPress.org compliance hardening.** Display name refined to "WWU Right of Withdrawal" (the plugin slug is unchanged, so nothing breaks on update). Additional input sanitisation on the rate-limiter, URL escaping tightened in the plain-text e-mails, explicit REST permission callbacks declared on the public withdrawal endpoints, and the now-unneeded textdomain loader removed (WordPress loads translations automatically since 4.6). No change to the withdrawal flow, your data or the evidence log.
+* **Housekeeping + WordPress.org compliance hardening.** Display name refined to "WWU Right of Withdrawal for WooCommerce, FluentCart, EDD & more" (the plugin slug is unchanged, so nothing breaks on update). Additional input sanitisation on the rate-limiter, URL escaping tightened in the plain-text e-mails, explicit REST permission callbacks declared on the public withdrawal endpoints, and the now-unneeded textdomain loader removed (WordPress loads translations automatically since 4.6). No change to the withdrawal flow, your data or the evidence log.
 
 = 1.2.3 =
 * **Acknowledgement e-mail failures now report the exact reason, not a generic message.** Building on the 1.2.2 fix: when the acknowledgement e-mail cannot be sent, the plugin now captures the specific reason from the mail transport — the SMTP plugin's own error (for example "Could not authenticate" or "Could not connect to host") or the thrown exception's message — and shows it in the admin "e-mail failed" notice and records it in the tamper-evident log, instead of a generic "email failed". Diagnosing an SMTP misconfiguration (WP Mail SMTP, FluentSMTP, a provider mailer) is now immediate, without digging through the PHP error log. The withdrawal is still always recorded and the consumer always reaches their confirmation page.
@@ -223,7 +223,7 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 == Upgrade Notice ==
 
 = 1.2.4 =
-Housekeeping + WordPress.org compliance hardening (input sanitisation, output escaping, explicit REST permission callbacks). The display name is now "WWU Right of Withdrawal"; the slug is unchanged. No change to the withdrawal flow or your data.
+Housekeeping + WordPress.org compliance hardening (input sanitisation, output escaping, explicit REST permission callbacks). The display name is now "WWU Right of Withdrawal for WooCommerce, FluentCart, EDD & more"; the slug is unchanged. No change to the withdrawal flow or your data.
 
 = 1.2.3 =
 Follow-up to the 1.2.2 e-mail fix: a failed acknowledgement e-mail now shows the exact transport reason (for example the SMTP plugin's "Could not authenticate") in the admin notice and the immutable log, instead of a generic "email failed", so an SMTP misconfiguration is obvious at a glance.
