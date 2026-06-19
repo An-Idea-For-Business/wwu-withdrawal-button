@@ -3,6 +3,21 @@
 All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); the project uses Semantic Versioning.
 
+## [1.2.7] — 2026-06-19 — Guest withdrawal button no longer asks for login
+
+User report (Enrico, live-testing a guest-checkout store): the withdrawal button shown in the order recap led to a **login screen for guests**. Root cause: `WooMyAccount::order_detail_button()` renders on `woocommerce_order_details_after_order_table`, which also fires on the **order-received (thank-you) page a guest sees after checkout**, but its URL was always built with `wc_get_account_endpoint_url()` — the **login-gated My Account endpoint**. A guest (no account) who clicked it was bounced to the WordPress login.
+
+**What changed (one file, `src/Frontend/WooMyAccount.php`):**
+- New `resolve_form_url()` picks the destination by viewer: logged-in customers keep the owner-verified My Account endpoint; **guests are routed to the public form page** carrying the order reference + WooCommerce order key — the same pre-authenticated link the order-confirmation e-mail already uses (`OrderEmailLink`), so the guest reaches the form via `verify_guest_key()` with no login.
+- New `guest_form_url()` builds that public-page URL; it falls back to the account endpoint when no public form page is configured.
+- `render_button()` gained an optional `$wc_order` argument (back-compatible) so it can read the order key for the guest link.
+
+No change to the logged-in flow, the public form page, the evidence log or the REST API — the guest path reuses the already-tested e-mail-link mechanism.
+
+**Not a bug (same report):** the public page still offers withdrawal for an order placed well over 14 days ago. This is **deliberate** — `WindowCalculator` is informational only and never hides the function: the 14 days run from delivery/possession (a date the plugin usually cannot know), and wrongly blocking a still-valid request would itself be a dark-pattern / compliance risk under Art. 11a. The plugin shows the remaining days, flags late submissions to the admin, and the merchant decides final validity.
+
+**Manual verification:** place a guest order (no account) → open the order-received page → the withdrawal button now opens the public form page (no login prompt) with the order pre-resolved; the e-mail-link path is unchanged.
+
 ## [1.2.6] — 2026-06-19 — Complete the bundled translations (IT/DE/FR/ES/SV)
 
 User report: the **Legal clauses** Settings section (and other recent strings) displayed in English on an Italian site. Root cause: the `.pot` had not been regenerated since the 1.2.1 editable-clauses work, so strings added in 1.2.1–1.2.5 (the clauses editor, `Notification email(s)`, the Compliance legal-texts reminders, the FluentCart e-mail helper, `Reported reason: %s`, etc.) were `__()`-wrapped but absent from the translation catalogue → WordPress fell back to the English source.

@@ -14,7 +14,7 @@
 
 <p align="center">
   <a href="#"><img alt="License: GPL v3" src="https://img.shields.io/badge/License-GPLv3-blue.svg"></a>
-  <img alt="Status" src="https://img.shields.io/badge/status-stable%20v1.2.6-brightgreen.svg">
+  <img alt="Status" src="https://img.shields.io/badge/status-stable%20v1.2.7-brightgreen.svg">
   <img alt="Applies from" src="https://img.shields.io/badge/applies%20from-19%20June%202026-critical.svg">
 </p>
 
