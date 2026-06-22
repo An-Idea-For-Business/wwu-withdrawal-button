@@ -447,6 +447,29 @@ final class SmokeTests {
 		$days = $calc->days_remaining( $recent );
 		$tests[] = $this->assert( 'window.days_remaining', is_int( $days ) && $days >= 11 && $days <= 12, 'Days remaining ≈ 12 (got ' . var_export( $days, true ) . ').' );
 
+		// --- Type-aware window start (1.2.9): digital = order date, physical = delivery (completed). ---
+		// Distinct paid vs completed dates so each branch is observable.
+		$cls         = '\\WWU\\WithdrawalButton\\Platform\\NormalizedOrder';
+		$d_paid      = new \DateTimeImmutable( '-10 days' );
+		$d_completed = new \DateTimeImmutable( '-2 days' );
+		$mk          = function ( array $items, $completed, string $status = 'completed' ) use ( $cls, $d_paid ) {
+			// Args: platform, ref, number, email, customer_id, country, status, locale,
+			// created, paid, completed, items, has_vat, is_renewal, subscription_ref.
+			return new $cls( 'woocommerce', 'T', 'T', 'b@example.com', 0, 'IT', $status, 'en_US', $d_paid, $d_paid, $completed, $items, false, false, '' );
+		};
+
+		$digital   = $mk( array( $this->fake_item( true ) ), $d_completed );
+		$physical  = $mk( array( $this->fake_item( false ) ), $d_completed );
+		$mixed     = $mk( array( $this->fake_item( true ), $this->fake_item( false ) ), $d_completed );
+		$phys_open = $mk( array( $this->fake_item( false ) ), null, 'processing' );
+		$no_items  = $mk( array(), $d_completed );
+
+		$tests[] = $this->assert( 'window.digital_uses_order_date', $digital->window_start() == $d_paid, 'All-digital order starts the clock at the order date (paid), not the later completed date.' );
+		$tests[] = $this->assert( 'window.physical_uses_completed', $physical->window_start() == $d_completed, 'Physical order starts at the completed (delivery proxy) date — unchanged behaviour.' );
+		$tests[] = $this->assert( 'window.mixed_treated_physical', $mixed->window_start() == $d_completed, 'Mixed cart (digital + physical) is treated as physical (completed date).' );
+		$tests[] = $this->assert( 'window.physical_uncompleted_fallback', $phys_open->window_start() == $d_paid, 'Physical order not yet completed falls back to the order date (countdown preserved).' );
+		$tests[] = $this->assert( 'window.empty_items_physical_fallback', $no_items->window_start() == $d_completed, 'Unknown/empty items are treated as physical (completed → paid → created).' );
+
 		return $tests;
 	}
 

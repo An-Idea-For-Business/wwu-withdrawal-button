@@ -3,6 +3,17 @@
 All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); the project uses Semantic Versioning.
 
+## [1.2.9] — 2026-06-19 — Type-aware withdrawal window (digital = order date, physical = delivery)
+
+Refines how the (informational) 14-day countdown is calculated, **without changing the safe default behaviour**. `NormalizedOrder::window_start()` is now product-type-aware:
+
+- **All-digital orders** (every item virtual/downloadable) → the clock starts at the **order date** (paid → created), the conclusion of the contract (Art. 9 Dir. 2011/83/EU — Art. 52 Cod. Consumo), and is no longer deferred to a later fulfilment/completed date.
+- **Everything else** (any tangible item, mixed cart, or unknown/empty contents) → **unchanged**: completed → paid → created (the completed date is the best delivery proxy, with the same safe fall-back so a shop that doesn't mark orders completed never loses the countdown).
+
+Still **informational only** — `WindowCalculator` never hides the button on this value (hiding on an uncertain delivery date would itself be a compliance risk under Art. 11a); the merchant decides the validity of late requests, and integrators with a real delivery date can refine via the existing `wwu_wb_compute_deadline` filter.
+
+New private helper `NormalizedOrder::is_all_digital()` (conservative: empty/unknown items are treated as physical, preserving prior behaviour). 6 new assertions in the `window` smoke suite (verified standalone: digital → order date, physical → completed, mixed → physical, uncompleted-physical → order-date fall-back, empty-items → physical). PHP lint clean.
+
 ## [1.2.8] — 2026-06-19 — Guest-aware withdrawal URL on every surface (shortcode + orders list)
 
 Completes the 1.2.7 fix. 1.2.7 routed guests to the public form page only from the **automatic** order button; three other surfaces that build the withdrawal URL still produced the **login-gated My Account URL** for everyone: the `[wwu_wb_button]` / `[wwu_wb_form]` shortcodes, the eligible-orders list, and the **My Account order-actions** link (the `woocommerce_my_account_my_orders_actions` filter). On a real store whose theme renders the WooCommerce order-actions on the order-received page, this produced a **second** withdrawal link in the "Actions" row that bounced guests to the login screen (the automatic button next to it was already correct). With a stock theme (Twenty Twenty-Five) only the automatic button shows — so the duplicate was theme-dependent, not a manual shortcode.
