@@ -139,7 +139,7 @@ final class WooMyAccount {
 			return $actions;
 		}
 		$actions['wwu_wb'] = array(
-			'url'  => $this->form_url( $order->order_ref ),
+			'url'  => WithdrawalUrl::resolve( $order->order_ref, (string) $wc_order->get_order_key() ),
 			'name' => Services::instance()->labels->withdraw_label( $order->country, $this->locale( $order ) ),
 		);
 		return $actions;
@@ -267,57 +267,18 @@ final class WooMyAccount {
 	/**
 	 * Resolve the withdrawal-form URL for the current viewer.
 	 *
-	 * Logged-in customers go to the My Account endpoint (owner-verified). Guests
-	 * — who have no account and would otherwise be bounced to the login screen by
-	 * wc_get_account_endpoint_url() — are routed to the public form page carrying
-	 * the order reference + order key (the same pre-authenticated link the order
-	 * confirmation email uses, see OrderEmailLink). Falls back to the account
-	 * endpoint when no public form page is configured.
+	 * Delegates to the shared WithdrawalUrl helper (single source of truth):
+	 * logged-in customers get the owner-verified My Account endpoint, guests get
+	 * the public form page (no login) carrying the order reference + order key.
+	 * See WithdrawalUrl::resolve().
 	 *
 	 * @param NormalizedOrder $order    Order.
 	 * @param mixed           $wc_order WC_Order when available (carries the key).
 	 * @return string
 	 */
 	private function resolve_form_url( NormalizedOrder $order, $wc_order = null ): string {
-		if ( is_user_logged_in() ) {
-			return $this->form_url( $order->order_ref );
-		}
-		$guest = $this->guest_form_url( $order->order_ref, $wc_order );
-		return '' !== $guest ? $guest : $this->form_url( $order->order_ref );
-	}
-
-	/**
-	 * Build the public-page withdrawal URL for a guest (no account).
-	 *
-	 * Mirrors OrderEmailLink: the link carries the order reference + WooCommerce
-	 * order key so the public form page can authenticate the guest via
-	 * verify_guest_key() without a login. Returns '' when no public form page is
-	 * configured (the caller then falls back to the account endpoint).
-	 *
-	 * @param string $order_ref Order reference.
-	 * @param mixed  $wc_order  WC_Order when available (carries the key).
-	 * @return string
-	 */
-	private function guest_form_url( string $order_ref, $wc_order = null ): string {
-		$page_id = (int) ( \WWU\WithdrawalButton\Core\Settings::main()['public_form_page_id'] ?? 0 );
-		if ( $page_id <= 0 ) {
-			return '';
-		}
-		$args = array( 'wwu_wb_order' => rawurlencode( $order_ref ) );
-		if ( $wc_order instanceof \WC_Order ) {
-			$args['key'] = rawurlencode( (string) $wc_order->get_order_key() );
-		}
-		return add_query_arg( $args, get_permalink( $page_id ) );
-	}
-
-	/**
-	 * Build the URL of the form (account endpoint with the order ref).
-	 *
-	 * @param string $order_ref Order reference.
-	 * @return string
-	 */
-	private function form_url( string $order_ref ): string {
-		return add_query_arg( 'wwu_wb_order', rawurlencode( $order_ref ), wc_get_account_endpoint_url( $this->endpoint ) );
+		$key = $wc_order instanceof \WC_Order ? (string) $wc_order->get_order_key() : null;
+		return WithdrawalUrl::resolve( $order->order_ref, $key );
 	}
 
 	/**

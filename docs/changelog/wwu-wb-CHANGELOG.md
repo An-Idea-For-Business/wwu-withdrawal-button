@@ -5,11 +5,11 @@ All notable changes to this project are documented here. Format loosely follows
 
 ## [1.2.8] — 2026-06-19 — Guest-aware withdrawal URL on every surface (shortcode + orders list)
 
-Completes the 1.2.7 fix. 1.2.7 routed guests to the public form page only from the **automatic** order button (`WooMyAccount`); the **`[wwu_wb_button]` / `[wwu_wb_form]` shortcodes** (and the eligible-orders list) still built the **login-gated My Account URL** for everyone. So a guest reaching the withdrawal link via the shortcode/block — e.g. placed in a custom order-summary "Actions" row — was still bounced to the login screen (reported on a real store: two links on the order recap, the automatic one correct, the shortcode one wrong).
+Completes the 1.2.7 fix. 1.2.7 routed guests to the public form page only from the **automatic** order button; three other surfaces that build the withdrawal URL still produced the **login-gated My Account URL** for everyone: the `[wwu_wb_button]` / `[wwu_wb_form]` shortcodes, the eligible-orders list, and the **My Account order-actions** link (the `woocommerce_my_account_my_orders_actions` filter). On a real store whose theme renders the WooCommerce order-actions on the order-received page, this produced a **second** withdrawal link in the "Actions" row that bounced guests to the login screen (the automatic button next to it was already correct). With a stock theme (Twenty Twenty-Five) only the automatic button shows — so the duplicate was theme-dependent, not a manual shortcode.
 
 **What changed**
 - New `WWU\WithdrawalButton\Frontend\WithdrawalUrl` — a single source of truth for the viewer-aware withdrawal URL: logged-in customers get the owner-verified My Account endpoint; guests get the **public form page** + order reference + WooCommerce order key (the same pre-authenticated link the order-confirmation email uses, see `OrderEmailLink`), so they reach the form with **no login**.
-- `Shortcodes::form_url()` and `EligibleOrders::form_url()` now **delegate** to it. The automatic `WooMyAccount` button (fixed in 1.2.7) is unchanged.
+- **All four URL producers now delegate** to it: `WooMyAccount` (the automatic button **and** the order-actions link), `Shortcodes::form_url()` (`[wwu_wb_button]` / `[wwu_wb_form]`) and `EligibleOrders::form_url()`. The now-dead `WooMyAccount::form_url()` / `guest_form_url()` were removed.
 
 Centralising the logic prevents the drift that caused the gap — the guest routing now lives in one place used by every surface. No change to the logged-in flow, the public page, the evidence log or the REST API. PHP lint clean.
 
