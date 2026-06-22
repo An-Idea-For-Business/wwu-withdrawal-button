@@ -129,15 +129,58 @@ final class NormalizedOrder {
 	}
 
 	/**
-	 * Best available "start of withdrawal window" date.
+	 * Best available "start of withdrawal window" date (type-aware).
 	 *
-	 * Italian law starts the 14-day clock from delivery for goods and from
-	 * conclusion for services/digital. WooCommerce rarely knows the delivery
-	 * date, so we approximate: completed → paid → created.
+	 * Italian/EU law starts the 14-day clock from delivery for goods and from the
+	 * conclusion of the contract for services / digital content (Art. 9 Dir.
+	 * 2011/83/EU — Art. 52 Cod. Consumo). WooCommerce rarely knows the real
+	 * delivery date, so we approximate:
+	 *
+	 *   - All-digital order (every item virtual/downloadable) → the ORDER date
+	 *     (paid → created): the contract is concluded at purchase and is never
+	 *     deferred to a later fulfilment/completed date.
+	 *   - Otherwise (any tangible item, mixed cart, or unknown contents) →
+	 *     completed → paid → created. This is UNCHANGED from earlier behaviour:
+	 *     the completed date is the best delivery proxy, with a safe fall-back so
+	 *     the countdown is never lost for shops that don't mark orders completed.
+	 *
+	 * Informational only — WindowCalculator never hides the button on this value;
+	 * integrators with a real delivery date can refine it via the
+	 * `wwu_wb_compute_deadline` filter.
 	 *
 	 * @return \DateTimeImmutable|null
 	 */
 	public function window_start(): ?\DateTimeImmutable {
+		if ( $this->is_all_digital() ) {
+			return $this->paid ?? $this->created;
+		}
 		return $this->completed ?? $this->paid ?? $this->created;
+	}
+
+	/**
+	 * Whether every line item is digital (virtual or downloadable).
+	 *
+	 * Conservative by design: an empty or unknown item set returns false, so the
+	 * order is treated as physical and the prior window-start behaviour is
+	 * preserved (no disruption for non-WooCommerce platforms or carts we cannot
+	 * classify).
+	 *
+	 * @return bool
+	 */
+	private function is_all_digital(): bool {
+		if ( empty( $this->items ) || ! is_array( $this->items ) ) {
+			return false;
+		}
+		foreach ( $this->items as $item ) {
+			if ( ! is_array( $item ) ) {
+				return false;
+			}
+			$virtual      = ! empty( $item['virtual'] );
+			$downloadable = ! empty( $item['downloadable'] );
+			if ( ! $virtual && ! $downloadable ) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
