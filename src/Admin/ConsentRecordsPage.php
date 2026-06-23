@@ -19,8 +19,10 @@ declare( strict_types=1 );
 
 namespace WWU\WithdrawalButton\Admin;
 
+use WWU\WithdrawalButton\Core\Services;
 use WWU\WithdrawalButton\Domain\ExceptionTypes;
 use WWU\WithdrawalButton\REST\Authentication;
+use WWU\WithdrawalButton\Storage\LogRepository;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -66,10 +68,11 @@ final class ConsentRecordsPage {
 		echo '<h1>' . esc_html__( 'Consent records', 'wwu-withdrawal-button' ) . '</h1>';
 		echo '<p class="description" style="max-width:900px;">' . esc_html__( 'Evidence of the consumers\' express consent + acknowledgement captured at checkout for the two conditional Art. 59 exemptions (digital content with immediate access; service fully performed). Keep it to discharge your burden of proof — it is evidence, not a legally-named "register". Physical products never appear here: they always keep the 14-day right of withdrawal.', 'wwu-withdrawal-button' ) . '</p>';
 
-		if ( ! function_exists( 'wc_get_orders' ) ) {
-			echo '<div class="notice notice-info inline"><p>' . esc_html__( 'WooCommerce is not active. Checkout consent is captured on WooCommerce today, so there are no records to show.', 'wwu-withdrawal-button' ) . '</p></div></div>';
-			return;
-		}
+		// Source of truth: the immutable, cross-platform evidence log. Every platform's
+		// checkout-consent capture appends an `exemption_consent` row, so reading by
+		// event surfaces WooCommerce, EDD and FluentCart uniformly. This page only READS
+		// the log — it never writes to or mutates the append-only chain.
+		$total = ( new LogRepository() )->count_by_event( 'exemption_consent' );
 
 		// CSV export button.
 		echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" style="margin:0 0 1em;">';
@@ -85,35 +88,20 @@ final class ConsentRecordsPage {
 		) . '</span>';
 		echo '</form>';
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only pagination.
-		$paged  = isset( $_GET['paged'] ) ? max( 1, (int) $_GET['paged'] ) : 1;
-		$result = wc_get_orders(
-			array(
-				'limit'      => self::PER_PAGE,
-				'paged'      => $paged,
-				'orderby'    => 'date',
-				'order'      => 'DESC',
-				'paginate'   => true,
-				'meta_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- admin screen, not a hot path.
-					array(
-						'key'     => WWU_WB_META_PREFIX . 'consent',
-						'compare' => 'EXISTS',
-					),
-				),
-			)
-		);
-
-		$orders = ( is_object( $result ) && isset( $result->orders ) ) ? $result->orders : array();
-		$max    = ( is_object( $result ) && isset( $result->max_num_pages ) ) ? (int) $result->max_num_pages : 1;
-
-		if ( empty( $orders ) ) {
-			echo '<p>' . esc_html__( 'No consent records yet.', 'wwu-withdrawal-button' ) . '</p></div>';
+		if ( 0 === $total ) {
+			echo '<p>' . esc_html__( 'No consent records yet. Consent is captured at checkout for the conditional Art. 59 exemptions on WooCommerce, Easy Digital Downloads and FluentCart.', 'wwu-withdrawal-button' ) . '</p></div>';
 			return;
 		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only pagination.
+		$paged = isset( $_GET['paged'] ) ? max( 1, (int) $_GET['paged'] ) : 1;
+		$max   = (int) max( 1, (int) ceil( $total / self::PER_PAGE ) );
+		$rows  = $this->fetch_consent_rows( self::PER_PAGE, ( $paged - 1 ) * self::PER_PAGE );
 
 		echo '<table class="widefat striped"><thead><tr>';
 		foreach ( array(
 			__( 'Order', 'wwu-withdrawal-button' ),
+			__( 'Platform', 'wwu-withdrawal-button' ),
 			__( 'Date', 'wwu-withdrawal-button' ),
 			__( 'Customer', 'wwu-withdrawal-button' ),
 			__( 'Reason(s)', 'wwu-withdrawal-button' ),
@@ -125,14 +113,8 @@ final class ConsentRecordsPage {
 		}
 		echo '</tr></thead><tbody>';
 
-		foreach ( $orders as $order ) {
-			if ( ! $order instanceof \WC_Order ) {
-				continue;
-			}
-			$entries = $order->get_meta( WWU_WB_META_PREFIX . 'consent' );
-			if ( ! is_array( $entries ) || empty( $entries ) ) {
-				continue;
-			}
+		foreach ( $rows as $row ) {
+			$entries = (array) $row['entries'];
 
 			$reasons = array();
 			$has_ip  = false;
@@ -148,22 +130,19 @@ final class ConsentRecordsPage {
 				}
 			}
 
-			$confirmed = (string) $order->get_meta( WWU_WB_META_PREFIX . 'consent_confirmation_sent' );
-			$purged    = (string) $order->get_meta( WWU_WB_META_PREFIX . 'consent_purged' );
-			$date      = $order->get_date_created();
-
 			$ip_cell = $has_ip
 				? __( 'stored', 'wwu-withdrawal-button' )
-				: ( '' !== $purged ? __( 'anonymised', 'wwu-withdrawal-button' ) : __( 'not stored', 'wwu-withdrawal-button' ) );
+				: ( '' !== (string) $row['purged'] ? __( 'anonymised', 'wwu-withdrawal-button' ) : __( 'not stored', 'wwu-withdrawal-button' ) );
 
-			$confirm_cell = ( '' !== $confirmed && '0' !== $confirmed )
+			$confirm_cell = ( '' !== (string) $row['confirmed'] && '0' !== (string) $row['confirmed'] )
 				? __( 'sent', 'wwu-withdrawal-button' )
 				: __( 'not sent', 'wwu-withdrawal-button' );
 
 			echo '<tr>';
-			echo '<td><a href="' . esc_url( $order->get_edit_order_url() ) . '">#' . esc_html( $order->get_order_number() ) . '</a></td>';
-			echo '<td>' . esc_html( $date ? $date->date_i18n( 'Y-m-d H:i' ) : '' ) . '</td>';
-			echo '<td>' . esc_html( $order->get_billing_email() ) . '</td>';
+			echo '<td>#' . esc_html( (string) $row['number'] ) . '</td>';
+			echo '<td>' . esc_html( (string) $row['platform_label'] ) . '</td>';
+			echo '<td>' . esc_html( (string) $row['date'] ) . '</td>';
+			echo '<td>' . esc_html( (string) $row['email'] ) . '</td>';
 			echo '<td>' . esc_html( implode( ', ', array_values( $reasons ) ) ) . '</td>';
 			echo '<td>' . esc_html( (string) count( $entries ) ) . '</td>';
 			echo '<td>' . esc_html( $confirm_cell ) . '</td>';
@@ -201,25 +180,7 @@ final class ConsentRecordsPage {
 		}
 		check_admin_referer( self::EXPORT_NONCE );
 
-		$redirect = admin_url( 'admin.php?page=' . AdminController::CONSENT_SLUG );
-		if ( ! function_exists( 'wc_get_orders' ) ) {
-			wp_safe_redirect( $redirect );
-			exit;
-		}
-
-		$orders = wc_get_orders(
-			array(
-				'limit'      => self::EXPORT_CAP,
-				'orderby'    => 'date',
-				'order'      => 'DESC',
-				'meta_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- bounded manual export.
-					array(
-						'key'     => WWU_WB_META_PREFIX . 'consent',
-						'compare' => 'EXISTS',
-					),
-				),
-			)
-		);
+		$rows = $this->fetch_consent_rows( self::EXPORT_CAP, 0 );
 
 		nocache_headers();
 		header( 'Content-Type: text/csv; charset=utf-8' );
@@ -233,22 +194,13 @@ final class ConsentRecordsPage {
 
 		fputcsv(
 			$out,
-			array( 'order_id', 'order_number', 'order_date_gmt', 'customer_email', 'product_id', 'reason_id', 'reason_label', 'consent_kind', 'text_hash', 'consented_at', 'ip', 'confirmation_sent' )
+			array( 'platform', 'order_ref', 'order_number', 'consent_logged_gmt', 'customer_email', 'product_id', 'reason_id', 'reason_label', 'consent_kind', 'text_hash', 'consented_at', 'ip', 'confirmation_sent' )
 		);
 
-		foreach ( (array) $orders as $order ) {
-			if ( ! $order instanceof \WC_Order ) {
-				continue;
-			}
-			$entries = $order->get_meta( WWU_WB_META_PREFIX . 'consent' );
-			if ( ! is_array( $entries ) || empty( $entries ) ) {
-				continue;
-			}
-			$confirmed   = (string) $order->get_meta( WWU_WB_META_PREFIX . 'consent_confirmation_sent' );
-			$confirm_str = ( '' !== $confirmed && '0' !== $confirmed ) ? $confirmed : 'no';
-			$created     = $order->get_date_created();
+		foreach ( $rows as $row ) {
+			$confirm_str = ( '' !== (string) $row['confirmed'] && '0' !== (string) $row['confirmed'] ) ? (string) $row['confirmed'] : 'no';
 
-			foreach ( $entries as $entry ) {
+			foreach ( (array) $row['entries'] as $entry ) {
 				$entry = (array) $entry;
 				$rid   = (string) ( $entry['reason_id'] ?? '' );
 				$def   = ExceptionTypes::get( $rid );
@@ -257,10 +209,11 @@ final class ConsentRecordsPage {
 				fputcsv(
 					$out,
 					array(
-						self::csv_safe( (string) $order->get_id() ),
-						self::csv_safe( (string) $order->get_order_number() ),
-						self::csv_safe( $created ? gmdate( 'Y-m-d H:i:s', $created->getTimestamp() ) : '' ),
-						self::csv_safe( (string) $order->get_billing_email() ),
+						self::csv_safe( (string) $row['platform'] ),
+						self::csv_safe( (string) $row['order_ref'] ),
+						self::csv_safe( (string) $row['number'] ),
+						self::csv_safe( (string) $row['date_gmt'] ),
+						self::csv_safe( (string) $row['email'] ),
 						self::csv_safe( (string) ( $entry['product_id'] ?? '' ) ),
 						self::csv_safe( $rid ),
 						self::csv_safe( $label ),
@@ -277,6 +230,94 @@ final class ConsentRecordsPage {
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 		fclose( $out );
 		exit;
+	}
+
+	/**
+	 * Fetch consent records cross-platform from the immutable evidence log (READ-ONLY).
+	 *
+	 * The `exemption_consent` log rows are the authoritative, cross-platform index of
+	 * which orders carry a captured consent — WooCommerce, EDD and FluentCart all append
+	 * them. The full per-entry evidence (including the IP) lives on the order and is read
+	 * back via the platform adapter when the order still exists; if the order was later
+	 * deleted, the log's PII-free entries are used so the evidence still appears. Nothing
+	 * here writes to or mutates the append-only log.
+	 *
+	 * @param int $limit  Max log rows.
+	 * @param int $offset Offset.
+	 * @return array<int,array<string,mixed>>
+	 */
+	private function fetch_consent_rows( int $limit, int $offset ): array {
+		$rows = ( new LogRepository() )->list_by_event( 'exemption_consent', $limit, $offset );
+		$out  = array();
+
+		foreach ( $rows as $row ) {
+			$platform  = (string) ( $row['platform'] ?? '' );
+			$order_ref = (string) ( $row['order_ref'] ?? '' );
+			$email     = (string) ( $row['customer_email'] ?? '' );
+			$date_gmt  = (string) ( $row['created_at'] ?? '' );
+			$number    = $order_ref;
+			$entries   = array();
+			$confirmed = '';
+			$purged    = '';
+
+			$adapter = Services::instance()->platforms->get( $platform );
+			if ( $adapter ) {
+				$meta = $adapter->get_meta( $order_ref, 'consent' );
+				if ( is_array( $meta ) && ! empty( $meta ) ) {
+					$entries = $meta; // Full entries (incl. IP) from the order meta.
+				}
+				$confirmed = (string) $adapter->get_meta( $order_ref, 'consent_confirmation_sent' );
+				$purged    = (string) $adapter->get_meta( $order_ref, 'consent_purged' );
+				$order     = $adapter->get_order( $order_ref );
+				if ( $order ) {
+					$number = '' !== (string) $order->number ? (string) $order->number : $order_ref;
+					if ( '' === $email ) {
+						$email = (string) $order->email;
+					}
+				}
+			}
+
+			// Fallback to the log's PII-free entries when the order/meta is gone.
+			if ( empty( $entries ) ) {
+				$payload = json_decode( (string) ( $row['payload_json'] ?? '' ), true );
+				if ( is_array( $payload ) && isset( $payload['entries'] ) && is_array( $payload['entries'] ) ) {
+					$entries = $payload['entries'];
+				}
+			}
+			if ( empty( $entries ) ) {
+				continue;
+			}
+
+			$out[] = array(
+				'platform'       => $platform,
+				'platform_label' => $this->platform_label( $platform ),
+				'order_ref'      => $order_ref,
+				'number'         => $number,
+				'email'          => $email,
+				'date'           => '' !== $date_gmt ? get_date_from_gmt( $date_gmt, 'Y-m-d H:i' ) : '',
+				'date_gmt'       => $date_gmt,
+				'entries'        => $entries,
+				'confirmed'      => $confirmed,
+				'purged'         => $purged,
+			);
+		}
+
+		return $out;
+	}
+
+	/**
+	 * Human label for a platform key.
+	 *
+	 * @param string $platform Platform key.
+	 * @return string
+	 */
+	private function platform_label( string $platform ): string {
+		$labels = array(
+			'woocommerce' => 'WooCommerce',
+			'edd'         => 'Easy Digital Downloads',
+			'fluentcart'  => 'FluentCart',
+		);
+		return isset( $labels[ $platform ] ) ? $labels[ $platform ] : ( '' !== $platform ? $platform : '—' );
 	}
 
 	/**

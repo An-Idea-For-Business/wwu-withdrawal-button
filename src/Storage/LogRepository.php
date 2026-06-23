@@ -206,6 +206,48 @@ final class LogRepository {
 	}
 
 	/**
+	 * List recent log rows for a given event (READ-ONLY — admin evidence views).
+	 *
+	 * The evidence log is the cross-platform, tamper-evident source of record: every
+	 * platform's checkout-consent capture appends an `exemption_consent` row here, so
+	 * reading by event is how an admin screen sees WooCommerce, EDD and FluentCart
+	 * uniformly. Pure SELECT — it never writes to or mutates the append-only chain.
+	 *
+	 * @param string $event  Event slug (e.g. 'exemption_consent').
+	 * @param int    $limit  Max rows.
+	 * @param int    $offset Offset.
+	 * @return array<int,array<string,mixed>>
+	 */
+	public function list_by_event( string $event, int $limit = 50, int $offset = 0 ): array {
+		global $wpdb;
+		$table = LogTable::name();
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM {$table} WHERE event = %s ORDER BY id DESC LIMIT %d OFFSET %d",
+				$event,
+				max( 1, $limit ),
+				max( 0, $offset )
+			),
+			ARRAY_A
+		);
+		return is_array( $rows ) ? $rows : array();
+	}
+
+	/**
+	 * Count log rows for a given event (READ-ONLY).
+	 *
+	 * @param string $event Event slug.
+	 * @return int
+	 */
+	public function count_by_event( string $event ): int {
+		global $wpdb;
+		$table = LogTable::name();
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery
+		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$table} WHERE event = %s", $event ) );
+	}
+
+	/**
 	 * Verify a single stored row's own hash (cheap O(1) integrity check).
 	 *
 	 * Recomputes row_hash from the row's evidence fields + its stored prev_hash.
