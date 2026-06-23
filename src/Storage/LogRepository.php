@@ -265,7 +265,10 @@ final class LogRepository {
 		if ( $limit > 0 ) {
 			$sql .= ' LIMIT ' . (int) $limit;
 		}
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery
+		// The query has no user input — the table name comes from LogTable::name()
+		// ($wpdb->prefix + a constant) and LIMIT is an (int) cast — so there is
+		// nothing to prepare(); the table name cannot be a placeholder anyway.
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery
 		$rows = $wpdb->get_results( $sql, ARRAY_A );
 		if ( ! is_array( $rows ) ) {
 			return 0;

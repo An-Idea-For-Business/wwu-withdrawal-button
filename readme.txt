@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.2.9
+Stable tag: 1.2.10
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -122,6 +122,18 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 
 == Changelog ==
 
+= 1.2.10 =
+* **WordPress.org compliance pass (no behaviour change).** Added `wp_unslash()` to the inputs read by the settings-save handler — the values were already sanitised (custom sanitisers, integer casts, `sanitize_*` / `esc_url_raw`), this just adds the WordPress-canonical unslash step the Plugin Check tool expects. Silenced a false-positive "query not prepared" error on the integrity-check read (it has no user input: the table name comes from `$wpdb->prefix` and the row limit is an integer cast, so there is nothing to prepare). Trimmed three over-long upgrade notices to the 300-character limit. No change to the withdrawal flow, your data or the evidence log.
+
+= 1.2.9 =
+* **Type-aware withdrawal window (informational).** The 14-day countdown shown to the customer is now calculated by product type: all-digital orders (every item virtual/downloadable) start from the order date — the conclusion of the contract, per Art. 9 of Directive 2011/83/EU and Art. 52 of the Italian Codice del Consumo — while any order containing a physical item is unchanged (the completed/delivery date, falling back to the order date). The window stays informational: the button is never hidden on this value, and you decide the validity of late requests. No breaking changes.
+
+= 1.2.8 =
+* **Guest withdrawal link fixed on every surface.** Completes the 1.2.7 fix. The `[wwu_wb_button]` / `[wwu_wb_form]` shortcodes and the WooCommerce order-actions link now also route guests (customers without an account) to the public withdrawal page instead of the login-gated account area — a shared helper builds the URL the same way everywhere, so a guest is never sent to the login screen regardless of which surface shows the link (some themes render the order-actions on the order-received page). Logged-in customers are unaffected; no change to the flow, your data or the evidence log.
+
+= 1.2.7 =
+* **Guest withdrawal button no longer asks for login.** The withdrawal button shown in the order recap / thank-you page sent guest (no-account) customers to the login screen, because it pointed at the My Account area. Guests are now routed to the public withdrawal page, carrying the order reference + order key (the same pre-authenticated link the order e-mail already uses), so they can withdraw without an account. Logged-in customers are unaffected.
+
 = 1.2.6 =
 * **Translations completed for all bundled locales.** Several admin strings added in recent releases — the "Legal clauses" editor, the "Notification email(s)" field, the legal-texts reminders on the Compliance page and the FluentCart e-mail helper — were showing in English because they had not been translated yet. All five bundled language files (Italian, German, French, Spanish, Swedish) are now complete for these strings, so those screens display in your language. (The Swedish strings were machine-assisted and are pending a native review.)
 
@@ -230,8 +242,20 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 
 == Upgrade Notice ==
 
+= 1.2.10 =
+WordPress.org compliance pass: wp_unslash() added on the settings-save inputs (already sanitised) and a false-positive prepared-SQL error silenced on the integrity query. Over-long upgrade notices trimmed. No change to the withdrawal flow or your data.
+
+= 1.2.9 =
+Type-aware withdrawal window: for all-digital orders the 14-day countdown now starts at the order date (contract conclusion); orders with physical items are unchanged (delivery/completed date). Informational only — the button is never hidden on this. No breaking changes.
+
+= 1.2.8 =
+Completes the guest fix: the [wwu_wb_button] shortcode and the order-actions link now also route guests to the public withdrawal page, not just the automatic button, so a guest is never sent to the login screen. Logged-in customers unaffected.
+
+= 1.2.7 =
+Fixes the withdrawal button in the order recap sending guest (no-account) customers to the login screen; guests are now routed to the public withdrawal page. Logged-in customers are unaffected. No breaking changes.
+
 = 1.2.6 =
-Completes the bundled translations (Italian, German, French, Spanish, Swedish) for recent admin strings that were still showing in English: the Legal clauses editor, the Notification email(s) field, the Compliance legal-texts reminders and the FluentCart e-mail helper. (Swedish is machine-assisted, pending native review.)
+Completes the bundled translations (Italian, German, French, Spanish, Swedish) for recent admin strings that were still showing in English — the Legal clauses editor, the Notification email(s) field and the Compliance reminders. (Swedish is machine-assisted, pending native review.)
 
 = 1.2.5 =
 Fixes PHP 7.4 compatibility: the bundled PDF library (Dompdf) had been requiring PHP 8.1 and showed a Composer platform error on PHP 7.4 sites; it is now pinned to the 7.4-compatible 2.x line. Also: the notification e-mail field now accepts multiple comma-separated recipients.
@@ -243,10 +267,10 @@ Housekeeping + WordPress.org compliance hardening (input sanitisation, output es
 Follow-up to the 1.2.2 e-mail fix: a failed acknowledgement e-mail now shows the exact transport reason (for example the SMTP plugin's "Could not authenticate") in the admin notice and the immutable log, instead of a generic "email failed", so an SMTP misconfiguration is obvious at a glance.
 
 = 1.2.2 =
-Critical: fixes a fatal "critical error" when sending the acknowledgement e-mail (on confirmation and admin resend), caused by an SMTP plugin like WP Mail SMTP throwing inside wp_mail. The send now fails gracefully instead of crashing. Also: set FluentCart handling to Off if you use FluentCart's new native add-on.
+Critical: fixes a fatal "critical error" when sending the acknowledgement e-mail (on confirmation and admin resend), caused by an SMTP plugin throwing inside wp_mail. The send now fails gracefully instead of crashing. Also: set FluentCart handling to Off if you use its native add-on.
 
 = 1.2.1 =
-Fixes the WooCommerce "Right of withdrawal" account tab returning a 404 on a fresh install — a one-time rewrite flush now runs automatically after activation (re-saving Permalinks also fixes it). You can now also edit the legal clauses from Settings → Legal clauses (no code), plus a wwu_wb_clause_text filter.
+Fixes the WooCommerce "Right of withdrawal" account tab returning a 404 on a fresh install — a one-time rewrite flush now runs after activation (re-saving Permalinks also fixes it). You can also edit the legal clauses from Settings → Legal clauses (no code).
 
 = 1.2.0 =
 Reminder: installing the button does not update your shop's legal texts. Your Terms & Conditions and pre-contractual information must describe the new withdrawal-button modality (Art. 6 CRD). The plugin now flags this and gives you the ready-to-paste clauses. No change to the flow.

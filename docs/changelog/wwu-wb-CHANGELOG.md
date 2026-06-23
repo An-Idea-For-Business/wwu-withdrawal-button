@@ -3,6 +3,16 @@
 All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); the project uses Semantic Versioning.
 
+## [1.2.10] — 2026-06-23 — WordPress.org Plugin Check compliance (real fixes)
+
+Addresses the genuine findings from a WordPress.org Plugin Check scan. The false positives — custom-table queries with `$wpdb->prefix` names, platform-handled checkout nonces, custom-`Sanitizer::` methods — are left as-is (documented as such), per the chosen "real fixes only" scope.
+
+- **`SettingsPage` save handler:** added `wp_unslash()` to the ~22 `$_POST` inputs that were missing it. The values were already sanitised (custom sanitisers, `(int)` casts, `sanitize_title`/`sanitize_text_field`/`esc_url_raw`); this adds the WordPress-canonical unslash step, clearing the `MissingUnslash` warnings.
+- **`LogRepository::verify_chain()` (the one ERROR):** extended the existing `phpcs:ignore` to cover `WordPress.DB.PreparedSQL.NotPrepared`. The integrity-scan query has no user input — the table name is `$wpdb->prefix`-derived (cannot be a placeholder) and the `LIMIT` is an `(int)` cast — so there is nothing to prepare.
+- **`readme.txt`:** trimmed three upgrade notices (1.2.1, 1.2.2, 1.2.6) over the 300-character limit, and backfilled the missing **1.2.7 / 1.2.8 / 1.2.9** upgrade notices + changelog entries (those releases had bumped the Stable tag + docs changelog but not the readme sections).
+
+**Left as documented false positives:** `ClientInfo` + `NoScriptFlow` `InputNotSanitized` (already `wp_unslash()`-ed and sanitised in `filter_var(FILTER_VALIDATE_IP)` / `WithdrawalRequest::from_input()`); the DB direct-query / table-interpolation / no-cache warnings (custom evidence-log tables); the checkout-consent nonce warnings (the platform verifies the checkout nonce); `error_log`/`var_export` in the UI-Kit loader + smoke tests. PHP lint clean; **no behaviour change**.
+
 ## [1.2.9] — 2026-06-19 — Type-aware withdrawal window (digital = order date, physical = delivery)
 
 Refines how the (informational) 14-day countdown is calculated, **without changing the safe default behaviour**. `NormalizedOrder::window_start()` is now product-type-aware:

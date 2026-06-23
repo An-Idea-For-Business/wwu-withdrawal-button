@@ -1089,26 +1089,26 @@ final class SettingsPage {
 		// General settings.
 		$settings               = (array) get_option( 'wwu_wb_settings', array() );
 		$old_slug               = sanitize_title( (string) ( $settings['endpoint_slug'] ?? 'wwu-withdrawal' ) );
-		$settings['enabled']    = Sanitizer::bool( $_POST['enabled'] ?? '' );
+		$settings['enabled']    = Sanitizer::bool( wp_unslash( $_POST['enabled'] ?? '' ) );
 		$settings['custom_css'] = Sanitizer::css( isset( $_POST['custom_css'] ) ? wp_unslash( $_POST['custom_css'] ) : '' );
-		$settings['send_pdf']        = Sanitizer::bool( $_POST['send_pdf'] ?? '' );
+		$settings['send_pdf']        = Sanitizer::bool( wp_unslash( $_POST['send_pdf'] ?? '' ) );
 		$settings['merchant_email']  = Sanitizer::email_list( isset( $_POST['merchant_email'] ) ? wp_unslash( $_POST['merchant_email'] ) : '' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitizer::email_list() runs sanitize_email() on each entry.
-		$settings['retention_years'] = max( 1, min( 30, (int) ( $_POST['retention_years'] ?? 10 ) ) );
+		$settings['retention_years'] = max( 1, min( 30, (int) wp_unslash( $_POST['retention_years'] ?? 10 ) ) );
 		// IP capture for the exemption-consent evidence (GDPR strict-necessity → configurable).
-		$settings['consent_capture_ip'] = Sanitizer::bool( $_POST['consent_capture_ip'] ?? '' );
+		$settings['consent_capture_ip'] = Sanitizer::bool( wp_unslash( $_POST['consent_capture_ip'] ?? '' ) );
 		// Consumer guidance: window is clamped to the 14-day legal minimum; custom
 		// text replaces the default block (basic HTML allowed, merchant-owned).
-		$settings['withdrawal_window_days'] = max( 14, min( 365, (int) ( $_POST['withdrawal_window_days'] ?? 14 ) ) );
+		$settings['withdrawal_window_days'] = max( 14, min( 365, (int) wp_unslash( $_POST['withdrawal_window_days'] ?? 14 ) ) );
 		$settings['custom_guidance']        = wp_kses_post( wp_unslash( $_POST['custom_guidance'] ?? '' ) );
 		$settings['custom_exemption_note']  = wp_kses_post( wp_unslash( $_POST['custom_exemption_note'] ?? '' ) );
 		// Subscriptions: a renewal does not restart the 14-day right, so the button is
 		// suppressed on renewals unless the merchant opts in; auto-cancelling the
 		// subscription on a withdrawal is opt-in (refund/pro-rata stay manual).
-		$settings['treat_renewals_as_withdrawable']    = Sanitizer::bool( $_POST['treat_renewals_as_withdrawable'] ?? '' );
-		$settings['cancel_subscription_on_withdrawal'] = Sanitizer::bool( $_POST['cancel_subscription_on_withdrawal'] ?? '' );
+		$settings['treat_renewals_as_withdrawable']    = Sanitizer::bool( wp_unslash( $_POST['treat_renewals_as_withdrawable'] ?? '' ) );
+		$settings['cancel_subscription_on_withdrawal'] = Sanitizer::bool( wp_unslash( $_POST['cancel_subscription_on_withdrawal'] ?? '' ) );
 		// FluentCart handling: auto (defer to a native add-on when present) / always / off.
-		$settings['fluentcart_mode'] = Sanitizer::enum( $_POST['fluentcart_mode'] ?? '', array( 'auto', 'always', 'off' ), 'auto' );
-		$new_slug                    = sanitize_title( (string) ( $_POST['endpoint_slug'] ?? 'wwu-withdrawal' ) );
+		$settings['fluentcart_mode'] = Sanitizer::enum( wp_unslash( $_POST['fluentcart_mode'] ?? '' ), array( 'auto', 'always', 'off' ), 'auto' );
+		$new_slug                    = sanitize_title( (string) wp_unslash( $_POST['endpoint_slug'] ?? 'wwu-withdrawal' ) );
 		$settings['endpoint_slug']   = '' !== $new_slug ? $new_slug : 'wwu-withdrawal';
 		update_option( 'wwu_wb_settings', $settings );
 
@@ -1133,9 +1133,9 @@ final class SettingsPage {
 
 		// Applicability.
 		$applicability = array(
-			'mode'                 => Sanitizer::enum( $_POST['applicability_mode'] ?? '', array( 'eu_eea_only', 'always', 'custom_list' ), 'eu_eea_only' ),
-			'custom_countries'     => Sanitizer::country_list( $_POST['applicability_custom'] ?? '' ),
-			'b2b_vat_out_of_scope' => Sanitizer::bool( $_POST['applicability_b2b'] ?? '' ),
+			'mode'                 => Sanitizer::enum( wp_unslash( $_POST['applicability_mode'] ?? '' ), array( 'eu_eea_only', 'always', 'custom_list' ), 'eu_eea_only' ),
+			'custom_countries'     => Sanitizer::country_list( wp_unslash( $_POST['applicability_custom'] ?? '' ) ),
+			'b2b_vat_out_of_scope' => Sanitizer::bool( wp_unslash( $_POST['applicability_b2b'] ?? '' ) ),
 		);
 		update_option( 'wwu_wb_applicability', $applicability );
 
@@ -1160,7 +1160,7 @@ final class SettingsPage {
 		}
 		$exclusions                        = (array) get_option( 'wwu_wb_exclusions', array() );
 		$exclusions['by_reason']           = $by_reason;
-		$exclusions['auto_detect_virtual'] = Sanitizer::bool( $_POST['exempt_auto_detect'] ?? '' );
+		$exclusions['auto_detect_virtual'] = Sanitizer::bool( wp_unslash( $_POST['exempt_auto_detect'] ?? '' ) );
 		unset( $exclusions['excluded_product_ids'], $exclusions['excluded_category_ids'] );
 		update_option( 'wwu_wb_exclusions', $exclusions );
 		// The block-checkout field gating caches the conditional product ids; refresh it.
@@ -1168,12 +1168,12 @@ final class SettingsPage {
 
 		// Timestamp provider.
 		$timestamp = (array) get_option( 'wwu_wb_timestamp', array() );
-		$timestamp['provider'] = Sanitizer::enum( $_POST['timestamp_provider'] ?? '', array( 'opentimestamps', 'rfc3161', 'none' ), 'opentimestamps' );
+		$timestamp['provider'] = Sanitizer::enum( wp_unslash( $_POST['timestamp_provider'] ?? '' ), array( 'opentimestamps', 'rfc3161', 'none' ), 'opentimestamps' );
 
 		// RFC 3161 config. The password uses the "leave blank to keep" pattern so
 		// the saved secret is never re-emitted to the browser.
 		$rfc3161           = (array) ( $timestamp['rfc3161'] ?? array() );
-		$rfc3161['endpoint'] = esc_url_raw( trim( (string) ( $_POST['rfc3161_endpoint'] ?? '' ) ) );
+		$rfc3161['endpoint'] = esc_url_raw( trim( (string) wp_unslash( $_POST['rfc3161_endpoint'] ?? '' ) ) );
 		// SSRF: never persist a TSA endpoint that resolves to an internal/reserved
 		// target (cloud-metadata, loopback, private, CGNAT, IPv4-mapped IPv6). The
 		// request-time guard in Rfc3161Provider blocks it too, but refusing to store
@@ -1181,7 +1181,7 @@ final class SettingsPage {
 		if ( '' !== $rfc3161['endpoint'] && ! \WWU\WithdrawalButton\Security\OutboundUrlGuard::is_safe_url( $rfc3161['endpoint'] ) ) {
 			$rfc3161['endpoint'] = '';
 		}
-		$rfc3161['user']     = sanitize_text_field( (string) ( $_POST['rfc3161_user'] ?? '' ) );
+		$rfc3161['user']     = sanitize_text_field( (string) wp_unslash( $_POST['rfc3161_user'] ?? '' ) );
 		$new_pass            = (string) wp_unslash( $_POST['rfc3161_pass'] ?? '' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Basic-auth secret kept verbatim.
 		if ( '' !== $new_pass ) {
 			$rfc3161['pass'] = $new_pass;
@@ -1196,8 +1196,8 @@ final class SettingsPage {
 		// key is never re-emitted to the browser. Enabling without a secret mints one
 		// so every delivery is signed.
 		$webhook            = (array) get_option( 'wwu_wb_webhook', array() );
-		$webhook['enabled'] = Sanitizer::bool( $_POST['webhook_enabled'] ?? '' );
-		$webhook_url        = esc_url_raw( trim( (string) ( $_POST['webhook_url'] ?? '' ) ) );
+		$webhook['enabled'] = Sanitizer::bool( wp_unslash( $_POST['webhook_enabled'] ?? '' ) );
+		$webhook_url        = esc_url_raw( trim( (string) wp_unslash( $_POST['webhook_url'] ?? '' ) ) );
 		if ( '' !== $webhook_url && ! OutboundUrlGuard::is_safe_url( $webhook_url ) ) {
 			$webhook_url = '';
 		}
@@ -1205,7 +1205,7 @@ final class SettingsPage {
 
 		$current_secret = (string) ( $webhook['secret'] ?? '' );
 		$posted_secret  = trim( (string) wp_unslash( $_POST['webhook_secret'] ?? '' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- HMAC key kept verbatim; capped below.
-		if ( Sanitizer::bool( $_POST['webhook_regenerate'] ?? '' ) ) {
+		if ( Sanitizer::bool( wp_unslash( $_POST['webhook_regenerate'] ?? '' ) ) ) {
 			$webhook['secret'] = Webhook::generate_secret();
 		} elseif ( '' !== $posted_secret ) {
 			$webhook['secret'] = substr( $posted_secret, 0, 128 );
@@ -1223,9 +1223,9 @@ final class SettingsPage {
 
 		// Debug audience.
 		$debug = Audience::config();
-		$debug['enabled']       = Sanitizer::bool( $_POST['debug_enabled'] ?? '' );
+		$debug['enabled']       = Sanitizer::bool( wp_unslash( $_POST['debug_enabled'] ?? '' ) );
 		$debug['mode']          = Sanitizer::enum(
-			$_POST['debug_mode'] ?? '',
+			wp_unslash( $_POST['debug_mode'] ?? '' ),
 			array(
 				Audience::MODE_ALL_ADMINS,
 				Audience::MODE_SPECIFIC_ROLES,
@@ -1235,7 +1235,7 @@ final class SettingsPage {
 			Audience::MODE_ALL_ADMINS
 		);
 		$debug['console_level'] = Sanitizer::enum(
-			$_POST['debug_console_level'] ?? '',
+			wp_unslash( $_POST['debug_console_level'] ?? '' ),
 			array( 'silent', 'error', 'warn', 'info', 'debug' ),
 			'warn'
 		);
