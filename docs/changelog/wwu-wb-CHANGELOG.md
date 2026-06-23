@@ -3,6 +3,16 @@
 All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); the project uses Semantic Versioning.
 
+## [1.2.11] — 2026-06-23 — Consent Records page is cross-platform (fixes #41)
+
+Fixes GitHub issue #41 (reported by wplit): the **Consent Records** admin page (and its CSV export) only read WooCommerce orders, so on an EDD-only (or FluentCart-only) store it showed the "WooCommerce is not active" notice even though consent was being captured.
+
+- The page now sources its records from the **immutable, cross-platform evidence log** (`LogRepository`, event `exemption_consent`) — every platform's checkout-consent capture already appends there — so WooCommerce, EDD and FluentCart consents all appear. New read-only `LogRepository::list_by_event()` / `count_by_event()`.
+- The full per-entry evidence (incl. the IP) is read back from the order via the platform adapter when the order still exists; if the order was later deleted, the log's PII-free entries are shown so the evidence survives. A new **Platform** column is added; the CSV gains `platform` + `order_ref` columns.
+- The empty state no longer says "WooCommerce not active".
+
+**Log integrity preserved:** strictly a READ-ONLY change to the page — it never writes to or mutates the append-only, hash-chained evidence log (the new repository methods are pure SELECTs). PHP lint clean.
+
 ## [1.2.10] — 2026-06-23 — WordPress.org Plugin Check compliance (real fixes)
 
 Addresses the genuine findings from a WordPress.org Plugin Check scan. The false positives — custom-table queries with `$wpdb->prefix` names, platform-handled checkout nonces, custom-`Sanitizer::` methods — are left as-is (documented as such), per the chosen "real fixes only" scope.
