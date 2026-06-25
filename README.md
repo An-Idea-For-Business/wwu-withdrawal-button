@@ -37,7 +37,7 @@ This plugin makes a WooCommerce, FluentCart or Easy Digital Downloads store comp
 - ✅ **Statutory withdrawal button** in the customer's order area, with the exact legal wording per language (IT `recedere dal contratto qui`, EN `withdraw from contract here`, DE `Vertrag widerrufen`, FR `renoncer au contrat ici`, ES `desistir del contrato aquí`).
 - ✅ **Two-step flow** (statement → `conferma recesso`) — no dark patterns, no mandatory reason, as easy as buying.
 - ✅ **Durable-medium acknowledgement**: immediate email + attached **PDF** + a permanent verifiable link, reproducing the statement content and the precise submission timestamp.
-- ✅ **Tamper-evident immutable log** (append-only, hash-chained, IP + contract data + timestamps) anchored to **OpenTimestamps** (free, Bitcoin-backed *data certa*), with a pluggable RFC 3161 / eIDAS provider.
+- ✅ **Tamper-evident immutable log** (append-only, hash-chained, IP + contract data + timestamps) with **optional** trusted-timestamp anchoring — **OpenTimestamps** (free, Bitcoin-backed *data certa*) or a pluggable RFC 3161 / eIDAS provider — **opt-in, off by default** (the log works offline; the plugin prompts you to enable the anchor).
 - ✅ **WooCommerce (HPOS + legacy), FluentCart and Easy Digital Downloads (3.0+)** via a common adapter.
 - ✅ **Multilingual** (IT/EN/FR/ES/DE, extensible) and **jurisdiction-aware** (DE §356a, FR D.221-5, ES direct-effect; Switzerland handled as voluntary; applicability follows the **consumer's country** per Rome I Art. 6).
 - ✅ **Compliance documents**: generates the **Annex I-B model withdrawal form** (multilingual) and ready clauses for Privacy Policy / Terms / pre-contractual info.

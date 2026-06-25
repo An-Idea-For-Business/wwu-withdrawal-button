@@ -15,7 +15,7 @@ the statutory withdrawal button, the two-step statement→confirmation, the dura
 
 ## 0. Environment
 
-- [ ] WordPress 5.8+, PHP 7.4+, **WooCommerce active** (HPOS or legacy both fine).
+- [ ] WordPress 5.8+, PHP 8.1+ (directory build; or PHP 7.4+ with the legacy GitHub build), **WooCommerce active** (HPOS or legacy both fine).
 - [ ] Install the plugin from the release ZIP (Plugins → Add New → Upload) and **Activate**.
 - [ ] (For the PDF copy) the ZIP bundles **Dompdf** in `vendor/` — PDF works out of the box. If you
   installed from source without `composer install`, the durable medium degrades to **e-mail-only**
