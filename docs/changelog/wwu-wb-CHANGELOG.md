@@ -3,6 +3,17 @@
 All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); the project uses Semantic Versioning.
 
+## [1.2.12] — 2026-06-25 — WordPress.org compliance: opt-in timestamping, no Custom CSS, PHP 8.1 + Dompdf 3.1.5
+
+Addresses the WordPress.org plugin-review feedback (two blockers + library currency). No change to the withdrawal flow for merchants beyond the two compliance items below.
+
+- **Custom CSS field removed.** The admin "Custom CSS" textarea, its save handler, the option seed, and the frontend / no-JS inline-style output are gone; `Sanitizer::css()` is dropped. The Appearance section is now a read-only styling reference pointing to WordPress core's **Customizer → Additional CSS** (targeting the documented `.wwu-wb-*` variables/classes). The plugin no longer processes arbitrary user CSS. (Review: "no arbitrary CSS/JS/PHP insertion".)
+- **Trusted timestamping is now opt-in, off by default.** The provider defaults to `none`, so the plugin makes **no external calls** unless the merchant explicitly enables OpenTimestamps or an RFC 3161 authority in Settings → Receipt & evidence. The append-only, hash-chained evidence log is the baseline and works fully offline. `readme.txt` External Services reframed accordingly. (Review: "no phoning home without opt-in".)
+- **PHP 8.1 minimum + Dompdf 3.1.5.** This build bundles the latest stable Dompdf (3.1.5, was 2.0.8); its dependency tree (`thecodingmachine/safe`) requires PHP 8.1, so `Requires PHP` is raised from 7.4 to 8.1. The PdfBuilder API is unchanged; PDF rendering was verified against 3.1.5. (Review: "out-of-date libraries".)
+- **PHP 7.4 line preserved.** A PHP 7.4-compatible build (same features, Dompdf pinned to the 2.x line) is maintained on the `php-7.4` branch and published as a separate GitHub release for stores still on PHP 7.4–8.0.
+
+Verified false-positives (explained to the review team, no change needed): the block render callback returns HTML already escaped per-variable by the form template (24 `esc_*` calls, no raw echo); the only un-prefixed code is the bundled Dompdf vendor library (third-party); the remaining inline `<style>` blocks live in the PDF, verify-receipt and no-JS standalone templates (legitimate non-enqueueable contexts) — there is no inline `<script>`/`<style>` on any admin screen.
+
 ## [1.2.11] — 2026-06-23 — Consent Records page is cross-platform (fixes #41)
 
 Fixes GitHub issue #41 (reported by wplit): the **Consent Records** admin page (and its CSV export) only read WooCommerce orders, so on an EDD-only (or FluentCart-only) store it showed the "WooCommerce is not active" notice even though consent was being captured.

@@ -14,7 +14,7 @@
 
 <p align="center">
   <a href="#"><img alt="License: GPL v3" src="https://img.shields.io/badge/License-GPLv3-blue.svg"></a>
-  <img alt="Status" src="https://img.shields.io/badge/status-stable%20v1.2.11-brightgreen.svg">
+  <img alt="Status" src="https://img.shields.io/badge/status-stable%20v1.2.12-brightgreen.svg">
   <img alt="Applies from" src="https://img.shields.io/badge/applies%20from-19%20June%202026-critical.svg">
 </p>
 
@@ -53,7 +53,7 @@ This plugin makes a WooCommerce, FluentCart or Easy Digital Downloads store comp
 
 ## Status
 
-🟢 **Stable.** The full withdrawal flow — statutory button, two-step confirmation, durable-medium acknowledgement (email + PDF + verifiable link), tamper-evident hash-chained log, and the compliance-document generators — ships across WooCommerce, FluentCart and Easy Digital Downloads. Latest stable on GitHub: see the **[latest release](../../releases/latest)** and the [changelog](docs/changelog/wwu-wb-CHANGELOG.md). Six locales (IT/EN/DE/FR/ES/SV). The **`1.1.1`** build is in the **WordPress.org** manual-review queue; once approved the latest version ships to the directory via SVN. Recent: **`1.2.0`** added an "update your legal texts too" merchant reminder (Art. 6 CRD); **`1.2.1`** fixed the My Account tab 404 on fresh installs + made the legal clauses editable from Settings; **`1.2.2`** fixed a fatal "critical error" when an SMTP plugin (e.g. WP Mail SMTP) threw inside `wp_mail` during the acknowledgement send, and added coexistence guidance now that **FluentCart 1.4.2** ships its own native withdrawal add-on; **`1.2.3`** makes a failed acknowledgement e-mail report the exact transport reason (e.g. the SMTP plugin's "Could not authenticate") in the admin notice + immutable log, instead of a generic "email failed"; **`1.2.4`** WordPress.org compliance hardening (more distinctive, trademark-free display name; extra input sanitisation, output escaping, explicit REST permission callbacks); **`1.2.5`** restored PHP 7.4 compatibility (pinned the bundled Dompdf to the 7.4-compatible 2.x line), added comma-separated multiple recipients for the notification e-mail, and wired automatic detection of FluentCart's native "Customer Rights" add-on so Auto mode defers to it. See the [roadmap](docs/plans/wwu-wb-roadmap-PLAN.md) for what's next.
+🟢 **Stable.** The full withdrawal flow — statutory button, two-step confirmation, durable-medium acknowledgement (email + PDF + verifiable link), tamper-evident hash-chained log, and the compliance-document generators — ships across WooCommerce, FluentCart and Easy Digital Downloads. Latest stable on GitHub: see the **[latest release](../../releases/latest)** and the [changelog](docs/changelog/wwu-wb-CHANGELOG.md). Six locales (IT/EN/DE/FR/ES/SV). The **`1.2.12`** build is in the **WordPress.org** manual-review queue; once approved the latest version ships to the directory via SVN. Recent: **`1.2.0`** added an "update your legal texts too" merchant reminder (Art. 6 CRD); **`1.2.1`** fixed the My Account tab 404 on fresh installs + made the legal clauses editable from Settings; **`1.2.2`** fixed a fatal "critical error" when an SMTP plugin (e.g. WP Mail SMTP) threw inside `wp_mail` during the acknowledgement send, and added coexistence guidance now that **FluentCart 1.4.2** ships its own native withdrawal add-on; **`1.2.3`** makes a failed acknowledgement e-mail report the exact transport reason (e.g. the SMTP plugin's "Could not authenticate") in the admin notice + immutable log, instead of a generic "email failed"; **`1.2.4`** WordPress.org compliance hardening (more distinctive, trademark-free display name; extra input sanitisation, output escaping, explicit REST permission callbacks); **`1.2.5`** restored PHP 7.4 compatibility (pinned the bundled Dompdf to the 7.4-compatible 2.x line), added comma-separated multiple recipients for the notification e-mail, and wired automatic detection of FluentCart's native "Customer Rights" add-on so Auto mode defers to it; **`1.2.12`** is a WordPress.org-compliance build that **removed the Custom CSS field** (restyle via WordPress core's Customizer → Additional CSS), made trusted timestamping **opt-in** (no external calls by default), and moved to **PHP 8.1 + Dompdf 3.1.5** — a PHP 7.4-compatible build of the same features remains on GitHub. See the [roadmap](docs/plans/wwu-wb-roadmap-PLAN.md) for what's next.
 
 ## Installation
 
@@ -66,7 +66,7 @@ The plugin isn't on the WordPress.org directory **yet** (submission in progress)
 5. Open **Withdrawal Button → Settings**, enable the function, and choose your applicability mode (EU/EEA only is the default).
 6. From the **Compliance** page, publish the generated **Annex I‑B model form** and update your Privacy / Terms / pre‑contractual information.
 
-**Requirements:** WordPress 5.8+, PHP 7.4+ (tested up to WordPress 7.0). Updating later: deactivate the old version and upload the new ZIP the same way — your settings and the evidence log are preserved.
+**Requirements:** WordPress 5.8+, PHP 8.1+ (tested up to WordPress 7.0). **Still on PHP 7.4 or 8.0?** A separate PHP 7.4-compatible build (Dompdf pinned to the 2.x line, same features) is published in the [GitHub releases](../../releases) — but it is a temporary bridge and **will not be maintained indefinitely**: PHP 7.4 has been end-of-life since November 2022, so plan to move your store to PHP 8.1+ (faster and more secure), after which you get the directory build with automatic updates. Updating later: deactivate the old version and upload the new ZIP the same way — your settings and the evidence log are preserved.
 
 <details>
 <summary>Installing from source (developers)</summary>
@@ -107,7 +107,7 @@ We document limitations openly. None of these block the legal compliance core �
 
 ## Requirements
 
-- WordPress 5.8+ · PHP 7.4+
+- WordPress 5.8+ · PHP 8.1+ (or the PHP 7.4-compatible build on GitHub)
 - WooCommerce 5.0+, FluentCart **and/or** Easy Digital Downloads 3.0+
 - For contributors: Composer (to build the bundled Dompdf vendor) and Node (block editor build).
 

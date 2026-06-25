@@ -3,8 +3,8 @@ Contributors: mredodos, webwakeup, anideaforbusiness
 Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 7.0
-Requires PHP: 7.4
-Stable tag: 1.2.11
+Requires PHP: 8.1
+Stable tag: 1.2.12
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -39,7 +39,7 @@ That is the whole customer experience. Everything below exists to make it correc
 * A one-click **e-mail delivery test** that detects your SMTP plugin and proves the receipt actually reaches the inbox — the #1 cause of "nothing happened".
 * A **Requests dashboard** to manage every withdrawal: status (open / processed / refunded), a chain-integrity badge, and one-click **mark processed**, **resend receipt** and **open the order to refund** (the refund is logged as proof you met the 14 days). Subscription and partial-withdrawal requests are flagged.
 * A **Compliance page**: a go-live countdown, the statutory labels in use, the document checklist with ready-to-paste clauses, and environment warnings (Complianz / cache / multilingual) to fix.
-* Receipts are **real WooCommerce e-mails** (your logo, colours, header) with a preview, and everything is styleable via a **Custom CSS** field.
+* Receipts are **real WooCommerce e-mails** (your logo, colours, header) with a preview. The withdrawal button and form **inherit your theme's typography and colour presets** out of the box, so they blend in automatically; for finer control, restyle every part from **Appearance → Customize → Additional CSS** (built into WordPress), targeting the plugin's documented CSS variables and classes.
 
 = Smart legal handling (so you don't have to think about it) =
 
@@ -51,7 +51,7 @@ That is the whole customer experience. Everything below exists to make it correc
 = Evidence, timestamps & integrity =
 
 * The immutable log is **append-only and hash-chained** (HMAC-keyed with your site secret), so tampering is detectable.
-* Free, independently-verifiable **OpenTimestamps** (Bitcoin) anchoring by default; or a **qualified eIDAS RFC 3161** timestamp (a free Sectigo endpoint, or your national authority — Aruba, InfoCert, D-Trust, Universign, FNMT, SwissSign) for stronger "data certa". Failed stamps retry automatically and any not-yet-anchored records are surfaced in the admin.
+* **Recommended** trusted timestamping (off by default — one click to enable): free, independently-verifiable **OpenTimestamps** (Bitcoin) anchoring, or a **qualified eIDAS RFC 3161** timestamp (a free Sectigo endpoint, or your national authority — Aruba, InfoCert, D-Trust, Universign, FNMT, SwissSign), for an independent **"data certa"** of when each withdrawal was received. The hash chain is the baseline evidence on its own; once you enable a provider, failed stamps retry automatically and any not-yet-anchored records are surfaced in the admin. (It is off by default only because WordPress.org requires external calls to be opt-in — the plugin prompts you to switch it on.)
 
 = Privacy & GDPR =
 
@@ -95,22 +95,26 @@ No. The right of withdrawal applies by default, **including** to digital product
 = Do I have to keep a register of these consents? =
 The law does not name a "register", but the burden of proof is on you (Art. 6(9) Dir. 2011/83/EU; GDPR accountability Art. 5(2)) — you must be able to prove the consent. The plugin keeps it for you: the agreed wording, a SHA-256 hash, the date/time and (optionally) the IP are stored on the order and anchored in the tamper-evident log; a **Consent records** admin screen lists and exports them. The IP is anonymised automatically after the retention period.
 
-= Is the timestamp legally valid? =
-OpenTimestamps provides a free, independently-verifiable Bitcoin-anchored proof. A pluggable RFC 3161 / eIDAS qualified-timestamp provider is available for stronger "data certa".
+= Is the timestamp legally valid? Should I enable it? =
+Yes — and we recommend you do. A trusted timestamp gives you an independent **"data certa"**: proof of the exact moment a withdrawal was received, which is the fact the statutory 14-day deadline turns on and the hardest thing to prove after the fact. **OpenTimestamps** is free, needs no account, and provides an independently-verifiable Bitcoin-anchored proof; a pluggable **RFC 3161 / eIDAS** qualified-timestamp provider is available for the strongest "data certa". It is **off by default** (WordPress.org requires external connections to be opt-in) and only an anonymous one-way hash is ever sent — never personal data — so turn it on in **Settings → Receipt & evidence** (the Dashboard checklist links you straight there).
+
+= Which PHP version do I need? What about PHP 7.4? =
+The build in the WordPress.org directory requires **PHP 8.1+** (it bundles the latest Dompdf 3.x PDF engine, whose dependencies need 8.1). If your host still runs **PHP 7.4 or 8.0**, the directory simply will not offer you this update — install the **PHP 7.4-compatible build** from our GitHub releases instead (identical features, Dompdf pinned to the 2.x line). That legacy build is a courtesy bridge and **will not be maintained forever**: PHP 7.4 reached end-of-life in November 2022, so please plan to move your store to PHP 8.1+ (it is faster and more secure), after which you get the directory version with automatic updates.
 
 == External services ==
 
-This plugin connects to the **OpenTimestamps** public calendar servers to obtain a free, trusted timestamp (a "data certa") for the tamper-evident withdrawal log. This is the default timestamp provider; you can switch it to "none" in the settings to disable all external calls.
+This plugin makes **no external calls by default**. Every outbound connection listed below is **opt-in** and stays **off** until you explicitly enable it in the settings. The tamper-evident log works fully offline — it is append-only and hash-chained with your site secret — so timestamping only *adds* an extra, independently-verifiable anchor; it is never required for the plugin to function.
+
+**OpenTimestamps** (opt-in, off by default) — only if you set the timestamp provider to "OpenTimestamps" (Settings → Receipt & evidence) does the plugin connect to the OpenTimestamps public calendar servers to obtain a free, trusted timestamp (a "data certa") for the log.
 
 - **What is sent:** only a SHA-256 hash (a one-way digest) of the immutable-log record, plus a random privacy nonce. No personal data, order content, names, emails or IP addresses are ever sent — only an opaque hash that cannot be reversed.
-- **When:** once when a withdrawal is confirmed (to submit the hash) and periodically via WP-Cron (to retrieve the Bitcoin-anchored proof).
+- **When:** only while the provider is enabled — once when a withdrawal is confirmed (to submit the hash) and periodically via WP-Cron (to retrieve the Bitcoin-anchored proof). Nothing is ever sent while the provider is "None" (the default).
 - **Where:** the OpenTimestamps public calendars (a.pool.opentimestamps.org, b.pool.opentimestamps.org, a.pool.eternitywall.com, ots.btc.catallaxy.com).
 - **Service info / privacy:** https://opentimestamps.org/
 
-**Optional** services, all **off by default** and used only if you turn them on:
+**RFC 3161 / eIDAS timestamp authority** (opt-in, off by default) — if you instead set the provider to an RFC 3161 authority, the same one-way SHA-256 hash (no personal data) is sent to the authority URL **you** configure. This is a provider you choose and contract with directly (examples: a free Sectigo endpoint, or a national authority such as Aruba, InfoCert, D-Trust, Universign, FNMT, SwissSign); please review that provider's own terms of service and privacy policy. No such call is made until you enable it.
 
-- **RFC 3161 / eIDAS timestamp authority** — OFF by default; OpenTimestamps is used unless you opt in. If you switch the timestamp provider to an RFC 3161 authority, the same one-way SHA-256 hash (no personal data) is sent to the authority URL **you** configure. This is a provider you choose and contract with directly (examples: a free Sectigo endpoint, or a national authority such as Aruba, InfoCert, D-Trust, Universign, FNMT, SwissSign); please review that provider's own terms of service and privacy policy. The plugin makes no such call until you enable it.
-- **Outbound webhook** (Settings → Integrations) — if enabled, the plugin sends a signed POST to the endpoint URL **you** specify whenever a withdrawal is confirmed. The payload carries a verification hash and contract reference, never the consumer's IP address.
+**Outbound webhook** (opt-in, off by default — Settings → Integrations) — if enabled, the plugin sends a signed POST to the endpoint URL **you** specify whenever a withdrawal is confirmed. The payload carries a verification hash and contract reference, never the consumer's IP address.
 
 No other external services are used. The plugin does not load remote scripts, fonts or trackers on your site.
 
@@ -121,6 +125,12 @@ The plugin records withdrawal declarations (name, identified contract, email, IP
 For the conditional Art. 59 exemptions, the plugin also stores the consumer's checkout consent + acknowledgement (the agreed wording, a hash, the date/time and — unless you turn it off — the IP) as evidence to prove the exemption is valid. The lawful basis is **legitimate interest** (GDPR Art. 6(1)(f); defence of legal claims), **not** GDPR consent. The IP lives only on the order (never in the immutable log) and is automatically anonymised once the retention period lapses. A second ready-to-paste privacy clause is generated for this processing.
 
 == Changelog ==
+
+= 1.2.12 =
+* **Now requires PHP 8.1** (was 7.4). This build bundles the latest stable PDF engine, **Dompdf 3.1.5**, whose dependencies need PHP 8.1. Sites still on PHP 7.4–8.0 are not offered this update and stay on 1.2.11; a PHP 7.4-compatible build of the same features is published on GitHub.
+* **Custom CSS field removed.** To restyle the withdrawal flow, use WordPress core's **Appearance → Customize → Additional CSS**, targeting the plugin's documented CSS variables and classes (a full reference is shown in Settings → Appearance). The plugin no longer processes arbitrary user CSS.
+* **No external calls by default.** Trusted timestamping (OpenTimestamps / RFC 3161) is now **opt-in and off by default** — the plugin makes no outbound connection unless you enable a provider in Settings → Receipt & evidence. The append-only, hash-chained evidence log works fully offline. (WordPress.org review compliance: opt-in consent + no arbitrary code insertion.)
+* Updated the bundled Dompdf PDF library from 2.0.8 to the latest stable **3.1.5**.
 
 = 1.2.11 =
 * **Consent Records page is now cross-platform (fixes #41).** The admin Consent Records screen and its CSV export only read WooCommerce orders, so on an Easy Digital Downloads or FluentCart store they showed the "WooCommerce not active" notice even though consent was being captured. The page now sources its records from the **tamper-evident, cross-platform evidence log** (every platform's checkout-consent capture already writes there), so WooCommerce, EDD and FluentCart consents all appear; the full per-entry evidence (including the IP) is read back from the order when it still exists, and survives as a PII-free record if the order was later deleted. A new "Platform" column is shown. This is strictly a read-only change — the append-only, hash-chained evidence log is never altered.
@@ -244,6 +254,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.2.12 =
+Now requires PHP 8.1 (was 7.4); ships Dompdf 3.1.5. Custom CSS field removed — restyle via WordPress Customizer → Additional CSS. Timestamping is now opt-in: no external calls by default. PHP 7.4–8.0 sites stay on 1.2.11; a compatible build is on GitHub.
 
 = 1.2.11 =
 Fixes the Consent Records admin page (and CSV export) showing only WooCommerce consents: it now reads cross-platform from the tamper-evident evidence log, so Easy Digital Downloads and FluentCart consents appear too. Read-only — the immutable log is never altered. (GitHub #41.)

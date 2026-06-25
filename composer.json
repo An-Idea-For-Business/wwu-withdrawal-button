@@ -25,8 +25,8 @@
 		"issues": "https://github.com/An-Idea-For-Business/wwu-withdrawal-button/issues"
 	},
 	"require": {
-		"php": ">=7.4",
-		"dompdf/dompdf": "^2.0"
+		"php": ">=8.1",
+		"dompdf/dompdf": "^3.1"
 	},
 	"require-dev": {
 		"squizlabs/php_codesniffer": "^3.9",
@@ -36,6 +36,9 @@
 	"config": {
 		"vendor-dir": "vendor",
 		"optimize-autoloader": true,
+		"platform": {
+			"php": "8.1.0"
+		},
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true
 		}

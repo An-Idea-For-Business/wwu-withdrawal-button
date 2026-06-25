@@ -221,11 +221,7 @@ final class NoScriptFlow {
 		nocache_headers();
 		header( 'Content-Type: text/html; charset=UTF-8' );
 		$css = '.wwu-wb-np{max-width:560px;margin:6vh auto;padding:0 20px;font-family:Arial,Helvetica,sans-serif;color:#222;}.wwu-wb-button{display:inline-block;padding:.7em 1.4em;background:#1a1f3a;color:#fff;border:0;border-radius:5px;font-size:1rem;cursor:pointer;text-decoration:none;}';
-		// Apply the merchant's custom CSS to the no-JS pages too (consistent branding).
-		$custom = (string) ( \WWU\WithdrawalButton\Core\Settings::main()['custom_css'] ?? '' );
-		if ( '' !== $custom ) {
-			$css .= "\n" . \WWU\WithdrawalButton\Security\Sanitizer::css( $custom );
-		}
+		// The no-JS pages use only the static layout CSS above (no user-supplied CSS).
 		echo '<!DOCTYPE html><html lang="' . esc_attr( get_bloginfo( 'language' ) ) . '"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>' . esc_html( $title ) . '</title><style>' . $css . '</style></head><body><div class="wwu-wb-np"><h1>' . esc_html( $title ) . '</h1>' . $body . '<p style="margin-top:2em;"><a href="' . esc_url( home_url( '/' ) ) . '">' . esc_html__( 'Back to the site', 'wwu-withdrawal-button' ) . '</a></p></div></body></html>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $body is pre-escaped; $css is a static literal.
 		exit;
 	}

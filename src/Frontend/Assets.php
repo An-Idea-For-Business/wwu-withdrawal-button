@@ -88,12 +88,6 @@ final class Assets {
 			WWU_WB_VERSION
 		);
 
-		// Merchant custom CSS — printed AFTER the plugin stylesheet so it overrides.
-		$custom_css = (string) ( \WWU\WithdrawalButton\Core\Settings::main()['custom_css'] ?? '' );
-		if ( '' !== $custom_css ) {
-			wp_add_inline_style( 'wwu-wb-frontend', \WWU\WithdrawalButton\Security\Sanitizer::css( $custom_css ) );
-		}
-
 		wp_enqueue_script(
 			'wwu-wb-frontend',
 			WWU_WB_URL . '/assets/frontend/withdrawal.js',

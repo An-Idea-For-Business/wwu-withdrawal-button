@@ -452,7 +452,7 @@ final class SettingsPage {
 	 * @return void
 	 */
 	private function render_receipt_section( array $settings ): void {
-		$ts       = wp_parse_args( (array) get_option( 'wwu_wb_timestamp', array() ), array( 'provider' => 'opentimestamps' ) );
+		$ts       = wp_parse_args( (array) get_option( 'wwu_wb_timestamp', array() ), array( 'provider' => 'none' ) );
 		$merchant = (string) ( $settings['merchant_email'] ?? get_option( 'admin_email' ) );
 		$retention= (int) ( $settings['retention_years'] ?? 10 );
 		$slug     = (string) ( $settings['endpoint_slug'] ?? 'wwu-withdrawal' );
@@ -487,18 +487,18 @@ final class SettingsPage {
 			)
 		);
 
-		echo '<tr><th scope="row">' . esc_html__( 'Trusted timestamp', 'wwu-withdrawal-button' ) . '</th><td>';
+		echo '<tr id="wwu-wb-timestamp"><th scope="row">' . esc_html__( 'Trusted timestamp', 'wwu-withdrawal-button' ) . '</th><td>';
 		echo '<select name="timestamp_provider">';
 		$tsopts = array(
-			'opentimestamps' => __( 'OpenTimestamps (free, Bitcoin-anchored — recommended)', 'wwu-withdrawal-button' ),
-			'rfc3161'        => __( 'RFC 3161 timestamp authority (immediate; eIDAS-qualified options)', 'wwu-withdrawal-button' ),
-			'none'           => __( 'None (the hash chain alone is the evidence)', 'wwu-withdrawal-button' ),
+			'none'           => __( 'None — no external calls (default; the hash chain alone is the evidence)', 'wwu-withdrawal-button' ),
+			'opentimestamps' => __( 'OpenTimestamps (opt-in; free, Bitcoin-anchored; sends only a one-way hash)', 'wwu-withdrawal-button' ),
+			'rfc3161'        => __( 'RFC 3161 timestamp authority (opt-in; immediate; eIDAS-qualified options)', 'wwu-withdrawal-button' ),
 		);
 		foreach ( $tsopts as $value => $label ) {
 			echo '<option value="' . esc_attr( $value ) . '" ' . selected( (string) $ts['provider'], $value, false ) . '>' . esc_html( $label ) . '</option>';
 		}
 		echo '</select>';
-		echo '<p class="description">' . esc_html__( 'Only a one-way hash leaves your site — never personal data. OpenTimestamps anchors to Bitcoin (free, ~hours). RFC 3161 gets an immediate signed token from a Time-Stamp Authority.', 'wwu-withdrawal-button' ) . '</p>';
+		echo '<p class="description"><strong>' . esc_html__( 'Recommended — turn this on.', 'wwu-withdrawal-button' ) . '</strong> ' . esc_html__( 'A trusted timestamp gives you an independent "data certa": proof of the exact date and time each withdrawal was received — the fact the statutory 14-day deadline turns on. It is OFF by default (the plugin makes no external call until you pick a provider here). When enabled, only a one-way hash ever leaves your site — never personal data: OpenTimestamps anchors it to Bitcoin (free, completes in ~hours); RFC 3161 returns an immediate signed token from a Time-Stamp Authority.', 'wwu-withdrawal-button' ) . '</p>';
 		echo '</td></tr>';
 
 		// RFC 3161 configuration (only used when that provider is selected).
@@ -541,7 +541,7 @@ final class SettingsPage {
 	private function render_timestamp_reference(): void {
 		// [ name, one-line description, official site ].
 		$refs = array(
-			array( 'OpenTimestamps', __( 'Free, Bitcoin-anchored, no account — the default. Proof completes after a block (~hours).', 'wwu-withdrawal-button' ), 'https://opentimestamps.org' ),
+			array( 'OpenTimestamps', __( 'Free, Bitcoin-anchored, no account (opt-in). Proof completes after a block (~hours).', 'wwu-withdrawal-button' ), 'https://opentimestamps.org' ),
 			array( 'Sectigo', __( 'Free RFC 3161. Its /qualified endpoint is eIDAS-qualified and needs no account — recommended free option.', 'wwu-withdrawal-button' ), 'https://www.sectigo.com/resource-library/time-stamping-server' ),
 			array( 'DigiCert', __( 'Free RFC 3161 timestamp authority, no account: http://timestamp.digicert.com', 'wwu-withdrawal-button' ), 'https://knowledge.digicert.com/general-information/rfc3161-compliant-time-stamp-authority-server' ),
 			array( 'Aruba (IT)', __( 'Italian eIDAS-qualified timestamp (marca temporale). Paid account; widely accepted in Italy.', 'wwu-withdrawal-button' ), 'https://www.aruba.it/marca-temporale.aspx' ),
@@ -641,13 +641,9 @@ final class SettingsPage {
 	 * @return void
 	 */
 	private function render_appearance_section( array $settings ): void {
-		$custom_css = (string) ( $settings['custom_css'] ?? '' );
-
-		echo '<h2>' . esc_html__( 'Appearance — Custom CSS', 'wwu-withdrawal-button' ) . '</h2>';
-		echo '<p class="description">' . esc_html__( 'Paste CSS to restyle any element of the withdrawal flow on your site. It is loaded after the plugin styles, so it always wins. Tip: override the CSS variables below for quick color/shape changes, or target the classes for full control.', 'wwu-withdrawal-button' ) . '</p>';
+		echo '<h2>' . esc_html__( 'Appearance — styling reference', 'wwu-withdrawal-button' ) . '</h2>';
+		echo '<p class="description">' . esc_html__( 'To restyle the withdrawal flow, add your rules in Appearance → Customize → Additional CSS (built into WordPress), targeting the CSS variables and classes listed below — they load after the plugin styles, so your overrides win.', 'wwu-withdrawal-button' ) . '</p>';
 		echo '<p class="description" style="color:#8a1f21;"><strong>' . esc_html__( 'Compliance note:', 'wwu-withdrawal-button' ) . '</strong> ' . esc_html__( 'the withdrawal button must stay legible and prominent (Art. 11a). Do not hide it, shrink it, or reduce its contrast.', 'wwu-withdrawal-button' ) . '</p>';
-
-		echo '<p><textarea name="custom_css" rows="10" class="large-text code" spellcheck="false" placeholder=":root { --wwu-wb-accent: #f49619; --wwu-wb-radius: 8px; }">' . esc_textarea( $custom_css ) . '</textarea></p>';
 
 		// --- Reference: CSS variables ---
 		$vars = array(
@@ -1090,7 +1086,6 @@ final class SettingsPage {
 		$settings               = (array) get_option( 'wwu_wb_settings', array() );
 		$old_slug               = sanitize_title( (string) ( $settings['endpoint_slug'] ?? 'wwu-withdrawal' ) );
 		$settings['enabled']    = Sanitizer::bool( wp_unslash( $_POST['enabled'] ?? '' ) );
-		$settings['custom_css'] = Sanitizer::css( isset( $_POST['custom_css'] ) ? wp_unslash( $_POST['custom_css'] ) : '' );
 		$settings['send_pdf']        = Sanitizer::bool( wp_unslash( $_POST['send_pdf'] ?? '' ) );
 		$settings['merchant_email']  = Sanitizer::email_list( isset( $_POST['merchant_email'] ) ? wp_unslash( $_POST['merchant_email'] ) : '' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitizer::email_list() runs sanitize_email() on each entry.
 		$settings['retention_years'] = max( 1, min( 30, (int) wp_unslash( $_POST['retention_years'] ?? 10 ) ) );
@@ -1168,7 +1163,7 @@ final class SettingsPage {
 
 		// Timestamp provider.
 		$timestamp = (array) get_option( 'wwu_wb_timestamp', array() );
-		$timestamp['provider'] = Sanitizer::enum( wp_unslash( $_POST['timestamp_provider'] ?? '' ), array( 'opentimestamps', 'rfc3161', 'none' ), 'opentimestamps' );
+		$timestamp['provider'] = Sanitizer::enum( wp_unslash( $_POST['timestamp_provider'] ?? '' ), array( 'opentimestamps', 'rfc3161', 'none' ), 'none' );
 
 		// RFC 3161 config. The password uses the "leave blank to keep" pattern so
 		// the saved secret is never re-emitted to the browser.
