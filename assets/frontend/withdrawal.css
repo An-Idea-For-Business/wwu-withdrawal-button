@@ -194,6 +194,44 @@
 	box-sizing: border-box;
 }
 
+/* Partial-withdrawal product selection + optional per-line quantity. */
+.wwu-wb-products {
+	border: 1px solid var(--wwu-wb-field-border);
+	border-radius: var(--wwu-wb-field-radius);
+	padding: 0.8em 1em;
+	margin-bottom: var(--wwu-wb-spacing);
+}
+.wwu-wb-products legend {
+	font-weight: var(--wwu-wb-label-weight);
+	padding: 0 0.4em;
+}
+.wwu-wb-products-help {
+	font-size: 0.85rem;
+	color: var(--wwu-wb-note-color);
+	margin: 0 0 0.6em;
+}
+.wwu-wb-products-item {
+	display: block;
+	margin: 0.35em 0 0.1em;
+}
+.wwu-wb-products-qty {
+	display: block;
+	margin: 0 0 0.6em 1.7em;
+	font-size: 0.9rem;
+	color: var(--wwu-wb-note-color);
+}
+.wwu-wb-products-qty-label {
+	margin-right: 0.4em;
+}
+.wwu-wb-products-qty input[type="number"] {
+	width: 6em;
+	padding: 0.3em 0.4em;
+	font-family: inherit; /* match the theme's typography */
+	font-size: 0.9rem;
+	border: 1px solid var(--wwu-wb-field-border);
+	border-radius: var(--wwu-wb-field-radius);
+}
+
 .wwu-wb-step2-intro {
 	font-weight: 600;
 }

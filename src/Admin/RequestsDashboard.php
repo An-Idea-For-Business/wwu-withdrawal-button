@@ -140,7 +140,15 @@ final class RequestsDashboard {
 			echo '<td>' . esc_html( (string) $row['customer_email'] ) . '</td>';
 			echo '<td>' . esc_html( (string) ( $payload['country'] ?? '' ) ) . '</td>';
 			$products_arr = isset( $payload['statement']['products'] ) && is_array( $payload['statement']['products'] ) ? $payload['statement']['products'] : array();
-			echo '<td>' . ( ! empty( $products_arr ) ? esc_html( implode( ', ', $products_arr ) ) : '&mdash;' ) . '</td>';
+			$qty_map      = isset( $payload['statement']['product_quantities'] ) && is_array( $payload['statement']['product_quantities'] ) ? $payload['statement']['product_quantities'] : array();
+			$products_out = array();
+			foreach ( $products_arr as $pname ) {
+				$pname = (string) $pname;
+				$pq    = isset( $qty_map[ $pname ] ) ? (int) $qty_map[ $pname ] : 0;
+				/* translators: 1: product name, 2: quantity the consumer is withdrawing. */
+				$products_out[] = $pq > 0 ? sprintf( __( '%1$s × %2$d', 'wwu-withdrawal-button' ), $pname, $pq ) : $pname;
+			}
+			echo '<td>' . ( ! empty( $products_out ) ? esc_html( implode( ', ', $products_out ) ) : '&mdash;' ) . '</td>';
 			echo '<td>' . ( $within
 				? '<span class="wwu-wb-badge wwu-wb-badge--ok">' . esc_html__( 'Yes', 'wwu-withdrawal-button' ) . '</span>'
 				: '<span class="wwu-wb-badge wwu-wb-badge--warn">' . esc_html__( 'Flagged late', 'wwu-withdrawal-button' ) . '</span>' ) . '</td>';

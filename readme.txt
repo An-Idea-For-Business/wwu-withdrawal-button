@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 1.2.12
+Stable tag: 1.2.13
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -125,6 +125,9 @@ The plugin records withdrawal declarations (name, identified contract, email, IP
 For the conditional Art. 59 exemptions, the plugin also stores the consumer's checkout consent + acknowledgement (the agreed wording, a hash, the date/time and — unless you turn it off — the IP) as evidence to prove the exemption is valid. The lawful basis is **legitimate interest** (GDPR Art. 6(1)(f); defence of legal claims), **not** GDPR consent. The IP lives only on the order (never in the immutable log) and is automatically anonymised once the retention period lapses. A second ready-to-paste privacy clause is generated for this processing.
 
 == Changelog ==
+
+= 1.2.13 =
+* **Partial withdrawal: choose a quantity per item.** When you withdraw from only some products and you bought more than one of an item, you can now enter **how many** to withdraw (e.g. 1 of 3) — an optional number field next to each line, no JavaScript required; leave it blank to withdraw the whole line. The chosen quantity appears on the durable-medium receipt (email + PDF), in the Requests dashboard and in the read-only REST API. Informational only (you still process the refund). Fully back-compatible: the existing `products` data is unchanged — a new additive `product_quantities` field carries the amounts. Requested in issue #47.
 
 = 1.2.12 =
 * **Now requires PHP 8.1** (was 7.4). This build bundles the latest stable PDF engine, **Dompdf 3.1.5**, whose dependencies need PHP 8.1. Sites still on PHP 7.4–8.0 are not offered this update and stay on 1.2.11; a PHP 7.4-compatible build of the same features is published on GitHub.
@@ -254,6 +257,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.2.13 =
+Partial withdrawal now lets the customer pick a quantity per item (e.g. 1 of 3) — an optional, no-JS number field; blank = the whole line. Shown on the receipt, dashboard and REST API. Informational and fully back-compatible (additive data). Issue #47.
 
 = 1.2.12 =
 Now requires PHP 8.1 (was 7.4); ships Dompdf 3.1.5. Custom CSS field removed — restyle via WordPress Customizer → Additional CSS. Timestamping is now opt-in: no external calls by default. PHP 7.4–8.0 sites stay on 1.2.11; a compatible build is on GitHub.

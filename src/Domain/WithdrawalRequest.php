@@ -34,6 +34,15 @@ final class WithdrawalRequest {
 	public array $products = array();
 
 	/**
+	 * Optional per-line quantity the consumer is withdrawing from (map: product name => int).
+	 * Recorded ONLY when the consumer entered a partial quantity; a missing entry means the
+	 * whole line. Additive — `products` keeps its flat-string shape (frozen log + REST contract).
+	 *
+	 * @var array<string,int>
+	 */
+	public array $product_quantities = array();
+
+	/**
 	 * Constructor.
 	 *
 	 * @param string $name      Consumer name (Art. 11a(2)(a)).
@@ -77,6 +86,29 @@ final class WithdrawalRequest {
 		}
 		$instance->products = array_values( $sanitized );
 
+		/*
+		 * Sanitise the optional per-product quantities (map: name => int). Same 50-key DoS
+		 * cap as the products list. A value is kept ONLY when it is a positive int for a
+		 * product that is also selected; a blank/invalid value is dropped, which means
+		 * "the whole line" (fail-open toward the consumer's right). The shipped form leaves
+		 * the field blank by default, so an untouched line records nothing.
+		 */
+		$raw_qty   = isset( $data['product_qty'] ) && is_array( $data['product_qty'] ) ? $data['product_qty'] : array();
+		$selected  = array_flip( $instance->products );
+		$qty_clean = array();
+		foreach ( array_slice( $raw_qty, 0, 50, true ) as $name => $qty ) {
+			$name = self::cap( sanitize_text_field( (string) $name ), 200 );
+			if ( '' === $name || ! isset( $selected[ $name ] ) ) {
+				continue;
+			}
+			$q = (int) $qty;
+			if ( $q < 1 ) {
+				continue;
+			}
+			$qty_clean[ $name ] = min( $q, 100000 );
+		}
+		$instance->product_quantities = $qty_clean;
+
 		return $instance;
 	}
 
@@ -112,6 +144,7 @@ final class WithdrawalRequest {
 			'email'     => $this->email,
 			'reason'    => $this->reason,
 			'products'  => $this->products,
+			'product_quantities' => $this->product_quantities,
 		);
 	}
 }

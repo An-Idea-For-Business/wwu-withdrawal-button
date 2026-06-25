@@ -121,12 +121,16 @@ final class RequestReader {
 		$products = ( isset( $payload['statement']['products'] ) && is_array( $payload['statement']['products'] ) )
 			? array_values( array_map( 'strval', $payload['statement']['products'] ) )
 			: array();
+		$product_quantities = ( isset( $payload['statement']['product_quantities'] ) && is_array( $payload['statement']['product_quantities'] ) )
+			? array_map( 'intval', $payload['statement']['product_quantities'] )
+			: array();
 
 		return array_merge(
 			$this->lean_row( $row, $status ),
 			array(
 				'consumer_email' => (string) ( $row['customer_email'] ?? '' ),
 				'products'       => $products,
+				'product_quantities' => $product_quantities,
 				'submitted_at'   => (string) ( $payload['submitted_at'] ?? $row['created_at'] ?? '' ),
 				'days_left'      => isset( $payload['days_left'] ) ? (int) $payload['days_left'] : null,
 				'row_hash'       => (string) ( $row['row_hash'] ?? '' ),

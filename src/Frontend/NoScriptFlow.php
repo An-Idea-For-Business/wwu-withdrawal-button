@@ -60,6 +60,7 @@ final class NoScriptFlow {
 
 		/* phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized inside from_input(). */
 		$raw_products = isset( $_POST['products'] ) && is_array( $_POST['products'] ) ? wp_unslash( $_POST['products'] ) : array();
+		$raw_qty      = isset( $_POST['product_qty'] ) && is_array( $_POST['product_qty'] ) ? wp_unslash( $_POST['product_qty'] ) : array();
 		/* phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized */
 		$req = WithdrawalRequest::from_input(
 			array(
@@ -68,6 +69,7 @@ final class NoScriptFlow {
 				'email'     => isset( $_POST['email'] ) ? wp_unslash( $_POST['email'] ) : $order->email,
 				'reason'    => isset( $_POST['reason'] ) ? wp_unslash( $_POST['reason'] ) : '',
 				'products'  => $raw_products,
+				'product_qty' => $raw_qty,
 			)
 		);
 		if ( ! $req->is_valid() ) {
@@ -98,6 +100,9 @@ final class NoScriptFlow {
 		foreach ( $req->products as $product_name ) {
 			$body .= '<input type="hidden" name="products[]" value="' . esc_attr( $product_name ) . '" />';
 		}
+		foreach ( $req->product_quantities as $product_name => $product_qty ) {
+			$body .= '<input type="hidden" name="product_qty[' . esc_attr( (string) $product_name ) . ']" value="' . esc_attr( (string) $product_qty ) . '" />';
+		}
 		$body .= '<input type="hidden" name="key" value="' . esc_attr( $key ) . '" />';
 		$body .= '<input type="hidden" name="access_token" value="' . esc_attr( $token ) . '" />';
 		$body .= wp_nonce_field( self::NONCE, '_wpnonce', true, false );
@@ -120,6 +125,7 @@ final class NoScriptFlow {
 
 		/* phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized inside from_input(). */
 		$raw_products_confirm = isset( $_POST['products'] ) && is_array( $_POST['products'] ) ? wp_unslash( $_POST['products'] ) : array();
+		$raw_qty_confirm      = isset( $_POST['product_qty'] ) && is_array( $_POST['product_qty'] ) ? wp_unslash( $_POST['product_qty'] ) : array();
 		/* phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized */
 		$req = WithdrawalRequest::from_input(
 			array(
@@ -128,6 +134,7 @@ final class NoScriptFlow {
 				'email'     => isset( $_POST['email'] ) ? wp_unslash( $_POST['email'] ) : $order->email,
 				'reason'    => isset( $_POST['reason'] ) ? wp_unslash( $_POST['reason'] ) : '',
 				'products'  => $raw_products_confirm,
+				'product_qty' => $raw_qty_confirm,
 			)
 		);
 		$request_uid = isset( $_POST['request_uid'] ) ? sanitize_text_field( wp_unslash( $_POST['request_uid'] ) ) : '';

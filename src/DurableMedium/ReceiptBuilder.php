@@ -48,7 +48,17 @@ final class ReceiptBuilder {
 			'name'              => $req->name,
 			'email'             => $req->email,
 			'reason'            => $req->reason,
-			'products_selected' => implode( ', ', $req->products ),
+			'products_selected' => implode(
+				', ',
+				array_map(
+					static function ( $name ) use ( $req ) {
+						$q = isset( $req->product_quantities[ $name ] ) ? (int) $req->product_quantities[ $name ] : 0;
+						/* translators: 1: product name, 2: quantity the consumer is withdrawing. */
+						return $q > 0 ? sprintf( __( '%1$s × %2$d', 'wwu-withdrawal-button' ), $name, $q ) : (string) $name;
+					},
+					$req->products
+				)
+			),
 			'items'             => $this->items_summary( $order ),
 			'submitted_at'      => $submitted_at,
 			'submitted_local'   => $this->localize_datetime( $submitted_at ),
