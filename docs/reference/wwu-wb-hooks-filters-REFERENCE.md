@@ -2,7 +2,7 @@
 
 All extension points the plugin exposes are prefixed `wwu_wb_`. These are the **supported public API**: you can safely rely on them across patch releases. Hooks not listed here are internal implementation details and may change without notice.
 
-Every `apply_filters()` / `do_action()` listed below was verified by reading the source. Default values match the plugin as shipped; examples compile correctly under PHP 7.4+.
+Every `apply_filters()` / `do_action()` listed below was verified by reading the source. Default values match the plugin as shipped; examples compile correctly under PHP 8.1+ (the directory build's minimum).
 
 ---
 

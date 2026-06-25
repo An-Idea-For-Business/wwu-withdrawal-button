@@ -24,7 +24,7 @@ verifiable link), the tamper-evident evidence log, and the admin side.
 
 ## 0. Environment
 
-- [ ] WordPress 5.8+, PHP 7.4+, **Easy Digital Downloads 3.0+ active** (the custom-tables order API).
+- [ ] WordPress 5.8+, PHP 8.1+ (directory build; or PHP 7.4+ with the legacy GitHub build), **Easy Digital Downloads 3.0+ active** (the custom-tables order API).
 - [ ] Install the plugin from the release ZIP (Plugins → Add New → Upload) and **Activate**.
 - [ ] (For the PDF copy) the ZIP bundles **Dompdf** — PDF works out of the box; otherwise e-mail-only
   (still compliant), with an admin notice.
