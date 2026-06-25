@@ -487,7 +487,7 @@ final class SettingsPage {
 			)
 		);
 
-		echo '<tr><th scope="row">' . esc_html__( 'Trusted timestamp', 'wwu-withdrawal-button' ) . '</th><td>';
+		echo '<tr id="wwu-wb-timestamp"><th scope="row">' . esc_html__( 'Trusted timestamp', 'wwu-withdrawal-button' ) . '</th><td>';
 		echo '<select name="timestamp_provider">';
 		$tsopts = array(
 			'none'           => __( 'None — no external calls (default; the hash chain alone is the evidence)', 'wwu-withdrawal-button' ),

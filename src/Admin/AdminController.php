@@ -110,6 +110,7 @@ final class AdminController {
 		add_action( 'admin_post_wwu_wb_export_consents', array( $this->consents, 'handle_export' ) );
 		add_action( 'admin_notices', array( $this, 'maybe_mail_failure_notice' ) );
 		add_action( 'admin_notices', array( $this, 'maybe_pdf_missing_notice' ) );
+		add_action( 'admin_notices', array( $this, 'maybe_timestamp_off_notice' ) );
 		$this->assets->register();
 	}
 
@@ -134,6 +135,41 @@ final class AdminController {
 		echo '<div class="notice notice-warning"><p>'
 			. esc_html__( 'WWU Withdrawal Button: the PDF library was not found, so the receipt is sent by email only (no PDF attachment). This is fine to go live, but to also attach a PDF copy, install the plugin using the official packaged ZIP (it bundles the library) instead of a plain source copy.', 'wwu-withdrawal-button' )
 			. '</p></div>';
+	}
+
+	/**
+	 * Action-required notice shown on every plugin screen while the plugin is
+	 * live but trusted timestamping is OFF. The timestamp is the independent
+	 * "data certa" of when a withdrawal was received — the fact the statutory
+	 * 14-day deadline turns on — so we prompt the admin imperatively, with a
+	 * direct link to the setting, until they enable a provider. Not dismissible:
+	 * it self-resolves the moment a provider is chosen.
+	 *
+	 * @return void
+	 */
+	public function maybe_timestamp_off_notice(): void {
+		if ( ! current_user_can( Authentication::capability() ) ) {
+			return;
+		}
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( ! $screen || false === strpos( (string) $screen->id, self::MENU_SLUG ) ) {
+			return;
+		}
+		if ( empty( Settings::main()['enabled'] ) ) {
+			return;
+		}
+		$provider = (string) ( ( (array) get_option( 'wwu_wb_timestamp', array() ) )['provider'] ?? 'none' );
+		if ( 'none' !== $provider ) {
+			return;
+		}
+		$url = admin_url( 'admin.php?page=' . self::SETTINGS_SLUG . '#wwu-wb-timestamp' );
+		echo '<div class="notice notice-warning"><p><strong>'
+			. esc_html__( 'WWU Withdrawal Button — action recommended: turn on the trusted timestamp.', 'wwu-withdrawal-button' )
+			. '</strong> '
+			. esc_html__( 'The plugin is live but trusted timestamping is OFF, so your withdrawal records have no independent "data certa" — the legally decisive proof of when each withdrawal was received (the fact the statutory 14-day deadline turns on). Turn it on now: it is free, and only an anonymous one-way hash ever leaves your site (never personal data).', 'wwu-withdrawal-button' )
+			. '</p><p><a class="button button-primary" href="' . esc_url( $url ) . '">'
+			. esc_html__( 'Enable trusted timestamping →', 'wwu-withdrawal-button' )
+			. '</a></p></div>';
 	}
 
 	/**
