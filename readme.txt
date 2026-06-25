@@ -39,7 +39,7 @@ That is the whole customer experience. Everything below exists to make it correc
 * A one-click **e-mail delivery test** that detects your SMTP plugin and proves the receipt actually reaches the inbox — the #1 cause of "nothing happened".
 * A **Requests dashboard** to manage every withdrawal: status (open / processed / refunded), a chain-integrity badge, and one-click **mark processed**, **resend receipt** and **open the order to refund** (the refund is logged as proof you met the 14 days). Subscription and partial-withdrawal requests are flagged.
 * A **Compliance page**: a go-live countdown, the statutory labels in use, the document checklist with ready-to-paste clauses, and environment warnings (Complianz / cache / multilingual) to fix.
-* Receipts are **real WooCommerce e-mails** (your logo, colours, header) with a preview, and everything is styleable via a **Custom CSS** field.
+* Receipts are **real WooCommerce e-mails** (your logo, colours, header) with a preview. Every part of the withdrawal flow is restyleable from **Appearance → Customize → Additional CSS** (built into WordPress), targeting the plugin's documented CSS variables and classes.
 
 = Smart legal handling (so you don't have to think about it) =
 
@@ -51,7 +51,7 @@ That is the whole customer experience. Everything below exists to make it correc
 = Evidence, timestamps & integrity =
 
 * The immutable log is **append-only and hash-chained** (HMAC-keyed with your site secret), so tampering is detectable.
-* Free, independently-verifiable **OpenTimestamps** (Bitcoin) anchoring by default; or a **qualified eIDAS RFC 3161** timestamp (a free Sectigo endpoint, or your national authority — Aruba, InfoCert, D-Trust, Universign, FNMT, SwissSign) for stronger "data certa". Failed stamps retry automatically and any not-yet-anchored records are surfaced in the admin.
+* **Optional** trusted timestamping (off by default — opt-in): free, independently-verifiable **OpenTimestamps** (Bitcoin) anchoring, or a **qualified eIDAS RFC 3161** timestamp (a free Sectigo endpoint, or your national authority — Aruba, InfoCert, D-Trust, Universign, FNMT, SwissSign) for stronger "data certa". The hash chain is the baseline evidence on its own; once you enable a provider, failed stamps retry automatically and any not-yet-anchored records are surfaced in the admin.
 
 = Privacy & GDPR =
 
@@ -100,17 +100,18 @@ OpenTimestamps provides a free, independently-verifiable Bitcoin-anchored proof.
 
 == External services ==
 
-This plugin connects to the **OpenTimestamps** public calendar servers to obtain a free, trusted timestamp (a "data certa") for the tamper-evident withdrawal log. This is the default timestamp provider; you can switch it to "none" in the settings to disable all external calls.
+This plugin makes **no external calls by default**. Every outbound connection listed below is **opt-in** and stays **off** until you explicitly enable it in the settings. The tamper-evident log works fully offline — it is append-only and hash-chained with your site secret — so timestamping only *adds* an extra, independently-verifiable anchor; it is never required for the plugin to function.
+
+**OpenTimestamps** (opt-in, off by default) — only if you set the timestamp provider to "OpenTimestamps" (Settings → Receipt & evidence) does the plugin connect to the OpenTimestamps public calendar servers to obtain a free, trusted timestamp (a "data certa") for the log.
 
 - **What is sent:** only a SHA-256 hash (a one-way digest) of the immutable-log record, plus a random privacy nonce. No personal data, order content, names, emails or IP addresses are ever sent — only an opaque hash that cannot be reversed.
-- **When:** once when a withdrawal is confirmed (to submit the hash) and periodically via WP-Cron (to retrieve the Bitcoin-anchored proof).
+- **When:** only while the provider is enabled — once when a withdrawal is confirmed (to submit the hash) and periodically via WP-Cron (to retrieve the Bitcoin-anchored proof). Nothing is ever sent while the provider is "None" (the default).
 - **Where:** the OpenTimestamps public calendars (a.pool.opentimestamps.org, b.pool.opentimestamps.org, a.pool.eternitywall.com, ots.btc.catallaxy.com).
 - **Service info / privacy:** https://opentimestamps.org/
 
-**Optional** services, all **off by default** and used only if you turn them on:
+**RFC 3161 / eIDAS timestamp authority** (opt-in, off by default) — if you instead set the provider to an RFC 3161 authority, the same one-way SHA-256 hash (no personal data) is sent to the authority URL **you** configure. This is a provider you choose and contract with directly (examples: a free Sectigo endpoint, or a national authority such as Aruba, InfoCert, D-Trust, Universign, FNMT, SwissSign); please review that provider's own terms of service and privacy policy. No such call is made until you enable it.
 
-- **RFC 3161 / eIDAS timestamp authority** — OFF by default; OpenTimestamps is used unless you opt in. If you switch the timestamp provider to an RFC 3161 authority, the same one-way SHA-256 hash (no personal data) is sent to the authority URL **you** configure. This is a provider you choose and contract with directly (examples: a free Sectigo endpoint, or a national authority such as Aruba, InfoCert, D-Trust, Universign, FNMT, SwissSign); please review that provider's own terms of service and privacy policy. The plugin makes no such call until you enable it.
-- **Outbound webhook** (Settings → Integrations) — if enabled, the plugin sends a signed POST to the endpoint URL **you** specify whenever a withdrawal is confirmed. The payload carries a verification hash and contract reference, never the consumer's IP address.
+**Outbound webhook** (opt-in, off by default — Settings → Integrations) — if enabled, the plugin sends a signed POST to the endpoint URL **you** specify whenever a withdrawal is confirmed. The payload carries a verification hash and contract reference, never the consumer's IP address.
 
 No other external services are used. The plugin does not load remote scripts, fonts or trackers on your site.
 

@@ -202,7 +202,6 @@ final class Install {
 				'retention_years'      => 10,
 				'consent_capture_ip'   => true,
 				'go_live_date'         => WWU_WB_GO_LIVE_DATE,
-				'custom_css'           => '',
 				/*
 				 * Consumer-facing copy overrides. Both default to '' which means the
 				 * built-in i18n text is used; non-empty values are rendered as-is
@@ -262,7 +261,10 @@ final class Install {
 		add_option(
 			'wwu_wb_timestamp',
 			array(
-				'provider' => 'opentimestamps',
+				// External calls are OPT-IN (wp.org Guideline 7: no phoning home without
+				// explicit consent). Default 'none' = the local hash-chained log still
+				// works; the merchant opts into OpenTimestamps or an RFC 3161 authority.
+				'provider' => 'none',
 				'rfc3161'  => array(
 					'endpoint' => '',
 					'user'     => '',

@@ -54,7 +54,8 @@ final class TimestampService {
 	 */
 	public function provider(): TimestampProvider {
 		$config = (array) get_option( 'wwu_wb_timestamp', array() );
-		$key    = (string) ( $config['provider'] ?? 'opentimestamps' );
+		// Default 'none' (no external call) when unset — opt-in only (wp.org Guideline 7).
+		$key    = (string) ( $config['provider'] ?? 'none' );
 
 		if ( 'none' === $key ) {
 			$provider = new NoneProvider();

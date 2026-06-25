@@ -55,31 +55,6 @@ final class Sanitizer {
 	}
 
 	/**
-	 * Sanitise an admin-authored custom CSS blob.
-	 *
-	 * The CSS is authored by a user with the admin capability, so the trust level
-	 * is high; this is defence-in-depth: it strips any HTML tags / `</style>`
-	 * break-out, and neutralises the classic CSS-based script vectors
-	 * (expression(), javascript:, behavior:, @import, and url(javascript:)).
-	 *
-	 * @param mixed $value Raw CSS.
-	 * @return string
-	 */
-	public static function css( $value ): string {
-		$css = is_string( $value ) ? $value : '';
-		// Remove any tags / style-tag break-out.
-		$css = wp_strip_all_tags( $css );
-		$css = str_ireplace( array( '</style', '<style', '<', '>' ), '', $css );
-		// Neutralise CSS script vectors.
-		$css = preg_replace( '/expression\s*\(/i', 'blocked(', $css );
-		$css = preg_replace( '/javascript\s*:/i', 'blocked:', $css );
-		$css = preg_replace( '/behaviou?r\s*:/i', 'blocked:', $css );
-		$css = preg_replace( '/@import\b/i', '/* @import blocked */', $css );
-		// Cap length to a sane size.
-		return trim( (string) substr( (string) $css, 0, 50000 ) );
-	}
-
-	/**
 	 * Sanitise an array of role slugs.
 	 *
 	 * @param mixed $value Raw value.
