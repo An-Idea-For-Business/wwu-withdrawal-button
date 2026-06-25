@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.2.11
+Stable tag: 1.2.12
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -122,6 +122,10 @@ The plugin records withdrawal declarations (name, identified contract, email, IP
 For the conditional Art. 59 exemptions, the plugin also stores the consumer's checkout consent + acknowledgement (the agreed wording, a hash, the date/time and — unless you turn it off — the IP) as evidence to prove the exemption is valid. The lawful basis is **legitimate interest** (GDPR Art. 6(1)(f); defence of legal claims), **not** GDPR consent. The IP lives only on the order (never in the immutable log) and is automatically anonymised once the retention period lapses. A second ready-to-paste privacy clause is generated for this processing.
 
 == Changelog ==
+
+= 1.2.12 =
+* **WordPress.org review compliance — PHP 7.4-compatible build.** Carries the same compliance changes as the main 1.2.12 release, kept on the PHP 7.4 line: the **Custom CSS field is removed** (restyle via WordPress core's Customizer → Additional CSS, targeting the documented `.wwu-wb-*` classes/variables), and **trusted timestamping is now opt-in, off by default** — the plugin makes no external calls unless you enable OpenTimestamps or an RFC 3161 authority; the local hash-chained log is the baseline evidence.
+* **Stays on Dompdf 2.x** to preserve PHP 7.4–8.0 support. The WordPress.org directory build (also 1.2.12) requires PHP 8.1 and ships Dompdf 3.1.5; this GitHub build is for stores that cannot move off PHP 7.4 yet. Functionally identical otherwise.
 
 = 1.2.11 =
 * **Consent Records page is now cross-platform (fixes #41).** The admin Consent Records screen and its CSV export only read WooCommerce orders, so on an Easy Digital Downloads or FluentCart store they showed the "WooCommerce not active" notice even though consent was being captured. The page now sources its records from the **tamper-evident, cross-platform evidence log** (every platform's checkout-consent capture already writes there), so WooCommerce, EDD and FluentCart consents all appear; the full per-entry evidence (including the IP) is read back from the order when it still exists, and survives as a PII-free record if the order was later deleted. A new "Platform" column is shown. This is strictly a read-only change — the append-only, hash-chained evidence log is never altered.
@@ -245,6 +249,9 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 * Foundation: bootstrap, schema (immutable log + timestamp tables), debug stack, REST diagnostics.
 
 == Upgrade Notice ==
+
+= 1.2.12 =
+PHP 7.4-compatible build of the 1.2.12 compliance changes: Custom CSS field removed (restyle via the WordPress Customizer) and timestamping made opt-in (no external calls by default). Stays on Dompdf 2.x for PHP 7.4–8.0; the PHP 8.1 directory build ships Dompdf 3.1.5.
 
 = 1.2.11 =
 Fixes the Consent Records admin page (and CSV export) showing only WooCommerce consents: it now reads cross-platform from the tamper-evident evidence log, so Easy Digital Downloads and FluentCart consents appear too. Read-only — the immutable log is never altered. (GitHub #41.)
