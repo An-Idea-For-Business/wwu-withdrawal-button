@@ -2,7 +2,7 @@
 
 - **Slug:** `wwu-wb` · **Feature:** `legal-documents`
 - **Target version:** `1.3.0` (minor — significant new feature set)
-- **Status:** DRAFT (awaiting user confirmation before implementation)
+- **Status:** CONFIRMED 2026-06-25 — implementing (Phase A). All 6 open questions resolved (see §12).
 - **Author:** Claude (Opus) with Edoardo
 - **Created:** 2026-06-19
 - **Recon sources:** `docs/analysis/wwu-wb-complianz-i18n-law-recon-2026-06-19-ANALYSIS.md` (online: Complianz hook schema, EU/IT law checklist, i18n tooling) + in-session local scan (ClauseLibrary, ExceptionTypes, settings, Install, Shortcodes, PdfBuilder).
@@ -193,6 +193,15 @@ A CLI dispatcher (hard CLI gate, like the other wwu-tools) with subcommands:
 
 ## 12. Open Questions
 
+**RESOLVED 2026-06-25 (confirmed with Edoardo before coding):**
+1. Terms companion → **depend on `complianz-terms-conditions` + guide** (Terms toggle disabled with a notice when the companion is missing); Privacy injection always available.
+2. Policy page content → **store the `[wwu_wb_policy]` shortcode** (always current) + an optional "freeze to static HTML" button.
+3. PDF branding → **plain** (like the receipt), MVP.
+4. Strengthened defaults language → **IT + EN now**, regenerate `.pot`, then DE/FR/ES via the new i18n tool (SV pending Daniel's review).
+5. Document label → **"Informativa sul diritto di recesso"** + a sub-line clarifying it *complements, not replaces*, the Terms / pre-contractual information.
+6. i18n tool → **build `wwu-tools/wwu-i18n.php` WWU-wide now** (Phase C).
+
+Original open questions (kept for the record):
 1. **Terms companion dependency:** ship requiring `complianz-terms-conditions` for Terms injection (cleanest) vs self-register the type via `cmplz_pages_load_types` (more autonomous, more surface). MVP leans "depend + guide"; confirm.
 2. **Policy page content:** store the `[wwu_wb_policy]` shortcode (stays live, re-renders) vs bake the rendered HTML at create time (static snapshot the merchant edits freely). Shortcode = always current; snapshot = merchant control. Recommend **shortcode**, with a "freeze to static" button as an option.
 3. **PDF letterhead/branding:** plain (like the receipt) vs include site logo/colours. MVP plain.
