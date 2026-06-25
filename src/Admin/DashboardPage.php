@@ -142,6 +142,25 @@ final class DashboardPage {
 			$pdf_ok ? 'ok' : 'warn'
 		);
 
+		// Trusted timestamp ("data certa"): off by default (no external call without
+		// opt-in), but strongly recommended — it is the independent legal proof of WHEN
+		// a withdrawal was received. Surface it prominently here so the admin enables it.
+		$ts_provider = (string) ( ( (array) get_option( 'wwu_wb_timestamp', array() ) )['provider'] ?? 'none' );
+		$ts_on       = ( 'none' !== $ts_provider );
+		$this->row(
+			$ts_on,
+			__( 'Trusted timestamp — legal "data certa" (recommended)', 'wwu-withdrawal-button' ),
+			$ts_on
+				? sprintf(
+					/* translators: %s: provider key (opentimestamps / rfc3161). */
+					__( 'Enabled (%s). Each confirmed withdrawal is anchored to an independent, tamper-proof timestamp — the legally decisive proof of WHEN it was received.', 'wwu-withdrawal-button' ),
+					$ts_provider
+				)
+				: __( 'OFF — please turn this on. The log is already tamper-evident, but a trusted timestamp adds an independent "data certa": proof of the exact date and time a withdrawal was received, which is the fact the statutory 14-day deadline turns on. OpenTimestamps is free and sends only an anonymous one-way hash — never personal data.', 'wwu-withdrawal-button' ),
+			$ts_on ? '' : array( admin_url( 'admin.php?page=' . AdminController::SETTINGS_SLUG ), __( 'Enable it now', 'wwu-withdrawal-button' ) ),
+			$ts_on ? 'ok' : 'warn'
+		);
+
 		echo '</tbody></table>';
 
 		$this->render_test_email_box( $mail );

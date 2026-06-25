@@ -1,23 +1,31 @@
 /**
  * WWU Withdrawal Button — frontend styles.
  *
- * Every visual element is themeable two ways:
- *   1. CSS custom properties (--wwu-wb-*) — one-line overrides (colors, radius,
- *      spacing). Override them from the admin "Custom CSS" box, e.g.
- *        :root { --wwu-wb-accent: #f49619; --wwu-wb-radius: 8px; }
+ * Theme-first by design: the flow inherits your theme's typography
+ * (font-family: inherit) and, where the theme exposes them, its colour presets
+ * (--wp--preset--color--*) — so the button and form blend in out of the box.
+ * Our own values are only the fallback used when the theme defines nothing.
+ *
+ * Two override layers, both through WordPress core's Customizer -> Additional CSS:
+ *   1. CSS custom properties (--wwu-wb-*) — one-line overrides (colours, radius,
+ *      spacing), e.g. :root { --wwu-wb-accent: #f49619; --wwu-wb-radius: 8px; }
  *   2. Plain classes (.wwu-wb-*) — full control for anything else.
  *
  * The full token + class reference is listed in the plugin Settings page.
  *
  * Legibility note: the withdrawal button must stay legible and prominent
- * (Art. 11a "easily legible"); do not hide or low-contrast it via custom CSS.
+ * (Art. 11a "easily legible"); do not hide it or reduce its contrast.
  */
 
 :root {
-	/* Accent (buttons) */
-	--wwu-wb-accent:        #1a1f3a;
+	/* Accent (buttons) — inherit the theme's primary/accent colour preset when
+	   present; our accessible navy is the fallback. Preset slugs vary by theme,
+	   so we try the common ones (primary, accent, accent-1). The button text
+	   stays white by default (safe for a dark accent); override
+	   --wwu-wb-accent-text via the Customizer if your accent is light. */
+	--wwu-wb-accent:        var(--wp--preset--color--primary, var(--wp--preset--color--accent, var(--wp--preset--color--accent-1, #1a1f3a)));
 	--wwu-wb-accent-text:   #ffffff;
-	--wwu-wb-accent-focus:  #1a1f3a;
+	--wwu-wb-accent-focus:  var(--wp--preset--color--primary, var(--wp--preset--color--accent, var(--wp--preset--color--accent-1, #1a1f3a)));
 	/* Shape */
 	--wwu-wb-radius:        5px;
 	--wwu-wb-field-radius:  4px;
@@ -50,6 +58,7 @@
 
 .wwu-wb-button {
 	display: inline-block;
+	font-family: inherit; /* match the theme's typography */
 	padding: var(--wwu-wb-button-padding);
 	font-size: var(--wwu-wb-button-font-size);
 	line-height: 1.2;
@@ -177,6 +186,7 @@
 .wwu-wb-field input,
 .wwu-wb-field textarea {
 	padding: var(--wwu-wb-field-padding);
+	font-family: inherit; /* match the theme's typography */
 	font-size: 1rem;
 	border: 1px solid var(--wwu-wb-field-border);
 	border-radius: var(--wwu-wb-field-radius);
