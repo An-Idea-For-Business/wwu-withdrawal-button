@@ -498,7 +498,7 @@ final class SettingsPage {
 			echo '<option value="' . esc_attr( $value ) . '" ' . selected( (string) $ts['provider'], $value, false ) . '>' . esc_html( $label ) . '</option>';
 		}
 		echo '</select>';
-		echo '<p class="description">' . esc_html__( 'Off by default — no external calls until you choose a provider here. When enabled, only a one-way hash leaves your site (never personal data): OpenTimestamps anchors to Bitcoin (free, ~hours); RFC 3161 gets an immediate signed token from a Time-Stamp Authority.', 'wwu-withdrawal-button' ) . '</p>';
+		echo '<p class="description"><strong>' . esc_html__( 'Recommended — turn this on.', 'wwu-withdrawal-button' ) . '</strong> ' . esc_html__( 'A trusted timestamp gives you an independent "data certa": proof of the exact date and time each withdrawal was received — the fact the statutory 14-day deadline turns on. It is OFF by default (the plugin makes no external call until you pick a provider here). When enabled, only a one-way hash ever leaves your site — never personal data: OpenTimestamps anchors it to Bitcoin (free, completes in ~hours); RFC 3161 returns an immediate signed token from a Time-Stamp Authority.', 'wwu-withdrawal-button' ) . '</p>';
 		echo '</td></tr>';
 
 		// RFC 3161 configuration (only used when that provider is selected).

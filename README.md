@@ -66,7 +66,7 @@ The plugin isn't on the WordPress.org directory **yet** (submission in progress)
 5. Open **Withdrawal Button → Settings**, enable the function, and choose your applicability mode (EU/EEA only is the default).
 6. From the **Compliance** page, publish the generated **Annex I‑B model form** and update your Privacy / Terms / pre‑contractual information.
 
-**Requirements:** WordPress 5.8+, PHP 8.1+ (tested up to WordPress 7.0; a PHP 7.4-compatible build is on GitHub). Updating later: deactivate the old version and upload the new ZIP the same way — your settings and the evidence log are preserved.
+**Requirements:** WordPress 5.8+, PHP 8.1+ (tested up to WordPress 7.0). **Still on PHP 7.4 or 8.0?** A separate PHP 7.4-compatible build (Dompdf pinned to the 2.x line, same features) is published in the [GitHub releases](../../releases) — but it is a temporary bridge and **will not be maintained indefinitely**: PHP 7.4 has been end-of-life since November 2022, so plan to move your store to PHP 8.1+ (faster and more secure), after which you get the directory build with automatic updates. Updating later: deactivate the old version and upload the new ZIP the same way — your settings and the evidence log are preserved.
 
 <details>
 <summary>Installing from source (developers)</summary>
