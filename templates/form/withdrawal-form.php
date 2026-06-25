@@ -72,7 +72,7 @@ $wwu_wb_token = isset( $_GET['access_token'] ) ? sanitize_text_field( wp_unslash
 		<?php if ( ! empty( $items ) && is_array( $items ) ) : ?>
 		<fieldset class="wwu-wb-field wwu-wb-products">
 			<legend><?php esc_html_e( 'Withdrawing from only some products?', 'wwu-withdrawal-button' ); ?></legend>
-			<p class="wwu-wb-products-help"><?php esc_html_e( 'Tick them — leave empty to withdraw from the whole order.', 'wwu-withdrawal-button' ); ?></p>
+			<p class="wwu-wb-products-help"><?php esc_html_e( 'Tick them — leave empty to withdraw from the whole order. If you bought more than one of an item, you can set how many to withdraw (leave blank for all).', 'wwu-withdrawal-button' ); ?></p>
 			<?php foreach ( $items as $item ) :
 				$item_name = (string) ( $item['name'] ?? '' );
 				$item_qty  = (int) ( $item['qty'] ?? 1 );
@@ -82,8 +82,17 @@ $wwu_wb_token = isset( $_GET['access_token'] ) ? sanitize_text_field( wp_unslash
 			?>
 			<label class="wwu-wb-products-item">
 				<input type="checkbox" name="products[]" value="<?php echo esc_attr( $item_name ); ?>" />
-				<?php echo esc_html( $item_name ); ?><?php if ( $item_qty > 1 ) : ?> <span class="wwu-wb-products-qty">&times; <?php echo esc_html( (string) $item_qty ); ?></span><?php endif; ?>
+				<?php echo esc_html( $item_name ); ?>
 			</label>
+			<?php if ( $item_qty > 1 ) : ?>
+			<label class="wwu-wb-products-qty">
+				<span class="wwu-wb-products-qty-label"><?php
+					/* translators: %d is the quantity the consumer ordered. */
+					printf( esc_html__( 'Quantity to withdraw (of %d):', 'wwu-withdrawal-button' ), (int) $item_qty );
+				?></span>
+				<input type="number" name="product_qty[<?php echo esc_attr( $item_name ); ?>]" min="1" max="<?php echo esc_attr( (string) $item_qty ); ?>" step="1" inputmode="numeric" placeholder="<?php echo esc_attr( sprintf( /* translators: %d: ordered quantity. */ __( 'all %d', 'wwu-withdrawal-button' ), (int) $item_qty ) ); ?>" />
+			</label>
+			<?php endif; ?>
 			<?php endforeach; ?>
 		</fieldset>
 		<?php endif; ?>

@@ -3,6 +3,16 @@
 All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); the project uses Semantic Versioning.
 
+## [1.2.13] — 2026-06-25 — Partial withdrawal: per-item quantity
+
+Extends the partial-withdrawal product selection (alpha.42) so a consumer can declare a **quantity per line** — "withdraw from 1 of the 3 I bought" — not just which products. From issue [#47](https://github.com/An-Idea-For-Business/wwu-withdrawal-button/issues/47). Additive and fully back-compatible.
+
+- **Form:** when an order line's ordered quantity is > 1, an optional number input (1…ordered qty) appears next to the checkbox, always visible (no-JS safe). Left blank = the whole line (fail-open). `templates/form/withdrawal-form.php`.
+- **Data model:** new additive `statement.product_quantities` (map name→int) on `WithdrawalRequest`; recorded only for a selected product with a positive quantity (blank / invalid / orphan dropped). **`statement.products` (`string[]`) is unchanged** — the immutable-log history and the public REST API contract are preserved.
+- **Surfaces:** the durable-medium receipt (`ReceiptBuilder` — "Name × N" for partial lines), the admin Requests "Products" column, and the read-only REST API (`RequestReader` adds `product_quantities`). The no-JS flow carries the quantity through step 1 → step 2 as hidden fields.
+- **Quantity bound:** every normalised order item already exposes `qty` (Woo `get_quantity()`, FluentCart/EDD `quantity ?? 1`), so the input is bounded to 1…ordered.
+- Informational only (the merchant still processes the refund). 4 new smoke assertions (`withdrawal_request.product_quantities.*` + back-compat). SPEC: `docs/specs/wwu-wb-partial-withdrawal-quantity-SPEC.md`. PHP lint 0 errors; `from_input` logic verified standalone.
+
 ## [1.2.12] — 2026-06-25 — WordPress.org compliance: opt-in timestamping, no Custom CSS, PHP 8.1 + Dompdf 3.1.5
 
 Addresses the WordPress.org plugin-review feedback (two blockers + library currency). No change to the withdrawal flow for merchants beyond the two compliance items below.

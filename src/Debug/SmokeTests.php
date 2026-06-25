@@ -1006,6 +1006,43 @@ final class SmokeTests {
 			'Products round-trip via to_array() (got: ' . wp_json_encode( $arr_a['products'] ?? null ) . ').'
 		);
 
+		/* (a2) Per-line quantity: kept for a selected product, dropped when invalid (0) or orphan. */
+		$req_q = $class::from_input(
+			array(
+				'order_ref'   => '99',
+				'name'        => 'Jane',
+				'email'       => 'jane@example.com',
+				'reason'      => '',
+				'products'    => array( 'Widget A', 'Widget B' ),
+				'product_qty' => array(
+					'Widget A' => '2',  // selected + positive  => kept
+					'Widget B' => '0',  // selected but invalid => dropped (whole line)
+					'Ghost'    => '5',  // not selected         => dropped (orphan)
+				),
+			)
+		);
+		$arr_q   = $req_q->to_array();
+		$tests[] = $this->assert(
+			'withdrawal_request.product_quantities.partial_kept',
+			isset( $arr_q['product_quantities']['Widget A'] ) && 2 === $arr_q['product_quantities']['Widget A'],
+			'Partial quantity for a selected product is recorded (got: ' . wp_json_encode( $arr_q['product_quantities'] ?? null ) . ').'
+		);
+		$tests[] = $this->assert(
+			'withdrawal_request.product_quantities.invalid_dropped',
+			empty( $arr_q['product_quantities']['Widget B'] ),
+			'A zero/blank quantity is dropped (treated as the whole line).'
+		);
+		$tests[] = $this->assert(
+			'withdrawal_request.product_quantities.orphan_dropped',
+			! isset( $arr_q['product_quantities']['Ghost'] ),
+			'A quantity for a non-selected product is dropped.'
+		);
+		$tests[] = $this->assert(
+			'withdrawal_request.products.shape_unchanged_with_qty',
+			array( 'Widget A', 'Widget B' ) === $arr_q['products'],
+			'products[] keeps its flat string-array shape when product_qty is present (back-compat).'
+		);
+
 		/* (b) Array with more than 50 elements is capped to 50. */
 		$long_list = array_map( static function ( $i ) {
 			return 'Product ' . $i;
