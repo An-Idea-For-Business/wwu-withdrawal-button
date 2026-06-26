@@ -12,7 +12,7 @@ Thank you for helping build a public-interest compliance tool. This guide gets y
 
 ```
 wwu-withdrawal-button.php   Bootstrap (constants, autoloader, boot)
-src/                        PSR-4  WWU\WithdrawalButton\*
+src/                        PSR-4  WebWakeUpWdb\WithdrawalButton\*
   Core/  Platform/  Domain/  Storage/  Timestamp/  DurableMedium/
   Mail/  Frontend/  Shortcodes/  Legal/  Compat/  Admin/  Debug/  REST/  I18n/
 assets/                     admin + frontend CSS/JS, ui-kit/ (bundled)
@@ -24,11 +24,11 @@ tests/                      manual test plans + (where feasible) PHPUnit
 
 ## Conventions (must follow)
 
-- **Namespace** `WWU\WithdrawalButton\*` · **constants** `WWU_WB_*` · **options** `wwu_wb_*` · **meta** `_wwu_wb_*` · **REST** `wwu-wb/v1` · **hooks** `wwu_wb_*` · **CSS** `.wwu-wb-*` · **text domain** `wwu-withdrawal-button`.
+- **Namespace** `WebWakeUpWdb\WithdrawalButton\*` · **constants** `WEBWAKEUPWDB_*` · **options** `webwakeupwdb_*` · **meta** `_webwakeupwdb_*` · **REST** `webwakeupwdb/v1` · **hooks** `webwakeupwdb_*` · **CSS** `.wwu-wb-*` · **text domain** `wwu-withdrawal-button`.
 - **Files < ~1500 lines**, single responsibility, PHPDoc on every class/method/property, JSDoc on every JS function.
 - **Security first:** sanitise all input, escape all output, capability checks, nonces on admin/AJAX. REST permission callbacks **must not** re-verify the WP nonce (WP REST does it before the callback).
 - **HPOS-safe:** read/write orders only via the platform adapter / `wc_get_order()` — never `get_post()` / `get_post_meta()` on orders.
-- **The immutable log is append-only:** never add an `UPDATE`/`DELETE` path against `wwu_wb_log`; never add `updated_at`/`deleted_at`.
+- **The immutable log is append-only:** never add an `UPDATE`/`DELETE` path against `webwakeupwdb_log`; never add `updated_at`/`deleted_at`.
 - **Debug-first (Standard #11):** new features extend the debug Collector (new channels/entries) and add a smoke-test suite.
 
 ### ⚠️ The PHP close-tag trap (read this)

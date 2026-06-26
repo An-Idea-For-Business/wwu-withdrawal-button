@@ -90,7 +90,7 @@ Run at least the first; the rest are quick confirmations.
 
 - **No checkbox at all** → confirm WC ≥ 9.9, that the page is the Checkout **block**, and that
   the product (or its category) is actually tagged in Settings → Exemptions. Use
-  `?wwu_wb_diag=1` (as admin) on the order/form to print the resolved exemption reason.
+  `?webwakeupwdb_diag=1` (as admin) on the order/form to print the resolved exemption reason.
 - **Checkbox shows but order isn't blocked** → check the browser console / WC logs; the field
   is registered `required`, so this would indicate a theme/Store-API conflict — capture it.
 - **Box ticked but no Consent record** → the authoritative capture runs on

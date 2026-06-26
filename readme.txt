@@ -61,6 +61,7 @@ That is the whole customer experience. Everything below exists to make it correc
 = Documents & compliance =
 
 * Generates the **Annex I-B model withdrawal form** and ready clauses for **pre-contractual information, Terms & Conditions and Privacy** — and reminds you, clearly, that installing the button is **not enough**: your Terms and pre-contractual withdrawal article must be updated to describe the new button modality (the plugin gives you the exact text to paste).
+* A single **consolidated "Right of withdrawal" notice**, assembled live from your settings and the Art. 59 exceptions you selected, published three ways: the **`[webwakeupwdb_policy]` shortcode**, an **auto-created page** (one click to recreate it if you delete it) or a downloadable **PDF** — all managed from **Compliance → "Informativa sul diritto di recesso"** (preview / create / open / **freeze** to static HTML / download). Optionally, two opt-in toggles append the same clauses to your **Complianz** Privacy Policy and Terms & Conditions (EU-only, off by default, with a live preview). It complements — it does **not** replace — your own legal texts.
 
 = Integrations & automation =
 
@@ -88,6 +89,9 @@ Any trader concluding distance B2C contracts via an online interface with EU/EEA
 
 = Does it replace the model withdrawal form? =
 No. The button is **additional** to the Annex I-B model form, which remains mandatory in pre-contractual information. The plugin generates both.
+
+= Can it publish a single "Right of withdrawal" policy page? =
+Yes. Since 1.3.0 the plugin assembles one consolidated **Right-of-withdrawal notice** from your live settings and the Art. 59 exceptions you selected. Publish it with the `[webwakeupwdb_policy]` shortcode, let the plugin **auto-create a page** for it (one click to recreate if you delete it), or download it as a **PDF** — all from **Compliance → "Informativa sul diritto di recesso"**, where you can also **freeze** it to static HTML. Optionally, two opt-in toggles add the same clauses to your **Complianz** Privacy Policy and Terms & Conditions (EU-only, off by default). It complements — it does **not** replace — your own Terms.
 
 = Do digital products lose the right of withdrawal automatically? =
 No. The right of withdrawal applies by default, **including** to digital products. It is removed only for the two conditional Art. 59 exemptions (digital content with immediate access; a service fully performed) and only when the consumer gives prior express consent + acknowledgement at checkout. The plugin captures that on the WooCommerce checkout (a required tick-box), stores it as evidence, and only then hides the button — otherwise the button stays (fail-safe). **Physical products never need consent.** For the digital exemption the plugin also e-mails the consumer a durable-medium confirmation, as the law requires.

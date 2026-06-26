@@ -1,6 +1,6 @@
 # WWU Withdrawal Button — Hooks & Filters Reference
 
-All extension points the plugin exposes are prefixed `wwu_wb_`. These are the **supported public API**: you can safely rely on them across patch releases. Hooks not listed here are internal implementation details and may change without notice.
+All extension points the plugin exposes are prefixed `webwakeupwdb_`. These are the **supported public API**: you can safely rely on them across patch releases. Hooks not listed here are internal implementation details and may change without notice.
 
 Every `apply_filters()` / `do_action()` listed below was verified by reading the source. Default values match the plugin as shipped; examples compile correctly under PHP 8.1+ (the directory build's minimum).
 
@@ -25,7 +25,7 @@ Every `apply_filters()` / `do_action()` listed below was verified by reading the
 
 ## 1. Access control
 
-### `wwu_wb_admin_capability`
+### `webwakeupwdb_admin_capability`
 
 | | |
 |---|---|
@@ -35,7 +35,7 @@ Every `apply_filters()` / `do_action()` listed below was verified by reading the
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_admin_capability', string $capability )
+apply_filters( 'webwakeupwdb_admin_capability', string $capability )
 ```
 
 | Param | Type | Description |
@@ -48,7 +48,7 @@ apply_filters( 'wwu_wb_admin_capability', string $capability )
 
 ```php
 // Grant access to users with 'edit_shop_orders' instead of 'manage_options'.
-add_filter( 'wwu_wb_admin_capability', function ( $cap ) {
+add_filter( 'webwakeupwdb_admin_capability', function ( $cap ) {
     return 'edit_shop_orders';
 } );
 ```
@@ -57,7 +57,7 @@ add_filter( 'wwu_wb_admin_capability', function ( $cap ) {
 
 ## 2. Applicability & eligibility
 
-### `wwu_wb_applicability_decision`
+### `webwakeupwdb_applicability_decision`
 
 | | |
 |---|---|
@@ -67,7 +67,7 @@ add_filter( 'wwu_wb_admin_capability', function ( $cap ) {
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_applicability_decision', ApplicabilityDecision $decision, NormalizedOrder $order )
+apply_filters( 'webwakeupwdb_applicability_decision', ApplicabilityDecision $decision, NormalizedOrder $order )
 ```
 
 | Param | Type | Description |
@@ -80,11 +80,11 @@ apply_filters( 'wwu_wb_applicability_decision', ApplicabilityDecision $decision,
 **Example**
 
 ```php
-use WWU\WithdrawalButton\Domain\ApplicabilityDecision;
+use WebWakeUpWdb\WithdrawalButton\Domain\ApplicabilityDecision;
 
 // Always make B2B orders ineligible regardless of other criteria.
 add_filter(
-    'wwu_wb_applicability_decision',
+    'webwakeupwdb_applicability_decision',
     function ( ApplicabilityDecision $decision, $order ) {
         if ( $order->has_vat_number ) {
             return $decision->as_ineligible( 'b2b_excluded' );
@@ -98,7 +98,7 @@ add_filter(
 
 ---
 
-### `wwu_wb_eligible_statuses`
+### `webwakeupwdb_eligible_statuses`
 
 | | |
 |---|---|
@@ -108,7 +108,7 @@ add_filter(
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_eligible_statuses', string[] $eligible, NormalizedOrder $order )
+apply_filters( 'webwakeupwdb_eligible_statuses', string[] $eligible, NormalizedOrder $order )
 ```
 
 | Param | Type | Description |
@@ -123,7 +123,7 @@ apply_filters( 'wwu_wb_eligible_statuses', string[] $eligible, NormalizedOrder $
 ```php
 // Accept a custom 'shipped' status as eligible.
 add_filter(
-    'wwu_wb_eligible_statuses',
+    'webwakeupwdb_eligible_statuses',
     function ( array $statuses, $order ) {
         $statuses[] = 'shipped';
         return $statuses;
@@ -135,7 +135,7 @@ add_filter(
 
 ---
 
-### `wwu_wb_in_scope_countries`
+### `webwakeupwdb_in_scope_countries`
 
 | | |
 |---|---|
@@ -145,7 +145,7 @@ add_filter(
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_in_scope_countries', string[] $countries )
+apply_filters( 'webwakeupwdb_in_scope_countries', string[] $countries )
 ```
 
 | Param | Type | Description |
@@ -158,7 +158,7 @@ apply_filters( 'wwu_wb_in_scope_countries', string[] $countries )
 
 ```php
 // Add the UK post-Brexit as a voluntary scope (your legal team's call).
-add_filter( 'wwu_wb_in_scope_countries', function ( array $countries ) {
+add_filter( 'webwakeupwdb_in_scope_countries', function ( array $countries ) {
     $countries[] = 'GB';
     return $countries;
 } );
@@ -166,7 +166,7 @@ add_filter( 'wwu_wb_in_scope_countries', function ( array $countries ) {
 
 ---
 
-### `wwu_wb_withdrawal_window_days`
+### `webwakeupwdb_withdrawal_window_days`
 
 | | |
 |---|---|
@@ -176,7 +176,7 @@ add_filter( 'wwu_wb_in_scope_countries', function ( array $countries ) {
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_withdrawal_window_days', int $days, NormalizedOrder $order )
+apply_filters( 'webwakeupwdb_withdrawal_window_days', int $days, NormalizedOrder $order )
 ```
 
 | Param | Type | Description |
@@ -191,7 +191,7 @@ apply_filters( 'wwu_wb_withdrawal_window_days', int $days, NormalizedOrder $orde
 ```php
 // Extend to 30 days for a specific product category.
 add_filter(
-    'wwu_wb_withdrawal_window_days',
+    'webwakeupwdb_withdrawal_window_days',
     function ( int $days, $order ) {
         foreach ( $order->items as $item ) {
             if ( in_array( 99, $item['category_ids'], true ) ) {
@@ -207,7 +207,7 @@ add_filter(
 
 ---
 
-### `wwu_wb_compute_deadline`
+### `webwakeupwdb_compute_deadline`
 
 | | |
 |---|---|
@@ -217,14 +217,14 @@ add_filter(
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_compute_deadline', \DateTimeImmutable $deadline, NormalizedOrder $order, int $days )
+apply_filters( 'webwakeupwdb_compute_deadline', \DateTimeImmutable $deadline, NormalizedOrder $order, int $days )
 ```
 
 | Param | Type | Description |
 |---|---|---|
 | `$deadline` | `\DateTimeImmutable` | The computed deadline (UTC). |
 | `$order` | `NormalizedOrder` | The normalized order. |
-| `$days` | `int` | The window length already filtered by `wwu_wb_withdrawal_window_days`. |
+| `$days` | `int` | The window length already filtered by `webwakeupwdb_withdrawal_window_days`. |
 
 **Purpose.** Allows full control over the deadline DateTimeImmutable object — for example to snap it to end-of-business day, apply holiday extensions, or implement complex calendar rules.
 
@@ -233,7 +233,7 @@ apply_filters( 'wwu_wb_compute_deadline', \DateTimeImmutable $deadline, Normaliz
 ```php
 // Move the deadline to end of day (23:59:59 UTC) instead of exact time.
 add_filter(
-    'wwu_wb_compute_deadline',
+    'webwakeupwdb_compute_deadline',
     function ( \DateTimeImmutable $deadline, $order, int $days ) {
         return $deadline->setTime( 23, 59, 59 );
     },
@@ -246,7 +246,7 @@ add_filter(
 
 ## 3. Platforms / adapters
 
-### `wwu_wb_platform_adapters`
+### `webwakeupwdb_platform_adapters`
 
 | | |
 |---|---|
@@ -256,7 +256,7 @@ add_filter(
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_platform_adapters', OrderDataSource[] $adapters )
+apply_filters( 'webwakeupwdb_platform_adapters', OrderDataSource[] $adapters )
 ```
 
 | Param | Type | Description |
@@ -270,7 +270,7 @@ apply_filters( 'wwu_wb_platform_adapters', OrderDataSource[] $adapters )
 ```php
 use MyPlugin\MyAdapter;
 
-add_filter( 'wwu_wb_platform_adapters', function ( array $adapters ) {
+add_filter( 'webwakeupwdb_platform_adapters', function ( array $adapters ) {
     $adapters['my-platform'] = new MyAdapter();
     return $adapters;
 } );
@@ -278,7 +278,7 @@ add_filter( 'wwu_wb_platform_adapters', function ( array $adapters ) {
 
 ---
 
-### `wwu_wb_order_is_renewal`
+### `webwakeupwdb_order_is_renewal`
 
 | | |
 |---|---|
@@ -288,7 +288,7 @@ add_filter( 'wwu_wb_platform_adapters', function ( array $adapters ) {
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_order_is_renewal', bool $is_renewal, string $order_ref, string $platform )
+apply_filters( 'webwakeupwdb_order_is_renewal', bool $is_renewal, string $order_ref, string $platform )
 ```
 
 | Param | Type | Description |
@@ -304,7 +304,7 @@ apply_filters( 'wwu_wb_order_is_renewal', bool $is_renewal, string $order_ref, s
 ```php
 // Detect renewals via a custom meta key.
 add_filter(
-    'wwu_wb_order_is_renewal',
+    'webwakeupwdb_order_is_renewal',
     function ( bool $is_renewal, string $order_ref, string $platform ) {
         if ( 'woocommerce' === $platform ) {
             $order = wc_get_order( (int) $order_ref );
@@ -321,7 +321,7 @@ add_filter(
 
 ---
 
-### `wwu_wb_order_has_vat_number`
+### `webwakeupwdb_order_has_vat_number`
 
 | | |
 |---|---|
@@ -331,7 +331,7 @@ add_filter(
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_order_has_vat_number', bool $found, \WC_Order $order )
+apply_filters( 'webwakeupwdb_order_has_vat_number', bool $found, \WC_Order $order )
 ```
 
 | Param | Type | Description |
@@ -346,7 +346,7 @@ apply_filters( 'wwu_wb_order_has_vat_number', bool $found, \WC_Order $order )
 ```php
 // Integrate with WooCommerce EU VAT Number plugin.
 add_filter(
-    'wwu_wb_order_has_vat_number',
+    'webwakeupwdb_order_has_vat_number',
     function ( bool $found, \WC_Order $order ) {
         $vat = $order->get_meta( '_billing_vat_number' );
         return $found || ( '' !== trim( (string) $vat ) );
@@ -358,7 +358,7 @@ add_filter(
 
 ---
 
-### `wwu_wb_edd_order_has_vat_number`
+### `webwakeupwdb_edd_order_has_vat_number`
 
 | | |
 |---|---|
@@ -368,7 +368,7 @@ add_filter(
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_edd_order_has_vat_number', bool $found, string $order_ref )
+apply_filters( 'webwakeupwdb_edd_order_has_vat_number', bool $found, string $order_ref )
 ```
 
 | Param | Type | Description |
@@ -376,13 +376,13 @@ apply_filters( 'wwu_wb_edd_order_has_vat_number', bool $found, string $order_ref
 | `$found` | `bool` | Whether the adapter found a VAT / business number for this EDD order. |
 | `$order_ref` | `string` | The EDD order reference. |
 
-**Purpose.** Same semantic as `wwu_wb_order_has_vat_number` but for Easy Digital Downloads orders, where the native order object type differs. Use the EDD orders API to supply your VAT detection result.
+**Purpose.** Same semantic as `webwakeupwdb_order_has_vat_number` but for Easy Digital Downloads orders, where the native order object type differs. Use the EDD orders API to supply your VAT detection result.
 
 **Example**
 
 ```php
 add_filter(
-    'wwu_wb_edd_order_has_vat_number',
+    'webwakeupwdb_edd_order_has_vat_number',
     function ( bool $found, string $order_ref ) {
         $vat = edd_get_order_meta( (int) $order_ref, '_vat_number', true );
         return $found || '' !== (string) $vat;
@@ -396,7 +396,7 @@ add_filter(
 
 ## 4. FluentCart
 
-### `wwu_wb_fluentcart_native_active`
+### `webwakeupwdb_fluentcart_native_active`
 
 | | |
 |---|---|
@@ -406,7 +406,7 @@ add_filter(
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_fluentcart_native_active', bool $detected )
+apply_filters( 'webwakeupwdb_fluentcart_native_active', bool $detected )
 ```
 
 | Param | Type | Description |
@@ -419,12 +419,12 @@ apply_filters( 'wwu_wb_fluentcart_native_active', bool $detected )
 
 ```php
 // Disable FluentCart integration on staging.
-add_filter( 'wwu_wb_fluentcart_native_active', '__return_false' );
+add_filter( 'webwakeupwdb_fluentcart_native_active', '__return_false' );
 ```
 
 ---
 
-### `wwu_wb_fluentcart_product_category_ids`
+### `webwakeupwdb_fluentcart_product_category_ids`
 
 | | |
 |---|---|
@@ -434,7 +434,7 @@ add_filter( 'wwu_wb_fluentcart_native_active', '__return_false' );
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_fluentcart_product_category_ids', int[] $ids, int $post_id )
+apply_filters( 'webwakeupwdb_fluentcart_product_category_ids', int[] $ids, int $post_id )
 ```
 
 | Param | Type | Description |
@@ -448,7 +448,7 @@ apply_filters( 'wwu_wb_fluentcart_product_category_ids', int[] $ids, int $post_i
 
 ```php
 add_filter(
-    'wwu_wb_fluentcart_product_category_ids',
+    'webwakeupwdb_fluentcart_product_category_ids',
     function ( array $ids, int $post_id ) {
         // Append IDs from a custom taxonomy.
         $extra = wp_get_post_terms( $post_id, 'my_product_type', array( 'fields' => 'ids' ) );
@@ -463,7 +463,7 @@ add_filter(
 
 ## 5. Exemptions (Art. 59)
 
-### `wwu_wb_exception_types`
+### `webwakeupwdb_exception_types`
 
 | | |
 |---|---|
@@ -473,7 +473,7 @@ add_filter(
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_exception_types', array $types )
+apply_filters( 'webwakeupwdb_exception_types', array $types )
 ```
 
 | Param | Type | Description |
@@ -486,7 +486,7 @@ apply_filters( 'wwu_wb_exception_types', array $types )
 
 ```php
 // Add a custom 'newspaper_subscription' exception type.
-add_filter( 'wwu_wb_exception_types', function ( array $types ) {
+add_filter( 'webwakeupwdb_exception_types', function ( array $types ) {
     $types['newspaper_subscription'] = array(
         'label'          => __( 'Newspaper subscription', 'my-theme' ),
         'consent_kind'   => 'opt_out_periodicals',
@@ -498,7 +498,7 @@ add_filter( 'wwu_wb_exception_types', function ( array $types ) {
 
 ---
 
-### `wwu_wb_exemption_consent`
+### `webwakeupwdb_exemption_consent`
 
 | | |
 |---|---|
@@ -508,7 +508,7 @@ add_filter( 'wwu_wb_exception_types', function ( array $types ) {
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_exemption_consent', array $consent, NormalizedOrder $order, array $item, string $reason )
+apply_filters( 'webwakeupwdb_exemption_consent', array $consent, NormalizedOrder $order, array $item, string $reason )
 ```
 
 | Param | Type | Description |
@@ -524,7 +524,7 @@ apply_filters( 'wwu_wb_exemption_consent', array $consent, NormalizedOrder $orde
 
 ```php
 add_filter(
-    'wwu_wb_exemption_consent',
+    'webwakeupwdb_exemption_consent',
     function ( array $consent, $order, array $item, string $reason ) {
         if ( 'digital_content' === $reason ) {
             // Pull consent from a custom order meta key.
@@ -539,7 +539,7 @@ add_filter(
 
 ---
 
-### `wwu_wb_excluded_product_ids`
+### `webwakeupwdb_excluded_product_ids`
 
 | | |
 |---|---|
@@ -549,7 +549,7 @@ add_filter(
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_excluded_product_ids', array $filtered, NormalizedOrder $order )
+apply_filters( 'webwakeupwdb_excluded_product_ids', array $filtered, NormalizedOrder $order )
 ```
 
 | Param | Type | Description |
@@ -564,7 +564,7 @@ apply_filters( 'wwu_wb_excluded_product_ids', array $filtered, NormalizedOrder $
 ```php
 // Exclude a hardcoded product from the withdrawal flow.
 add_filter(
-    'wwu_wb_excluded_product_ids',
+    'webwakeupwdb_excluded_product_ids',
     function ( array $ids, $order ) {
         $ids[] = 12345; // e.g. a "donation" product.
         return $ids;
@@ -576,7 +576,7 @@ add_filter(
 
 ---
 
-### `wwu_wb_clause_text`
+### `webwakeupwdb_clause_text`
 
 | | |
 |---|---|
@@ -586,7 +586,7 @@ add_filter(
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_clause_text', string $text, string $type, string $lang )
+apply_filters( 'webwakeupwdb_clause_text', string $text, string $type, string $lang )
 ```
 
 | Param | Type | Description |
@@ -595,13 +595,13 @@ apply_filters( 'wwu_wb_clause_text', string $text, string $type, string $lang )
 | `$type` | `string` | Clause type: `precontractual`, `terms`, `privacy` or `consent_privacy`. |
 | `$lang` | `string` | Two-letter language code (e.g. `it`, `en`). |
 
-**Purpose.** Overrides the wording of a generated legal clause programmatically, on both the Compliance page and the `[wwu_wb_info]` shortcode. For a **no-code** alternative, edit the clauses in **Settings → Legal clauses** (the same override, saved per type + language in the `wwu_wb_clauses` option); this filter runs on top of any saved override. Since `1.2.1`.
+**Purpose.** Overrides the wording of a generated legal clause programmatically, on both the Compliance page and the `[webwakeupwdb_info]` shortcode. For a **no-code** alternative, edit the clauses in **Settings → Legal clauses** (the same override, saved per type + language in the `webwakeupwdb_clauses` option); this filter runs on top of any saved override. Since `1.2.1`.
 
 **Example**
 
 ```php
 add_filter(
-    'wwu_wb_clause_text',
+    'webwakeupwdb_clause_text',
     function ( string $text, string $type, string $lang ) {
         if ( 'terms' === $type && 'it' === $lang ) {
             return 'Modalità di recesso — Il cliente recede tramite il pulsante «Recedere dal contratto qui» nella propria area ordini, oppure col modulo tipo …';
@@ -615,7 +615,7 @@ add_filter(
 
 ---
 
-### `wwu_wb_consent_text`
+### `webwakeupwdb_consent_text`
 
 | | |
 |---|---|
@@ -625,7 +625,7 @@ add_filter(
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_consent_text', string $text, string $kind, string $reason_id )
+apply_filters( 'webwakeupwdb_consent_text', string $text, string $kind, string $reason_id )
 ```
 
 | Param | Type | Description |
@@ -640,7 +640,7 @@ apply_filters( 'wwu_wb_consent_text', string $text, string $kind, string $reason
 
 ```php
 add_filter(
-    'wwu_wb_consent_text',
+    'webwakeupwdb_consent_text',
     function ( string $text, string $kind, string $reason_id ) {
         if ( 'digital_content_ack' === $kind ) {
             return __( 'I acknowledge that delivery begins immediately and I lose my right of withdrawal.', 'my-theme' );
@@ -656,7 +656,7 @@ add_filter(
 
 ## 6. Rendering / surfaces
 
-### `wwu_wb_template_path`
+### `webwakeupwdb_template_path`
 
 | | |
 |---|---|
@@ -666,7 +666,7 @@ add_filter(
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_template_path', string $path, string $name, array $args )
+apply_filters( 'webwakeupwdb_template_path', string $path, string $name, array $args )
 ```
 
 | Param | Type | Description |
@@ -681,7 +681,7 @@ apply_filters( 'wwu_wb_template_path', string $path, string $name, array $args )
 
 ```php
 add_filter(
-    'wwu_wb_template_path',
+    'webwakeupwdb_template_path',
     function ( string $path, string $name, array $args ) {
         $theme_file = get_stylesheet_directory() . '/wwu-withdrawal-button/' . $name . '.php';
         return file_exists( $theme_file ) ? $theme_file : $path;
@@ -693,7 +693,7 @@ add_filter(
 
 ---
 
-### `wwu_wb_force_enqueue_frontend`
+### `webwakeupwdb_force_enqueue_frontend`
 
 | | |
 |---|---|
@@ -703,7 +703,7 @@ add_filter(
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_force_enqueue_frontend', bool $enqueue )
+apply_filters( 'webwakeupwdb_force_enqueue_frontend', bool $enqueue )
 ```
 
 | Param | Type | Description |
@@ -717,7 +717,7 @@ apply_filters( 'wwu_wb_force_enqueue_frontend', bool $enqueue )
 ```php
 // Force enqueue on a custom "my-orders" page template.
 add_filter(
-    'wwu_wb_force_enqueue_frontend',
+    'webwakeupwdb_force_enqueue_frontend',
     function ( bool $enqueue ) {
         return $enqueue || is_page_template( 'my-orders.php' );
     }
@@ -726,7 +726,7 @@ add_filter(
 
 ---
 
-### `wwu_wb_order_admin_url`
+### `webwakeupwdb_order_admin_url`
 
 | | |
 |---|---|
@@ -736,7 +736,7 @@ add_filter(
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_order_admin_url', string $url, string $platform, string $order_ref )
+apply_filters( 'webwakeupwdb_order_admin_url', string $url, string $platform, string $order_ref )
 ```
 
 | Param | Type | Description |
@@ -751,7 +751,7 @@ apply_filters( 'wwu_wb_order_admin_url', string $url, string $platform, string $
 
 ```php
 add_filter(
-    'wwu_wb_order_admin_url',
+    'webwakeupwdb_order_admin_url',
     function ( string $url, string $platform, string $order_ref ) {
         if ( 'woocommerce' === $platform ) {
             return 'https://erp.example.com/orders/' . urlencode( $order_ref );
@@ -765,7 +765,7 @@ add_filter(
 
 ---
 
-### `wwu_wb_exemption_note_text`
+### `webwakeupwdb_exemption_note_text`
 
 | | |
 |---|---|
@@ -776,12 +776,12 @@ add_filter(
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_exemption_note_text', string $text, array $reason_ids, \WWU\WithdrawalButton\Platform\NormalizedOrder $order )
+apply_filters( 'webwakeupwdb_exemption_note_text', string $text, array $reason_ids, \WebWakeUpWdb\WithdrawalButton\Platform\NormalizedOrder $order )
 ```
 
 | Param | Type | Description |
 |---|---|---|
-| `$text` | `string` | The resolved "why exempt" note (HTML). Either the built-in copy naming the matched Art. 59 exception(s) + legal reference, or the merchant override `wwu_wb_settings['custom_exemption_note']`. |
+| `$text` | `string` | The resolved "why exempt" note (HTML). Either the built-in copy naming the matched Art. 59 exception(s) + legal reference, or the merchant override `webwakeupwdb_settings['custom_exemption_note']`. |
 | `$reason_ids` | `string[]` | The per-item statutory reason ids that resolved (e.g. `['59_o']`). |
 | `$order` | `NormalizedOrder` | The exempt order being rendered. |
 
@@ -791,7 +791,7 @@ apply_filters( 'wwu_wb_exemption_note_text', string $text, array $reason_ids, \W
 
 ```php
 add_filter(
-    'wwu_wb_exemption_note_text',
+    'webwakeupwdb_exemption_note_text',
     function ( string $text, array $reason_ids, $order ) {
         if ( in_array( '59_o', $reason_ids, true ) ) {
             return '<p>' . esc_html__( 'Digital content: you agreed to immediate access and waived withdrawal at checkout.', 'my-textdomain' ) . '</p>';
@@ -807,7 +807,7 @@ add_filter(
 
 ## 7. Guest access & security
 
-### `wwu_wb_client_ip`
+### `webwakeupwdb_client_ip`
 
 | | |
 |---|---|
@@ -817,7 +817,7 @@ add_filter(
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_client_ip', string $raw )
+apply_filters( 'webwakeupwdb_client_ip', string $raw )
 ```
 
 | Param | Type | Description |
@@ -830,7 +830,7 @@ apply_filters( 'wwu_wb_client_ip', string $raw )
 
 ```php
 // Trust the Cloudflare CF-Connecting-IP header.
-add_filter( 'wwu_wb_client_ip', function ( string $ip ) {
+add_filter( 'webwakeupwdb_client_ip', function ( string $ip ) {
     $cf = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? '';
     return filter_var( $cf, FILTER_VALIDATE_IP ) ? $cf : $ip;
 } );
@@ -838,7 +838,7 @@ add_filter( 'wwu_wb_client_ip', function ( string $ip ) {
 
 ---
 
-### `wwu_wb_rate_limit_max_attempts`
+### `webwakeupwdb_rate_limit_max_attempts`
 
 | | |
 |---|---|
@@ -849,7 +849,7 @@ add_filter( 'wwu_wb_client_ip', function ( string $ip ) {
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_rate_limit_max_attempts', int $max )
+apply_filters( 'webwakeupwdb_rate_limit_max_attempts', int $max )
 ```
 
 | Param | Type | Description |
@@ -862,14 +862,14 @@ apply_filters( 'wwu_wb_rate_limit_max_attempts', int $max )
 
 ```php
 // Allow up to 20 attempts per window.
-add_filter( 'wwu_wb_rate_limit_max_attempts', function () {
+add_filter( 'webwakeupwdb_rate_limit_max_attempts', function () {
     return 20;
 } );
 ```
 
 ---
 
-### `wwu_wb_rate_limit_window_seconds`
+### `webwakeupwdb_rate_limit_window_seconds`
 
 | | |
 |---|---|
@@ -880,7 +880,7 @@ add_filter( 'wwu_wb_rate_limit_max_attempts', function () {
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_rate_limit_window_seconds', int $seconds )
+apply_filters( 'webwakeupwdb_rate_limit_window_seconds', int $seconds )
 ```
 
 | Param | Type | Description |
@@ -893,7 +893,7 @@ apply_filters( 'wwu_wb_rate_limit_window_seconds', int $seconds )
 
 ```php
 // Use a 10-minute window instead of 5.
-add_filter( 'wwu_wb_rate_limit_window_seconds', function () {
+add_filter( 'webwakeupwdb_rate_limit_window_seconds', function () {
     return 600;
 } );
 ```
@@ -902,7 +902,7 @@ add_filter( 'wwu_wb_rate_limit_window_seconds', function () {
 
 ## 8. Durable medium / evidence
 
-### `wwu_wb_exemption_confirmation_html`
+### `webwakeupwdb_exemption_confirmation_html`
 
 | | |
 |---|---|
@@ -912,7 +912,7 @@ add_filter( 'wwu_wb_rate_limit_window_seconds', function () {
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_exemption_confirmation_html', string $out, string $number, array $entries )
+apply_filters( 'webwakeupwdb_exemption_confirmation_html', string $out, string $number, array $entries )
 ```
 
 | Param | Type | Description |
@@ -927,7 +927,7 @@ apply_filters( 'wwu_wb_exemption_confirmation_html', string $out, string $number
 
 ```php
 add_filter(
-    'wwu_wb_exemption_confirmation_html',
+    'webwakeupwdb_exemption_confirmation_html',
     function ( string $html, string $number, array $entries ) {
         ob_start();
         // load your own Twig/Blade/blade-like template here
@@ -941,15 +941,15 @@ add_filter(
 
 ---
 
-### `wwu_wb_receipt_sent` _(action)_
+### `webwakeupwdb_receipt_sent` _(action)_
 
-Documented in [§ 10 Lifecycle & log](#10-lifecycle--log) because it fires as part of the post-confirmation flow. See `wwu_wb_receipt_sent` there.
+Documented in [§ 10 Lifecycle & log](#10-lifecycle--log) because it fires as part of the post-confirmation flow. See `webwakeupwdb_receipt_sent` there.
 
 ---
 
 ## 9. Timestamping
 
-### `wwu_wb_timestamp_provider`
+### `webwakeupwdb_timestamp_provider`
 
 | | |
 |---|---|
@@ -959,7 +959,7 @@ Documented in [§ 10 Lifecycle & log](#10-lifecycle--log) because it fires as pa
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_timestamp_provider', TimestampProvider $provider, string $key )
+apply_filters( 'webwakeupwdb_timestamp_provider', TimestampProvider $provider, string $key )
 ```
 
 | Param | Type | Description |
@@ -973,10 +973,10 @@ apply_filters( 'wwu_wb_timestamp_provider', TimestampProvider $provider, string 
 
 ```php
 use MyPlugin\MyTimestampProvider;
-use WWU\WithdrawalButton\Timestamp\TimestampProvider;
+use WebWakeUpWdb\WithdrawalButton\Timestamp\TimestampProvider;
 
 add_filter(
-    'wwu_wb_timestamp_provider',
+    'webwakeupwdb_timestamp_provider',
     function ( TimestampProvider $provider, string $key ) {
         if ( 'my_authority' === $key ) {
             return new MyTimestampProvider();
@@ -990,7 +990,7 @@ add_filter(
 
 ---
 
-### `wwu_wb_ots_calendars`
+### `webwakeupwdb_ots_calendars`
 
 | | |
 |---|---|
@@ -1000,7 +1000,7 @@ add_filter(
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_ots_calendars', string[] $calendars )
+apply_filters( 'webwakeupwdb_ots_calendars', string[] $calendars )
 ```
 
 | Param | Type | Description |
@@ -1013,14 +1013,14 @@ apply_filters( 'wwu_wb_ots_calendars', string[] $calendars )
 
 ```php
 // Use only your organization's private OTS calendar.
-add_filter( 'wwu_wb_ots_calendars', function () {
+add_filter( 'webwakeupwdb_ots_calendars', function () {
     return array( 'https://ots.example.com/' );
 } );
 ```
 
 ---
 
-### `wwu_wb_timestamp_anchored` _(action)_
+### `webwakeupwdb_timestamp_anchored` _(action)_
 
 | | |
 |---|---|
@@ -1030,7 +1030,7 @@ add_filter( 'wwu_wb_ots_calendars', function () {
 **Signature**
 
 ```php
-do_action( 'wwu_wb_timestamp_anchored', int $log_id, string $row_hash, string $provider )
+do_action( 'webwakeupwdb_timestamp_anchored', int $log_id, string $row_hash, string $provider )
 ```
 
 | Param | Type | Description |
@@ -1045,7 +1045,7 @@ do_action( 'wwu_wb_timestamp_anchored', int $log_id, string $row_hash, string $p
 
 ```php
 add_action(
-    'wwu_wb_timestamp_anchored',
+    'webwakeupwdb_timestamp_anchored',
     function ( int $log_id, string $row_hash, string $provider ) {
         // Forward the anchor confirmation to an external audit service.
         wp_remote_post( 'https://audit.example.com/anchor', array(
@@ -1065,7 +1065,7 @@ add_action(
 
 ## 10. Lifecycle & log
 
-### `wwu_wb_withdrawal_confirmed` _(action)_
+### `webwakeupwdb_withdrawal_confirmed` _(action)_
 
 | | |
 |---|---|
@@ -1076,7 +1076,7 @@ add_action(
 
 ```php
 do_action(
-    'wwu_wb_withdrawal_confirmed',
+    'webwakeupwdb_withdrawal_confirmed',
     string           $request_uid,
     NormalizedOrder  $order,
     WithdrawalRequest $req,
@@ -1098,10 +1098,10 @@ do_action(
 **Example**
 
 ```php
-use WWU\WithdrawalButton\Platform\NormalizedOrder;
+use WebWakeUpWdb\WithdrawalButton\Platform\NormalizedOrder;
 
 add_action(
-    'wwu_wb_withdrawal_confirmed',
+    'webwakeupwdb_withdrawal_confirmed',
     function ( string $uid, NormalizedOrder $order, $req, int $log_id, $adapter ) {
         // Trigger an automatic refund via WooCommerce.
         if ( 'woocommerce' === $order->platform ) {
@@ -1122,7 +1122,7 @@ add_action(
 
 ---
 
-### `wwu_wb_subscription_cancel_result` _(action)_
+### `webwakeupwdb_subscription_cancel_result` _(action)_
 
 | | |
 |---|---|
@@ -1133,7 +1133,7 @@ add_action(
 
 ```php
 do_action(
-    'wwu_wb_subscription_cancel_result',
+    'webwakeupwdb_subscription_cancel_result',
     bool            $cancelled,
     string          $sub_ref,
     NormalizedOrder $order,
@@ -1154,7 +1154,7 @@ do_action(
 
 ```php
 add_action(
-    'wwu_wb_subscription_cancel_result',
+    'webwakeupwdb_subscription_cancel_result',
     function ( bool $cancelled, string $sub_ref, $order, $adapter ) {
         if ( ! $cancelled ) {
             // Log a task for manual cancellation review.
@@ -1172,7 +1172,7 @@ add_action(
 
 ---
 
-### `wwu_wb_receipt_sent` _(action)_
+### `webwakeupwdb_receipt_sent` _(action)_
 
 | | |
 |---|---|
@@ -1182,7 +1182,7 @@ add_action(
 **Signature**
 
 ```php
-do_action( 'wwu_wb_receipt_sent', string $request_uid, string $channel, array $data )
+do_action( 'webwakeupwdb_receipt_sent', string $request_uid, string $channel, array $data )
 ```
 
 | Param | Type | Description |
@@ -1197,7 +1197,7 @@ do_action( 'wwu_wb_receipt_sent', string $request_uid, string $channel, array $d
 
 ```php
 add_action(
-    'wwu_wb_receipt_sent',
+    'webwakeupwdb_receipt_sent',
     function ( string $uid, string $channel, array $data ) {
         if ( 'email+pdf' === $channel ) {
             // Archive the PDF in your DMS.
@@ -1211,7 +1211,7 @@ add_action(
 
 ---
 
-### `wwu_wb_log_written` _(action)_
+### `webwakeupwdb_log_written` _(action)_
 
 | | |
 |---|---|
@@ -1221,7 +1221,7 @@ add_action(
 **Signature**
 
 ```php
-do_action( 'wwu_wb_log_written', int $id, string $event, array $row )
+do_action( 'webwakeupwdb_log_written', int $id, string $event, array $row )
 ```
 
 | Param | Type | Description |
@@ -1236,7 +1236,7 @@ do_action( 'wwu_wb_log_written', int $id, string $event, array $row )
 
 ```php
 add_action(
-    'wwu_wb_log_written',
+    'webwakeupwdb_log_written',
     function ( int $id, string $event, array $row ) {
         // Ship every audit event to a remote log sink.
         wp_remote_post( 'https://siem.example.com/events', array(
@@ -1256,40 +1256,40 @@ add_action(
 
 | Hook | Type | One-line purpose |
 |------|------|-----------------|
-| `wwu_wb_admin_capability` | filter | Override the WordPress capability required for all admin/REST access. |
-| `wwu_wb_applicability_decision` | filter | Replace the computed applicability decision for an order. |
-| `wwu_wb_client_ip` | filter | Override the detected client IP used for guest rate-limiting. |
-| `wwu_wb_clause_text` | filter | Override a generated legal clause body (pre-contractual / terms / privacy / consent_privacy). |
-| `wwu_wb_compute_deadline` | filter | Replace the computed withdrawal deadline `DateTimeImmutable`. |
-| `wwu_wb_consent_text` | filter | Replace the statutory consent wording shown at checkout. |
-| `wwu_wb_edd_order_has_vat_number` | filter | Override B2B/VAT detection for EDD orders. |
-| `wwu_wb_eligible_statuses` | filter | Add or remove order statuses that make the button available. |
-| `wwu_wb_exception_types` | filter | Register custom Art. 59 exception types or modify existing ones. |
-| `wwu_wb_excluded_product_ids` | filter | Add product IDs to the exemption list at evaluation time. |
-| `wwu_wb_exemption_confirmation_html` | filter | Replace the HTML body of the Art. 59 exemption confirmation email. |
-| `wwu_wb_exemption_consent` | filter | Override captured consent data for a specific exemption reason. |
-| `wwu_wb_exemption_note_text` | filter | Override the consumer "why exempt" note on fully-exempt orders. |
-| `wwu_wb_fluentcart_native_active` | filter | Override whether the FluentCart adapter is treated as active. |
-| `wwu_wb_fluentcart_product_category_ids` | filter | Override category term IDs for a FluentCart product. |
-| `wwu_wb_force_enqueue_frontend` | filter | Force-enqueue frontend assets on pages not auto-detected. |
-| `wwu_wb_in_scope_countries` | filter | Add or remove countries from the mandatory in-scope set. |
-| `wwu_wb_order_admin_url` | filter | Override the admin order-edit URL shown in the Requests Dashboard. |
-| `wwu_wb_order_has_vat_number` | filter | Override B2B/VAT detection for WooCommerce orders. |
-| `wwu_wb_order_is_renewal` | filter | Override subscription-renewal detection (WooCommerce, FluentCart, EDD). |
-| `wwu_wb_ots_calendars` | filter | Customize OpenTimestamps calendar server URLs. |
-| `wwu_wb_platform_adapters` | filter | Register a custom platform adapter. |
-| `wwu_wb_rate_limit_max_attempts` | filter | Change the guest rate-limit attempt cap. |
-| `wwu_wb_rate_limit_window_seconds` | filter | Change the guest rate-limit sliding window duration. |
-| `wwu_wb_template_path` | filter | Override a frontend template file path. |
-| `wwu_wb_timestamp_provider` | filter | Swap in a custom timestamping provider implementation. |
-| `wwu_wb_webhook_payload` | filter | Filter the outbound automations webhook payload before signing/sending. |
-| `wwu_wb_withdrawal_window_days` | filter | Change the statutory withdrawal period (default: 14 days). |
-| `wwu_wb_log_written` | action | Fires after every audit log write — replicate events to external sinks. |
-| `wwu_wb_receipt_sent` | action | Fires after the durable-medium receipt is dispatched to the consumer. |
-| `wwu_wb_subscription_cancel_result` | action | Fires after subscription cancellation is attempted. |
-| `wwu_wb_timestamp_anchored` | action | Fires after a log row is successfully anchored by the timestamp provider. |
-| `wwu_wb_webhook_delivered` | action | Fires after each outbound webhook delivery attempt (success or failure). |
-| `wwu_wb_withdrawal_confirmed` | action | Fires once per successful withdrawal confirmation — main integration hook. |
+| `webwakeupwdb_admin_capability` | filter | Override the WordPress capability required for all admin/REST access. |
+| `webwakeupwdb_applicability_decision` | filter | Replace the computed applicability decision for an order. |
+| `webwakeupwdb_client_ip` | filter | Override the detected client IP used for guest rate-limiting. |
+| `webwakeupwdb_clause_text` | filter | Override a generated legal clause body (pre-contractual / terms / privacy / consent_privacy). |
+| `webwakeupwdb_compute_deadline` | filter | Replace the computed withdrawal deadline `DateTimeImmutable`. |
+| `webwakeupwdb_consent_text` | filter | Replace the statutory consent wording shown at checkout. |
+| `webwakeupwdb_edd_order_has_vat_number` | filter | Override B2B/VAT detection for EDD orders. |
+| `webwakeupwdb_eligible_statuses` | filter | Add or remove order statuses that make the button available. |
+| `webwakeupwdb_exception_types` | filter | Register custom Art. 59 exception types or modify existing ones. |
+| `webwakeupwdb_excluded_product_ids` | filter | Add product IDs to the exemption list at evaluation time. |
+| `webwakeupwdb_exemption_confirmation_html` | filter | Replace the HTML body of the Art. 59 exemption confirmation email. |
+| `webwakeupwdb_exemption_consent` | filter | Override captured consent data for a specific exemption reason. |
+| `webwakeupwdb_exemption_note_text` | filter | Override the consumer "why exempt" note on fully-exempt orders. |
+| `webwakeupwdb_fluentcart_native_active` | filter | Override whether the FluentCart adapter is treated as active. |
+| `webwakeupwdb_fluentcart_product_category_ids` | filter | Override category term IDs for a FluentCart product. |
+| `webwakeupwdb_force_enqueue_frontend` | filter | Force-enqueue frontend assets on pages not auto-detected. |
+| `webwakeupwdb_in_scope_countries` | filter | Add or remove countries from the mandatory in-scope set. |
+| `webwakeupwdb_order_admin_url` | filter | Override the admin order-edit URL shown in the Requests Dashboard. |
+| `webwakeupwdb_order_has_vat_number` | filter | Override B2B/VAT detection for WooCommerce orders. |
+| `webwakeupwdb_order_is_renewal` | filter | Override subscription-renewal detection (WooCommerce, FluentCart, EDD). |
+| `webwakeupwdb_ots_calendars` | filter | Customize OpenTimestamps calendar server URLs. |
+| `webwakeupwdb_platform_adapters` | filter | Register a custom platform adapter. |
+| `webwakeupwdb_rate_limit_max_attempts` | filter | Change the guest rate-limit attempt cap. |
+| `webwakeupwdb_rate_limit_window_seconds` | filter | Change the guest rate-limit sliding window duration. |
+| `webwakeupwdb_template_path` | filter | Override a frontend template file path. |
+| `webwakeupwdb_timestamp_provider` | filter | Swap in a custom timestamping provider implementation. |
+| `webwakeupwdb_webhook_payload` | filter | Filter the outbound automations webhook payload before signing/sending. |
+| `webwakeupwdb_withdrawal_window_days` | filter | Change the statutory withdrawal period (default: 14 days). |
+| `webwakeupwdb_log_written` | action | Fires after every audit log write — replicate events to external sinks. |
+| `webwakeupwdb_receipt_sent` | action | Fires after the durable-medium receipt is dispatched to the consumer. |
+| `webwakeupwdb_subscription_cancel_result` | action | Fires after subscription cancellation is attempted. |
+| `webwakeupwdb_timestamp_anchored` | action | Fires after a log row is successfully anchored by the timestamp provider. |
+| `webwakeupwdb_webhook_delivered` | action | Fires after each outbound webhook delivery attempt (success or failure). |
+| `webwakeupwdb_withdrawal_confirmed` | action | Fires once per successful withdrawal confirmation — main integration hook. |
 
 ---
 
@@ -1300,7 +1300,7 @@ reference, auth and signature-verification examples:
 [`wwu-wb-rest-api-REFERENCE.md`](./wwu-wb-rest-api-REFERENCE.md). The two hooks
 below are the extension points for the **webhook**.
 
-### `wwu_wb_webhook_payload`
+### `webwakeupwdb_webhook_payload`
 
 | | |
 |---|---|
@@ -1311,7 +1311,7 @@ below are the extension points for the **webhook**.
 **Signature**
 
 ```php
-apply_filters( 'wwu_wb_webhook_payload', array $payload, string $request_uid )
+apply_filters( 'webwakeupwdb_webhook_payload', array $payload, string $request_uid )
 ```
 
 | Param | Type | Description |
@@ -1325,7 +1325,7 @@ apply_filters( 'wwu_wb_webhook_payload', array $payload, string $request_uid )
 
 ```php
 add_filter(
-    'wwu_wb_webhook_payload',
+    'webwakeupwdb_webhook_payload',
     function ( array $payload, string $request_uid ) {
         $payload['source'] = 'my-store';
         return $payload;
@@ -1337,7 +1337,7 @@ add_filter(
 
 ---
 
-### `wwu_wb_webhook_delivered`
+### `webwakeupwdb_webhook_delivered`
 
 | | |
 |---|---|
@@ -1348,7 +1348,7 @@ add_filter(
 **Signature**
 
 ```php
-do_action( 'wwu_wb_webhook_delivered', bool $ok, int $code, string $request_uid, string $delivery_id )
+do_action( 'webwakeupwdb_webhook_delivered', bool $ok, int $code, string $request_uid, string $delivery_id )
 ```
 
 | Param | Type | Description |
@@ -1364,7 +1364,7 @@ do_action( 'wwu_wb_webhook_delivered', bool $ok, int $code, string $request_uid,
 
 ```php
 add_action(
-    'wwu_wb_webhook_delivered',
+    'webwakeupwdb_webhook_delivered',
     function ( bool $ok, int $code, string $request_uid, string $delivery_id ) {
         if ( ! $ok ) {
             error_log( "WWU-WB webhook failed for {$request_uid} (HTTP {$code}, delivery {$delivery_id})" );

@@ -1,7 +1,7 @@
 # REST API & webhook — reference (automations)
 
 > Read-only REST API + signed outbound webhook for WWU Withdrawal Button.
-> Available since **1.0.0-alpha.44**. Namespace: `wwu-wb/v1`.
+> Available since **1.0.0-alpha.44**. Namespace: `webwakeupwdb/v1`.
 > Design rationale + feasibility decision: [`docs/specs/wwu-wb-rest-api-automations-SPEC.md`](../specs/wwu-wb-rest-api-automations-SPEC.md).
 > Related hooks: [`wwu-wb-hooks-filters-REFERENCE.md`](./wwu-wb-hooks-filters-REFERENCE.md) §12.
 
@@ -24,7 +24,7 @@ data) but never the IP or the hash-chain internals.
 Reads authenticate with a **WordPress Application Password** (Users → Profile →
 Application Passwords) over HTTPS, sent as HTTP Basic auth. WordPress resolves the
 user; the request is then authorised by capability — the user must have the plugin
-admin capability (default `manage_woocommerce`, filter `wwu_wb_admin_capability`).
+admin capability (default `manage_woocommerce`, filter `webwakeupwdb_admin_capability`).
 
 - **Use HTTPS.** Application Passwords over plain HTTP leak the credential.
 - No nonce is required or accepted (Application-Password requests carry none).
@@ -33,7 +33,7 @@ admin capability (default `manage_woocommerce`, filter `wwu_wb_admin_capability`
 ```bash
 # List the most recent confirmed requests
 curl -s --user 'admin:xxxx xxxx xxxx xxxx xxxx xxxx' \
-  'https://store.example.com/wp-json/wwu-wb/v1/requests?per_page=10'
+  'https://store.example.com/wp-json/webwakeupwdb/v1/requests?per_page=10'
 ```
 
 A failed/anonymous call returns `401`; a logged-in user without the capability
@@ -108,7 +108,7 @@ Adds the email + the partial-withdrawal product selection + the evidence
 }
 ```
 
-`404` (`wwu_wb_not_found`) when no confirmed request has that id.
+`404` (`webwakeupwdb_not_found`) when no confirmed request has that id.
 
 ### `GET /orders/{platform}/{order_ref}/withdrawal` — per-order status
 
@@ -123,7 +123,7 @@ withdrawn?".
 { "success": true, "data": { "withdrawn": false, "status": "none" } }
 ```
 
-`404` (`wwu_wb_order_unknown`) when the plugin has no record of that
+`404` (`webwakeupwdb_order_unknown`) when the plugin has no record of that
 platform/order at all.
 
 ---
@@ -169,7 +169,7 @@ X-WWU-WB-Signature: sha256=<hex HMAC-SHA256(rawBody, secret)>
 ```
 
 (No raw IP — by design.) The payload is filterable server-side via
-`wwu_wb_webhook_payload`.
+`webwakeupwdb_webhook_payload`.
 
 ### Verifying the signature
 
@@ -180,7 +180,7 @@ compare in constant time against the hex in `X-WWU-WB-Signature` (after the
 ```php
 // PHP receiver
 $raw    = file_get_contents( 'php://input' );
-$sig    = $_SERVER['HTTP_X_WWU_WB_SIGNATURE'] ?? '';
+$sig    = $_SERVER['HTTP_X_WEBWAKEUPWDB_SIGNATURE'] ?? '';
 $expect = 'sha256=' . hash_hmac( 'sha256', $raw, $my_secret );
 if ( ! hash_equals( $expect, $sig ) ) {
     http_response_code( 401 );
@@ -196,7 +196,7 @@ const ok = crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(req.get('X-
 ```
 
 Return any `2xx` to acknowledge. The plugin records the outcome and fires
-`wwu_wb_webhook_delivered( bool $ok, int $code, string $request_uid, string $delivery_id )`.
+`webwakeupwdb_webhook_delivered( bool $ok, int $code, string $request_uid, string $delivery_id )`.
 
 ---
 

@@ -14,7 +14,7 @@
 A free, open-source WordPress plugin that makes a store compliant with Directive (EU) 2023/2673 (new Art. 11a of the Consumer Rights Directive 2011/83/EU; Italy: Art. 54-bis Codice del Consumo via D.Lgs. 209/2025): a prominently displayed, continuously available, statutory-labelled withdrawal button → two-step statement + confirmation → durable-medium acknowledgement (email + PDF + verifiable link) → tamper-evident immutable log with optional, opt-in OpenTimestamps / RFC 3161 anchoring (off by default). Dual platform (WooCommerce HPOS+legacy / FluentCart), multilingual (IT/EN/FR/ES/DE + extensible), Complianz/TranslatePress-compatible, shortcodes + blocks, plus generators for the Annex I-B model form and Privacy/Terms/pre-contractual clauses.
 
 ## Conventions
-Namespace `WWU\WithdrawalButton` · constants `WWU_WB_*` · options `wwu_wb_*` · meta `_wwu_wb_*` · REST `wwu-wb/v1` · hooks `wwu_wb_*` · CSS `.wwu-wb-*` · text domain `wwu-withdrawal-button` · JS `window.wwuWbData`.
+Namespace `WebWakeUpWdb\WithdrawalButton` · constants `WEBWAKEUPWDB_*` · options `webwakeupwdb_*` · meta `_webwakeupwdb_*` · REST `webwakeupwdb/v1` · hooks `webwakeupwdb_*` · CSS `.wwu-wb-*` (unchanged) · text domain `wwu-withdrawal-button` (unchanged) · JS `window.webwakeupwdbData`. **Doc slug `wwu-wb` (filenames, `MASTER-wwu-wb.md`) is unchanged — only the code identifiers moved to the `webwakeupwdb` prefix in 1.3.x (WordPress.org review).**
 
 ## Specifications
 - [SPEC — EU withdrawal button](docs/specs/wwu-wb-eu-withdrawal-button-SPEC.md) — 12 canonical sections; the authoritative design (2026-06-13).

@@ -11,7 +11,7 @@
 # --php74 derives the PHP 7.4-compatible artifact from the PHP 8.1 source (no
 # separate branch): it rewrites the 5 known version deltas in a backup/restore
 # wrapper (composer.json dompdf ^2.0 + php >=7.4 + no platform pin; the plugin
-# header Requires PHP / WWU_WB_MIN_PHP; readme Requires PHP), re-resolves Dompdf
+# header Requires PHP / WEBWAKEUPWDB_MIN_PHP; readme Requires PHP), re-resolves Dompdf
 # to the 2.x line, builds the -php7.4 zip, and ALWAYS restores the PHP 8.1 source
 # afterwards (EXIT trap). It removes only its own target zip, so the sibling 8.1
 # zip is preserved — run both back to back at release time.
@@ -66,9 +66,9 @@ if [[ "${PHP74}" -eq 1 ]]; then
 	sed -i 's#"dompdf/dompdf": "\^3.1"#"dompdf/dompdf": "^2.0"#' "${COMPOSER_F}"
 	perl -0pi -e 's/,\s*"platform":\s*\{[^}]*\}//s' "${COMPOSER_F}"
 
-	# Plugin header -> Requires PHP 7.4 + WWU_WB_MIN_PHP 7.4.
+	# Plugin header -> Requires PHP 7.4 + WEBWAKEUPWDB_MIN_PHP 7.4.
 	sed -i -E 's/(Requires PHP:[[:space:]]+)8\.1/\17.4/' "${BOOT_F}"
-	sed -i "s/WWU_WB_MIN_PHP', '8\.1'/WWU_WB_MIN_PHP', '7.4'/" "${BOOT_F}"
+	sed -i "s/WEBWAKEUPWDB_MIN_PHP', '8\.1'/WEBWAKEUPWDB_MIN_PHP', '7.4'/" "${BOOT_F}"
 
 	# readme.txt -> Requires PHP 7.4.
 	sed -i -E 's/(Requires PHP:[[:space:]]+)8\.1/\17.4/' "${README_F}"
