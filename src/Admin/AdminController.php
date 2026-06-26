@@ -108,6 +108,7 @@ final class AdminController {
 		add_action( 'admin_post_wwu_wb_mark_processed', array( $this->requests, 'handle_mark_processed' ) );
 		add_action( 'admin_post_wwu_wb_resend', array( $this->requests, 'handle_resend' ) );
 		add_action( 'admin_post_wwu_wb_export_consents', array( $this->consents, 'handle_export' ) );
+		add_action( 'admin_post_wwu_wb_recreate_page', array( $this->dashboard, 'handle_recreate_page' ) );
 		add_action( 'admin_notices', array( $this, 'maybe_mail_failure_notice' ) );
 		add_action( 'admin_notices', array( $this, 'maybe_pdf_missing_notice' ) );
 		add_action( 'admin_notices', array( $this, 'maybe_timestamp_off_notice' ) );

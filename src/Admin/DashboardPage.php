@@ -21,6 +21,7 @@ declare( strict_types=1 );
 
 namespace WWU\WithdrawalButton\Admin;
 
+use WWU\WithdrawalButton\Core\Install;
 use WWU\WithdrawalButton\Core\Settings;
 use WWU\WithdrawalButton\DurableMedium\PdfBuilder;
 use WWU\WithdrawalButton\Mail\Mailer;
@@ -57,6 +58,13 @@ final class DashboardPage {
 	private const TEST_EMAIL_RESULT = 'wwu_wb_test_email_result';
 
 	/**
+	 * Nonce action for the "recreate page" buttons (form / policy page).
+	 *
+	 * @var string
+	 */
+	public const RECREATE_PAGE_NONCE = 'wwu_wb_recreate_page';
+
+	/**
 	 * Render the dashboard.
 	 *
 	 * @return void
@@ -82,6 +90,7 @@ final class DashboardPage {
 		echo '<p>' . esc_html__( 'The EU online right-of-withdrawal function (Art. 11a / Art. 54-bis) for WooCommerce & FluentCart.', 'wwu-withdrawal-button' ) . '</p>';
 
 		$this->maybe_render_test_email_result();
+		$this->maybe_render_recreate_notice();
 		$this->render_go_live( $settings );
 
 		// --- Setup checklist ---
@@ -113,10 +122,15 @@ final class DashboardPage {
 				array( get_permalink( $page_id ), __( 'View page', 'wwu-withdrawal-button' ) )
 			);
 		} else {
+			$recreate_url = wp_nonce_url(
+				admin_url( 'admin-post.php?action=wwu_wb_recreate_page&which=form' ),
+				self::RECREATE_PAGE_NONCE
+			);
 			$this->row(
 				false,
 				__( 'Withdrawal form page', 'wwu-withdrawal-button' ),
-				__( 'No published form page yet. Guests without an account need one. Re-activate the plugin to create it automatically, or publish a page containing the [wwu_wb_form] shortcode.', 'wwu-withdrawal-button' )
+				__( 'No published form page found — it may have been deleted or trashed. Guests without an account need one; recreate it in one click:', 'wwu-withdrawal-button' ),
+				array( $recreate_url, __( 'Recreate the page', 'wwu-withdrawal-button' ) )
 			);
 		}
 
@@ -402,6 +416,55 @@ final class DashboardPage {
 			'name'   => $name,
 			'active' => $active,
 		);
+	}
+
+	/**
+	 * Recreate an auto-managed plugin page (form or policy) on demand — for when a
+	 * merchant deleted/trashed it by mistake, a one-click fix instead of a plugin
+	 * re-activation. Capability + nonce gated; idempotent (no duplicate when the
+	 * page still exists, via Install::ensure_*); PRG redirect with a result flag.
+	 *
+	 * @return void
+	 */
+	public function handle_recreate_page(): void {
+		if ( ! current_user_can( Authentication::capability() ) ) {
+			wp_die( esc_html__( 'Insufficient permissions.', 'wwu-withdrawal-button' ) );
+		}
+		check_admin_referer( self::RECREATE_PAGE_NONCE );
+
+		$which = isset( $_REQUEST['which'] ) ? sanitize_key( wp_unslash( $_REQUEST['which'] ) ) : 'form';
+		if ( 'policy' === $which ) {
+			$id       = Install::ensure_policy_page();
+			$redirect = admin_url( 'admin.php?page=' . AdminController::COMPLIANCE_SLUG );
+		} else {
+			$id       = Install::ensure_form_page();
+			$redirect = admin_url( 'admin.php?page=' . AdminController::MENU_SLUG );
+		}
+
+		wp_safe_redirect( add_query_arg( 'wwu_wb_page_recreated', $id > 0 ? $which : 'fail', $redirect ) );
+		exit;
+	}
+
+	/**
+	 * Render the success/failure notice after a "Recreate page" action.
+	 *
+	 * @return void
+	 */
+	private function maybe_render_recreate_notice(): void {
+		// Display-only flag set by handle_recreate_page() after its nonce-checked PRG redirect.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$flag = isset( $_GET['wwu_wb_page_recreated'] ) ? sanitize_key( wp_unslash( $_GET['wwu_wb_page_recreated'] ) ) : '';
+		if ( '' === $flag ) {
+			return;
+		}
+		if ( 'fail' === $flag ) {
+			echo '<div class="notice notice-error is-dismissible"><p>' . esc_html__( 'Could not recreate the page. Please try again, or create it manually with the relevant shortcode.', 'wwu-withdrawal-button' ) . '</p></div>';
+			return;
+		}
+		$msg = ( 'policy' === $flag )
+			? __( 'The withdrawal policy page has been recreated as a draft — review and publish it.', 'wwu-withdrawal-button' )
+			: __( 'The withdrawal form page has been recreated and published.', 'wwu-withdrawal-button' );
+		echo '<div class="notice notice-success is-dismissible"><p>' . esc_html( $msg ) . '</p></div>';
 	}
 
 	/**

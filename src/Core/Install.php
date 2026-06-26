@@ -195,6 +195,7 @@ final class Install {
 				'enabled'              => false,
 				'endpoint_slug'        => 'wwu-withdrawal',
 				'public_form_page_id'  => 0,
+				'policy_page_id'       => 0,
 				'withdrawal_window_days' => 14,
 				'send_pdf'             => true,
 				'receipt_link_enabled' => true,
@@ -325,29 +326,74 @@ final class Install {
 	 *
 	 * @return void
 	 */
-	private static function ensure_form_page(): void {
+	public static function ensure_form_page(): int {
+		return self::ensure_page(
+			'public_form_page_id',
+			__( 'Right of withdrawal', 'wwu-withdrawal-button' ),
+			'right-of-withdrawal',
+			'[wwu_wb_form]',
+			'publish'
+		);
+	}
+
+	/**
+	 * Ensure the consolidated "Right of withdrawal — information notice" policy
+	 * page exists. Created as a DRAFT (the merchant publishes it explicitly).
+	 * Stored in settings['policy_page_id']. Idempotent + self-healing (recreated
+	 * if trashed/deleted). Content is the [wwu_wb_policy] shortcode. {@see PolicyBuilder}.
+	 *
+	 * @return int The policy page id (0 on failure).
+	 */
+	public static function ensure_policy_page(): int {
+		return self::ensure_page(
+			'policy_page_id',
+			__( 'Right of withdrawal — information notice', 'wwu-withdrawal-button' ),
+			'withdrawal-policy',
+			'[wwu_wb_policy]',
+			'draft'
+		);
+	}
+
+	/**
+	 * Create-if-missing helper for an auto-managed page. Returns the existing id
+	 * when the stored page is still a non-trashed `page`; otherwise — deleted or
+	 * trashed by the merchant — self-heals by creating a fresh one and storing its
+	 * id. Safe to call on demand: the "Recreate page" admin buttons use it so a
+	 * page removed by mistake is a one-click fix instead of a plugin re-activation.
+	 *
+	 * @param string $key     Settings key holding the page id.
+	 * @param string $title   Page title.
+	 * @param string $slug    Page slug.
+	 * @param string $content Page content (the relevant shortcode).
+	 * @param string $status  'publish' | 'draft'.
+	 * @return int The page id (0 on failure).
+	 */
+	private static function ensure_page( string $key, string $title, string $slug, string $content, string $status ): int {
 		$settings = (array) get_option( 'wwu_wb_settings', array() );
-		$page_id  = (int) ( $settings['public_form_page_id'] ?? 0 );
+		$page_id  = (int) ( $settings[ $key ] ?? 0 );
 
 		if ( $page_id > 0 && 'page' === get_post_type( $page_id ) && 'trash' !== get_post_status( $page_id ) ) {
-			return; // still valid.
+			return $page_id; // still valid — no duplicate.
 		}
 
 		$new_id = wp_insert_post(
 			array(
-				'post_title'   => __( 'Right of withdrawal', 'wwu-withdrawal-button' ),
-				'post_name'    => 'right-of-withdrawal',
-				'post_content' => '[wwu_wb_form]',
-				'post_status'  => 'publish',
+				'post_title'   => $title,
+				'post_name'    => $slug,
+				'post_content' => $content,
+				'post_status'  => $status,
 				'post_type'    => 'page',
 			),
 			true
 		);
 
 		if ( ! is_wp_error( $new_id ) && $new_id > 0 ) {
-			$settings['public_form_page_id'] = (int) $new_id;
+			$settings[ $key ] = (int) $new_id;
 			update_option( 'wwu_wb_settings', $settings );
+			return (int) $new_id;
 		}
+
+		return 0;
 	}
 
 	/**
