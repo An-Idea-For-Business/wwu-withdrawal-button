@@ -8,7 +8,7 @@
  * Emogrifier). The plugin adds NO custom colours or CSS here — the email inherits
  * the store's email design configured in WooCommerce → Settings → Emails.
  *
- * Override in a theme at: woocommerce/emails/wwu-wb-withdrawal-ack.php
+ * Override in a theme at: woocommerce/emails/webwakeupwdb-withdrawal-ack.php
  *
  * @var array  $data               Receipt data (order_number, name, items, …).
  * @var string $email_heading      Email heading.
@@ -17,7 +17,7 @@
  * @var bool   $plain_text         Always false here.
  * @var \WC_Email $email           The email object.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );

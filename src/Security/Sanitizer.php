@@ -2,12 +2,12 @@
 /**
  * Shared input-sanitisation helpers.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Security;
+namespace WebWakeUpWdb\WithdrawalButton\Security;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

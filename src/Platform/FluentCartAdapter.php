@@ -9,12 +9,12 @@
  * withdrawal flow + evidence log + durable medium work even where FluentCart's
  * own meta API differs across versions.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Platform;
+namespace WebWakeUpWdb\WithdrawalButton\Platform;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -66,7 +66,7 @@ final class FluentCartAdapter implements OrderDataSource, SubscriptionAware {
 	 * @return string One of 'auto'|'always'|'off'.
 	 */
 	public static function mode(): string {
-		$mode = (string) ( \WWU\WithdrawalButton\Core\Settings::main()['fluentcart_mode'] ?? 'auto' );
+		$mode = (string) ( \WebWakeUpWdb\WithdrawalButton\Core\Settings::main()['fluentcart_mode'] ?? 'auto' );
 		return in_array( $mode, array( 'auto', 'always', 'off' ), true ) ? $mode : 'auto';
 	}
 
@@ -79,7 +79,7 @@ final class FluentCartAdapter implements OrderDataSource, SubscriptionAware {
 	 * defined at boot (available on plugins_loaded priority 20) as their own
 	 * double-load guard, which will not be removed; `class_exists( 'FluentCartCustomerRights' )`
 	 * is a secondary guard. The result remains filterable via
-	 * `wwu_wb_fluentcart_native_active` for forward-compatibility.
+	 * `webwakeupwdb_fluentcart_native_active` for forward-compatibility.
 	 *
 	 * @return bool
 	 */
@@ -95,7 +95,7 @@ final class FluentCartAdapter implements OrderDataSource, SubscriptionAware {
 		 *
 		 * @param bool $detected Whether the native add-on was detected.
 		 */
-		return (bool) apply_filters( 'wwu_wb_fluentcart_native_active', $detected );
+		return (bool) apply_filters( 'webwakeupwdb_fluentcart_native_active', $detected );
 	}
 
 	/**
@@ -396,7 +396,7 @@ final class FluentCartAdapter implements OrderDataSource, SubscriptionAware {
 		 * @param string $order_ref  Order reference.
 		 * @param string $platform   Adapter key.
 		 */
-		return (bool) apply_filters( 'wwu_wb_order_is_renewal', $is_renewal, $order_ref, $this->key() );
+		return (bool) apply_filters( 'webwakeupwdb_order_is_renewal', $is_renewal, $order_ref, $this->key() );
 	}
 
 	/**
@@ -504,7 +504,7 @@ final class FluentCartAdapter implements OrderDataSource, SubscriptionAware {
 		// Preferred: FluentCart's own activity log → visible in the admin order
 		// timeline. Signature confirmed by the FluentCart team (2026-06-15):
 		// fluent_cart_add_log( $title, $message, $level, $context ). See
-		// docs/analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md.
+		// docs/analysis/webwakeupwdb-fluentcart-hooks-ANALYSIS.md.
 		if ( function_exists( 'fluent_cart_add_log' ) ) {
 			try {
 				$context = array(
@@ -590,7 +590,7 @@ final class FluentCartAdapter implements OrderDataSource, SubscriptionAware {
 	 * @return string
 	 */
 	private function meta_option( string $order_ref ): string {
-		return 'wwu_wb_fc_' . preg_replace( '/[^a-z0-9]/i', '', $order_ref );
+		return 'webwakeupwdb_fc_' . preg_replace( '/[^a-z0-9]/i', '', $order_ref );
 	}
 
 	/**
@@ -636,7 +636,7 @@ final class FluentCartAdapter implements OrderDataSource, SubscriptionAware {
 	 *
 	 * FluentCart products are a WordPress post type; their categories live in the
 	 * `product-categories` taxonomy — confirmed by the FluentCart team (2026-06-15,
-	 * see docs/analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md). Resolving them here is
+	 * see docs/analysis/webwakeupwdb-fluentcart-hooks-ANALYSIS.md). Resolving them here is
 	 * what makes FluentCart exemptions category-aware, in parity with WooCommerce
 	 * (`product_cat`) and EDD (`download_category`). Cached per request.
 	 *
@@ -676,7 +676,7 @@ final class FluentCartAdapter implements OrderDataSource, SubscriptionAware {
 		 * @param int[] $ids     Category term ids.
 		 * @param int   $post_id Product post id.
 		 */
-		return (array) apply_filters( 'wwu_wb_fluentcart_product_category_ids', $ids, $post_id );
+		return (array) apply_filters( 'webwakeupwdb_fluentcart_product_category_ids', $ids, $post_id );
 	}
 
 	/**

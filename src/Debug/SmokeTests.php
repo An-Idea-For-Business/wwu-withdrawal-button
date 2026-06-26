@@ -9,16 +9,16 @@
  * audience). Each implementation phase appends its own suite (log chain,
  * timestamps, applicability, labels, durable medium, platforms, compat).
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Debug;
+namespace WebWakeUpWdb\WithdrawalButton\Debug;
 
-use WWU\WithdrawalButton\Core\Migrator;
-use WWU\WithdrawalButton\Storage\Database\LogTable;
-use WWU\WithdrawalButton\Storage\Database\TimestampTable;
+use WebWakeUpWdb\WithdrawalButton\Core\Migrator;
+use WebWakeUpWdb\WithdrawalButton\Storage\Database\LogTable;
+use WebWakeUpWdb\WithdrawalButton\Storage\Database\TimestampTable;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -116,7 +116,7 @@ final class SmokeTests {
 	 */
 	private function suite_policy(): array {
 		$tests   = array();
-		$builder = '\WWU\WithdrawalButton\Legal\PolicyBuilder';
+		$builder = '\WebWakeUpWdb\WithdrawalButton\Legal\PolicyBuilder';
 		$ids_of  = static function ( $doc ) {
 			return array_map(
 				static function ( $section ) {
@@ -133,25 +133,25 @@ final class SmokeTests {
 		foreach ( array( 'right', 'how', 'refund', 'privacy', 'trader' ) as $must ) {
 			$tests[] = $this->assert( 'policy.section.' . $must, in_array( $must, $ids, true ), 'Section "' . $must . '" present (got: ' . wp_json_encode( $ids ) . ').' );
 		}
-		$tests[] = $this->assert( 'policy.html_wrapped', false !== strpos( $doc->to_html(), 'wwu-wb-policy' ), 'to_html() wraps content in .wwu-wb-policy.' );
+		$tests[] = $this->assert( 'policy.html_wrapped', false !== strpos( $doc->to_html(), 'webwakeupwdb-policy' ), 'to_html() wraps content in .webwakeupwdb-policy.' );
 		$tests[] = $this->assert( 'policy.plain_nonempty', '' !== trim( $doc->to_plain() ), 'to_plain() is non-empty.' );
 
 		// Exceptions section: present iff at least one exemption reason has targets.
 		// This mutates the real option, so the restore is in a finally — a thrown
 		// assertion or build() can never leak the test value into the merchant's
 		// settings. (Run smoke tests off peak; the window is a single request.)
-		$saved = get_option( 'wwu_wb_exclusions' );
+		$saved = get_option( 'webwakeupwdb_exclusions' );
 		try {
-			update_option( 'wwu_wb_exclusions', array( 'by_reason' => array() ) );
+			update_option( 'webwakeupwdb_exclusions', array( 'by_reason' => array() ) );
 			$tests[] = $this->assert( 'policy.exceptions.absent_when_none', ! in_array( 'exceptions', $ids_of( $builder::build( 'en' ) ), true ), 'Exceptions section omitted when no exemptions configured.' );
 
-			update_option( 'wwu_wb_exclusions', array( 'by_reason' => array( '59_c' => array( 'products' => array( 123 ), 'categories' => array() ) ) ) );
+			update_option( 'webwakeupwdb_exclusions', array( 'by_reason' => array( '59_c' => array( 'products' => array( 123 ), 'categories' => array() ) ) ) );
 			$tests[] = $this->assert( 'policy.exceptions.present_when_set', in_array( 'exceptions', $ids_of( $builder::build( 'en' ) ), true ), 'Exceptions section present when an exemption reason has targets.' );
 		} finally {
 			if ( false === $saved ) {
-				delete_option( 'wwu_wb_exclusions' );
+				delete_option( 'webwakeupwdb_exclusions' );
 			} else {
-				update_option( 'wwu_wb_exclusions', $saved );
+				update_option( 'webwakeupwdb_exclusions', $saved );
 			}
 		}
 
@@ -160,9 +160,9 @@ final class SmokeTests {
 		$tests[] = $this->assert( 'policy.sections_allowlist', array( 'right' ) === $only_ids, 'sections allow-list keeps only the requested ids (got: ' . wp_json_encode( $only_ids ) . ').' );
 
 		// PDF surface (skip when Dompdf is not bundled, e.g. a plain source install).
-		if ( \WWU\WithdrawalButton\DurableMedium\PdfBuilder::is_available() ) {
+		if ( \WebWakeUpWdb\WithdrawalButton\DurableMedium\PdfBuilder::is_available() ) {
 			$pdf_html = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>' . $builder::build( 'en' )->to_html() . '</body></html>';
-			$pdf      = ( new \WWU\WithdrawalButton\DurableMedium\PdfBuilder() )->render( $pdf_html );
+			$pdf      = ( new \WebWakeUpWdb\WithdrawalButton\DurableMedium\PdfBuilder() )->render( $pdf_html );
 			$tests[]  = $this->assert( 'policy.pdf.renders', is_string( $pdf ) && 0 === strpos( (string) $pdf, '%PDF' ), 'PolicyBuilder HTML renders to a %PDF document.' );
 		} else {
 			$tests[] = array(
@@ -182,7 +182,7 @@ final class SmokeTests {
 	 */
 	private function suite_complianz_docs(): array {
 		$tests = array();
-		$docs  = new \WWU\WithdrawalButton\Compat\ComplianzDocuments();
+		$docs  = new \WebWakeUpWdb\WithdrawalButton\Compat\ComplianzDocuments();
 
 		// preview_elements() — pure, no option dependency.
 		$priv  = $docs->preview_elements( 'privacy-policy', 'en' );
@@ -192,12 +192,12 @@ final class SmokeTests {
 
 		$all_prefixed = true;
 		foreach ( array_merge( array_keys( $priv ), array_keys( $terms ) ) as $key ) {
-			if ( 0 !== strpos( (string) $key, 'wwu_wb_' ) ) {
+			if ( 0 !== strpos( (string) $key, 'webwakeupwdb_' ) ) {
 				$all_prefixed = false;
 				break;
 			}
 		}
-		$tests[] = $this->assert( 'complianz.keys.prefixed', $all_prefixed, 'All element keys are wwu_wb_-prefixed (no collision with Complianz keys).' );
+		$tests[] = $this->assert( 'complianz.keys.prefixed', $all_prefixed, 'All element keys are webwakeupwdb_-prefixed (no collision with Complianz keys).' );
 
 		$has_body = false;
 		foreach ( $priv as $el ) {
@@ -213,21 +213,21 @@ final class SmokeTests {
 
 		// inject(): EU + type + toggle. Mutates the main settings option to flip the
 		// two toggles, restored in finally (only the two keys change; rest preserved).
-		$saved = get_option( 'wwu_wb_settings' );
+		$saved = get_option( 'webwakeupwdb_settings' );
 		try {
 			$base = is_array( $saved ) ? $saved : array();
-			update_option( 'wwu_wb_settings', array_merge( $base, array( 'complianz_inject_privacy' => true, 'complianz_inject_terms' => false ) ) );
+			update_option( 'webwakeupwdb_settings', array_merge( $base, array( 'complianz_inject_privacy' => true, 'complianz_inject_terms' => false ) ) );
 			$on = $docs->inject( array(), 'eu', 'privacy-policy', array() );
-			$tests[] = $this->assert( 'complianz.inject.privacy_on', isset( $on['wwu_wb_withdrawal_privacy'] ), 'Privacy toggle on: clauses injected for EU privacy-policy.' );
+			$tests[] = $this->assert( 'complianz.inject.privacy_on', isset( $on['webwakeupwdb_withdrawal_privacy'] ), 'Privacy toggle on: clauses injected for EU privacy-policy.' );
 			$tests[] = $this->assert( 'complianz.inject.terms_off', array() === $docs->inject( array(), 'eu', 'terms-conditions', array() ), 'Terms toggle off: nothing injected for EU terms-conditions.' );
 
-			update_option( 'wwu_wb_settings', array_merge( $base, array( 'complianz_inject_privacy' => false ) ) );
+			update_option( 'webwakeupwdb_settings', array_merge( $base, array( 'complianz_inject_privacy' => false ) ) );
 			$tests[] = $this->assert( 'complianz.inject.privacy_off', array() === $docs->inject( array(), 'eu', 'privacy-policy', array() ), 'Privacy toggle off: nothing injected.' );
 		} finally {
 			if ( false === $saved ) {
-				delete_option( 'wwu_wb_settings' );
+				delete_option( 'webwakeupwdb_settings' );
 			} else {
-				update_option( 'wwu_wb_settings', $saved );
+				update_option( 'webwakeupwdb_settings', $saved );
 			}
 		}
 
@@ -244,28 +244,28 @@ final class SmokeTests {
 
 		$tests[] = $this->assert(
 			'foundation.constants_defined',
-			defined( 'WWU_WB_VERSION' ) && defined( 'WWU_WB_REST_NAMESPACE' ) && defined( 'WWU_WB_SCHEMA_VERSION' ),
+			defined( 'WEBWAKEUPWDB_VERSION' ) && defined( 'WEBWAKEUPWDB_REST_NAMESPACE' ) && defined( 'WEBWAKEUPWDB_SCHEMA_VERSION' ),
 			'Core constants are defined.'
 		);
 
-		$settings = get_option( 'wwu_wb_settings' );
+		$settings = get_option( 'webwakeupwdb_settings' );
 		$tests[]  = $this->assert(
 			'foundation.settings_seeded',
 			is_array( $settings ) && array_key_exists( 'enabled', $settings ),
-			is_array( $settings ) ? 'wwu_wb_settings present.' : 'wwu_wb_settings missing.'
+			is_array( $settings ) ? 'webwakeupwdb_settings present.' : 'webwakeupwdb_settings missing.'
 		);
 
 		$tests[] = $this->assert(
 			'foundation.secret_present',
-			(bool) get_option( 'wwu_wb_secret' ),
+			(bool) get_option( 'webwakeupwdb_secret' ),
 			'Per-site secret generated.'
 		);
 
 		$db_version = (int) get_option( Migrator::OPTION_DB_VERSION, 0 );
 		$tests[]    = $this->assert(
 			'foundation.db_version_current',
-			$db_version === (int) WWU_WB_SCHEMA_VERSION,
-			sprintf( 'db_version=%d, target=%d.', $db_version, (int) WWU_WB_SCHEMA_VERSION )
+			$db_version === (int) WEBWAKEUPWDB_SCHEMA_VERSION,
+			sprintf( 'db_version=%d, target=%d.', $db_version, (int) WEBWAKEUPWDB_SCHEMA_VERSION )
 		);
 
 		return $tests;
@@ -384,7 +384,7 @@ final class SmokeTests {
 	 */
 	private function suite_labels(): array {
 		$tests    = array();
-		$resolver = new \WWU\WithdrawalButton\Domain\LabelResolver();
+		$resolver = new \WebWakeUpWdb\WithdrawalButton\Domain\LabelResolver();
 
 		$cases = array(
 			array( 'IT', 'it_IT', 'recedere dal contratto qui', 'conferma recesso' ),
@@ -424,7 +424,7 @@ final class SmokeTests {
 	 */
 	private function suite_applicability(): array {
 		$tests    = array();
-		$resolver = new \WWU\WithdrawalButton\Domain\ApplicabilityResolver();
+		$resolver = new \WebWakeUpWdb\WithdrawalButton\Domain\ApplicabilityResolver();
 
 		// Relies on the default seeded mode (eu_eea_only). Cases below are deterministic.
 		$it   = $this->fake_order( 'IT', 'completed', false, array( $this->fake_item( false ) ) );
@@ -444,18 +444,18 @@ final class SmokeTests {
 		// Digital auto-exclusion now defaults OFF (the right is the default; the
 		// digital exemption needs captured consent). A completed digital order is
 		// shown UNLESS the merchant has opted in. Invariant: shown iff auto-detect off.
-		$exclusions = (array) \WWU\WithdrawalButton\Core\Settings::get( 'wwu_wb_exclusions' );
+		$exclusions = (array) \WebWakeUpWdb\WithdrawalButton\Core\Settings::get( 'webwakeupwdb_exclusions' );
 		$auto_on    = ! empty( $exclusions['auto_detect_virtual'] );
 		$tests[]    = $this->assert( 'applicability.digital_matches_auto_detect', $d_dig->show === ! $auto_on, 'Completed digital order shown iff auto-detect off (auto_detect=' . ( $auto_on ? 'on' : 'off' ) . ', show=' . ( $d_dig->show ? 'yes' : 'no' ) . ').' );
 
-		// Deterministic exclusion via the wwu_wb_excluded_product_ids filter.
+		// Deterministic exclusion via the webwakeupwdb_excluded_product_ids filter.
 		$excl_filter = static function ( $ids ) {
 			$ids[] = 123;
 			return $ids;
 		};
-		add_filter( 'wwu_wb_excluded_product_ids', $excl_filter );
+		add_filter( 'webwakeupwdb_excluded_product_ids', $excl_filter );
 		$d_excl = $resolver->decide( $this->fake_order( 'IT', 'completed', false, array( $this->fake_item( false ) ) ) );
-		remove_filter( 'wwu_wb_excluded_product_ids', $excl_filter );
+		remove_filter( 'webwakeupwdb_excluded_product_ids', $excl_filter );
 		$tests[] = $this->assert( 'applicability.excluded_product_hidden', ! $d_excl->show && 'no_withdrawal_right' === $d_excl->reason, 'Product in the excluded list is hidden (reason: ' . $d_excl->reason . ').' );
 
 		// Regression (alpha.20): an order with NO readable items must still be
@@ -484,7 +484,7 @@ final class SmokeTests {
 	 */
 	private function suite_fluentcart(): array {
 		$tests   = array();
-		$adapter = '\\WWU\\WithdrawalButton\\Platform\\FluentCartAdapter';
+		$adapter = '\\WebWakeUpWdb\\WithdrawalButton\\Platform\\FluentCartAdapter';
 
 		// Collection unwrap: a fake Eloquent-like collection exposing ->all().
 		$collection = new class() {
@@ -513,37 +513,37 @@ final class SmokeTests {
 
 		// Handling mode (Auto / Always / Off) + native-add-on auto-defer. Mutates the
 		// settings option then restores it, so the live site is unchanged afterwards.
-		$saved    = get_option( 'wwu_wb_settings', array() );
+		$saved    = get_option( 'webwakeupwdb_settings', array() );
 		$set_mode = static function ( $mode ) {
-			$s                    = (array) get_option( 'wwu_wb_settings', array() );
+			$s                    = (array) get_option( 'webwakeupwdb_settings', array() );
 			$s['fluentcart_mode'] = $mode;
-			update_option( 'wwu_wb_settings', $s );
-			\WWU\WithdrawalButton\Core\Settings::flush( 'wwu_wb_settings' );
+			update_option( 'webwakeupwdb_settings', $s );
+			\WebWakeUpWdb\WithdrawalButton\Core\Settings::flush( 'webwakeupwdb_settings' );
 		};
 
 		$tests[] = $this->assert( 'fluentcart.mode_whitelisted', in_array( $adapter::mode(), array( 'auto', 'always', 'off' ), true ), 'mode() is one of auto/always/off (got "' . $adapter::mode() . '").' );
 
 		// native_addon_active(): false by default, forced true via the filter.
 		$native_default = $adapter::native_addon_active();
-		add_filter( 'wwu_wb_fluentcart_native_active', '__return_true' );
+		add_filter( 'webwakeupwdb_fluentcart_native_active', '__return_true' );
 		$native_filtered = $adapter::native_addon_active();
-		remove_filter( 'wwu_wb_fluentcart_native_active', '__return_true' );
+		remove_filter( 'webwakeupwdb_fluentcart_native_active', '__return_true' );
 		$tests[] = $this->assert( 'fluentcart.native_default_false', false === $native_default, 'No native add-on signal by default → false.' );
-		$tests[] = $this->assert( 'fluentcart.native_filterable', true === $native_filtered, 'wwu_wb_fluentcart_native_active filter forces detection true.' );
+		$tests[] = $this->assert( 'fluentcart.native_filterable', true === $native_filtered, 'webwakeupwdb_fluentcart_native_active filter forces detection true.' );
 
 		// should_render(): off → never; always → always (even with native present);
 		// auto → defers to the native add-on.
 		$set_mode( 'off' );
 		$off = $adapter::should_render();
 		$set_mode( 'always' );
-		add_filter( 'wwu_wb_fluentcart_native_active', '__return_true' );
+		add_filter( 'webwakeupwdb_fluentcart_native_active', '__return_true' );
 		$always_native = $adapter::should_render();
-		remove_filter( 'wwu_wb_fluentcart_native_active', '__return_true' );
+		remove_filter( 'webwakeupwdb_fluentcart_native_active', '__return_true' );
 		$set_mode( 'auto' );
 		$auto_plain = $adapter::should_render();
-		add_filter( 'wwu_wb_fluentcart_native_active', '__return_true' );
+		add_filter( 'webwakeupwdb_fluentcart_native_active', '__return_true' );
 		$auto_native = $adapter::should_render();
-		remove_filter( 'wwu_wb_fluentcart_native_active', '__return_true' );
+		remove_filter( 'webwakeupwdb_fluentcart_native_active', '__return_true' );
 
 		$tests[] = $this->assert( 'fluentcart.render_off', false === $off, 'Off mode → never render our FluentCart surfaces.' );
 		$tests[] = $this->assert( 'fluentcart.render_always_overrides_native', true === $always_native, 'Always mode renders even when a native add-on is detected.' );
@@ -551,8 +551,8 @@ final class SmokeTests {
 		$tests[] = $this->assert( 'fluentcart.render_auto_defers', false === $auto_native, 'Auto mode steps aside when the native add-on is detected.' );
 
 		// Restore the option exactly as it was before this suite ran.
-		update_option( 'wwu_wb_settings', $saved );
-		\WWU\WithdrawalButton\Core\Settings::flush( 'wwu_wb_settings' );
+		update_option( 'webwakeupwdb_settings', $saved );
+		\WebWakeUpWdb\WithdrawalButton\Core\Settings::flush( 'webwakeupwdb_settings' );
 
 		return $tests;
 	}
@@ -564,7 +564,7 @@ final class SmokeTests {
 	 */
 	private function suite_window(): array {
 		$tests = array();
-		$calc  = new \WWU\WithdrawalButton\Domain\WindowCalculator();
+		$calc  = new \WebWakeUpWdb\WithdrawalButton\Domain\WindowCalculator();
 
 		$recent = $this->fake_order( 'IT', 'completed', false, array( $this->fake_item( false ) ), new \DateTimeImmutable( '-2 days' ) );
 		$old    = $this->fake_order( 'IT', 'completed', false, array( $this->fake_item( false ) ), new \DateTimeImmutable( '-30 days' ) );
@@ -576,7 +576,7 @@ final class SmokeTests {
 
 		// --- Type-aware window start (1.2.9): digital = order date, physical = delivery (completed). ---
 		// Distinct paid vs completed dates so each branch is observable.
-		$cls         = '\\WWU\\WithdrawalButton\\Platform\\NormalizedOrder';
+		$cls         = '\\WebWakeUpWdb\\WithdrawalButton\\Platform\\NormalizedOrder';
 		$d_paid      = new \DateTimeImmutable( '-10 days' );
 		$d_completed = new \DateTimeImmutable( '-2 days' );
 		$mk          = function ( array $items, $completed, string $status = 'completed' ) use ( $cls, $d_paid ) {
@@ -608,27 +608,27 @@ final class SmokeTests {
 	private function suite_log(): array {
 		$tests = array();
 
-		$prev = \WWU\WithdrawalButton\Storage\LogChain::genesis();
+		$prev = \WebWakeUpWdb\WithdrawalButton\Storage\LogChain::genesis();
 		$ev_a = array( 'event' => 'confirmed', 'payload' => array( 'b' => 2, 'a' => 1 ), 'ip_address' => '1.2.3.4' );
 		$ev_b = array( 'event' => 'confirmed', 'payload' => array( 'a' => 1, 'b' => 2 ), 'ip_address' => '1.2.3.4' );
 
-		$h_a = \WWU\WithdrawalButton\Storage\LogChain::compute( $prev, $ev_a );
-		$h_b = \WWU\WithdrawalButton\Storage\LogChain::compute( $prev, $ev_b );
+		$h_a = \WebWakeUpWdb\WithdrawalButton\Storage\LogChain::compute( $prev, $ev_a );
+		$h_b = \WebWakeUpWdb\WithdrawalButton\Storage\LogChain::compute( $prev, $ev_b );
 
 		$tests[] = $this->assert( 'log.hash_is_sha256', 64 === strlen( $h_a ) && ctype_xdigit( $h_a ), 'row_hash is 64 hex chars.' );
 		$tests[] = $this->assert( 'log.order_independent', $h_a === $h_b, 'Canonicalisation makes the hash key-order independent.' );
 
 		$ev_tampered = $ev_a;
 		$ev_tampered['ip_address'] = '9.9.9.9';
-		$h_t = \WWU\WithdrawalButton\Storage\LogChain::compute( $prev, $ev_tampered );
+		$h_t = \WebWakeUpWdb\WithdrawalButton\Storage\LogChain::compute( $prev, $ev_tampered );
 		$tests[] = $this->assert( 'log.tamper_sensitive', $h_a !== $h_t, 'Changing any evidence field changes the hash.' );
 
-		$tests[] = $this->assert( 'log.genesis_stable', \WWU\WithdrawalButton\Storage\LogChain::genesis() === $prev, 'Genesis hash is stable per site.' );
+		$tests[] = $this->assert( 'log.genesis_stable', \WebWakeUpWdb\WithdrawalButton\Storage\LogChain::genesis() === $prev, 'Genesis hash is stable per site.' );
 
 		// Chain v2: the row hash is keyed (HMAC) and differs from the legacy v1
 		// (unkeyed SHA-256) form; the default version is the current one.
-		$h_v1 = \WWU\WithdrawalButton\Storage\LogChain::compute( $prev, $ev_a, 1 );
-		$h_v2 = \WWU\WithdrawalButton\Storage\LogChain::compute( $prev, $ev_a, 2 );
+		$h_v1 = \WebWakeUpWdb\WithdrawalButton\Storage\LogChain::compute( $prev, $ev_a, 1 );
+		$h_v2 = \WebWakeUpWdb\WithdrawalButton\Storage\LogChain::compute( $prev, $ev_a, 2 );
 		$tests[] = $this->assert(
 			'log.v2_keyed',
 			$h_v1 !== $h_v2 && $h_a === $h_v2,
@@ -638,21 +638,21 @@ final class SmokeTests {
 		// IP anonymisation for the hashed evidence (full IP kept separately).
 		$tests[] = $this->assert(
 			'log.ip_anonymized',
-			'203.0.113.0' === \WWU\WithdrawalButton\Security\ClientInfo::anonymize_ip( '203.0.113.45' )
-				&& '' === \WWU\WithdrawalButton\Security\ClientInfo::anonymize_ip( '' ),
+			'203.0.113.0' === \WebWakeUpWdb\WithdrawalButton\Security\ClientInfo::anonymize_ip( '203.0.113.45' )
+				&& '' === \WebWakeUpWdb\WithdrawalButton\Security\ClientInfo::anonymize_ip( '' ),
 			'IPv4 is anonymised (last octet zeroed); empty stays empty.'
 		);
 
 		// Schema v3: the new columns exist (ip_full purgeable + per-row chain_version).
 		global $wpdb;
-		$log_table = \WWU\WithdrawalButton\Storage\Database\LogTable::name();
+		$log_table = \WebWakeUpWdb\WithdrawalButton\Storage\Database\LogTable::name();
 		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery -- table name is constant-derived; read-only column introspection.
 		$cols   = (array) $wpdb->get_col( "SHOW COLUMNS FROM {$log_table}" );
 		$has_v3 = in_array( 'ip_full', $cols, true ) && in_array( 'chain_version', $cols, true );
 		$tests[] = $this->assert( 'log.schema_v3_columns', $has_v3, 'Log table has ip_full + chain_version (schema v3).' );
 
 		// Verify the live chain is intact (0 = no broken row).
-		$broken = ( new \WWU\WithdrawalButton\Storage\LogRepository() )->verify_chain();
+		$broken = ( new \WebWakeUpWdb\WithdrawalButton\Storage\LogRepository() )->verify_chain();
 		$tests[] = $this->assert( 'log.chain_intact', 0 === $broken, 0 === $broken ? 'Live chain intact.' : 'Chain broken at row ' . $broken . '.' );
 
 		return $tests;
@@ -667,28 +667,28 @@ final class SmokeTests {
 		$tests = array();
 		$uid   = '00000000-0000-4000-8000-000000000000';
 
-		$token = \WWU\WithdrawalButton\DurableMedium\VerifiableLink::token( $uid );
+		$token = \WebWakeUpWdb\WithdrawalButton\DurableMedium\VerifiableLink::token( $uid );
 		$tests[] = $this->assert(
 			'durable_medium.link_token_roundtrip',
-			\WWU\WithdrawalButton\DurableMedium\VerifiableLink::verify( $uid, $token ) && ! \WWU\WithdrawalButton\DurableMedium\VerifiableLink::verify( $uid, $token . 'x' ),
+			\WebWakeUpWdb\WithdrawalButton\DurableMedium\VerifiableLink::verify( $uid, $token ) && ! \WebWakeUpWdb\WithdrawalButton\DurableMedium\VerifiableLink::verify( $uid, $token . 'x' ),
 			'Receipt link token verifies and rejects tampering.'
 		);
 
-		$available = \WWU\WithdrawalButton\DurableMedium\PdfBuilder::is_available();
+		$available = \WebWakeUpWdb\WithdrawalButton\DurableMedium\PdfBuilder::is_available();
 		$tests[] = array(
 			'name'   => 'durable_medium.pdf_library',
 			'status' => $available ? 'pass' : 'skip',
 			'output' => $available ? 'Dompdf available — PDF receipts enabled.' : 'Dompdf not installed (run composer install). Email-only durable medium still works.',
 		);
 
-		$path = ( new \WWU\WithdrawalButton\DurableMedium\ReceiptStore() )->path_for( $uid );
+		$path = ( new \WebWakeUpWdb\WithdrawalButton\DurableMedium\ReceiptStore() )->path_for( $uid );
 		$tests[] = $this->assert(
 			'durable_medium.store_path',
-			false !== strpos( $path, 'wwu-wb/receipts' ) && false !== strpos( $path, $uid . '.pdf' ),
+			false !== strpos( $path, 'webwakeupwdb/receipts' ) && false !== strpos( $path, $uid . '.pdf' ),
 			'Receipt store path is confined and uid-named.'
 		);
 
-		$el = \WWU\WithdrawalButton\Security\Sanitizer::email_list( ' a@x.com , not-an-email , b@y.com, a@x.com ' );
+		$el = \WebWakeUpWdb\WithdrawalButton\Security\Sanitizer::email_list( ' a@x.com , not-an-email , b@y.com, a@x.com ' );
 		$tests[] = $this->assert(
 			'durable_medium.email_list_multi',
 			'a@x.com, b@y.com' === $el,
@@ -696,13 +696,13 @@ final class SmokeTests {
 		);
 		$tests[] = $this->assert(
 			'durable_medium.email_list_single',
-			'solo@x.com' === \WWU\WithdrawalButton\Security\Sanitizer::email_list( 'solo@x.com' ),
+			'solo@x.com' === \WebWakeUpWdb\WithdrawalButton\Security\Sanitizer::email_list( 'solo@x.com' ),
 			'email_list() leaves a single valid address intact (back-compatible).'
 		);
 		$tests[] = $this->assert(
 			'durable_medium.first_email',
-			'a@x.com' === \WWU\WithdrawalButton\Security\Sanitizer::first_email( 'a@x.com, b@y.com' )
-				&& '' === \WWU\WithdrawalButton\Security\Sanitizer::first_email( '' ),
+			'a@x.com' === \WebWakeUpWdb\WithdrawalButton\Security\Sanitizer::first_email( 'a@x.com, b@y.com' )
+				&& '' === \WebWakeUpWdb\WithdrawalButton\Security\Sanitizer::first_email( '' ),
 			'first_email() returns the primary address (the receipt trader contact) and "" for an empty list.'
 		);
 
@@ -716,8 +716,8 @@ final class SmokeTests {
 	 */
 	private function suite_exemptions(): array {
 		$tests = array();
-		$types = '\\WWU\\WithdrawalButton\\Domain\\ExceptionTypes';
-		$ev    = new \WWU\WithdrawalButton\Domain\ArticleFiftyNineEvaluator();
+		$types = '\\WebWakeUpWdb\\WithdrawalButton\\Domain\\ExceptionTypes';
+		$ev    = new \WebWakeUpWdb\WithdrawalButton\Domain\ArticleFiftyNineEvaluator();
 
 		// Registry sanity.
 		$tests[] = $this->assert( 'exemptions.registry_digital_conditional', $types::is_conditional( '59_o' ), 'Digital-immediate (59_o) is conditional.' );
@@ -739,21 +739,21 @@ final class SmokeTests {
 			$ids[] = 4242;
 			return $ids;
 		};
-		add_filter( 'wwu_wb_excluded_product_ids', $f );
+		add_filter( 'webwakeupwdb_excluded_product_ids', $f );
 		$tests[] = $this->assert( 'exemptions.filter_excludes_single', ! $ev->has_withdrawable_item( $mk( array( 4242 ) ) ), 'Filter-excluded single-item order has no withdrawable item.' );
 		$tests[] = $this->assert( 'exemptions.mixed_cart_still_shows', $ev->has_withdrawable_item( $mk( array( 4242, 1 ) ) ), 'Mixed cart (excluded + normal) stays withdrawable.' );
-		remove_filter( 'wwu_wb_excluded_product_ids', $f );
+		remove_filter( 'webwakeupwdb_excluded_product_ids', $f );
 
 		// Per-reason via option: tag product 7777 under the conditional 59_o.
-		$saved = get_option( 'wwu_wb_exclusions' );
+		$saved = get_option( 'webwakeupwdb_exclusions' );
 		update_option(
-			'wwu_wb_exclusions',
+			'webwakeupwdb_exclusions',
 			array(
 				'by_reason'           => array( '59_o' => array( 'products' => array( 7777 ), 'categories' => array() ) ),
 				'auto_detect_virtual' => false,
 			)
 		);
-		\WWU\WithdrawalButton\Core\Settings::flush();
+		\WebWakeUpWdb\WithdrawalButton\Core\Settings::flush();
 
 		$tests[] = $this->assert( 'exemptions.conditional_no_consent_keeps_button', $ev->has_withdrawable_item( $mk( array( 7777 ) ) ), 'Conditional reason WITHOUT captured consent keeps the button (fail-safe).' );
 
@@ -761,35 +761,35 @@ final class SmokeTests {
 			$consent[] = array( 'product_id' => 7777, 'reason_id' => '59_o' );
 			return $consent;
 		};
-		add_filter( 'wwu_wb_exemption_consent', $cf );
+		add_filter( 'webwakeupwdb_exemption_consent', $cf );
 		$tests[] = $this->assert( 'exemptions.conditional_with_consent_exempts', ! $ev->has_withdrawable_item( $mk( array( 7777 ) ) ), 'Conditional reason WITH captured consent exempts the item.' );
-		remove_filter( 'wwu_wb_exemption_consent', $cf );
+		remove_filter( 'webwakeupwdb_exemption_consent', $cf );
 
 		// Tag a product under a seal-based reason → never auto-hidden.
 		update_option(
-			'wwu_wb_exclusions',
+			'webwakeupwdb_exclusions',
 			array(
 				'by_reason'           => array( '59_e' => array( 'products' => array( 8888 ), 'categories' => array() ) ),
 				'auto_detect_virtual' => false,
 			)
 		);
-		\WWU\WithdrawalButton\Core\Settings::flush();
+		\WebWakeUpWdb\WithdrawalButton\Core\Settings::flush();
 		$tests[] = $this->assert( 'exemptions.seal_based_keeps_button', $ev->has_withdrawable_item( $mk( array( 8888 ) ) ), 'Seal-based reason never auto-hides the button.' );
 
 		// Unconditional reason → exempt.
 		update_option(
-			'wwu_wb_exclusions',
+			'webwakeupwdb_exclusions',
 			array(
 				'by_reason'           => array( '59_c' => array( 'products' => array( 9999 ), 'categories' => array() ) ),
 				'auto_detect_virtual' => false,
 			)
 		);
-		\WWU\WithdrawalButton\Core\Settings::flush();
+		\WebWakeUpWdb\WithdrawalButton\Core\Settings::flush();
 		$tests[] = $this->assert( 'exemptions.unconditional_exempts', ! $ev->has_withdrawable_item( $mk( array( 9999 ) ) ), 'Unconditional reason (custom-made) exempts the item.' );
 
 		// Restore.
-		update_option( 'wwu_wb_exclusions', is_array( $saved ) ? $saved : array() );
-		\WWU\WithdrawalButton\Core\Settings::flush();
+		update_option( 'webwakeupwdb_exclusions', is_array( $saved ) ? $saved : array() );
+		\WebWakeUpWdb\WithdrawalButton\Core\Settings::flush();
 
 		return $tests;
 	}
@@ -806,9 +806,9 @@ final class SmokeTests {
 	 */
 	private function suite_consent(): array {
 		$tests = array();
-		$ct    = '\\WWU\\WithdrawalButton\\Domain\\ConsentText';
-		$res   = '\\WWU\\WithdrawalButton\\Domain\\ExemptionResolver';
-		$cc    = '\\WWU\\WithdrawalButton\\Frontend\\WooCheckoutConsent';
+		$ct    = '\\WebWakeUpWdb\\WithdrawalButton\\Domain\\ConsentText';
+		$res   = '\\WebWakeUpWdb\\WithdrawalButton\\Domain\\ExemptionResolver';
+		$cc    = '\\WebWakeUpWdb\\WithdrawalButton\\Frontend\\WooCheckoutConsent';
 
 		// Wording: conditional reasons get text; unconditional/seal-based get ''.
 		$digital = (string) $ct::for_reason( '59_o' );
@@ -822,14 +822,14 @@ final class SmokeTests {
 		$flt = static function () {
 			return 'CUSTOM-ACK';
 		};
-		add_filter( 'wwu_wb_consent_text', $flt, 10, 3 );
-		$tests[] = $this->assert( 'consent.text_filterable', 'CUSTOM-ACK' === (string) $ct::for_reason( '59_o' ), 'wwu_wb_consent_text overrides the wording.' );
-		remove_filter( 'wwu_wb_consent_text', $flt, 10 );
+		add_filter( 'webwakeupwdb_consent_text', $flt, 10, 3 );
+		$tests[] = $this->assert( 'consent.text_filterable', 'CUSTOM-ACK' === (string) $ct::for_reason( '59_o' ), 'webwakeupwdb_consent_text overrides the wording.' );
+		remove_filter( 'webwakeupwdb_consent_text', $flt, 10 );
 
 		// Order-independent reason lookup (checkout path).
-		$saved = get_option( 'wwu_wb_exclusions' );
+		$saved = get_option( 'webwakeupwdb_exclusions' );
 		update_option(
-			'wwu_wb_exclusions',
+			'webwakeupwdb_exclusions',
 			array(
 				'by_reason'           => array(
 					'59_o' => array(
@@ -844,8 +844,8 @@ final class SmokeTests {
 				'auto_detect_virtual' => false,
 			)
 		);
-		\WWU\WithdrawalButton\Core\Settings::flush();
-		\WWU\WithdrawalButton\Domain\ExceptionTypes::reset_cache();
+		\WebWakeUpWdb\WithdrawalButton\Core\Settings::flush();
+		\WebWakeUpWdb\WithdrawalButton\Domain\ExceptionTypes::reset_cache();
 
 		$tests[] = $this->assert( 'consent.reason_for_product', '59_o' === (string) $res::reason_for( 7777, array() ), 'reason_for() resolves a tagged product to its reason.' );
 		$tests[] = $this->assert( 'consent.reason_for_category', '59_c' === (string) $res::reason_for( 0, array( 55 ) ), 'reason_for() resolves a tagged category to its reason.' );
@@ -870,7 +870,7 @@ final class SmokeTests {
 		$tests[] = $this->assert( 'consent.untiked_no_entry', empty( $none ), 'An un-ticked reason produces no consent entry.' );
 
 		// ClauseLibrary: the exemption-consent privacy clause exists in IT + EN.
-		$cl      = '\\WWU\\WithdrawalButton\\Legal\\ClauseLibrary';
+		$cl      = '\\WebWakeUpWdb\\WithdrawalButton\\Legal\\ClauseLibrary';
 		$tests[] = $this->assert( 'consent.clause_registered', in_array( 'consent_privacy', $cl::types(), true ), 'consent_privacy clause type is registered.' );
 		$tests[] = $this->assert( 'consent.clause_it', '' !== trim( (string) $cl::get( 'consent_privacy', 'it' ) ), 'IT exemption-consent privacy clause is present.' );
 		$tests[] = $this->assert( 'consent.clause_en', '' !== trim( (string) $cl::get( 'consent_privacy', 'en' ) ), 'EN exemption-consent privacy clause is present.' );
@@ -881,7 +881,7 @@ final class SmokeTests {
 		// so a failing assertion never leaks test data into the merchant's clauses.
 		$clause_opt    = $cl::OPTION;
 		$clause_backup = get_option( $clause_opt, null );
-		$marker        = 'WWU_WB_SMOKE_OVERRIDE_' . wp_generate_password( 6, false );
+		$marker        = 'WEBWAKEUPWDB_SMOKE_OVERRIDE_' . wp_generate_password( 6, false );
 		update_option( $clause_opt, array( 'terms' => array( 'it' => $marker ) ), false );
 		$got = (string) $cl::get( 'terms', 'it' );
 		$has = (bool) $cl::has_override( 'terms', 'it' );
@@ -896,12 +896,12 @@ final class SmokeTests {
 		$tests[] = $this->assert( 'clauses.default_text_is_template', '' !== trim( $def ) && $def !== $marker, 'default_text() returns the built-in template, not the override.' );
 
 		// ExemptionConfirmation: no-op guards (no email / no entries → no send, no side effects).
-		$ec      = '\\WWU\\WithdrawalButton\\Mail\\ExemptionConfirmation';
+		$ec      = '\\WebWakeUpWdb\\WithdrawalButton\\Mail\\ExemptionConfirmation';
 		$tests[] = $this->assert( 'consent.confirmation_guard_no_email', false === $ec::send_for_order( 'woocommerce', '1', '', '#1', array( array( 'reason_id' => '59_o' ) ) ), 'Confirmation is not sent without a valid e-mail.' );
 		$tests[] = $this->assert( 'consent.confirmation_guard_no_entries', false === $ec::send_for_order( 'woocommerce', '1', 'buyer@example.com', '#1', array() ), 'Confirmation is not sent without entries.' );
 
 		// Grouping derivation + per-reason examples (exemptions-UX bundle).
-		$et      = '\\WWU\\WithdrawalButton\\Domain\\ExceptionTypes';
+		$et      = '\\WebWakeUpWdb\\WithdrawalButton\\Domain\\ExceptionTypes';
 		$tests[] = $this->assert( 'consent.group_conditional', 'conditional' === $et::group( '59_o' ) && 'conditional' === $et::group( '59_a' ), 'Digital/service reasons group as conditional.' );
 		$tests[] = $this->assert( 'consent.group_seal', 'seal_based' === $et::group( '59_e' ) && 'seal_based' === $et::group( '59_i' ), 'Sealed reasons group as seal_based.' );
 		$tests[] = $this->assert( 'consent.group_unconditional', 'unconditional' === $et::group( '59_c' ) && 'unconditional' === $et::group( 'manual' ), 'Custom-made / manual group as unconditional.' );
@@ -919,12 +919,12 @@ final class SmokeTests {
 		$tests[] = $this->assert( 'consent.preview_unconditional_empty', '' === (string) $ec::preview_html( '59_c' ), 'Unconditional reason has no preview.' );
 
 		// EDD adapter status mapping (pure, no EDD needed).
-		$tests[] = $this->assert( 'consent.edd_eligible_status', 'completed' === \WWU\WithdrawalButton\Platform\EddAdapter::eligible_status( 'complete' ), 'EDD "complete" maps to the eligible "completed" status.' );
+		$tests[] = $this->assert( 'consent.edd_eligible_status', 'completed' === \WebWakeUpWdb\WithdrawalButton\Platform\EddAdapter::eligible_status( 'complete' ), 'EDD "complete" maps to the eligible "completed" status.' );
 
 		// Restore.
-		update_option( 'wwu_wb_exclusions', is_array( $saved ) ? $saved : array() );
-		\WWU\WithdrawalButton\Core\Settings::flush();
-		\WWU\WithdrawalButton\Domain\ExceptionTypes::reset_cache();
+		update_option( 'webwakeupwdb_exclusions', is_array( $saved ) ? $saved : array() );
+		\WebWakeUpWdb\WithdrawalButton\Core\Settings::flush();
+		\WebWakeUpWdb\WithdrawalButton\Domain\ExceptionTypes::reset_cache();
 
 		return $tests;
 	}
@@ -939,11 +939,11 @@ final class SmokeTests {
 	 * @param \DateTimeImmutable|null $created          Created date.
 	 * @param bool                    $is_renewal       Whether this is a subscription renewal order.
 	 * @param string                  $subscription_ref Subscription id tied to the order, or ''.
-	 * @return \WWU\WithdrawalButton\Platform\NormalizedOrder
+	 * @return \WebWakeUpWdb\WithdrawalButton\Platform\NormalizedOrder
 	 */
-	private function fake_order( string $country, string $status, bool $vat, array $items, ?\DateTimeImmutable $created = null, bool $is_renewal = false, string $subscription_ref = '' ): \WWU\WithdrawalButton\Platform\NormalizedOrder {
+	private function fake_order( string $country, string $status, bool $vat, array $items, ?\DateTimeImmutable $created = null, bool $is_renewal = false, string $subscription_ref = '' ): \WebWakeUpWdb\WithdrawalButton\Platform\NormalizedOrder {
 		$created = $created ?? new \DateTimeImmutable( '-1 day' );
-		return new \WWU\WithdrawalButton\Platform\NormalizedOrder(
+		return new \WebWakeUpWdb\WithdrawalButton\Platform\NormalizedOrder(
 			'woocommerce',
 			'TEST-1',
 			'TEST-1',
@@ -973,7 +973,7 @@ final class SmokeTests {
 	 */
 	private function suite_subscriptions(): array {
 		$tests    = array();
-		$resolver = new \WWU\WithdrawalButton\Domain\ApplicabilityResolver();
+		$resolver = new \WebWakeUpWdb\WithdrawalButton\Domain\ApplicabilityResolver();
 		$item     = array( $this->fake_item( false ) );
 
 		// NormalizedOrder back-compat: the new flags default to false/'' so every
@@ -982,11 +982,11 @@ final class SmokeTests {
 		$tests[] = $this->assert( 'subscriptions.flags_default', false === $plain->is_renewal && '' === $plain->subscription_ref, 'NormalizedOrder defaults: is_renewal=false, subscription_ref="".' );
 
 		// Save + clear the toggle so the default (suppress on renewal) is exercised.
-		$settings = (array) get_option( 'wwu_wb_settings', array() );
+		$settings = (array) get_option( 'webwakeupwdb_settings', array() );
 		$saved    = $settings;
 		$settings['treat_renewals_as_withdrawable'] = false;
-		update_option( 'wwu_wb_settings', $settings );
-		\WWU\WithdrawalButton\Core\Settings::flush();
+		update_option( 'webwakeupwdb_settings', $settings );
+		\WebWakeUpWdb\WithdrawalButton\Core\Settings::flush();
 
 		// Initial order (not a renewal, but linked to a subscription) → shown + mandatory.
 		$initial = $this->fake_order( 'IT', 'completed', false, $item, null, false, 'SUB-1' );
@@ -1000,8 +1000,8 @@ final class SmokeTests {
 
 		// Opt-in: treating renewals as withdrawable flips the renewal case to shown.
 		$settings['treat_renewals_as_withdrawable'] = true;
-		update_option( 'wwu_wb_settings', $settings );
-		\WWU\WithdrawalButton\Core\Settings::flush();
+		update_option( 'webwakeupwdb_settings', $settings );
+		\WebWakeUpWdb\WithdrawalButton\Core\Settings::flush();
 		$d_renew_on = $resolver->decide( $this->fake_order( 'IT', 'completed', false, $item, null, true, 'SUB-1' ) );
 		$tests[]    = $this->assert( 'subscriptions.renewal_optin_shown', $d_renew_on->show, 'With treat_renewals_as_withdrawable on, the renewal order is shown again.' );
 
@@ -1011,8 +1011,8 @@ final class SmokeTests {
 		$tests[]    = $this->assert( 'subscriptions.noneu_renewal_not_mandatory', ! $d_ch_renew->mandatory, 'A non-EU renewal is never mandatory (reason: ' . $d_ch_renew->reason . ').' );
 
 		// Restore.
-		update_option( 'wwu_wb_settings', $saved );
-		\WWU\WithdrawalButton\Core\Settings::flush();
+		update_option( 'webwakeupwdb_settings', $saved );
+		\WebWakeUpWdb\WithdrawalButton\Core\Settings::flush();
 
 		return $tests;
 	}
@@ -1052,11 +1052,11 @@ final class SmokeTests {
 		$tests = array();
 
 		// Guard: empty endpoint makes no request and returns null.
-		$empty = new \WWU\WithdrawalButton\Timestamp\Rfc3161Provider( array( 'endpoint' => '' ) );
+		$empty = new \WebWakeUpWdb\WithdrawalButton\Timestamp\Rfc3161Provider( array( 'endpoint' => '' ) );
 		$tests[] = $this->assert( 'rfc3161.empty_endpoint_null', null === $empty->stamp( str_repeat( 'a', 64 ) ), 'Empty endpoint returns null (no request made).' );
 
 		// Guard: a non-hex digest returns null before any network call.
-		$prov = new \WWU\WithdrawalButton\Timestamp\Rfc3161Provider( array( 'endpoint' => 'http://timestamp.sectigo.com' ) );
+		$prov = new \WebWakeUpWdb\WithdrawalButton\Timestamp\Rfc3161Provider( array( 'endpoint' => 'http://timestamp.sectigo.com' ) );
 		$tests[] = $this->assert( 'rfc3161.bad_hex_null', null === $prov->stamp( 'not-a-hex' ), 'Non-hex digest returns null.' );
 
 		// Pure-logic checks via reflection (no network).
@@ -1084,7 +1084,7 @@ final class SmokeTests {
 
 		// HTTPS is required by default (the TSA signature is verified out-of-band).
 		try {
-			$http_prov = new \WWU\WithdrawalButton\Timestamp\Rfc3161Provider( array( 'endpoint' => 'http://timestamp.example.com' ) );
+			$http_prov = new \WebWakeUpWdb\WithdrawalButton\Timestamp\Rfc3161Provider( array( 'endpoint' => 'http://timestamp.example.com' ) );
 			$valid     = new \ReflectionMethod( $http_prov, 'endpoint_is_valid' );
 			$valid->setAccessible( true );
 			$tests[] = $this->assert( 'rfc3161.https_required', false === $valid->invoke( $http_prov ), 'A plaintext http TSA endpoint is rejected by default.' );
@@ -1093,7 +1093,7 @@ final class SmokeTests {
 		}
 
 		// Un-anchored confirmed-row count (surfaced in admin; cron retries them).
-		$unanchored = ( new \WWU\WithdrawalButton\Timestamp\TimestampService() )->count_unanchored();
+		$unanchored = ( new \WebWakeUpWdb\WithdrawalButton\Timestamp\TimestampService() )->count_unanchored();
 		$tests[] = $this->assert( 'timestamp.unanchored_count', is_int( $unanchored ) && $unanchored >= 0, 'Un-anchored confirmed-row count is a non-negative int (got ' . var_export( $unanchored, true ) . ').' );
 
 		// Return the flat test array like every other suite — run() wraps it in
@@ -1113,7 +1113,7 @@ final class SmokeTests {
 	 */
 	private function suite_withdrawal_request(): array {
 		$tests = array();
-		$class = '\\WWU\\WithdrawalButton\\Domain\\WithdrawalRequest';
+		$class = '\\WebWakeUpWdb\\WithdrawalButton\\Domain\\WithdrawalRequest';
 
 		/* (a) Normal products array round-trips via to_array(). */
 		$req_a = $class::from_input(
@@ -1249,21 +1249,21 @@ final class SmokeTests {
 	 */
 	private function suite_exemption_note(): array {
 		$tests    = array();
-		$renderer = '\\WWU\\WithdrawalButton\\Frontend\\ExemptionNoteRenderer';
+		$renderer = '\\WebWakeUpWdb\\WithdrawalButton\\Frontend\\ExemptionNoteRenderer';
 
 		// Save + restore option state so the tests don't pollute each other.
-		$saved_exclusions = get_option( 'wwu_wb_exclusions' );
-		$saved_settings   = (array) get_option( 'wwu_wb_settings', array() );
+		$saved_exclusions = get_option( 'webwakeupwdb_exclusions' );
+		$saved_settings   = (array) get_option( 'webwakeupwdb_settings', array() );
 
 		/* (a) No exemption rule for product 111 → renderer returns ''. */
 		update_option(
-			'wwu_wb_exclusions',
+			'webwakeupwdb_exclusions',
 			array(
 				'by_reason'           => array(),
 				'auto_detect_virtual' => false,
 			)
 		);
-		\WWU\WithdrawalButton\Core\Settings::flush();
+		\WebWakeUpWdb\WithdrawalButton\Core\Settings::flush();
 		$order_plain = $this->fake_order(
 			'IT',
 			'completed',
@@ -1279,18 +1279,18 @@ final class SmokeTests {
 
 		/* (b) Unconditional reason (59_c custom-made) → note names the exception. */
 		update_option(
-			'wwu_wb_exclusions',
+			'webwakeupwdb_exclusions',
 			array(
 				'by_reason'           => array( '59_c' => array( 'products' => array( 222 ), 'categories' => array() ) ),
 				'auto_detect_virtual' => false,
 			)
 		);
-		\WWU\WithdrawalButton\Core\Settings::flush();
+		\WebWakeUpWdb\WithdrawalButton\Core\Settings::flush();
 		// Ensure no custom override is active.
 		$settings_b = $saved_settings;
 		$settings_b['custom_exemption_note'] = '';
-		update_option( 'wwu_wb_settings', $settings_b );
-		\WWU\WithdrawalButton\Core\Settings::flush();
+		update_option( 'webwakeupwdb_settings', $settings_b );
+		\WebWakeUpWdb\WithdrawalButton\Core\Settings::flush();
 
 		$order_exempt = $this->fake_order(
 			'IT',
@@ -1301,15 +1301,15 @@ final class SmokeTests {
 		$note_b  = $renderer::render( $order_exempt );
 		$tests[] = $this->assert(
 			'exemption_note.reason_names_exception',
-			'' !== $note_b && false !== strpos( $note_b, 'wwu-wb-exempt-note' ),
-			'Exempt order → note HTML contains .wwu-wb-exempt-note (got: ' . mb_substr( $note_b, 0, 120 ) . ').'
+			'' !== $note_b && false !== strpos( $note_b, 'webwakeupwdb-exempt-note' ),
+			'Exempt order → note HTML contains .webwakeupwdb-exempt-note (got: ' . mb_substr( $note_b, 0, 120 ) . ').'
 		);
 
 		/* (c) custom_exemption_note in settings overrides built-in copy. */
 		$settings_c = $saved_settings;
 		$settings_c['custom_exemption_note'] = '<p>Custom store policy note.</p>';
-		update_option( 'wwu_wb_settings', $settings_c );
-		\WWU\WithdrawalButton\Core\Settings::flush();
+		update_option( 'webwakeupwdb_settings', $settings_c );
+		\WebWakeUpWdb\WithdrawalButton\Core\Settings::flush();
 
 		$note_c  = $renderer::render( $order_exempt );
 		$tests[] = $this->assert(
@@ -1319,9 +1319,9 @@ final class SmokeTests {
 		);
 
 		// Restore.
-		update_option( 'wwu_wb_exclusions', is_array( $saved_exclusions ) ? $saved_exclusions : array() );
-		update_option( 'wwu_wb_settings', $saved_settings );
-		\WWU\WithdrawalButton\Core\Settings::flush();
+		update_option( 'webwakeupwdb_exclusions', is_array( $saved_exclusions ) ? $saved_exclusions : array() );
+		update_option( 'webwakeupwdb_settings', $saved_settings );
+		\WebWakeUpWdb\WithdrawalButton\Core\Settings::flush();
 
 		return $tests;
 	}
@@ -1336,16 +1336,16 @@ final class SmokeTests {
 	 */
 	private function suite_automations(): array {
 		$tests   = array();
-		$webhook = '\\WWU\\WithdrawalButton\\Api\\Webhook';
-		$guard   = '\\WWU\\WithdrawalButton\\Security\\OutboundUrlGuard';
+		$webhook = '\\WebWakeUpWdb\\WithdrawalButton\\Api\\Webhook';
+		$guard   = '\\WebWakeUpWdb\\WithdrawalButton\\Security\\OutboundUrlGuard';
 
 		// Wiring: the classes are present.
 		$tests[] = $this->assert(
 			'automations.classes_present',
-			class_exists( '\\WWU\\WithdrawalButton\\Api\\RequestReader' )
-				&& class_exists( '\\WWU\\WithdrawalButton\\Api\\Webhook' )
-				&& class_exists( '\\WWU\\WithdrawalButton\\Api\\WebhookDispatcher' )
-				&& class_exists( '\\WWU\\WithdrawalButton\\REST\\Routes\\ApiRoutes' ),
+			class_exists( '\\WebWakeUpWdb\\WithdrawalButton\\Api\\RequestReader' )
+				&& class_exists( '\\WebWakeUpWdb\\WithdrawalButton\\Api\\Webhook' )
+				&& class_exists( '\\WebWakeUpWdb\\WithdrawalButton\\Api\\WebhookDispatcher' )
+				&& class_exists( '\\WebWakeUpWdb\\WithdrawalButton\\REST\\Routes\\ApiRoutes' ),
 			'RequestReader / Webhook / WebhookDispatcher / ApiRoutes all autoload.'
 		);
 
@@ -1400,7 +1400,7 @@ final class SmokeTests {
 		);
 
 		// Reader: unknown lookups return null (read-only, no writes).
-		$reader  = new \WWU\WithdrawalButton\Api\RequestReader();
+		$reader  = new \WebWakeUpWdb\WithdrawalButton\Api\RequestReader();
 		$tests[] = $this->assert(
 			'automations.detail_unknown_null',
 			null === $reader->detail( 'no-such-uid-0000' ),
@@ -1408,7 +1408,7 @@ final class SmokeTests {
 		);
 		$tests[] = $this->assert(
 			'automations.order_status_unknown_null',
-			null === $reader->order_status( 'wwu_wb_no_platform', 'nonexistent-ref' ),
+			null === $reader->order_status( 'webwakeupwdb_no_platform', 'nonexistent-ref' ),
 			'order_status() returns null for an unknown platform/order.'
 		);
 		$tests[] = $this->assert(
@@ -1422,7 +1422,7 @@ final class SmokeTests {
 		$listed  = $reader->list( array(), 1, 999 );
 		$tests[] = $this->assert(
 			'automations.list_per_page_clamped',
-			isset( $listed['per_page'] ) && \WWU\WithdrawalButton\Api\RequestReader::MAX_PER_PAGE === (int) $listed['per_page'],
+			isset( $listed['per_page'] ) && \WebWakeUpWdb\WithdrawalButton\Api\RequestReader::MAX_PER_PAGE === (int) $listed['per_page'],
 			'list() clamps per_page to MAX_PER_PAGE (got: ' . ( $listed['per_page'] ?? 'n/a' ) . ').'
 		);
 		$filtered = $reader->list( array( 'status' => 'refunded' ), 1, 10 );

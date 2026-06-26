@@ -8,14 +8,14 @@
  * email is still sent with the full textual content — the durable-medium
  * obligation is met by the email itself; the PDF is an additional copy.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\DurableMedium;
+namespace WebWakeUpWdb\WithdrawalButton\DurableMedium;
 
-use WWU\WithdrawalButton\Debug\Debug;
+use WebWakeUpWdb\WithdrawalButton\Debug\Debug;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -35,7 +35,7 @@ final class PdfBuilder {
 		if ( class_exists( '\\Dompdf\\Dompdf' ) ) {
 			return true;
 		}
-		$autoload = WWU_WB_PATH . '/vendor/autoload.php';
+		$autoload = WEBWAKEUPWDB_PATH . '/vendor/autoload.php';
 		if ( is_readable( $autoload ) ) {
 			require_once $autoload;
 		}

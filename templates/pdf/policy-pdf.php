@@ -12,7 +12,7 @@
  * @var string $site_name       Site name.
  * @var string $generated_local Localised generation datetime.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
@@ -27,13 +27,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 <meta charset="UTF-8">
 <style>
 	body { font-family: "DejaVu Sans", sans-serif; color: #222; font-size: 12px; line-height: 1.5; }
-	h2.wwu-wb-policy__title { color: #1a1f3a; font-size: 18px; margin: 0 0 4px; }
-	h3.wwu-wb-policy__heading { color: #1a1f3a; font-size: 13px; margin: 16px 0 4px; }
+	h2.webwakeupwdb-policy__title { color: #1a1f3a; font-size: 18px; margin: 0 0 4px; }
+	h3.webwakeupwdb-policy__heading { color: #1a1f3a; font-size: 13px; margin: 16px 0 4px; }
 	p { margin: 0 0 8px; }
-	ul.wwu-wb-policy__exceptions { margin: 4px 0 8px; padding-left: 18px; }
-	ul.wwu-wb-policy__exceptions li { margin-bottom: 6px; }
-	.wwu-wb-policy__ref { color: #777; font-size: 11px; }
-	.wwu-wb-policy__disclaimer { color: #555; font-size: 11px; background: #f3f3f3; border-left: 3px solid #1a1f3a; padding: 6px 10px; margin: 0 0 14px; }
+	ul.webwakeupwdb-policy__exceptions { margin: 4px 0 8px; padding-left: 18px; }
+	ul.webwakeupwdb-policy__exceptions li { margin-bottom: 6px; }
+	.webwakeupwdb-policy__ref { color: #777; font-size: 11px; }
+	.webwakeupwdb-policy__disclaimer { color: #555; font-size: 11px; background: #f3f3f3; border-left: 3px solid #1a1f3a; padding: 6px 10px; margin: 0 0 14px; }
 	.foot { margin-top: 24px; font-size: 10px; color: #999; }
 </style>
 </head>

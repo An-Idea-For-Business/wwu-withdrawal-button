@@ -8,12 +8,12 @@
  * email). All failures return identical generic errors (no enumeration), and
  * lookup attempts are rate-limited per IP.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Frontend;
+namespace WebWakeUpWdb\WithdrawalButton\Frontend;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -70,9 +70,9 @@ final class GuestAccess {
 	 */
 	public static function check_rate_limit(): bool {
 		$ip      = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
-		$key     = 'wwu_wb_rl_' . md5( $ip );
-		$max     = (int) apply_filters( 'wwu_wb_rate_limit_max_attempts', 10 );
-		$window  = (int) apply_filters( 'wwu_wb_rate_limit_window_seconds', 300 );
+		$key     = 'webwakeupwdb_rl_' . md5( $ip );
+		$max     = (int) apply_filters( 'webwakeupwdb_rate_limit_max_attempts', 10 );
+		$window  = (int) apply_filters( 'webwakeupwdb_rate_limit_window_seconds', 300 );
 		$count   = (int) get_transient( $key );
 		if ( $count >= $max ) {
 			return false;
@@ -90,7 +90,7 @@ final class GuestAccess {
 	 * @return string
 	 */
 	private static function token( string $order_ref, string $email, int $bucket ): string {
-		$secret = \WWU\WithdrawalButton\Security\Secret::get();
+		$secret = \WebWakeUpWdb\WithdrawalButton\Security\Secret::get();
 		$data   = implode( '|', array( 'guest', $order_ref, strtolower( $email ), (string) $bucket ) );
 		return substr( hash_hmac( 'sha256', $data, $secret ), 0, 40 );
 	}

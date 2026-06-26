@@ -10,7 +10,7 @@
  * Hand-written with the window.wp.* globals (no JSX, no build step). The script
  * dependencies are declared in index.asset.php.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 ( function ( wp ) {
@@ -28,7 +28,7 @@
 	var TextControl       = wp.components.TextControl;
 	var ServerSideRender  = wp.serverSideRender;
 
-	wp.blocks.registerBlockType( 'wwu-wb/withdrawal-form', {
+	wp.blocks.registerBlockType( 'webwakeupwdb/withdrawal-form', {
 		/**
 		 * Editor view: an optional "specific order ID" control + a live
 		 * server-rendered preview of the front-end output.
@@ -64,7 +64,7 @@
 
 			var preview = ServerSideRender
 				? el( ServerSideRender, {
-					block: 'wwu-wb/withdrawal-form',
+					block: 'webwakeupwdb/withdrawal-form',
 					attributes: attributes
 				} )
 				: el(

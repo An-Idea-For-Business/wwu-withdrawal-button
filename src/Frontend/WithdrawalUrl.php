@@ -3,7 +3,7 @@
  * Viewer-aware withdrawal-form URL builder (single source of truth).
  *
  * Every surface that links to the withdrawal form — the My Account button, the
- * [wwu_wb_button] / [wwu_wb_form] shortcodes, the Gutenberg block, and the
+ * [webwakeupwdb_button] / [webwakeupwdb_form] shortcodes, the Gutenberg block, and the
  * eligible-orders list — must build the destination the same way:
  *
  *   - Logged-in customers go to the owner-verified My Account endpoint.
@@ -16,14 +16,14 @@
  * Centralising this here prevents the drift that left the shortcode/list still
  * pointing guests at the login screen after the My Account button was fixed.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Frontend;
+namespace WebWakeUpWdb\WithdrawalButton\Frontend;
 
-use WWU\WithdrawalButton\Core\Settings;
+use WebWakeUpWdb\WithdrawalButton\Core\Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -56,7 +56,7 @@ final class WithdrawalUrl {
 			return self::account_url( $order_ref );
 		}
 
-		$args = array( 'wwu_wb_order' => rawurlencode( $order_ref ) );
+		$args = array( 'webwakeupwdb_order' => rawurlencode( $order_ref ) );
 		$key  = ( null === $order_key || '' === $order_key ) ? self::woocommerce_order_key( $order_ref ) : $order_key;
 		if ( '' !== $key ) {
 			$args['key'] = rawurlencode( $key );
@@ -74,9 +74,9 @@ final class WithdrawalUrl {
 	private static function account_url( string $order_ref ): string {
 		$slug = sanitize_title( (string) ( Settings::main()['endpoint_slug'] ?? 'wwu-withdrawal' ) );
 		if ( function_exists( 'wc_get_account_endpoint_url' ) ) {
-			return add_query_arg( 'wwu_wb_order', rawurlencode( $order_ref ), wc_get_account_endpoint_url( $slug ) );
+			return add_query_arg( 'webwakeupwdb_order', rawurlencode( $order_ref ), wc_get_account_endpoint_url( $slug ) );
 		}
-		return add_query_arg( 'wwu_wb_order', rawurlencode( $order_ref ) );
+		return add_query_arg( 'webwakeupwdb_order', rawurlencode( $order_ref ) );
 	}
 
 	/**

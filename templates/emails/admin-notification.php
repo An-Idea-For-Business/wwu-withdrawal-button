@@ -10,7 +10,7 @@
  * @var string $submitted_local Localised submission datetime.
  * @var string $verify_url      Verification link.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );

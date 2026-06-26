@@ -11,19 +11,19 @@
  * resend the acknowledgement (e.g. after fixing SMTP), and jump to the order's
  * refund screen. Every state change is written to the immutable log.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Admin;
+namespace WebWakeUpWdb\WithdrawalButton\Admin;
 
-use WWU\WithdrawalButton\Core\Services;
-use WWU\WithdrawalButton\DurableMedium\ConfirmationDispatcher;
-use WWU\WithdrawalButton\DurableMedium\VerifiableLink;
-use WWU\WithdrawalButton\Platform\OrderDataSource;
-use WWU\WithdrawalButton\REST\Authentication;
-use WWU\WithdrawalButton\Storage\LogRepository;
+use WebWakeUpWdb\WithdrawalButton\Core\Services;
+use WebWakeUpWdb\WithdrawalButton\DurableMedium\ConfirmationDispatcher;
+use WebWakeUpWdb\WithdrawalButton\DurableMedium\VerifiableLink;
+use WebWakeUpWdb\WithdrawalButton\Platform\OrderDataSource;
+use WebWakeUpWdb\WithdrawalButton\REST\Authentication;
+use WebWakeUpWdb\WithdrawalButton\Storage\LogRepository;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -39,7 +39,7 @@ final class RequestsDashboard {
 	 *
 	 * @var string
 	 */
-	private const ACTION_NONCE = 'wwu_wb_request_action';
+	private const ACTION_NONCE = 'webwakeupwdb_request_action';
 
 	/**
 	 * Per-render cache of platform adapters keyed by platform name.
@@ -65,7 +65,7 @@ final class RequestsDashboard {
 		$total  = $repo->count_confirmed();
 		$broken = $repo->chain_status_cached();
 
-		echo '<div class="wrap wwu-wb-wrap">';
+		echo '<div class="wrap webwakeupwdb-wrap">';
 		echo '<h1>' . esc_html__( 'Withdrawal requests', 'wwu-withdrawal-button' ) . '</h1>';
 
 		$this->maybe_render_notice();
@@ -77,9 +77,9 @@ final class RequestsDashboard {
 
 		// Chain-integrity badge.
 		if ( 0 === $broken ) {
-			echo '<p><span class="wwu-wb-badge wwu-wb-badge--ok">' . esc_html__( 'Evidence log: chain intact', 'wwu-withdrawal-button' ) . '</span></p>';
+			echo '<p><span class="webwakeupwdb-badge webwakeupwdb-badge--ok">' . esc_html__( 'Evidence log: chain intact', 'wwu-withdrawal-button' ) . '</span></p>';
 		} else {
-			echo '<p><span class="wwu-wb-badge wwu-wb-badge--err">' . esc_html(
+			echo '<p><span class="webwakeupwdb-badge webwakeupwdb-badge--err">' . esc_html(
 				sprintf(
 					/* translators: %d: row id. */
 					__( 'Evidence log: integrity broken at row #%d — investigate.', 'wwu-withdrawal-button' ),
@@ -91,9 +91,9 @@ final class RequestsDashboard {
 		// Timestamp-anchor status: surface confirmed rows that still lack an external
 		// timestamp proof (e.g. calendars/TSA were unreachable at confirm time — the
 		// hourly cron retries them). 0 when the timestamp provider is 'none'.
-		$unanchored = ( new \WWU\WithdrawalButton\Timestamp\TimestampService() )->count_unanchored();
+		$unanchored = ( new \WebWakeUpWdb\WithdrawalButton\Timestamp\TimestampService() )->count_unanchored();
 		if ( $unanchored > 0 ) {
-			echo '<p><span class="wwu-wb-badge">' . esc_html(
+			echo '<p><span class="webwakeupwdb-badge">' . esc_html(
 				sprintf(
 					/* translators: %d: number of confirmed records. */
 					_n(
@@ -150,8 +150,8 @@ final class RequestsDashboard {
 			}
 			echo '<td>' . ( ! empty( $products_out ) ? esc_html( implode( ', ', $products_out ) ) : '&mdash;' ) . '</td>';
 			echo '<td>' . ( $within
-				? '<span class="wwu-wb-badge wwu-wb-badge--ok">' . esc_html__( 'Yes', 'wwu-withdrawal-button' ) . '</span>'
-				: '<span class="wwu-wb-badge wwu-wb-badge--warn">' . esc_html__( 'Flagged late', 'wwu-withdrawal-button' ) . '</span>' ) . '</td>';
+				? '<span class="webwakeupwdb-badge webwakeupwdb-badge--ok">' . esc_html__( 'Yes', 'wwu-withdrawal-button' ) . '</span>'
+				: '<span class="webwakeupwdb-badge webwakeupwdb-badge--warn">' . esc_html__( 'Flagged late', 'wwu-withdrawal-button' ) . '</span>' ) . '</td>';
 
 			// Processing status (refunded > processed > open).
 			echo '<td>' . $this->status_cell( $order_ref, $processed_at ) . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built with escaped parts + wc_price.
@@ -168,7 +168,7 @@ final class RequestsDashboard {
 		// Simple pagination.
 		$pages = (int) ceil( $total / $per );
 		if ( $pages > 1 ) {
-			echo '<p class="wwu-wb-pagination">';
+			echo '<p class="webwakeupwdb-pagination">';
 			for ( $i = 1; $i <= $pages; $i++ ) {
 				$url = add_query_arg( array( 'page' => AdminController::REQUESTS_SLUG, 'paged' => $i ), admin_url( 'admin.php' ) );
 				echo ( $i === $page )
@@ -199,7 +199,7 @@ final class RequestsDashboard {
 			__( 'Mark the request as processed once you have refunded (and received any returned goods). This closes it in this list; the immutable log keeps the full history.', 'wwu-withdrawal-button' ),
 		);
 
-		echo '<details class="wwu-wb-help" style="max-width:820px;margin:1em 0;padding:0.5em 1em;border:1px solid #dcdcde;border-radius:6px;background:#fff;">';
+		echo '<details class="webwakeupwdb-help" style="max-width:820px;margin:1em 0;padding:0.5em 1em;border:1px solid #dcdcde;border-radius:6px;background:#fff;">';
 		echo '<summary style="cursor:pointer;font-weight:600;">' . esc_html__( 'What to do after receiving a request', 'wwu-withdrawal-button' ) . '</summary>';
 		echo '<ol style="margin:1em 0 0.5em;padding-left:1.4em;line-height:1.6;">';
 		foreach ( $steps as $step ) {
@@ -231,7 +231,7 @@ final class RequestsDashboard {
 			return '';
 		}
 		$title = __( 'Subscription order. The 14-day right covers the initial contract — stop future renewals and apply any pro-rata for service already used, then refund. None of this is automatic unless you enabled auto-cancel.', 'wwu-withdrawal-button' );
-		return ' <span class="wwu-wb-badge wwu-wb-badge--warn" title="' . esc_attr( $title ) . '">' . esc_html__( 'Subscription', 'wwu-withdrawal-button' ) . '</span>';
+		return ' <span class="webwakeupwdb-badge webwakeupwdb-badge--warn" title="' . esc_attr( $title ) . '">' . esc_html__( 'Subscription', 'wwu-withdrawal-button' ) . '</span>';
 	}
 
 	/**
@@ -259,14 +259,14 @@ final class RequestsDashboard {
 			$amount = function_exists( 'wc_price' )
 				? wp_kses_post( wc_price( $refunded, array( 'currency' => $currency ) ) )
 				: esc_html( number_format_i18n( $refunded, 2 ) . ' ' . $currency );
-			return '<span class="wwu-wb-badge wwu-wb-badge--ok">' . esc_html__( 'Refunded', 'wwu-withdrawal-button' ) . ' ' . $amount . '</span>';
+			return '<span class="webwakeupwdb-badge webwakeupwdb-badge--ok">' . esc_html__( 'Refunded', 'wwu-withdrawal-button' ) . ' ' . $amount . '</span>';
 		}
 
 		if ( '' !== $processed_at ) {
-			return '<span class="wwu-wb-badge wwu-wb-badge--ok">' . esc_html__( 'Processed', 'wwu-withdrawal-button' ) . '</span>';
+			return '<span class="webwakeupwdb-badge webwakeupwdb-badge--ok">' . esc_html__( 'Processed', 'wwu-withdrawal-button' ) . '</span>';
 		}
 
-		return '<span class="wwu-wb-badge wwu-wb-badge--warn">' . esc_html__( 'Open', 'wwu-withdrawal-button' ) . '</span>';
+		return '<span class="webwakeupwdb-badge webwakeupwdb-badge--warn">' . esc_html__( 'Open', 'wwu-withdrawal-button' ) . '</span>';
 	}
 
 	/**
@@ -283,11 +283,11 @@ final class RequestsDashboard {
 		$out  = array();
 
 		if ( ! $processed ) {
-			$mark = wp_nonce_url( add_query_arg( array( 'action' => 'wwu_wb_mark_processed', 'uid' => $uid ), $base ), self::ACTION_NONCE );
+			$mark = wp_nonce_url( add_query_arg( array( 'action' => 'webwakeupwdb_mark_processed', 'uid' => $uid ), $base ), self::ACTION_NONCE );
 			$out[] = '<a href="' . esc_url( $mark ) . '">' . esc_html__( 'Mark processed', 'wwu-withdrawal-button' ) . '</a>';
 		}
 
-		$resend = wp_nonce_url( add_query_arg( array( 'action' => 'wwu_wb_resend', 'uid' => $uid ), $base ), self::ACTION_NONCE );
+		$resend = wp_nonce_url( add_query_arg( array( 'action' => 'webwakeupwdb_resend', 'uid' => $uid ), $base ), self::ACTION_NONCE );
 		$out[]  = '<a href="' . esc_url( $resend ) . '">' . esc_html__( 'Resend email', 'wwu-withdrawal-button' ) . '</a>';
 
 		$order_url = $this->order_admin_url( $platform, $order_ref );
@@ -305,7 +305,7 @@ final class RequestsDashboard {
 	 * model's own `getViewUrl('admin')` (confirmed against the official docs
 	 * 2026-06-14), with the canonical SPA route
 	 * `admin.php?page=fluent-cart#/orders/{id}/view` as a fallback. Still filterable
-	 * via `wwu_wb_order_admin_url`. Returns '' when no URL can be built.
+	 * via `webwakeupwdb_order_admin_url`. Returns '' when no URL can be built.
 	 *
 	 * @param string $platform  Platform key.
 	 * @param string $order_ref Order reference.
@@ -352,7 +352,7 @@ final class RequestsDashboard {
 		 * @param string $platform  Platform key.
 		 * @param string $order_ref Order reference.
 		 */
-		return (string) apply_filters( 'wwu_wb_order_admin_url', $url, $platform, $order_ref );
+		return (string) apply_filters( 'webwakeupwdb_order_admin_url', $url, $platform, $order_ref );
 	}
 
 	/**
@@ -407,7 +407,7 @@ final class RequestsDashboard {
 
 		// Debounce accidental double-clicks: a resend sends a real email to the
 		// consumer, so suppress repeats within a short window.
-		$throttle = 'wwu_wb_resend_' . md5( $uid );
+		$throttle = 'webwakeupwdb_resend_' . md5( $uid );
 		if ( get_transient( $throttle ) ) {
 			$this->redirect_back( 'resend_throttled' );
 		}
@@ -449,7 +449,7 @@ final class RequestsDashboard {
 			add_query_arg(
 				array(
 					'page'        => AdminController::REQUESTS_SLUG,
-					'wwu_wb_msg'  => $flag,
+					'webwakeupwdb_msg'  => $flag,
 				),
 				admin_url( 'admin.php' )
 			)
@@ -463,7 +463,7 @@ final class RequestsDashboard {
 	 * @return void
 	 */
 	private function maybe_render_notice(): void {
-		$msg = isset( $_GET['wwu_wb_msg'] ) ? sanitize_key( wp_unslash( $_GET['wwu_wb_msg'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$msg = isset( $_GET['webwakeupwdb_msg'] ) ? sanitize_key( wp_unslash( $_GET['webwakeupwdb_msg'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( '' === $msg ) {
 			return;
 		}

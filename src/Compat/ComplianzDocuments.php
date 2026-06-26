@@ -17,14 +17,14 @@
  *    last only exists when the `complianz-terms-conditions` companion is active).
  *  - element keys must be plugin-prefixed; `content` is filtered through Complianz KSES.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Compat;
+namespace WebWakeUpWdb\WithdrawalButton\Compat;
 
-use WWU\WithdrawalButton\Legal\ClauseLibrary;
+use WebWakeUpWdb\WithdrawalButton\Legal\ClauseLibrary;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -40,7 +40,7 @@ final class ComplianzDocuments {
 	 *
 	 * @var string
 	 */
-	private const OPTION = 'wwu_wb_settings';
+	private const OPTION = 'webwakeupwdb_settings';
 
 	/**
 	 * Wire the document filter. No-op unless Complianz is active (the filter
@@ -73,7 +73,7 @@ final class ComplianzDocuments {
 		 *
 		 * @param string[] $regions Complianz region slugs.
 		 */
-		$regions = (array) apply_filters( 'wwu_wb_complianz_regions', array( 'eu' ) );
+		$regions = (array) apply_filters( 'webwakeupwdb_complianz_regions', array( 'eu' ) );
 		if ( ! in_array( (string) $region, $regions, true ) ) {
 			return $elements;
 		}
@@ -95,7 +95,7 @@ final class ComplianzDocuments {
 		 * @param string $type     Document slug.
 		 * @param string $lang     Two-letter language.
 		 */
-		return (array) apply_filters( 'wwu_wb_complianz_elements', $elements, $type, $lang );
+		return (array) apply_filters( 'webwakeupwdb_complianz_elements', $elements, $type, $lang );
 	}
 
 	/**
@@ -106,14 +106,14 @@ final class ComplianzDocuments {
 	 * @return array
 	 */
 	private function append_terms( array $elements, string $lang ): array {
-		$elements['wwu_wb_withdrawal_title'] = array(
+		$elements['webwakeupwdb_withdrawal_title'] = array(
 			'title'     => __( 'Right of withdrawal', 'wwu-withdrawal-button' ),
 			'numbering' => true,
 		);
-		$elements['wwu_wb_withdrawal_terms'] = array(
+		$elements['webwakeupwdb_withdrawal_terms'] = array(
 			'content' => $this->clause_text( 'terms', $lang ),
 		);
-		$elements['wwu_wb_withdrawal_modelform'] = array(
+		$elements['webwakeupwdb_withdrawal_modelform'] = array(
 			'content' => __( 'You may withdraw using the model withdrawal form (Annex I-B) or directly online through the "withdraw from contract" function available in your order area throughout the withdrawal period.', 'wwu-withdrawal-button' ),
 		);
 		return $elements;
@@ -127,14 +127,14 @@ final class ComplianzDocuments {
 	 * @return array
 	 */
 	private function append_privacy( array $elements, string $lang ): array {
-		$elements['wwu_wb_withdrawal_privacy_title'] = array(
+		$elements['webwakeupwdb_withdrawal_privacy_title'] = array(
 			'title'     => __( 'Right-of-withdrawal records', 'wwu-withdrawal-button' ),
 			'numbering' => true,
 		);
-		$elements['wwu_wb_withdrawal_privacy'] = array(
+		$elements['webwakeupwdb_withdrawal_privacy'] = array(
 			'content' => $this->clause_text( 'privacy', $lang ),
 		);
-		$elements['wwu_wb_withdrawal_consent_privacy'] = array(
+		$elements['webwakeupwdb_withdrawal_consent_privacy'] = array(
 			'content' => $this->clause_text( 'consent_privacy', $lang ),
 		);
 		return $elements;
@@ -195,7 +195,7 @@ final class ComplianzDocuments {
 		 *
 		 * @param bool $active Whether the companion is active.
 		 */
-		return (bool) apply_filters( 'wwu_wb_complianz_terms_companion_active', $active );
+		return (bool) apply_filters( 'webwakeupwdb_complianz_terms_companion_active', $active );
 	}
 
 	/**

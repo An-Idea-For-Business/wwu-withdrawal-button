@@ -6,15 +6,15 @@
  * a live-entries table, counters, and a snapshot block. Behaviour lives in
  * assets/admin/inspector.js, which talks to the /debug/* REST endpoints.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Admin;
+namespace WebWakeUpWdb\WithdrawalButton\Admin;
 
-use WWU\WithdrawalButton\Debug\Audience;
-use WWU\WithdrawalButton\REST\Authentication;
+use WebWakeUpWdb\WithdrawalButton\Debug\Audience;
+use WebWakeUpWdb\WithdrawalButton\REST\Authentication;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -35,7 +35,7 @@ final class InspectorPage {
 			return;
 		}
 
-		echo '<div class="wrap wwu-wb-wrap wwu-wb-inspector">';
+		echo '<div class="wrap webwakeupwdb-wrap webwakeupwdb-inspector">';
 		echo '<h1>' . esc_html__( 'WWU Withdrawal Button — Debug Inspector', 'wwu-withdrawal-button' ) . '</h1>';
 
 		if ( ! Audience::is_current_user() ) {
@@ -51,7 +51,7 @@ final class InspectorPage {
 		}
 
 		// Status bar.
-		echo '<div class="wwu-wb-inspector__statusbar">';
+		echo '<div class="webwakeupwdb-inspector__statusbar">';
 		echo '<span data-role="poll-state">' . esc_html__( 'Polling: on', 'wwu-withdrawal-button' ) . '</span> · ';
 		echo '<span data-role="entry-count">0</span> ' . esc_html__( 'entries', 'wwu-withdrawal-button' ) . ' · ';
 		echo '<button type="button" class="button" data-action="toggle-poll">' . esc_html__( 'Pause', 'wwu-withdrawal-button' ) . '</button> ';
@@ -62,7 +62,7 @@ final class InspectorPage {
 		echo '<h2>' . esc_html__( 'Smoke tests', 'wwu-withdrawal-button' ) . '</h2>';
 		echo '<p>';
 		echo '<button type="button" class="button button-primary" data-action="run-suite" data-suite="all">' . esc_html__( 'Run ALL', 'wwu-withdrawal-button' ) . '</button> ';
-		foreach ( \WWU\WithdrawalButton\Debug\SmokeTests::suite_names() as $suite ) {
+		foreach ( \WebWakeUpWdb\WithdrawalButton\Debug\SmokeTests::suite_names() as $suite ) {
 			echo '<button type="button" class="button" data-action="run-suite" data-suite="' . esc_attr( $suite ) . '">' . esc_html( $suite ) . '</button> ';
 		}
 		echo '</p>';
@@ -81,7 +81,7 @@ final class InspectorPage {
 		echo '<h2>' . esc_html__( 'Snapshot', 'wwu-withdrawal-button' ) . '</h2>';
 		echo '<p><button type="button" class="button" data-action="snapshot">' . esc_html__( 'Fetch snapshot', 'wwu-withdrawal-button' ) . '</button> ';
 		echo '<button type="button" class="button" data-action="copy-snapshot">' . esc_html__( 'Copy', 'wwu-withdrawal-button' ) . '</button></p>';
-		echo '<pre data-role="snapshot" class="wwu-wb-inspector__snapshot"></pre>';
+		echo '<pre data-role="snapshot" class="webwakeupwdb-inspector__snapshot"></pre>';
 
 		echo '</div>';
 	}

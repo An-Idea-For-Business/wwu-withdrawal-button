@@ -7,15 +7,15 @@
  * against the true latest row even under concurrency (withdrawal write volume is
  * low, so the lock is cheap).
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Storage;
+namespace WebWakeUpWdb\WithdrawalButton\Storage;
 
-use WWU\WithdrawalButton\Storage\Database\LogTable;
-use WWU\WithdrawalButton\Debug\Debug;
+use WebWakeUpWdb\WithdrawalButton\Storage\Database\LogTable;
+use WebWakeUpWdb\WithdrawalButton\Debug\Debug;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -31,7 +31,7 @@ final class LogRepository {
 	 *
 	 * @var string
 	 */
-	private const LOCK = 'wwu_wb_log_append';
+	private const LOCK = 'webwakeupwdb_log_append';
 
 	/**
 	 * Append a row to the immutable log.
@@ -77,7 +77,7 @@ final class LogRepository {
 			// then blanked by the retention purge. ip_full is NOT part of the hashed
 			// evidence, so erasing it later never breaks the chain.
 			$raw_ip  = (string) ( $row['ip_address'] ?? '' );
-			$anon_ip = \WWU\WithdrawalButton\Security\ClientInfo::anonymize_ip( $raw_ip );
+			$anon_ip = \WebWakeUpWdb\WithdrawalButton\Security\ClientInfo::anonymize_ip( $raw_ip );
 
 			$evidence = array(
 				'request_uid' => (string) ( $row['request_uid'] ?? '' ),
@@ -126,7 +126,7 @@ final class LogRepository {
 			 * @param string $event Event slug.
 			 * @param array  $row   The submitted row.
 			 */
-			do_action( 'wwu_wb_log_written', $id, $evidence['event'], $row );
+			do_action( 'webwakeupwdb_log_written', $id, $evidence['event'], $row );
 		} else {
 			Debug::error( 'log', 'append_failed', array( 'db_error' => $wpdb->last_error ) );
 		}
@@ -284,12 +284,12 @@ final class LogRepository {
 	 * @return int First broken row id, or 0 if intact.
 	 */
 	public function chain_status_cached( int $ttl = 900 ): int {
-		$cached = get_transient( 'wwu_wb_chain_status' );
+		$cached = get_transient( 'webwakeupwdb_chain_status' );
 		if ( false !== $cached ) {
 			return (int) $cached;
 		}
 		$broken = $this->verify_chain();
-		set_transient( 'wwu_wb_chain_status', $broken, $ttl );
+		set_transient( 'webwakeupwdb_chain_status', $broken, $ttl );
 		return $broken;
 	}
 

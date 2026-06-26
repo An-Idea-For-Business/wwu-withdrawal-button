@@ -6,14 +6,14 @@
  * legally mandatory, following the consumer's country (Rome I Art. 6), the
  * configured mode, B2B detection, and Art. 59 exceptions.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Domain;
+namespace WebWakeUpWdb\WithdrawalButton\Domain;
 
-use WWU\WithdrawalButton\Platform\NormalizedOrder;
+use WebWakeUpWdb\WithdrawalButton\Platform\NormalizedOrder;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -47,7 +47,7 @@ final class ApplicabilityResolver {
 	 * @return ApplicabilityDecision
 	 */
 	public function decide( NormalizedOrder $order ): ApplicabilityDecision {
-		$config  = \WWU\WithdrawalButton\Core\Settings::get( 'wwu_wb_applicability' );
+		$config  = \WebWakeUpWdb\WithdrawalButton\Core\Settings::get( 'webwakeupwdb_applicability' );
 		$mode    = (string) ( $config['mode'] ?? 'eu_eea_only' );
 		$country = strtoupper( $order->country );
 
@@ -59,7 +59,7 @@ final class ApplicabilityResolver {
 		 * @param ApplicabilityDecision $decision Decision.
 		 * @param NormalizedOrder       $order    Order.
 		 */
-		return apply_filters( 'wwu_wb_applicability_decision', $decision, $order );
+		return apply_filters( 'webwakeupwdb_applicability_decision', $decision, $order );
 	}
 
 	/**
@@ -84,7 +84,7 @@ final class ApplicabilityResolver {
 		// it continues the same contract concluded at the initial order (Art. 9 CRD /
 		// art. 52 Cod. Consumo). Suppress on renewals unless the merchant explicitly
 		// opts to treat them as withdrawable. The initial order keeps the button.
-		if ( $order->is_renewal && empty( \WWU\WithdrawalButton\Core\Settings::main()['treat_renewals_as_withdrawable'] ) ) {
+		if ( $order->is_renewal && empty( \WebWakeUpWdb\WithdrawalButton\Core\Settings::main()['treat_renewals_as_withdrawable'] ) ) {
 			return new ApplicabilityDecision( false, false, 'renewal_order', $country );
 		}
 
@@ -140,7 +140,7 @@ final class ApplicabilityResolver {
 		 * @param string[]        $eligible Lower-case unprefixed status slugs.
 		 * @param NormalizedOrder $order    Order.
 		 */
-		$eligible = array_map( 'strtolower', (array) apply_filters( 'wwu_wb_eligible_statuses', $eligible, $order ) );
+		$eligible = array_map( 'strtolower', (array) apply_filters( 'webwakeupwdb_eligible_statuses', $eligible, $order ) );
 
 		return in_array( $status, $eligible, true );
 	}

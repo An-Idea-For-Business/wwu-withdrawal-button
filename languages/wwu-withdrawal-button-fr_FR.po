@@ -115,8 +115,8 @@ msgid "The obligation has been in effect since %s."
 msgstr "L'obligation est en vigueur depuis le %s."
 
 #: src/Admin/ComplianceStatusPage.php:141
-msgid "No published withdrawal form page is configured. Guests (and FluentCart customers) cannot withdraw. Create a page with the [wwu_wb_form] shortcode and set it in Settings."
-msgstr "Aucune page de formulaire de rétractation publiée n'est configurée. Les visiteurs non connectés (et les clients FluentCart) ne peuvent pas se rétracter. Créez une page contenant le shortcode [wwu_wb_form] et définissez-la dans les Paramètres."
+msgid "No published withdrawal form page is configured. Guests (and FluentCart customers) cannot withdraw. Create a page with the [webwakeupwdb_form] shortcode and set it in Settings."
+msgstr "Aucune page de formulaire de rétractation publiée n'est configurée. Les visiteurs non connectés (et les clients FluentCart) ne peuvent pas se rétracter. Créez une page contenant le shortcode [webwakeupwdb_form] et définissez-la dans les Paramètres."
 
 #: src/Admin/ComplianceStatusPage.php:145
 msgid "Complianz is active. The withdrawal flow is functional (consent-exempt); the plugin marks its scripts so they are not blocked. Verify on the front end after first activation."
@@ -176,8 +176,8 @@ msgid "Pre-contractual info shortcode:"
 msgstr "Shortcode des informations précontractuelles :"
 
 #: src/Admin/ComplianceStatusPage.php:71
-msgid "The texts below are the ones in use. To replace them with your own wording (no code needed), edit them in <a href=\"%s\">Settings &rarr; Legal clauses</a> — your version then appears here and wherever the <code>[wwu_wb_info]</code> shortcode is used."
-msgstr "Les textes ci-dessous sont ceux actuellement utilisés. Pour les remplacer par votre propre rédaction (sans code nécessaire), modifiez-les dans <a href=\"%s\">Réglages &rarr; Clauses juridiques</a> — votre version apparaîtra alors ici et partout où le shortcode <code>[wwu_wb_info]</code> est utilisé."
+msgid "The texts below are the ones in use. To replace them with your own wording (no code needed), edit them in <a href=\"%s\">Settings &rarr; Legal clauses</a> — your version then appears here and wherever the <code>[webwakeupwdb_info]</code> shortcode is used."
+msgstr "Les textes ci-dessous sont ceux actuellement utilisés. Pour les remplacer par votre propre rédaction (sans code nécessaire), modifiez-les dans <a href=\"%s\">Réglages &rarr; Clauses juridiques</a> — votre version apparaîtra alors ici et partout où le shortcode <code>[webwakeupwdb_info]</code> est utilisé."
 
 #: src/Admin/ComplianceStatusPage.php:82
 #: src/Admin/SettingsPage.php:435
@@ -187,9 +187,9 @@ msgstr "personnalisé"
 #: src/Admin/ConsentRecordsPage.php:116
 #: src/Admin/RequestsDashboard.php:117
 #: templates/emails/admin-notification.php:30
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:27
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:27
 #: templates/emails/withdrawal-confirmation.php:36
-#: templates/emails/wwu-wb-withdrawal-ack.php:50
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:50
 #: templates/form/withdrawal-form.php:60
 #: templates/myaccount/withdrawal-list.php:72
 #: templates/pdf/receipt-pdf.php:48
@@ -560,9 +560,9 @@ msgstr "Date/heure (soumise)"
 
 #: src/Admin/RequestsDashboard.php:118
 #: templates/emails/admin-notification.php:31
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:29
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:29
 #: templates/emails/withdrawal-confirmation.php:38
-#: templates/emails/wwu-wb-withdrawal-ack.php:58
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:58
 #: templates/pdf/receipt-pdf.php:50
 msgid "Consumer"
 msgstr "Consommateur"
@@ -1074,8 +1074,8 @@ msgid "Legal clauses"
 msgstr "Clauses juridiques"
 
 #: src/Admin/SettingsPage.php:422
-msgid "Customise the ready-to-paste legal clauses (language: %s). Leave a field empty to use the built-in sample template. When you type your own wording it replaces the default everywhere — the Compliance page and the [wwu_wb_info] shortcode — and the \"sample text\" note is dropped. This is your own text: have your lawyer review it."
-msgstr "Personnalisez les clauses juridiques prêtes à l'emploi (langue : %s). Laissez un champ vide pour utiliser le modèle d'exemple intégré. Lorsque vous saisissez votre propre rédaction, elle remplace le texte par défaut partout — sur la page Conformité et dans le shortcode [wwu_wb_info] — et la mention « texte d'exemple » est supprimée. Il s'agit de votre propre texte : faites-le vérifier par votre juriste."
+msgid "Customise the ready-to-paste legal clauses (language: %s). Leave a field empty to use the built-in sample template. When you type your own wording it replaces the default everywhere — the Compliance page and the [webwakeupwdb_info] shortcode — and the \"sample text\" note is dropped. This is your own text: have your lawyer review it."
+msgstr "Personnalisez les clauses juridiques prêtes à l'emploi (langue : %s). Laissez un champ vide pour utiliser le modèle d'exemple intégré. Lorsque vous saisissez votre propre rédaction, elle remplace le texte par défaut partout — sur la page Conformité et dans le shortcode [webwakeupwdb_info] — et la mention « texte d'exemple » est supprimée. Il s'agit de votre propre texte : faites-le vérifier par votre juriste."
 
 #: src/Admin/SettingsPage.php:438
 msgid "Leave empty to use the built-in sample template."
@@ -1410,8 +1410,8 @@ msgid "The right of withdrawal applies <strong>by default to every product</stro
 msgstr "Le droit de rétractation s'applique <strong>par défaut à tout produit</strong>, y compris les biens et services numériques. Les <strong>produits physiques n'ont jamais besoin de consentement</strong> — le droit de 14 jours s'applique simplement et aucune case à cocher ne leur est présentée. Seules les <strong>deux exemptions conditionnelles</strong> (contenu numérique à accès immédiat ; prestation de service entièrement exécutée) suppriment le droit, et uniquement lorsque le consommateur donne son <strong>consentement exprès préalable</strong> ET <strong>reconnaît perdre le droit</strong>. Associez un produit ou une catégorie à un motif spécifique ci-dessous en saisissant les ID de produit et/ou de catégorie (séparés par des virgules)."
 
 #: src/Admin/SettingsPage.php:739
-msgid "For the two conditional reasons the plugin <strong>captures the consent first, then hides the button</strong>: on the <strong>WooCommerce checkout</strong> it adds the required tick-box automatically and stores the agreed wording on the order. Until that tick-box is confirmed — and on platforms/checkouts where capture is not available yet — the button <strong>stays visible, even on digital items</strong> (fail-safe toward the consumer's right). The plugin never hides the button \"on digital\" blindly. The acknowledgement wording is filterable via <code>wwu_wb_consent_text</code>. Seal-based reasons depend on the consumer unsealing after delivery, so they are never auto-hidden."
-msgstr "Pour les deux motifs conditionnels le plugin <strong>capture d'abord le consentement, puis masque le bouton</strong> : lors du <strong>paiement WooCommerce</strong> il ajoute automatiquement la case à cocher requise et enregistre le libellé convenu sur la commande. Jusqu'à ce que cette case soit confirmée — et sur les plateformes/paiements où la capture n'est pas encore disponible — le bouton <strong>reste visible, même pour les articles numériques</strong> (sécurisé par défaut pour le droit du consommateur). Le plugin ne masque jamais le bouton « sur le numérique » à l'aveugle. Le libellé de la reconnaissance est filtrable via <code>wwu_wb_consent_text</code>. Les motifs fondés sur le descellement dépendent de l'ouverture du scellé par le consommateur après la livraison et ne sont donc jamais masqués automatiquement."
+msgid "For the two conditional reasons the plugin <strong>captures the consent first, then hides the button</strong>: on the <strong>WooCommerce checkout</strong> it adds the required tick-box automatically and stores the agreed wording on the order. Until that tick-box is confirmed — and on platforms/checkouts where capture is not available yet — the button <strong>stays visible, even on digital items</strong> (fail-safe toward the consumer's right). The plugin never hides the button \"on digital\" blindly. The acknowledgement wording is filterable via <code>webwakeupwdb_consent_text</code>. Seal-based reasons depend on the consumer unsealing after delivery, so they are never auto-hidden."
+msgstr "Pour les deux motifs conditionnels le plugin <strong>capture d'abord le consentement, puis masque le bouton</strong> : lors du <strong>paiement WooCommerce</strong> il ajoute automatiquement la case à cocher requise et enregistre le libellé convenu sur la commande. Jusqu'à ce que cette case soit confirmée — et sur les plateformes/paiements où la capture n'est pas encore disponible — le bouton <strong>reste visible, même pour les articles numériques</strong> (sécurisé par défaut pour le droit du consommateur). Le plugin ne masque jamais le bouton « sur le numérique » à l'aveugle. Le libellé de la reconnaissance est filtrable via <code>webwakeupwdb_consent_text</code>. Les motifs fondés sur le descellement dépendent de l'ouverture du scellé par le consommateur après la livraison et ne sont donc jamais masqués automatiquement."
 
 #: src/Admin/SettingsPage.php:74
 msgid "General"
@@ -2074,9 +2074,9 @@ msgid "please verify whether the request is still valid."
 msgstr "veuillez vérifier si la demande est toujours valable."
 
 #: templates/emails/admin-notification.php:32
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:28
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:28
 #: templates/emails/withdrawal-confirmation.php:37
-#: templates/emails/wwu-wb-withdrawal-ack.php:54
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:54
 #: templates/pdf/receipt-pdf.php:49
 msgid "Goods / services"
 msgstr "Biens / services"
@@ -2098,69 +2098,69 @@ msgstr "La commande a été marquée « Rétractation demandée ». N'oubliez pa
 msgid "View the evidence record"
 msgstr "Voir l'enregistrement de preuve"
 
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:24
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:24
 #: templates/emails/withdrawal-confirmation.php:32
-#: templates/emails/wwu-wb-withdrawal-ack.php:42
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:42
 msgid "Dear %s,"
 msgstr "Madame, Monsieur %s,"
 
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:25
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:25
 #: templates/emails/withdrawal-confirmation.php:33
-#: templates/emails/wwu-wb-withdrawal-ack.php:44
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:44
 msgid "We confirm that we have received your withdrawal from the following distance contract. This message is your acknowledgement of receipt on a durable medium."
 msgstr "Nous confirmons avoir reçu votre rétractation du contrat à distance suivant. Ce message constitue votre accusé de réception sur un support durable."
 
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:31
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:31
 #: templates/emails/withdrawal-confirmation.php:40
-#: templates/emails/wwu-wb-withdrawal-ack.php:63
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:63
 #: templates/form/withdrawal-form.php:68
 #: templates/pdf/receipt-pdf.php:52
 msgid "Reason (optional)"
 msgstr "Motif (facultatif)"
 
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:33
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:33
 #: templates/emails/withdrawal-confirmation.php:45
-#: templates/emails/wwu-wb-withdrawal-ack.php:74
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:74
 #: templates/pdf/receipt-pdf.php:57
 msgid "Date and time of submission"
 msgstr "Date et heure de soumission"
 
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:35
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:35
 #: templates/emails/withdrawal-confirmation.php:49
-#: templates/emails/wwu-wb-withdrawal-ack.php:79
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:79
 msgid "Addressee (trader):"
 msgstr "Destinataire (professionnel) :"
 
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:42
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:42
 msgid "Download your receipt (PDF):"
 msgstr "Télécharger votre reçu (PDF) :"
 
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:45
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:45
 msgid "Verify this receipt:"
 msgstr "Vérifier ce reçu :"
 
 #: templates/emails/withdrawal-confirmation.php:43
-#: templates/emails/wwu-wb-withdrawal-ack.php:69
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:69
 #: templates/pdf/receipt-pdf.php:55
 msgid "Products withdrawn"
 msgstr "Produits faisant l'objet de la rétractation"
 
 #: templates/emails/withdrawal-confirmation.php:54
-#: templates/emails/wwu-wb-withdrawal-ack.php:84
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:84
 msgid "Download your receipt (PDF)"
 msgstr "Télécharger votre reçu (PDF)"
 
 #: templates/emails/withdrawal-confirmation.php:58
-#: templates/emails/wwu-wb-withdrawal-ack.php:88
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:88
 msgid "Evidence reference:"
 msgstr "Référence de preuve :"
 
 #: templates/emails/withdrawal-confirmation.php:59
-#: templates/emails/wwu-wb-withdrawal-ack.php:90
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:90
 msgid "Verify this receipt"
 msgstr "Vérifier ce reçu"
 
-#: templates/emails/wwu-wb-withdrawal-ack.php:46
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:46
 msgid "Withdrawal details"
 msgstr "Détails de la rétractation"
 
@@ -2460,8 +2460,8 @@ msgid "Enable it now"
 msgstr "L'activer maintenant"
 
 #: src/Admin/DashboardPage.php:531
-msgid "The PDF library is not available on this site. Install the plugin from the official packaged ZIP to enable PDF export — the policy page and the [wwu_wb_policy] shortcode still work without it."
-msgstr "La bibliothèque PDF n'est pas disponible sur ce site. Installez le plugin depuis le ZIP officiel pour activer l'export PDF — la page de la politique et le shortcode [wwu_wb_policy] fonctionnent toujours sans elle."
+msgid "The PDF library is not available on this site. Install the plugin from the official packaged ZIP to enable PDF export — the policy page and the [webwakeupwdb_policy] shortcode still work without it."
+msgstr "La bibliothèque PDF n'est pas disponible sur ce site. Installez le plugin depuis le ZIP officiel pour activer l'export PDF — la page de la politique et le shortcode [webwakeupwdb_policy] fonctionnent toujours sans elle."
 
 #: src/Admin/DashboardPage.php:567
 msgid "Could not recreate the page. Please try again, or create it manually with the relevant shortcode."

@@ -1,13 +1,13 @@
 /**
  * WWU Withdrawal Button — admin styles.
- * Prefix: .wwu-wb-*  (UI Kit core stays .wwu-ui-*).
+ * Prefix: .webwakeupwdb-*  (UI Kit core stays .wwu-ui-*).
  */
 
-.wwu-wb-wrap {
+.webwakeupwdb-wrap {
 	max-width: 1100px;
 }
 
-.wwu-wb-inspector__statusbar {
+.webwakeupwdb-inspector__statusbar {
 	margin: 1em 0;
 	padding: 8px 12px;
 	background: #f6f7f7;
@@ -16,7 +16,7 @@
 	font-size: 13px;
 }
 
-.wwu-wb-inspector__snapshot {
+.webwakeupwdb-inspector__snapshot {
 	max-height: 420px;
 	overflow: auto;
 	padding: 12px;
@@ -27,33 +27,33 @@
 	line-height: 1.5;
 }
 
-.wwu-wb-inspector table code {
+.webwakeupwdb-inspector table code {
 	font-size: 11px;
 	word-break: break-all;
 }
 
-.wwu-wb-test-pass {
+.webwakeupwdb-test-pass {
 	color: #008a20;
 }
 
-.wwu-wb-test-fail {
+.webwakeupwdb-test-fail {
 	color: #d63638;
 	font-weight: 600;
 }
 
-.wwu-wb-test-skip {
+.webwakeupwdb-test-skip {
 	color: #996800;
 }
 
-.wwu-wb-level-error td {
+.webwakeupwdb-level-error td {
 	background: #fcf0f1;
 }
 
-.wwu-wb-level-warn td {
+.webwakeupwdb-level-warn td {
 	background: #fcf9e8;
 }
 
-.wwu-wb-badge {
+.webwakeupwdb-badge {
 	display: inline-block;
 	padding: 3px 10px;
 	border-radius: 12px;
@@ -61,34 +61,34 @@
 	font-weight: 600;
 }
 
-.wwu-wb-badge--ok {
+.webwakeupwdb-badge--ok {
 	background: #edfaef;
 	color: #1a4d24;
 	border: 1px solid #46b450;
 }
 
-.wwu-wb-badge--warn {
+.webwakeupwdb-badge--warn {
 	background: #fcf9e8;
 	color: #7a5c00;
 	border: 1px solid #dba617;
 }
 
-.wwu-wb-badge--err {
+.webwakeupwdb-badge--err {
 	background: #fcf0f1;
 	color: #8a1f21;
 	border: 1px solid #d63638;
 }
 
-.wwu-wb-warnings li {
+.webwakeupwdb-warnings li {
 	margin: 0.4em 0;
 }
 
-.wwu-wb-clause {
+.webwakeupwdb-clause {
 	margin: 0.6em 0;
 }
 
-.wwu-wb-pagination a,
-.wwu-wb-pagination strong {
+.webwakeupwdb-pagination a,
+.webwakeupwdb-pagination strong {
 	display: inline-block;
 	padding: 2px 8px;
 }

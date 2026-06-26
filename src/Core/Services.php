@@ -6,18 +6,18 @@
  * resolvers, the withdrawal service) so the Frontend and REST layers share one
  * instance instead of rebuilding state.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Core;
+namespace WebWakeUpWdb\WithdrawalButton\Core;
 
-use WWU\WithdrawalButton\Domain\ApplicabilityResolver;
-use WWU\WithdrawalButton\Domain\LabelResolver;
-use WWU\WithdrawalButton\Domain\WindowCalculator;
-use WWU\WithdrawalButton\Domain\WithdrawalService;
-use WWU\WithdrawalButton\Platform\PlatformRegistry;
+use WebWakeUpWdb\WithdrawalButton\Domain\ApplicabilityResolver;
+use WebWakeUpWdb\WithdrawalButton\Domain\LabelResolver;
+use WebWakeUpWdb\WithdrawalButton\Domain\WindowCalculator;
+use WebWakeUpWdb\WithdrawalButton\Domain\WithdrawalService;
+use WebWakeUpWdb\WithdrawalButton\Platform\PlatformRegistry;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

@@ -8,17 +8,17 @@
  * Both are token-gated (HMAC) and rate-limited; unknown/invalid requests return
  * a generic 404/403 with no enumeration.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\REST\Routes;
+namespace WebWakeUpWdb\WithdrawalButton\REST\Routes;
 
-use WWU\WithdrawalButton\DurableMedium\ReceiptStore;
-use WWU\WithdrawalButton\DurableMedium\VerifiableLink;
-use WWU\WithdrawalButton\Frontend\GuestAccess;
-use WWU\WithdrawalButton\Storage\LogRepository;
+use WebWakeUpWdb\WithdrawalButton\DurableMedium\ReceiptStore;
+use WebWakeUpWdb\WithdrawalButton\DurableMedium\VerifiableLink;
+use WebWakeUpWdb\WithdrawalButton\Frontend\GuestAccess;
+use WebWakeUpWdb\WithdrawalButton\Storage\LogRepository;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -43,12 +43,12 @@ final class ReceiptRoute extends AbstractRoute {
 			),
 		);
 
-		register_rest_route( WWU_WB_REST_NAMESPACE, '/receipt/(?P<uid>[a-f0-9\-]{36})', array_merge( $args, array(
+		register_rest_route( WEBWAKEUPWDB_REST_NAMESPACE, '/receipt/(?P<uid>[a-f0-9\-]{36})', array_merge( $args, array(
 			'methods'  => 'GET',
 			'callback' => array( $this, 'download' ),
 		) ) );
 
-		register_rest_route( WWU_WB_REST_NAMESPACE, '/verify/(?P<uid>[a-f0-9\-]{36})', array_merge( $args, array(
+		register_rest_route( WEBWAKEUPWDB_REST_NAMESPACE, '/verify/(?P<uid>[a-f0-9\-]{36})', array_merge( $args, array(
 			'methods'  => 'GET',
 			'callback' => array( $this, 'verify' ),
 		) ) );
@@ -62,17 +62,17 @@ final class ReceiptRoute extends AbstractRoute {
 	 */
 	public function download( \WP_REST_Request $request ) {
 		if ( ! GuestAccess::check_rate_limit() ) {
-			return $this->error( 'wwu_wb_rate_limited', __( 'Too many attempts.', 'wwu-withdrawal-button' ), 429 );
+			return $this->error( 'webwakeupwdb_rate_limited', __( 'Too many attempts.', 'wwu-withdrawal-button' ), 429 );
 		}
 		$uid   = (string) $request->get_param( 'uid' );
 		$token = (string) $request->get_param( 't' );
 		if ( ! VerifiableLink::verify( $uid, $token ) ) {
-			return $this->error( 'wwu_wb_not_found', __( 'Not found.', 'wwu-withdrawal-button' ), 404 );
+			return $this->error( 'webwakeupwdb_not_found', __( 'Not found.', 'wwu-withdrawal-button' ), 404 );
 		}
 
 		$store = new ReceiptStore();
 		if ( ! $store->exists( $uid ) ) {
-			return $this->error( 'wwu_wb_not_found', __( 'Receipt not available.', 'wwu-withdrawal-button' ), 404 );
+			return $this->error( 'webwakeupwdb_not_found', __( 'Receipt not available.', 'wwu-withdrawal-button' ), 404 );
 		}
 
 		$path = $store->path_for( $uid );
@@ -93,18 +93,18 @@ final class ReceiptRoute extends AbstractRoute {
 	 */
 	public function verify( \WP_REST_Request $request ) {
 		if ( ! GuestAccess::check_rate_limit() ) {
-			return $this->error( 'wwu_wb_rate_limited', __( 'Too many attempts.', 'wwu-withdrawal-button' ), 429 );
+			return $this->error( 'webwakeupwdb_rate_limited', __( 'Too many attempts.', 'wwu-withdrawal-button' ), 429 );
 		}
 		$uid   = (string) $request->get_param( 'uid' );
 		$token = (string) $request->get_param( 't' );
 		if ( ! VerifiableLink::verify( $uid, $token ) ) {
-			return $this->error( 'wwu_wb_not_found', __( 'Not found.', 'wwu-withdrawal-button' ), 404 );
+			return $this->error( 'webwakeupwdb_not_found', __( 'Not found.', 'wwu-withdrawal-button' ), 404 );
 		}
 
 		$repo = new LogRepository();
 		$row  = $repo->find( $uid, 'confirmed' );
 		if ( ! $row ) {
-			return $this->error( 'wwu_wb_not_found', __( 'Not found.', 'wwu-withdrawal-button' ), 404 );
+			return $this->error( 'webwakeupwdb_not_found', __( 'Not found.', 'wwu-withdrawal-button' ), 404 );
 		}
 
 		$payload = (array) json_decode( (string) $row['payload_json'], true );
@@ -155,7 +155,7 @@ final class ReceiptRoute extends AbstractRoute {
 		$submitted_ts  = strtotime( (string) $result['submitted_at'] );
 		$submitted_hum = $submitted_ts ? wp_date( $format, $submitted_ts ) : (string) $result['submitted_at'];
 
-		$html = \WWU\WithdrawalButton\Frontend\Template::render(
+		$html = \WebWakeUpWdb\WithdrawalButton\Frontend\Template::render(
 			'public/verify-receipt.php',
 			array(
 				'order_number'    => (string) $result['order_number'],

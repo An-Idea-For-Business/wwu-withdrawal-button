@@ -15,7 +15,7 @@
  * @var string $verify_url      Verification link.
  * @var string $site_name       Site name.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );

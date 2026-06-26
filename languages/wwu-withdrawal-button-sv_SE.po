@@ -115,8 +115,8 @@ msgid "The obligation has been in effect since %s."
 msgstr "Skyldigheten har gällt sedan %s."
 
 #: src/Admin/ComplianceStatusPage.php:141
-msgid "No published withdrawal form page is configured. Guests (and FluentCart customers) cannot withdraw. Create a page with the [wwu_wb_form] shortcode and set it in Settings."
-msgstr "Ingen publicerad sida för ångerformuläret är konfigurerad. Gäster (och FluentCart-kunder) kan inte utöva ångerrätten. Skapa en sida med shortcode [wwu_wb_form] och ange den i Inställningar."
+msgid "No published withdrawal form page is configured. Guests (and FluentCart customers) cannot withdraw. Create a page with the [webwakeupwdb_form] shortcode and set it in Settings."
+msgstr "Ingen publicerad sida för ångerformuläret är konfigurerad. Gäster (och FluentCart-kunder) kan inte utöva ångerrätten. Skapa en sida med shortcode [webwakeupwdb_form] och ange den i Inställningar."
 
 #: src/Admin/ComplianceStatusPage.php:145
 msgid "Complianz is active. The withdrawal flow is functional (consent-exempt); the plugin marks its scripts so they are not blocked. Verify on the front end after first activation."
@@ -176,8 +176,8 @@ msgid "Pre-contractual info shortcode:"
 msgstr "Shortcode för förköpsinformation:"
 
 #: src/Admin/ComplianceStatusPage.php:71
-msgid "The texts below are the ones in use. To replace them with your own wording (no code needed), edit them in <a href=\"%s\">Settings &rarr; Legal clauses</a> — your version then appears here and wherever the <code>[wwu_wb_info]</code> shortcode is used."
-msgstr "Texterna nedan är de som används. För att ersätta dem med din egen formulering (ingen kod krävs) redigerar du dem under <a href=\"%s\">Inställningar &rarr; Juridiska klausuler</a> — din version visas sedan här och överallt där shortcoden <code>[wwu_wb_info]</code> används."
+msgid "The texts below are the ones in use. To replace them with your own wording (no code needed), edit them in <a href=\"%s\">Settings &rarr; Legal clauses</a> — your version then appears here and wherever the <code>[webwakeupwdb_info]</code> shortcode is used."
+msgstr "Texterna nedan är de som används. För att ersätta dem med din egen formulering (ingen kod krävs) redigerar du dem under <a href=\"%s\">Inställningar &rarr; Juridiska klausuler</a> — din version visas sedan här och överallt där shortcoden <code>[webwakeupwdb_info]</code> används."
 
 #: src/Admin/ComplianceStatusPage.php:82
 #: src/Admin/SettingsPage.php:435
@@ -187,9 +187,9 @@ msgstr "anpassad"
 #: src/Admin/ConsentRecordsPage.php:116
 #: src/Admin/RequestsDashboard.php:117
 #: templates/emails/admin-notification.php:30
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:27
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:27
 #: templates/emails/withdrawal-confirmation.php:36
-#: templates/emails/wwu-wb-withdrawal-ack.php:50
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:50
 #: templates/form/withdrawal-form.php:60
 #: templates/myaccount/withdrawal-list.php:72
 #: templates/pdf/receipt-pdf.php:48
@@ -560,9 +560,9 @@ msgstr "Datum/tid (inskickat)"
 
 #: src/Admin/RequestsDashboard.php:118
 #: templates/emails/admin-notification.php:31
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:29
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:29
 #: templates/emails/withdrawal-confirmation.php:38
-#: templates/emails/wwu-wb-withdrawal-ack.php:58
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:58
 #: templates/pdf/receipt-pdf.php:50
 msgid "Consumer"
 msgstr "Konsument"
@@ -1074,8 +1074,8 @@ msgid "Legal clauses"
 msgstr "Juridiska klausuler"
 
 #: src/Admin/SettingsPage.php:422
-msgid "Customise the ready-to-paste legal clauses (language: %s). Leave a field empty to use the built-in sample template. When you type your own wording it replaces the default everywhere — the Compliance page and the [wwu_wb_info] shortcode — and the \"sample text\" note is dropped. This is your own text: have your lawyer review it."
-msgstr "Anpassa de färdiga juridiska klausulerna (språk: %s). Lämna ett fält tomt för att använda den inbyggda exempelmallen. När du skriver din egen formulering ersätter den standarden överallt — på efterlevnadssidan och i shortcoden [wwu_wb_info] — och notering om „exempeltext” tas bort. Det här är din egen text: låt din jurist granska den."
+msgid "Customise the ready-to-paste legal clauses (language: %s). Leave a field empty to use the built-in sample template. When you type your own wording it replaces the default everywhere — the Compliance page and the [webwakeupwdb_info] shortcode — and the \"sample text\" note is dropped. This is your own text: have your lawyer review it."
+msgstr "Anpassa de färdiga juridiska klausulerna (språk: %s). Lämna ett fält tomt för att använda den inbyggda exempelmallen. När du skriver din egen formulering ersätter den standarden överallt — på efterlevnadssidan och i shortcoden [webwakeupwdb_info] — och notering om „exempeltext” tas bort. Det här är din egen text: låt din jurist granska den."
 
 #: src/Admin/SettingsPage.php:438
 msgid "Leave empty to use the built-in sample template."
@@ -1410,8 +1410,8 @@ msgid "The right of withdrawal applies <strong>by default to every product</stro
 msgstr "Ångerrätten gäller <strong>som standard för varje produkt</strong>, inklusive digitala varor och tjänster. <strong>Fysiska produkter behöver aldrig samtycke</strong> — den 14-dagars rätten gäller bara och ingen kryssruta visas för dem. Bara de <strong>två villkorade undantagen</strong> (digitalt innehåll med omedelbar åtkomst; en tjänst som fullständigt utförts) upphäver rätten, och bara när konsumenten ger <strong>förhandsuttryckligt samtycke</strong> OCH <strong>bekräftar att de förlorar rätten</strong>. Tagga en produkt eller kategori under ett specifikt skäl nedan genom att ange produkt-ID:n och/eller kategori-ID:n (kommaseparerade)."
 
 #: src/Admin/SettingsPage.php:739
-msgid "For the two conditional reasons the plugin <strong>captures the consent first, then hides the button</strong>: on the <strong>WooCommerce checkout</strong> it adds the required tick-box automatically and stores the agreed wording on the order. Until that tick-box is confirmed — and on platforms/checkouts where capture is not available yet — the button <strong>stays visible, even on digital items</strong> (fail-safe toward the consumer's right). The plugin never hides the button \"on digital\" blindly. The acknowledgement wording is filterable via <code>wwu_wb_consent_text</code>. Seal-based reasons depend on the consumer unsealing after delivery, so they are never auto-hidden."
-msgstr "För de två villkorade skälen <strong>registrerar insticksprogrammet samtycket först och döljer sedan knappen</strong>: i <strong>WooCommerce-kassan</strong> lägger det automatiskt till den obligatoriska kryssrutan och sparar den godkända texten på beställningen. Tills den kryssrutan bekräftas — och på plattformar/kassor där registrering inte är tillgänglig ännu — <strong>förblir knappen synlig, även för digitala artiklar</strong> (med hänsyn till konsumentens rätt). Insticksprogrammet döljer aldrig knappen \"för digitalt\" blint. Bekräftelsetexten kan filtreras via <code>wwu_wb_consent_text</code>. Förseglingsbaserade skäl beror på att konsumenten bryter förseglingen efter leverans, så de döljs aldrig automatiskt."
+msgid "For the two conditional reasons the plugin <strong>captures the consent first, then hides the button</strong>: on the <strong>WooCommerce checkout</strong> it adds the required tick-box automatically and stores the agreed wording on the order. Until that tick-box is confirmed — and on platforms/checkouts where capture is not available yet — the button <strong>stays visible, even on digital items</strong> (fail-safe toward the consumer's right). The plugin never hides the button \"on digital\" blindly. The acknowledgement wording is filterable via <code>webwakeupwdb_consent_text</code>. Seal-based reasons depend on the consumer unsealing after delivery, so they are never auto-hidden."
+msgstr "För de två villkorade skälen <strong>registrerar insticksprogrammet samtycket först och döljer sedan knappen</strong>: i <strong>WooCommerce-kassan</strong> lägger det automatiskt till den obligatoriska kryssrutan och sparar den godkända texten på beställningen. Tills den kryssrutan bekräftas — och på plattformar/kassor där registrering inte är tillgänglig ännu — <strong>förblir knappen synlig, även för digitala artiklar</strong> (med hänsyn till konsumentens rätt). Insticksprogrammet döljer aldrig knappen \"för digitalt\" blint. Bekräftelsetexten kan filtreras via <code>webwakeupwdb_consent_text</code>. Förseglingsbaserade skäl beror på att konsumenten bryter förseglingen efter leverans, så de döljs aldrig automatiskt."
 
 #: src/Admin/SettingsPage.php:74
 msgid "General"
@@ -2074,9 +2074,9 @@ msgid "please verify whether the request is still valid."
 msgstr "kontrollera om ärendet fortfarande är giltigt."
 
 #: templates/emails/admin-notification.php:32
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:28
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:28
 #: templates/emails/withdrawal-confirmation.php:37
-#: templates/emails/wwu-wb-withdrawal-ack.php:54
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:54
 #: templates/pdf/receipt-pdf.php:49
 msgid "Goods / services"
 msgstr "Varor / tjänster"
@@ -2098,69 +2098,69 @@ msgstr "Beställningen har markerats som \"Frånträde begärt\". Kom ihåg åte
 msgid "View the evidence record"
 msgstr "Visa bevisposten"
 
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:24
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:24
 #: templates/emails/withdrawal-confirmation.php:32
-#: templates/emails/wwu-wb-withdrawal-ack.php:42
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:42
 msgid "Dear %s,"
 msgstr "Kära %s,"
 
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:25
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:25
 #: templates/emails/withdrawal-confirmation.php:33
-#: templates/emails/wwu-wb-withdrawal-ack.php:44
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:44
 msgid "We confirm that we have received your withdrawal from the following distance contract. This message is your acknowledgement of receipt on a durable medium."
 msgstr "Vi bekräftar att vi har mottagit ditt frånträde från följande distansavtal. Det här meddelandet är ditt mottagningsbevis på ett varaktigt medium."
 
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:31
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:31
 #: templates/emails/withdrawal-confirmation.php:40
-#: templates/emails/wwu-wb-withdrawal-ack.php:63
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:63
 #: templates/form/withdrawal-form.php:68
 #: templates/pdf/receipt-pdf.php:52
 msgid "Reason (optional)"
 msgstr "Skäl (valfritt)"
 
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:33
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:33
 #: templates/emails/withdrawal-confirmation.php:45
-#: templates/emails/wwu-wb-withdrawal-ack.php:74
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:74
 #: templates/pdf/receipt-pdf.php:57
 msgid "Date and time of submission"
 msgstr "Datum och tid för inlämning"
 
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:35
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:35
 #: templates/emails/withdrawal-confirmation.php:49
-#: templates/emails/wwu-wb-withdrawal-ack.php:79
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:79
 msgid "Addressee (trader):"
 msgstr "Adressat (handlare):"
 
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:42
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:42
 msgid "Download your receipt (PDF):"
 msgstr "Ladda ned ditt kvitto (PDF):"
 
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:45
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:45
 msgid "Verify this receipt:"
 msgstr "Verifiera detta kvitto:"
 
 #: templates/emails/withdrawal-confirmation.php:43
-#: templates/emails/wwu-wb-withdrawal-ack.php:69
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:69
 #: templates/pdf/receipt-pdf.php:55
 msgid "Products withdrawn"
 msgstr "Produkter som frånträds"
 
 #: templates/emails/withdrawal-confirmation.php:54
-#: templates/emails/wwu-wb-withdrawal-ack.php:84
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:84
 msgid "Download your receipt (PDF)"
 msgstr "Ladda ned ditt kvitto (PDF)"
 
 #: templates/emails/withdrawal-confirmation.php:58
-#: templates/emails/wwu-wb-withdrawal-ack.php:88
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:88
 msgid "Evidence reference:"
 msgstr "Bevisreferens:"
 
 #: templates/emails/withdrawal-confirmation.php:59
-#: templates/emails/wwu-wb-withdrawal-ack.php:90
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:90
 msgid "Verify this receipt"
 msgstr "Verifiera detta kvitto"
 
-#: templates/emails/wwu-wb-withdrawal-ack.php:46
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:46
 msgid "Withdrawal details"
 msgstr "Detaljer om ångerbegäran"
 
@@ -2460,8 +2460,8 @@ msgid "Enable it now"
 msgstr "Aktivera nu"
 
 #: src/Admin/DashboardPage.php:531
-msgid "The PDF library is not available on this site. Install the plugin from the official packaged ZIP to enable PDF export — the policy page and the [wwu_wb_policy] shortcode still work without it."
-msgstr "PDF-biblioteket är inte tillgängligt på den här webbplatsen. Installera insticksprogrammet från den officiella förpackade ZIP-filen för att aktivera PDF-export — policysidan och shortcoden [wwu_wb_policy] fungerar ändå utan den."
+msgid "The PDF library is not available on this site. Install the plugin from the official packaged ZIP to enable PDF export — the policy page and the [webwakeupwdb_policy] shortcode still work without it."
+msgstr "PDF-biblioteket är inte tillgängligt på den här webbplatsen. Installera insticksprogrammet från den officiella förpackade ZIP-filen för att aktivera PDF-export — policysidan och shortcoden [webwakeupwdb_policy] fungerar ändå utan den."
 
 #: src/Admin/DashboardPage.php:567
 msgid "Could not recreate the page. Please try again, or create it manually with the relevant shortcode."

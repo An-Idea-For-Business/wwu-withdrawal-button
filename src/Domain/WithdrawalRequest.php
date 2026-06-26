@@ -2,12 +2,12 @@
 /**
  * Value object for a consumer's withdrawal statement (Art. 11a(2) data).
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Domain;
+namespace WebWakeUpWdb\WithdrawalButton\Domain;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

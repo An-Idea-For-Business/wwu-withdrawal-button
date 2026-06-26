@@ -6,15 +6,15 @@
  * (GDPR Art. 6(1)(b)/(c)) and must work WITHOUT consent. Complianz's cookie
  * blocker scans the page output and could rewrite our functional script to
  * type="text/plain" if a substring coincidentally matches a known service. We
- * whitelist our marker attribute (data-wwu-wb=) so our scripts are never blocked,
+ * whitelist our marker attribute (data-webwakeupwdb=) so our scripts are never blocked,
  * and force them into the always-allowed "functional" category as a belt.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Compat;
+namespace WebWakeUpWdb\WithdrawalButton\Compat;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -43,7 +43,7 @@ final class Complianz {
 	 */
 	public function whitelist( $tags ): array {
 		$tags   = (array) $tags;
-		$tags[] = 'data-wwu-wb=';
+		$tags[] = 'data-webwakeupwdb=';
 		return $tags;
 	}
 
@@ -56,7 +56,7 @@ final class Complianz {
 	 * @return string
 	 */
 	public function force_functional( $class, $total_match, $found ): string {
-		if ( is_string( $total_match ) && false !== strpos( $total_match, 'data-wwu-wb=' ) ) {
+		if ( is_string( $total_match ) && false !== strpos( $total_match, 'data-webwakeupwdb=' ) ) {
 			return 'functional';
 		}
 		return (string) $class;

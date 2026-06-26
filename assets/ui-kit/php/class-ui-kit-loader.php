@@ -2,7 +2,7 @@
 /**
  * WWU UI Kit — Selective enqueue loader
  *
- * Consumer plugins call `WWU_UI_Kit_Loader::enqueue( $prefix, $components )`
+ * Consumer plugins call `WebWakeUpWdb_UI_Kit_Loader::enqueue( $prefix, $components )`
  * with the ONLY components they need. The loader resolves dependencies
  * (e.g. modal → auto-includes focus-trap + core-js + tokens) and enqueues
  * just the minimum CSS/JS required.
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-if ( class_exists( 'WWU_UI_Kit_Loader' ) ) {
+if ( class_exists( 'WebWakeUpWdb_UI_Kit_Loader' ) ) {
     // Already loaded by another plugin — first loader wins.
     return;
 }
@@ -28,7 +28,7 @@ if ( class_exists( 'WWU_UI_Kit_Loader' ) ) {
 /**
  * Static-only class.
  */
-final class WWU_UI_Kit_Loader {
+final class WebWakeUpWdb_UI_Kit_Loader {
 
     /**
      * Semantic version of the kit. Must match VERSION file + CHANGELOG.
@@ -137,7 +137,7 @@ final class WWU_UI_Kit_Loader {
      * Enqueue a specific subset of components. Dependencies are auto-resolved.
      *
      * Example:
-     *   WWU_UI_Kit_Loader::enqueue( 'wwu-pm', array(
+     *   WebWakeUpWdb_UI_Kit_Loader::enqueue( 'wwu-pm', array(
      *       'toast', 'accordion', 'form-field', 'switch',
      *   ) );
      *   // -> enqueues tokens, core (JS), utilities (hmm no — not needed),
@@ -149,7 +149,7 @@ final class WWU_UI_Kit_Loader {
      * @since 0.8.0
      *
      * @param string   $consumer_prefix  Short plugin identifier (e.g. 'wwu-pm').
-     *                                   Emitted in the `wwu_ui_kit_enqueued` action.
+     *                                   Emitted in the `webwakeupwdb_ui_kit_enqueued` action.
      * @param string[] $components       Component IDs to load. Dependencies
      *                                   auto-added. Unknown IDs log a warning.
      * @return void
@@ -216,7 +216,7 @@ final class WWU_UI_Kit_Loader {
          * @param string[] $resolved         Final list of components loaded
          *                                   (including dependencies).
          */
-        do_action( 'wwu_ui_kit_enqueued', $consumer_prefix, $ver, $resolved );
+        do_action( 'webwakeupwdb_ui_kit_enqueued', $consumer_prefix, $ver, $resolved );
     }
 
     /**
@@ -261,7 +261,7 @@ final class WWU_UI_Kit_Loader {
         );
 
         /** @see enqueue() */
-        do_action( 'wwu_ui_kit_enqueued', $consumer_prefix, $ver, array( '__bundle__' ) );
+        do_action( 'webwakeupwdb_ui_kit_enqueued', $consumer_prefix, $ver, array( '__bundle__' ) );
     }
 
     /**

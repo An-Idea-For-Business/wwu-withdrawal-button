@@ -7,17 +7,17 @@
  * server-side Step-2 confirmation page, then confirms. This keeps the statutory
  * withdrawal function "easily accessible" (Art. 11a(1)) even without scripting.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Frontend;
+namespace WebWakeUpWdb\WithdrawalButton\Frontend;
 
-use WWU\WithdrawalButton\Core\Services;
-use WWU\WithdrawalButton\Domain\WithdrawalRequest;
-use WWU\WithdrawalButton\Platform\NormalizedOrder;
-use WWU\WithdrawalButton\Platform\OrderDataSource;
+use WebWakeUpWdb\WithdrawalButton\Core\Services;
+use WebWakeUpWdb\WithdrawalButton\Domain\WithdrawalRequest;
+use WebWakeUpWdb\WithdrawalButton\Platform\NormalizedOrder;
+use WebWakeUpWdb\WithdrawalButton\Platform\OrderDataSource;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -33,7 +33,7 @@ final class NoScriptFlow {
 	 *
 	 * @var string
 	 */
-	private const NONCE = 'wwu_wb_noscript';
+	private const NONCE = 'webwakeupwdb_noscript';
 
 	/**
 	 * Wire admin-post handlers (logged-in + guest).
@@ -42,8 +42,8 @@ final class NoScriptFlow {
 	 */
 	public function register(): void {
 		foreach ( array( 'statement', 'confirm' ) as $step ) {
-			add_action( 'admin_post_wwu_wb_noscript_' . $step, array( $this, 'handle_' . $step ) );
-			add_action( 'admin_post_nopriv_wwu_wb_noscript_' . $step, array( $this, 'handle_' . $step ) );
+			add_action( 'admin_post_webwakeupwdb_noscript_' . $step, array( $this, 'handle_' . $step ) );
+			add_action( 'admin_post_nopriv_webwakeupwdb_noscript_' . $step, array( $this, 'handle_' . $step ) );
 		}
 	}
 
@@ -90,7 +90,7 @@ final class NoScriptFlow {
 
 		$body  = '<p>' . esc_html__( 'Please confirm your withdrawal. This is the final step.', 'wwu-withdrawal-button' ) . '</p>';
 		$body .= '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
-		$body .= '<input type="hidden" name="action" value="wwu_wb_noscript_confirm" />';
+		$body .= '<input type="hidden" name="action" value="webwakeupwdb_noscript_confirm" />';
 		$body .= '<input type="hidden" name="order_ref" value="' . esc_attr( $order->order_ref ) . '" />';
 		$body .= '<input type="hidden" name="request_uid" value="' . esc_attr( $result['request_uid'] ) . '" />';
 		$body .= '<input type="hidden" name="confirm_token" value="' . esc_attr( $result['confirm_token'] ) . '" />';
@@ -106,7 +106,7 @@ final class NoScriptFlow {
 		$body .= '<input type="hidden" name="key" value="' . esc_attr( $key ) . '" />';
 		$body .= '<input type="hidden" name="access_token" value="' . esc_attr( $token ) . '" />';
 		$body .= wp_nonce_field( self::NONCE, '_wpnonce', true, false );
-		$body .= '<button type="submit" class="wwu-wb-button" data-no-translation>' . esc_html( $confirm ) . '</button>';
+		$body .= '<button type="submit" class="webwakeupwdb-button" data-no-translation>' . esc_html( $confirm ) . '</button>';
 		$body .= '</form>';
 
 		$this->render_page( $confirm, $body );
@@ -227,9 +227,9 @@ final class NoScriptFlow {
 	private function render_page( string $title, string $body ): void {
 		nocache_headers();
 		header( 'Content-Type: text/html; charset=UTF-8' );
-		$css = '.wwu-wb-np{max-width:560px;margin:6vh auto;padding:0 20px;font-family:Arial,Helvetica,sans-serif;color:#222;}.wwu-wb-button{display:inline-block;padding:.7em 1.4em;background:#1a1f3a;color:#fff;border:0;border-radius:5px;font-size:1rem;cursor:pointer;text-decoration:none;}';
+		$css = '.webwakeupwdb-np{max-width:560px;margin:6vh auto;padding:0 20px;font-family:Arial,Helvetica,sans-serif;color:#222;}.webwakeupwdb-button{display:inline-block;padding:.7em 1.4em;background:#1a1f3a;color:#fff;border:0;border-radius:5px;font-size:1rem;cursor:pointer;text-decoration:none;}';
 		// The no-JS pages use only the static layout CSS above (no user-supplied CSS).
-		echo '<!DOCTYPE html><html lang="' . esc_attr( get_bloginfo( 'language' ) ) . '"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>' . esc_html( $title ) . '</title><style>' . $css . '</style></head><body><div class="wwu-wb-np"><h1>' . esc_html( $title ) . '</h1>' . $body . '<p style="margin-top:2em;"><a href="' . esc_url( home_url( '/' ) ) . '">' . esc_html__( 'Back to the site', 'wwu-withdrawal-button' ) . '</a></p></div></body></html>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $body is pre-escaped; $css is a static literal.
+		echo '<!DOCTYPE html><html lang="' . esc_attr( get_bloginfo( 'language' ) ) . '"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>' . esc_html( $title ) . '</title><style>' . $css . '</style></head><body><div class="webwakeupwdb-np"><h1>' . esc_html( $title ) . '</h1>' . $body . '<p style="margin-top:2em;"><a href="' . esc_url( home_url( '/' ) ) . '">' . esc_html__( 'Back to the site', 'wwu-withdrawal-button' ) . '</a></p></div></body></html>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $body is pre-escaped; $css is a static literal.
 		exit;
 	}
 }

@@ -7,15 +7,15 @@
  * the link carries the order reference + order key so a guest (no account)
  * reaches the pre-authenticated withdrawal form.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Mail;
+namespace WebWakeUpWdb\WithdrawalButton\Mail;
 
-use WWU\WithdrawalButton\Core\Services;
-use WWU\WithdrawalButton\Core\Settings;
+use WebWakeUpWdb\WithdrawalButton\Core\Services;
+use WebWakeUpWdb\WithdrawalButton\Core\Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -65,7 +65,7 @@ final class OrderEmailLink {
 
 		$url = add_query_arg(
 			array(
-				'wwu_wb_order' => rawurlencode( $order->order_ref ),
+				'webwakeupwdb_order' => rawurlencode( $order->order_ref ),
 				'key'          => rawurlencode( (string) $wc_order->get_order_key() ),
 			),
 			get_permalink( $page_id )

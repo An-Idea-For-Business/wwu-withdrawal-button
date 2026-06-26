@@ -9,7 +9,7 @@
  * core scripts that expose wp.blocks, wp.element, wp.i18n, wp.blockEditor,
  * wp.components and wp.serverSideRender.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 return array(

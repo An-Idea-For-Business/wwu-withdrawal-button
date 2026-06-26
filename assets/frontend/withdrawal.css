@@ -7,9 +7,9 @@
  * Our own values are only the fallback used when the theme defines nothing.
  *
  * Two override layers, both through WordPress core's Customizer -> Additional CSS:
- *   1. CSS custom properties (--wwu-wb-*) — one-line overrides (colours, radius,
- *      spacing), e.g. :root { --wwu-wb-accent: #f49619; --wwu-wb-radius: 8px; }
- *   2. Plain classes (.wwu-wb-*) — full control for anything else.
+ *   1. CSS custom properties (--webwakeupwdb-*) — one-line overrides (colours, radius,
+ *      spacing), e.g. :root { --webwakeupwdb-accent: #f49619; --webwakeupwdb-radius: 8px; }
+ *   2. Plain classes (.webwakeupwdb-*) — full control for anything else.
  *
  * The full token + class reference is listed in the plugin Settings page.
  *
@@ -22,345 +22,345 @@
 	   present; our accessible navy is the fallback. Preset slugs vary by theme,
 	   so we try the common ones (primary, accent, accent-1). The button text
 	   stays white by default (safe for a dark accent); override
-	   --wwu-wb-accent-text via the Customizer if your accent is light. */
-	--wwu-wb-accent:        var(--wp--preset--color--primary, var(--wp--preset--color--accent, var(--wp--preset--color--accent-1, #1a1f3a)));
-	--wwu-wb-accent-text:   #ffffff;
-	--wwu-wb-accent-focus:  var(--wp--preset--color--primary, var(--wp--preset--color--accent, var(--wp--preset--color--accent-1, #1a1f3a)));
+	   --webwakeupwdb-accent-text via the Customizer if your accent is light. */
+	--webwakeupwdb-accent:        var(--wp--preset--color--primary, var(--wp--preset--color--accent, var(--wp--preset--color--accent-1, #1a1f3a)));
+	--webwakeupwdb-accent-text:   #ffffff;
+	--webwakeupwdb-accent-focus:  var(--wp--preset--color--primary, var(--wp--preset--color--accent, var(--wp--preset--color--accent-1, #1a1f3a)));
 	/* Shape */
-	--wwu-wb-radius:        5px;
-	--wwu-wb-field-radius:  4px;
+	--webwakeupwdb-radius:        5px;
+	--webwakeupwdb-field-radius:  4px;
 	/* Buttons */
-	--wwu-wb-button-padding:   0.7em 1.4em;
-	--wwu-wb-button-font-size: 1rem;
-	--wwu-wb-button-font-weight: 600;
-	--wwu-wb-button-border:    2px solid currentColor;
+	--webwakeupwdb-button-padding:   0.7em 1.4em;
+	--webwakeupwdb-button-font-size: 1rem;
+	--webwakeupwdb-button-font-weight: 600;
+	--webwakeupwdb-button-border:    2px solid currentColor;
 	/* Form */
-	--wwu-wb-form-max-width:   540px;
-	--wwu-wb-field-border:     #c3c4c7;
-	--wwu-wb-field-padding:    0.6em 0.7em;
-	--wwu-wb-label-weight:     600;
+	--webwakeupwdb-form-max-width:   540px;
+	--webwakeupwdb-field-border:     #c3c4c7;
+	--webwakeupwdb-field-padding:    0.6em 0.7em;
+	--webwakeupwdb-label-weight:     600;
 	/* Notes / states */
-	--wwu-wb-note-color:       #666666;
-	--wwu-wb-success-bg:       #edfaef;
-	--wwu-wb-success-border:   #46b450;
-	--wwu-wb-success-text:     #1a4d24;
-	--wwu-wb-error-bg:         #fcf0f1;
-	--wwu-wb-error-border:     #d63638;
-	--wwu-wb-error-text:       #8a1f21;
-	--wwu-wb-notice-bg:        #f6f7f7;
-	--wwu-wb-notice-accent:    #1a1f3a;
-	--wwu-wb-spacing:          1em;
+	--webwakeupwdb-note-color:       #666666;
+	--webwakeupwdb-success-bg:       #edfaef;
+	--webwakeupwdb-success-border:   #46b450;
+	--webwakeupwdb-success-text:     #1a4d24;
+	--webwakeupwdb-error-bg:         #fcf0f1;
+	--webwakeupwdb-error-border:     #d63638;
+	--webwakeupwdb-error-text:       #8a1f21;
+	--webwakeupwdb-notice-bg:        #f6f7f7;
+	--webwakeupwdb-notice-accent:    #1a1f3a;
+	--webwakeupwdb-spacing:          1em;
 }
 
-.wwu-wb-button-wrap {
-	margin: var(--wwu-wb-spacing) 0;
+.webwakeupwdb-button-wrap {
+	margin: var(--webwakeupwdb-spacing) 0;
 }
 
-.wwu-wb-button {
+.webwakeupwdb-button {
 	display: inline-block;
 	font-family: inherit; /* match the theme's typography */
-	padding: var(--wwu-wb-button-padding);
-	font-size: var(--wwu-wb-button-font-size);
+	padding: var(--webwakeupwdb-button-padding);
+	font-size: var(--webwakeupwdb-button-font-size);
 	line-height: 1.2;
-	font-weight: var(--wwu-wb-button-font-weight);
+	font-weight: var(--webwakeupwdb-button-font-weight);
 	text-decoration: none;
-	border-radius: var(--wwu-wb-radius);
+	border-radius: var(--webwakeupwdb-radius);
 	cursor: pointer;
-	border: var(--wwu-wb-button-border);
-	background: var(--wwu-wb-accent);
-	color: var(--wwu-wb-accent-text);
+	border: var(--webwakeupwdb-button-border);
+	background: var(--webwakeupwdb-accent);
+	color: var(--webwakeupwdb-accent-text);
 	transition: opacity 0.2s ease-in-out;
 }
 
-.wwu-wb-button:hover,
-.wwu-wb-button:focus {
+.webwakeupwdb-button:hover,
+.webwakeupwdb-button:focus {
 	opacity: 0.9;
-	color: var(--wwu-wb-accent-text);
+	color: var(--webwakeupwdb-accent-text);
 }
 
-.wwu-wb-button:focus-visible {
-	outline: 3px solid var(--wwu-wb-accent-focus);
+.webwakeupwdb-button:focus-visible {
+	outline: 3px solid var(--webwakeupwdb-accent-focus);
 	outline-offset: 2px;
 }
 
-.wwu-wb-window-note {
+.webwakeupwdb-window-note {
 	display: inline-block;
 	margin-left: 0.75em;
 	font-size: 0.85rem;
-	color: var(--wwu-wb-note-color);
+	color: var(--webwakeupwdb-note-color);
 }
 
 /* Small button variant (used in the orders chooser table). */
-.wwu-wb-button--sm {
+.webwakeupwdb-button--sm {
 	padding: 0.45em 1em;
 	font-size: 0.9rem;
 	white-space: nowrap;
 }
 
 /* Orders chooser (My Account tab + public form page). */
-.wwu-wb-account-intro {
+.webwakeupwdb-account-intro {
 	margin: 1em 0;
 }
 
-.wwu-wb-orders {
+.webwakeupwdb-orders {
 	width: 100%;
 	border-collapse: collapse;
 	margin: 1em 0;
 }
 
-.wwu-wb-orders th,
-.wwu-wb-orders td {
+.webwakeupwdb-orders th,
+.webwakeupwdb-orders td {
 	text-align: left;
 	padding: 0.7em 1em;
-	border-bottom: 1px solid var(--wwu-wb-field-border);
+	border-bottom: 1px solid var(--webwakeupwdb-field-border);
 	vertical-align: middle;
 }
 
-.wwu-wb-orders thead th {
+.webwakeupwdb-orders thead th {
 	font-weight: 600;
 	border-bottom-width: 2px;
 }
 
-.wwu-wb-orders__action {
+.webwakeupwdb-orders__action {
 	white-space: nowrap;
 }
 
 /* Compact, inline status pill — no block margins inside a table cell. */
-.wwu-wb-status-pill {
+.webwakeupwdb-status-pill {
 	display: inline-block;
 	padding: 0.3em 0.7em;
 	font-size: 0.85rem;
 	line-height: 1.2;
 	border-radius: 999px;
-	background: var(--wwu-wb-notice-bg);
-	border: 1px solid var(--wwu-wb-field-border);
-	color: var(--wwu-wb-note-color);
+	background: var(--webwakeupwdb-notice-bg);
+	border: 1px solid var(--webwakeupwdb-field-border);
+	color: var(--webwakeupwdb-note-color);
 	white-space: nowrap;
 }
 
 /* Stack the table into rows on small screens (no theme dependency). */
 @media (max-width: 600px) {
-	.wwu-wb-orders thead {
+	.webwakeupwdb-orders thead {
 		display: none;
 	}
-	.wwu-wb-orders,
-	.wwu-wb-orders tbody,
-	.wwu-wb-orders tr,
-	.wwu-wb-orders td {
+	.webwakeupwdb-orders,
+	.webwakeupwdb-orders tbody,
+	.webwakeupwdb-orders tr,
+	.webwakeupwdb-orders td {
 		display: block;
 		width: 100%;
 	}
-	.wwu-wb-orders td {
+	.webwakeupwdb-orders td {
 		border-bottom: none;
 		padding: 0.2em 0;
 	}
-	.wwu-wb-orders tr {
-		border-bottom: 1px solid var(--wwu-wb-field-border);
+	.webwakeupwdb-orders tr {
+		border-bottom: 1px solid var(--webwakeupwdb-field-border);
 		padding: 0.8em 0;
 	}
-	.wwu-wb-orders__num {
+	.webwakeupwdb-orders__num {
 		font-weight: 600;
 	}
 }
 
-.wwu-wb-form-wrap {
-	max-width: var(--wwu-wb-form-max-width);
+.webwakeupwdb-form-wrap {
+	max-width: var(--webwakeupwdb-form-max-width);
 	margin: 1.5em 0;
 }
 
-.wwu-wb-form-title {
+.webwakeupwdb-form-title {
 	margin-top: 0;
 }
 
-.wwu-wb-field {
+.webwakeupwdb-field {
 	display: flex;
 	flex-direction: column;
-	margin-bottom: var(--wwu-wb-spacing);
+	margin-bottom: var(--webwakeupwdb-spacing);
 }
 
-.wwu-wb-field label {
-	font-weight: var(--wwu-wb-label-weight);
+.webwakeupwdb-field label {
+	font-weight: var(--webwakeupwdb-label-weight);
 	margin-bottom: 0.25em;
 }
 
-.wwu-wb-field input,
-.wwu-wb-field textarea {
-	padding: var(--wwu-wb-field-padding);
+.webwakeupwdb-field input,
+.webwakeupwdb-field textarea {
+	padding: var(--webwakeupwdb-field-padding);
 	font-family: inherit; /* match the theme's typography */
 	font-size: 1rem;
-	border: 1px solid var(--wwu-wb-field-border);
-	border-radius: var(--wwu-wb-field-radius);
+	border: 1px solid var(--webwakeupwdb-field-border);
+	border-radius: var(--webwakeupwdb-field-radius);
 	width: 100%;
 	box-sizing: border-box;
 }
 
 /* Partial-withdrawal product selection + optional per-line quantity. */
-.wwu-wb-products {
-	border: 1px solid var(--wwu-wb-field-border);
-	border-radius: var(--wwu-wb-field-radius);
+.webwakeupwdb-products {
+	border: 1px solid var(--webwakeupwdb-field-border);
+	border-radius: var(--webwakeupwdb-field-radius);
 	padding: 0.8em 1em;
-	margin-bottom: var(--wwu-wb-spacing);
+	margin-bottom: var(--webwakeupwdb-spacing);
 }
-.wwu-wb-products legend {
-	font-weight: var(--wwu-wb-label-weight);
+.webwakeupwdb-products legend {
+	font-weight: var(--webwakeupwdb-label-weight);
 	padding: 0 0.4em;
 }
-.wwu-wb-products-help {
+.webwakeupwdb-products-help {
 	font-size: 0.85rem;
-	color: var(--wwu-wb-note-color);
+	color: var(--webwakeupwdb-note-color);
 	margin: 0 0 0.6em;
 }
-.wwu-wb-products-item {
+.webwakeupwdb-products-item {
 	display: block;
 	margin: 0.35em 0 0.1em;
 }
-.wwu-wb-products-qty {
+.webwakeupwdb-products-qty {
 	display: block;
 	margin: 0 0 0.6em 1.7em;
 	font-size: 0.9rem;
-	color: var(--wwu-wb-note-color);
+	color: var(--webwakeupwdb-note-color);
 }
-.wwu-wb-products-qty-label {
+.webwakeupwdb-products-qty-label {
 	margin-right: 0.4em;
 }
-.wwu-wb-products-qty input[type="number"] {
+.webwakeupwdb-products-qty input[type="number"] {
 	width: 6em;
 	padding: 0.3em 0.4em;
 	font-family: inherit; /* match the theme's typography */
 	font-size: 0.9rem;
-	border: 1px solid var(--wwu-wb-field-border);
-	border-radius: var(--wwu-wb-field-radius);
+	border: 1px solid var(--webwakeupwdb-field-border);
+	border-radius: var(--webwakeupwdb-field-radius);
 }
 
 /* Consolidated "Right of withdrawal" information notice (shortcode / page / PDF). */
-.wwu-wb-policy-wrap {
+.webwakeupwdb-policy-wrap {
 	max-width: 820px;
 	margin: 1.5em 0;
 }
-.wwu-wb-policy__disclaimer {
+.webwakeupwdb-policy__disclaimer {
 	font-size: 0.9rem;
-	color: var(--wwu-wb-note-color);
-	background: var(--wwu-wb-notice-bg);
-	border-left: 4px solid var(--wwu-wb-notice-accent);
+	color: var(--webwakeupwdb-note-color);
+	background: var(--webwakeupwdb-notice-bg);
+	border-left: 4px solid var(--webwakeupwdb-notice-accent);
 	padding: 0.6em 1em;
 	margin: 0 0 1.2em;
 }
-.wwu-wb-policy__title {
+.webwakeupwdb-policy__title {
 	margin: 0 0 0.6em;
 }
-.wwu-wb-policy__section {
+.webwakeupwdb-policy__section {
 	margin: 0 0 1.4em;
 }
-.wwu-wb-policy__heading {
+.webwakeupwdb-policy__heading {
 	margin: 0 0 0.4em;
 }
-.wwu-wb-policy__ref {
-	color: var(--wwu-wb-note-color);
+.webwakeupwdb-policy__ref {
+	color: var(--webwakeupwdb-note-color);
 	font-size: 0.9em;
 }
-.wwu-wb-policy__exceptions {
+.webwakeupwdb-policy__exceptions {
 	margin: 0.4em 0 0;
 	padding-left: 1.2em;
 }
-.wwu-wb-policy__exceptions li {
+.webwakeupwdb-policy__exceptions li {
 	margin-bottom: 0.6em;
 }
 
-.wwu-wb-step2-intro {
+.webwakeupwdb-step2-intro {
 	font-weight: 600;
 }
 
-.wwu-wb-result {
-	margin-top: var(--wwu-wb-spacing);
+.webwakeupwdb-result {
+	margin-top: var(--webwakeupwdb-spacing);
 	padding: 0.8em 1em;
-	border-radius: var(--wwu-wb-field-radius);
+	border-radius: var(--webwakeupwdb-field-radius);
 }
 
-.wwu-wb-result.is-success {
-	background: var(--wwu-wb-success-bg);
-	border: 1px solid var(--wwu-wb-success-border);
-	color: var(--wwu-wb-success-text);
+.webwakeupwdb-result.is-success {
+	background: var(--webwakeupwdb-success-bg);
+	border: 1px solid var(--webwakeupwdb-success-border);
+	color: var(--webwakeupwdb-success-text);
 }
 
-.wwu-wb-result.is-error {
-	background: var(--wwu-wb-error-bg);
-	border: 1px solid var(--wwu-wb-error-border);
-	color: var(--wwu-wb-error-text);
+.webwakeupwdb-result.is-error {
+	background: var(--webwakeupwdb-error-bg);
+	border: 1px solid var(--webwakeupwdb-error-border);
+	color: var(--webwakeupwdb-error-text);
 }
 
-.wwu-wb-status-notice {
-	margin: var(--wwu-wb-spacing) 0;
+.webwakeupwdb-status-notice {
+	margin: var(--webwakeupwdb-spacing) 0;
 	padding: 0.6em 1em;
-	background: var(--wwu-wb-notice-bg);
-	border-left: 4px solid var(--wwu-wb-notice-accent);
+	background: var(--webwakeupwdb-notice-bg);
+	border-left: 4px solid var(--webwakeupwdb-notice-accent);
 }
 
-.wwu-wb-notice {
-	margin: var(--wwu-wb-spacing) 0;
-	color: var(--wwu-wb-note-color);
+.webwakeupwdb-notice {
+	margin: var(--webwakeupwdb-spacing) 0;
+	color: var(--webwakeupwdb-note-color);
 }
 
-.wwu-wb-noscript {
-	color: var(--wwu-wb-error-text);
+.webwakeupwdb-noscript {
+	color: var(--webwakeupwdb-error-text);
 }
 
-.wwu-wb-model-form {
+.webwakeupwdb-model-form {
 	margin: 1.5em 0;
 }
 
-.wwu-wb-model-form__fields {
+.webwakeupwdb-model-form__fields {
 	list-style: none;
 	padding: 0;
 }
 
-.wwu-wb-model-form__fields li {
+.webwakeupwdb-model-form__fields li {
 	padding: 0.35em 0;
-	border-bottom: 1px dashed var(--wwu-wb-field-border);
+	border-bottom: 1px dashed var(--webwakeupwdb-field-border);
 }
 
-.wwu-wb-info {
-	margin: var(--wwu-wb-spacing) 0;
+.webwakeupwdb-info {
+	margin: var(--webwakeupwdb-spacing) 0;
 }
 
 /* Consumer "how it works" guidance block. */
-.wwu-wb-guidance {
+.webwakeupwdb-guidance {
 	margin: 0 0 1.2em;
 	padding: 0.9em 1.1em;
-	background: var(--wwu-wb-notice-bg);
-	border-left: 4px solid var(--wwu-wb-notice-accent);
-	border-radius: var(--wwu-wb-field-radius);
+	background: var(--webwakeupwdb-notice-bg);
+	border-left: 4px solid var(--webwakeupwdb-notice-accent);
+	border-radius: var(--webwakeupwdb-field-radius);
 }
 
-.wwu-wb-guidance__intro {
+.webwakeupwdb-guidance__intro {
 	margin: 0;
 }
 
-.wwu-wb-guidance__details {
+.webwakeupwdb-guidance__details {
 	margin-top: 0.6em;
 }
 
-.wwu-wb-guidance__details summary {
+.webwakeupwdb-guidance__details summary {
 	cursor: pointer;
 	font-weight: 600;
 }
 
-.wwu-wb-guidance__list {
+.webwakeupwdb-guidance__list {
 	margin: 0.8em 0 0.4em;
 	padding-left: 1.3em;
 }
 
-.wwu-wb-guidance__list li {
+.webwakeupwdb-guidance__list li {
 	margin-bottom: 0.5em;
 }
 
-.wwu-wb-guidance__help {
+.webwakeupwdb-guidance__help {
 	margin: 0.4em 0 0;
 	font-size: 0.9rem;
-	color: var(--wwu-wb-note-color);
+	color: var(--webwakeupwdb-note-color);
 }
 
 /* Trap #19 twin rule: keep [hidden] effective even if a theme sets display. */
-.wwu-wb-form-wrap [hidden] {
+.webwakeupwdb-form-wrap [hidden] {
 	display: none !important;
 }
 
@@ -368,17 +368,17 @@
  * Art. 59 exemption transparency note — shown when the button is absent
  * because the order is exempt from the right of withdrawal.
  */
-.wwu-wb-exempt-note {
+.webwakeupwdb-exempt-note {
 	margin: 1em 0;
 	padding: 0.75em 1em;
 	background-color: #f9f0e0;
 	border-left: 4px solid #c78a00;
 	border-radius: 0 4px 4px 0;
-	color: var(--wwu-wb-text-color, #333);
+	color: var(--webwakeupwdb-text-color, #333);
 	font-size: 0.9rem;
 	line-height: 1.5;
 }
 
-.wwu-wb-exempt-note p {
+.webwakeupwdb-exempt-note p {
 	margin: 0;
 }

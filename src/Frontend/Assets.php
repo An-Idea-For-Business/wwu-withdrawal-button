@@ -4,18 +4,18 @@
  *
  * Loads a small CSS+JS bundle ONLY where the flow can appear (My Account, or a
  * page containing a plugin shortcode) — zero overhead elsewhere. Every emitted
- * script tag carries a data-wwu-wb marker so Complianz (and similar consent
+ * script tag carries a data-webwakeupwdb marker so Complianz (and similar consent
  * blockers) can whitelist this functional, consent-exempt flow (handled fully in
  * the Compat layer; the marker is added here at the source).
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Frontend;
+namespace WebWakeUpWdb\WithdrawalButton\Frontend;
 
-use WWU\WithdrawalButton\Core\Services;
+use WebWakeUpWdb\WithdrawalButton\Core\Services;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -59,13 +59,13 @@ final class Assets {
 	 * @return void
 	 */
 	public function ensure(): void {
-		if ( ! \WWU\WithdrawalButton\Core\Settings::enabled() ) {
+		if ( ! \WebWakeUpWdb\WithdrawalButton\Core\Settings::enabled() ) {
 			return;
 		}
 		if ( ! Services::instance()->platforms->has_active() ) {
 			return;
 		}
-		if ( wp_style_is( 'wwu-wb-frontend', 'enqueued' ) ) {
+		if ( wp_style_is( 'webwakeupwdb-frontend', 'enqueued' ) ) {
 			return;
 		}
 		$this->do_enqueue();
@@ -82,25 +82,25 @@ final class Assets {
 		add_filter( 'script_loader_tag', array( $this, 'mark_script_tag' ), 10, 2 );
 
 		wp_enqueue_style(
-			'wwu-wb-frontend',
-			WWU_WB_URL . '/assets/frontend/withdrawal.css',
+			'webwakeupwdb-frontend',
+			WEBWAKEUPWDB_URL . '/assets/frontend/withdrawal.css',
 			array(),
-			WWU_WB_VERSION
+			WEBWAKEUPWDB_VERSION
 		);
 
 		wp_enqueue_script(
-			'wwu-wb-frontend',
-			WWU_WB_URL . '/assets/frontend/withdrawal.js',
+			'webwakeupwdb-frontend',
+			WEBWAKEUPWDB_URL . '/assets/frontend/withdrawal.js',
 			array(),
-			WWU_WB_VERSION,
+			WEBWAKEUPWDB_VERSION,
 			true
 		);
 
 		wp_localize_script(
-			'wwu-wb-frontend',
-			'wwuWbData',
+			'webwakeupwdb-frontend',
+			'webwakeupwdbData',
 			array(
-				'restUrl'   => esc_url_raw( rest_url( WWU_WB_REST_NAMESPACE . '/' ) ),
+				'restUrl'   => esc_url_raw( rest_url( WEBWAKEUPWDB_REST_NAMESPACE . '/' ) ),
 				'restNonce' => wp_create_nonce( 'wp_rest' ),
 				'i18n'      => array(
 					'submitting'   => __( 'Submitting…', 'wwu-withdrawal-button' ),
@@ -123,13 +123,13 @@ final class Assets {
 	 * @return string
 	 */
 	public function mark_script_tag( string $tag, string $handle ): string {
-		if ( false === strpos( $handle, 'wwu-wb' ) ) {
+		if ( false === strpos( $handle, 'webwakeupwdb' ) ) {
 			return $tag;
 		}
-		if ( false !== strpos( $tag, 'data-wwu-wb' ) ) {
+		if ( false !== strpos( $tag, 'data-webwakeupwdb' ) ) {
 			return $tag;
 		}
-		return str_replace( '<script ', '<script data-wwu-wb="withdrawal-flow" ', $tag );
+		return str_replace( '<script ', '<script data-webwakeupwdb="withdrawal-flow" ', $tag );
 	}
 
 	/**
@@ -138,7 +138,7 @@ final class Assets {
 	 * @return bool
 	 */
 	private function should_enqueue(): bool {
-		if ( ! \WWU\WithdrawalButton\Core\Settings::enabled() ) {
+		if ( ! \WebWakeUpWdb\WithdrawalButton\Core\Settings::enabled() ) {
 			return false;
 		}
 		if ( ! Services::instance()->platforms->has_active() ) {
@@ -152,7 +152,7 @@ final class Assets {
 		// Pages containing one of the plugin shortcodes.
 		if ( is_singular() ) {
 			$post = get_post();
-			if ( $post && ( has_shortcode( (string) $post->post_content, 'wwu_wb_form' ) || has_shortcode( (string) $post->post_content, 'wwu_wb_button' ) ) ) {
+			if ( $post && ( has_shortcode( (string) $post->post_content, 'webwakeupwdb_form' ) || has_shortcode( (string) $post->post_content, 'webwakeupwdb_button' ) ) ) {
 				return true;
 			}
 		}
@@ -162,6 +162,6 @@ final class Assets {
 		 *
 		 * @param bool $enqueue Whether to enqueue.
 		 */
-		return (bool) apply_filters( 'wwu_wb_force_enqueue_frontend', false );
+		return (bool) apply_filters( 'webwakeupwdb_force_enqueue_frontend', false );
 	}
 }

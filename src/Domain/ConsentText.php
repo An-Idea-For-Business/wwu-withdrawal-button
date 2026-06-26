@@ -10,18 +10,18 @@
  *  - service that begins immediately and is fully performed.
  *
  * The exact wording is statutory-sensitive, so it ships as an i18n default and is
- * fully overridable per kind/reason via the `wwu_wb_consent_text` filter (a
+ * fully overridable per kind/reason via the `webwakeupwdb_consent_text` filter (a
  * merchant who wants their lawyer's exact phrasing replaces it there). The text
  * the consumer agreed to is stored verbatim on the order, with a SHA-256 hash, as
  * evidence — so the wording at the time of consent is reconstructable later even
  * if this default changes.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Domain;
+namespace WebWakeUpWdb\WithdrawalButton\Domain;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -77,6 +77,6 @@ final class ConsentText {
 		 * @param string $kind      Consent kind (ExceptionTypes::CONSENT_*).
 		 * @param string $reason_id Reason id.
 		 */
-		return (string) apply_filters( 'wwu_wb_consent_text', $text, $kind, $reason_id );
+		return (string) apply_filters( 'webwakeupwdb_consent_text', $text, $kind, $reason_id );
 	}
 }

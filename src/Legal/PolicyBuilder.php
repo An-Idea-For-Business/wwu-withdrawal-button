@@ -7,18 +7,18 @@
  * {@see ClauseLibrary} (override-aware; the per-clause sample disclaimer is stripped
  * because the document carries one global disclaimer in its wrapper). Section
  * headings and framing are i18n `__()` strings; the exceptions section is driven by
- * {@see ExceptionTypes} + the `wwu_wb_exclusions['by_reason']` option.
+ * {@see ExceptionTypes} + the `webwakeupwdb_exclusions['by_reason']` option.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Legal;
+namespace WebWakeUpWdb\WithdrawalButton\Legal;
 
-use WWU\WithdrawalButton\Core\Settings;
-use WWU\WithdrawalButton\Domain\ExceptionTypes;
-use WWU\WithdrawalButton\Security\Sanitizer;
+use WebWakeUpWdb\WithdrawalButton\Core\Settings;
+use WebWakeUpWdb\WithdrawalButton\Domain\ExceptionTypes;
+use WebWakeUpWdb\WithdrawalButton\Security\Sanitizer;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -72,7 +72,7 @@ final class PolicyBuilder {
 		 * @param array  $sections Ordered sections, each [ id, heading, body_html, source ].
 		 * @param string $lang     Two-letter language.
 		 */
-		$sections = (array) apply_filters( 'wwu_wb_policy_sections', $sections, $lang );
+		$sections = (array) apply_filters( 'webwakeupwdb_policy_sections', $sections, $lang );
 
 		return new PolicyDocument(
 			__( 'Right of withdrawal — information notice', 'wwu-withdrawal-button' ),
@@ -89,7 +89,7 @@ final class PolicyBuilder {
 	 * @return string Safe HTML paragraph.
 	 */
 	public static function disclaimer_html(): string {
-		return '<p class="wwu-wb-policy__disclaimer">'
+		return '<p class="webwakeupwdb-policy__disclaimer">'
 			. esc_html__( 'This notice complements — and does not replace — your Terms of Sale and pre-contractual information. It is a generic template; have it reviewed by your own legal counsel.', 'wwu-withdrawal-button' )
 			. '</p>';
 	}
@@ -142,7 +142,7 @@ final class PolicyBuilder {
 	 * @return array<string,string>|null
 	 */
 	private static function section_exceptions( string $lang ): ?array {
-		$opt       = (array) Settings::get( 'wwu_wb_exclusions' );
+		$opt       = (array) Settings::get( 'webwakeupwdb_exclusions' );
 		$by_reason = ( isset( $opt['by_reason'] ) && is_array( $opt['by_reason'] ) ) ? $opt['by_reason'] : array();
 
 		$items = '';
@@ -157,7 +157,7 @@ final class PolicyBuilder {
 			}
 			$line = '<strong>' . esc_html( (string) $def['label'] ) . '</strong>';
 			if ( ! empty( $def['legal_ref'] ) ) {
-				$line .= ' <span class="wwu-wb-policy__ref">(' . esc_html( (string) $def['legal_ref'] ) . ')</span>';
+				$line .= ' <span class="webwakeupwdb-policy__ref">(' . esc_html( (string) $def['legal_ref'] ) . ')</span>';
 			}
 			if ( ! empty( $def['hint'] ) ) {
 				$line .= '<br>' . esc_html( (string) $def['hint'] );
@@ -173,7 +173,7 @@ final class PolicyBuilder {
 		}
 
 		$intro = self::to_html( __( 'For some of the products or services in this shop, the law excludes or limits the right of withdrawal:', 'wwu-withdrawal-button' ) );
-		$body  = $intro . '<ul class="wwu-wb-policy__exceptions">' . $items . '</ul>';
+		$body  = $intro . '<ul class="webwakeupwdb-policy__exceptions">' . $items . '</ul>';
 		return self::section( 'exceptions', __( 'Exceptions that apply to this shop', 'wwu-withdrawal-button' ), $body, 'exemptions' );
 	}
 

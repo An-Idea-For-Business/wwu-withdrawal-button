@@ -8,7 +8,7 @@
  * it at send time.
  *
  * Hook contract verified with the FluentCart team (2026-06-15,
- * docs/analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md §"Third verification round"):
+ * docs/analysis/webwakeupwdb-fluentcart-hooks-ANALYSIS.md §"Third verification round"):
  *   - picker  → `fluent_cart/editor_shortcodes` (group keyed by slug, `shortcodes` map);
  *   - resolve → `fluent_cart/smartcode_fallback`, whose `$data` is the current rendering
  *     context. In order e-mails it carries `order`/`customer`/transaction; in subscription
@@ -27,15 +27,15 @@
  * live FluentCart test** — the resolver shape cannot be exercised without a FluentCart
  * install.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Mail;
+namespace WebWakeUpWdb\WithdrawalButton\Mail;
 
-use WWU\WithdrawalButton\Core\Services;
-use WWU\WithdrawalButton\Core\Settings;
+use WebWakeUpWdb\WithdrawalButton\Core\Services;
+use WebWakeUpWdb\WithdrawalButton\Core\Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -142,7 +142,7 @@ final class FluentCartWithdrawalTag {
 
 		// Respect the FluentCart handling mode — emit an empty link when our FluentCart
 		// handling is off or auto-deferred to a native add-on (no stray placeholder).
-		if ( ! \WWU\WithdrawalButton\Platform\FluentCartAdapter::should_render() ) {
+		if ( ! \WebWakeUpWdb\WithdrawalButton\Platform\FluentCartAdapter::should_render() ) {
 			return '';
 		}
 
@@ -164,7 +164,7 @@ final class FluentCartWithdrawalTag {
 			return '';
 		}
 
-		$args = array( 'wwu_wb_order' => rawurlencode( $normalized->order_ref ) );
+		$args = array( 'webwakeupwdb_order' => rawurlencode( $normalized->order_ref ) );
 		// Carry the order's own key for guest authentication (FluentCart order hash/uuid),
 		// mirroring the WooCommerce order-email link.
 		$key = (string) ( $order->order_hash ?? $order->uuid ?? '' );

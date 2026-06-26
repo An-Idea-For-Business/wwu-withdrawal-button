@@ -10,19 +10,19 @@
  * guard). The append-only immutable log remains the tamper-evident anchor; this
  * page is the human-readable, queryable read model on top of the order meta.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  *
- * @see docs/legal/wwu-wb-exemption-consent-evidence-NOTE.md
+ * @see docs/legal/webwakeupwdb-exemption-consent-evidence-NOTE.md
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Admin;
+namespace WebWakeUpWdb\WithdrawalButton\Admin;
 
-use WWU\WithdrawalButton\Core\Services;
-use WWU\WithdrawalButton\Domain\ExceptionTypes;
-use WWU\WithdrawalButton\REST\Authentication;
-use WWU\WithdrawalButton\Storage\LogRepository;
+use WebWakeUpWdb\WithdrawalButton\Core\Services;
+use WebWakeUpWdb\WithdrawalButton\Domain\ExceptionTypes;
+use WebWakeUpWdb\WithdrawalButton\REST\Authentication;
+use WebWakeUpWdb\WithdrawalButton\Storage\LogRepository;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -38,7 +38,7 @@ final class ConsentRecordsPage {
 	 *
 	 * @var string
 	 */
-	private const EXPORT_NONCE = 'wwu_wb_export_consents';
+	private const EXPORT_NONCE = 'webwakeupwdb_export_consents';
 
 	/**
 	 * Orders shown per page.
@@ -64,7 +64,7 @@ final class ConsentRecordsPage {
 			return;
 		}
 
-		echo '<div class="wrap wwu-wb-wrap">';
+		echo '<div class="wrap webwakeupwdb-wrap">';
 		echo '<h1>' . esc_html__( 'Consent records', 'wwu-withdrawal-button' ) . '</h1>';
 		echo '<p class="description" style="max-width:900px;">' . esc_html__( 'Evidence of the consumers\' express consent + acknowledgement captured at checkout for the two conditional Art. 59 exemptions (digital content with immediate access; service fully performed). Keep it to discharge your burden of proof — it is evidence, not a legally-named "register". Physical products never appear here: they always keep the 14-day right of withdrawal.', 'wwu-withdrawal-button' ) . '</p>';
 
@@ -76,7 +76,7 @@ final class ConsentRecordsPage {
 
 		// CSV export button.
 		echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" style="margin:0 0 1em;">';
-		echo '<input type="hidden" name="action" value="wwu_wb_export_consents" />';
+		echo '<input type="hidden" name="action" value="webwakeupwdb_export_consents" />';
 		wp_nonce_field( self::EXPORT_NONCE );
 		echo '<button type="submit" class="button">' . esc_html__( 'Export to CSV', 'wwu-withdrawal-button' ) . '</button> ';
 		echo '<span class="description">' . esc_html(
@@ -184,7 +184,7 @@ final class ConsentRecordsPage {
 
 		nocache_headers();
 		header( 'Content-Type: text/csv; charset=utf-8' );
-		header( 'Content-Disposition: attachment; filename="wwu-wb-consents-' . gmdate( 'Ymd-His' ) . '.csv"' );
+		header( 'Content-Disposition: attachment; filename="webwakeupwdb-consents-' . gmdate( 'Ymd-His' ) . '.csv"' );
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 		$out = fopen( 'php://output', 'w' );

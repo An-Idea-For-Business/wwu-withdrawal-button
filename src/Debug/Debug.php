@@ -6,12 +6,12 @@
  * single boolean check and the call is a no-op (zero production overhead). When
  * the audience is open, calls are forwarded to the Collector singleton.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Debug;
+namespace WebWakeUpWdb\WithdrawalButton\Debug;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

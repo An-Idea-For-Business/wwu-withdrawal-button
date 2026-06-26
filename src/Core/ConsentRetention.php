@@ -6,10 +6,10 @@
  * horizon — an "immutable forever" record is itself a defect. The defensible
  * period is tied to the limitation/prescription window for a contractual claim
  * (Italy: ordinary 10 years, art. 2946 c.c.), so the merchant-configurable
- * `wwu_wb_settings['retention_years']` (default 10) drives it.
+ * `webwakeupwdb_settings['retention_years']` (default 10) drives it.
  *
  * What is purged:
- *   - Order-meta consent records (`_wwu_wb_consent`): the stored IP is anonymised
+ *   - Order-meta consent records (`_webwakeupwdb_consent`): the stored IP is anonymised
  *     once the horizon passes. The verbatim wording + its SHA-256 hash are KEPT
  *     (they let the trader reconstruct what was agreed and are not, alone,
  *     identifying).
@@ -22,16 +22,16 @@
  * The log sweep is platform-agnostic; the consent-record sweep runs over WooCommerce
  * orders (consent is captured on WooCommerce today) and is a no-op without it.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  *
- * @see docs/legal/wwu-wb-exemption-consent-evidence-NOTE.md
+ * @see docs/legal/webwakeupwdb-exemption-consent-evidence-NOTE.md
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Core;
+namespace WebWakeUpWdb\WithdrawalButton\Core;
 
-use WWU\WithdrawalButton\Debug\Debug;
+use WebWakeUpWdb\WithdrawalButton\Debug\Debug;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -47,7 +47,7 @@ final class ConsentRetention {
 	 *
 	 * @var string
 	 */
-	public const CRON_HOOK = 'wwu_wb_consent_retention_purge';
+	public const CRON_HOOK = 'webwakeupwdb_consent_retention_purge';
 
 	/**
 	 * Orders processed per run (bounded; re-queues if more remain).
@@ -92,7 +92,7 @@ final class ConsentRetention {
 	 */
 	public function purge(): void {
 		// Record that the sweep ran (for the exemptions status panel).
-		update_option( 'wwu_wb_consent_last_purge', gmdate( 'c' ), false );
+		update_option( 'webwakeupwdb_consent_last_purge', gmdate( 'c' ), false );
 
 		$years  = (int) ( Settings::main()['retention_years'] ?? 10 );
 		$years  = max( 1, min( 30, $years ) );
@@ -116,11 +116,11 @@ final class ConsentRetention {
 				'date_created' => '<' . $cutoff,
 				'meta_query'   => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- bounded daily cron, not a hot path.
 					array(
-						'key'     => WWU_WB_META_PREFIX . 'consent',
+						'key'     => WEBWAKEUPWDB_META_PREFIX . 'consent',
 						'compare' => 'EXISTS',
 					),
 					array(
-						'key'     => WWU_WB_META_PREFIX . 'consent_purged',
+						'key'     => WEBWAKEUPWDB_META_PREFIX . 'consent_purged',
 						'compare' => 'NOT EXISTS',
 					),
 				),
@@ -138,7 +138,7 @@ final class ConsentRetention {
 				continue;
 			}
 
-			$entries = $order->get_meta( WWU_WB_META_PREFIX . 'consent' );
+			$entries = $order->get_meta( WEBWAKEUPWDB_META_PREFIX . 'consent' );
 			if ( is_array( $entries ) && ! empty( $entries ) ) {
 				$changed = false;
 				foreach ( $entries as $i => $entry ) {
@@ -151,11 +151,11 @@ final class ConsentRetention {
 					}
 				}
 				if ( $changed ) {
-					$order->update_meta_data( WWU_WB_META_PREFIX . 'consent', $entries );
+					$order->update_meta_data( WEBWAKEUPWDB_META_PREFIX . 'consent', $entries );
 				}
 			}
 
-			$order->update_meta_data( WWU_WB_META_PREFIX . 'consent_purged', gmdate( 'c' ) );
+			$order->update_meta_data( WEBWAKEUPWDB_META_PREFIX . 'consent_purged', gmdate( 'c' ) );
 			$order->save();
 			++$purged;
 		}
@@ -190,7 +190,7 @@ final class ConsentRetention {
 	 */
 	private function purge_log( int $cutoff ): void {
 		global $wpdb;
-		$table      = \WWU\WithdrawalButton\Storage\Database\LogTable::name();
+		$table      = \WebWakeUpWdb\WithdrawalButton\Storage\Database\LogTable::name();
 		$cutoff_gmt = gmdate( 'Y-m-d H:i:s', $cutoff );
 
 		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery -- table name is constant-derived; all values are bound.

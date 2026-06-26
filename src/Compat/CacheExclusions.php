@@ -7,12 +7,12 @@
  * clean filters); W3TC and Cloudflare have no PHP-side filter, so the Compliance
  * page surfaces a manual-rule note for those.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Compat;
+namespace WebWakeUpWdb\WithdrawalButton\Compat;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -43,7 +43,7 @@ final class CacheExclusions {
 		$uris = (array) $uris;
 
 		// The public form page, if configured.
-		$settings = (array) get_option( 'wwu_wb_settings', array() );
+		$settings = (array) get_option( 'webwakeupwdb_settings', array() );
 		$page_id  = (int) ( $settings['public_form_page_id'] ?? 0 );
 		if ( $page_id > 0 ) {
 			$path = wp_parse_url( (string) get_permalink( $page_id ), PHP_URL_PATH );
@@ -53,8 +53,8 @@ final class CacheExclusions {
 		}
 
 		// The REST receipt/verify endpoints.
-		$uris[] = '/wp-json/' . WWU_WB_REST_NAMESPACE . '/receipt/';
-		$uris[] = '/wp-json/' . WWU_WB_REST_NAMESPACE . '/verify/';
+		$uris[] = '/wp-json/' . WEBWAKEUPWDB_REST_NAMESPACE . '/receipt/';
+		$uris[] = '/wp-json/' . WEBWAKEUPWDB_REST_NAMESPACE . '/verify/';
 
 		return array_values( array_unique( $uris ) );
 	}

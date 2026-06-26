@@ -10,15 +10,15 @@
  * words; a merchant override that is not in the recognised equivalence set emits
  * a debug warning so non-compliant wording is caught in development.
  *
- * @see docs/legal/wwu-wb-legal-reference.md §4
- * @package WWU\WithdrawalButton
+ * @see docs/legal/webwakeupwdb-legal-reference.md §4
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Domain;
+namespace WebWakeUpWdb\WithdrawalButton\Domain;
 
-use WWU\WithdrawalButton\Debug\Debug;
+use WebWakeUpWdb\WithdrawalButton\Debug\Debug;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -94,7 +94,7 @@ final class LabelResolver {
 		$lang      = $this->resolve_language( $country, $locale );
 		$statutory = self::STATUTORY[ $lang ][ $index ] ?? self::STATUTORY['en'][ $index ];
 
-		$overrides = \WWU\WithdrawalButton\Core\Settings::get( 'wwu_wb_labels' );
+		$overrides = \WebWakeUpWdb\WithdrawalButton\Core\Settings::get( 'webwakeupwdb_labels' );
 		$override  = isset( $overrides[ $lang ][ $kind ] ) ? trim( (string) $overrides[ $lang ][ $kind ] ) : '';
 
 		if ( '' === $override ) {

@@ -1,19 +1,19 @@
 <?php
 /**
- * POST /wwu-wb/v1/debug/run-tests — smoke-test runner (wwu-tools contract).
+ * POST /webwakeupwdb/v1/debug/run-tests — smoke-test runner (wwu-tools contract).
  *
  * Returns the canonical shape:
  *   { summary: {pass, fail, skip, total}, suites: [{ name, tests: [{name,status,output}] }] }
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\REST\Routes;
+namespace WebWakeUpWdb\WithdrawalButton\REST\Routes;
 
-use WWU\WithdrawalButton\Debug\SmokeTests;
-use WWU\WithdrawalButton\REST\Authentication;
+use WebWakeUpWdb\WithdrawalButton\Debug\SmokeTests;
+use WebWakeUpWdb\WithdrawalButton\REST\Authentication;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -31,7 +31,7 @@ final class DebugTestsRoute extends AbstractRoute {
 	 */
 	public function register(): void {
 		register_rest_route(
-			WWU_WB_REST_NAMESPACE,
+			WEBWAKEUPWDB_REST_NAMESPACE,
 			'/debug/run-tests',
 			array(
 				'methods'             => 'POST',

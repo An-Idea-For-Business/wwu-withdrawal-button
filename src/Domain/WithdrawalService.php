@@ -5,21 +5,21 @@
  * Step 1 (submit_statement): records the statement, issues a single-use
  * confirmation token. Step 2 (confirm): validates the token, writes the
  * immutable "confirmed" log row (the authoritative timestamp of timely exercise),
- * transitions the order, and fires wwu_wb_withdrawal_confirmed — the hook the
+ * transitions the order, and fires webwakeupwdb_withdrawal_confirmed — the hook the
  * durable-medium (email/PDF) and timestamping layers listen on.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Domain;
+namespace WebWakeUpWdb\WithdrawalButton\Domain;
 
-use WWU\WithdrawalButton\Platform\NormalizedOrder;
-use WWU\WithdrawalButton\Platform\OrderDataSource;
-use WWU\WithdrawalButton\Security\ClientInfo;
-use WWU\WithdrawalButton\Storage\LogRepository;
-use WWU\WithdrawalButton\Debug\Debug;
+use WebWakeUpWdb\WithdrawalButton\Platform\NormalizedOrder;
+use WebWakeUpWdb\WithdrawalButton\Platform\OrderDataSource;
+use WebWakeUpWdb\WithdrawalButton\Security\ClientInfo;
+use WebWakeUpWdb\WithdrawalButton\Storage\LogRepository;
+use WebWakeUpWdb\WithdrawalButton\Debug\Debug;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -122,13 +122,13 @@ final class WithdrawalService {
 		// Validate the confirmation token against the pending record.
 		$pending = $adapter->get_meta( $order->order_ref, 'pending' );
 		if ( ! is_array( $pending ) || empty( $pending['token_hash'] ) ) {
-			return new \WP_Error( 'wwu_wb_no_pending', __( 'No pending withdrawal to confirm. Please start again.', 'wwu-withdrawal-button' ), array( 'status' => 409 ) );
+			return new \WP_Error( 'webwakeupwdb_no_pending', __( 'No pending withdrawal to confirm. Please start again.', 'wwu-withdrawal-button' ), array( 'status' => 409 ) );
 		}
 		if ( (int) ( $pending['expires'] ?? 0 ) < time() ) {
-			return new \WP_Error( 'wwu_wb_token_expired', __( 'This confirmation has expired. Please start the withdrawal again.', 'wwu-withdrawal-button' ), array( 'status' => 410 ) );
+			return new \WP_Error( 'webwakeupwdb_token_expired', __( 'This confirmation has expired. Please start the withdrawal again.', 'wwu-withdrawal-button' ), array( 'status' => 410 ) );
 		}
 		if ( ! hash_equals( (string) $pending['token_hash'], wp_hash( $token ) ) || ! hash_equals( (string) ( $pending['request_uid'] ?? '' ), $request_uid ) ) {
-			return new \WP_Error( 'wwu_wb_token_invalid', __( 'Invalid confirmation. Please start the withdrawal again.', 'wwu-withdrawal-button' ), array( 'status' => 403 ) );
+			return new \WP_Error( 'webwakeupwdb_token_invalid', __( 'Invalid confirmation. Please start the withdrawal again.', 'wwu-withdrawal-button' ), array( 'status' => 403 ) );
 		}
 
 		$submitted_at = gmdate( 'Y-m-d\TH:i:s\Z' );
@@ -195,7 +195,7 @@ final class WithdrawalService {
 		 * @param int               $log_id      Immutable-log row id.
 		 * @param OrderDataSource   $adapter     Platform adapter.
 		 */
-		do_action( 'wwu_wb_withdrawal_confirmed', $request_uid, $order, $req, $log_id, $adapter );
+		do_action( 'webwakeupwdb_withdrawal_confirmed', $request_uid, $order, $req, $log_id, $adapter );
 
 		return $this->result( $order, $request_uid, $log_id, false, $submitted_at, $within );
 	}
@@ -229,8 +229,8 @@ final class WithdrawalService {
 			)
 		);
 
-		$opted_in = ! empty( \WWU\WithdrawalButton\Core\Settings::main()['cancel_subscription_on_withdrawal'] );
-		if ( ! $opted_in || ! $adapter instanceof \WWU\WithdrawalButton\Platform\SubscriptionAware ) {
+		$opted_in = ! empty( \WebWakeUpWdb\WithdrawalButton\Core\Settings::main()['cancel_subscription_on_withdrawal'] );
+		if ( ! $opted_in || ! $adapter instanceof \WebWakeUpWdb\WithdrawalButton\Platform\SubscriptionAware ) {
 			return;
 		}
 
@@ -275,7 +275,7 @@ final class WithdrawalService {
 		 * @param NormalizedOrder $order     Order.
 		 * @param OrderDataSource $adapter   Adapter.
 		 */
-		do_action( 'wwu_wb_subscription_cancel_result', $cancelled, $sub_ref, $order, $adapter );
+		do_action( 'webwakeupwdb_subscription_cancel_result', $cancelled, $sub_ref, $order, $adapter );
 	}
 
 	/**

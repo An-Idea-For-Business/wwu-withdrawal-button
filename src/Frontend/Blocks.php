@@ -3,21 +3,21 @@
  * Gutenberg block registration.
  *
  * Ships a single dynamic block, "Withdrawal — self-service"
- * (wwu-wb/withdrawal-form), so merchants can place the withdrawal surface
+ * (webwakeupwdb/withdrawal-form), so merchants can place the withdrawal surface
  * anywhere in the block editor / Site Editor. It is a thin server-rendered
  * wrapper: the render callback delegates to the SAME Shortcodes::form() renderer
- * the [wwu_wb_form] shortcode uses, so the applicability + ownership gates and the
+ * the [webwakeupwdb_form] shortcode uses, so the applicability + ownership gates and the
  * eligible-orders list behave identically. No build step — the editor script is
  * plain JS using the window.wp.* globals (see blocks/withdrawal-form/).
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Frontend;
+namespace WebWakeUpWdb\WithdrawalButton\Frontend;
 
-use WWU\WithdrawalButton\Shortcodes\Shortcodes;
+use WebWakeUpWdb\WithdrawalButton\Shortcodes\Shortcodes;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -48,13 +48,13 @@ final class Blocks {
 		}
 
 		register_block_type(
-			WWU_WB_PATH . '/blocks/withdrawal-form',
+			WEBWAKEUPWDB_PATH . '/blocks/withdrawal-form',
 			array( 'render_callback' => array( $this, 'render_form_block' ) )
 		);
 	}
 
 	/**
-	 * Render callback for wwu-wb/withdrawal-form.
+	 * Render callback for webwakeupwdb/withdrawal-form.
 	 *
 	 * Treats attributes as untrusted: the optional order id is cast to a positive
 	 * integer and passed to the shared shortcode renderer, which performs the

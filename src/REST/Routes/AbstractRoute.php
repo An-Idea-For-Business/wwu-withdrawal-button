@@ -2,12 +2,12 @@
 /**
  * Base class for REST routes: shared registration + response helpers.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\REST\Routes;
+namespace WebWakeUpWdb\WithdrawalButton\REST\Routes;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

@@ -2,7 +2,7 @@
 /**
  * Outbound webhook delivery on a confirmed withdrawal.
  *
- * Listens on `wwu_wb_withdrawal_confirmed` (priority 20, after the durable-medium
+ * Listens on `webwakeupwdb_withdrawal_confirmed` (priority 20, after the durable-medium
  * and timestamp side-effects) and schedules a single async event so the consumer
  * request is never blocked by the merchant's endpoint. Delivery rebuilds the
  * payload from the immutable log at send time (the uid is the only thing carried
@@ -12,18 +12,18 @@
  * `reject_unsafe_urls => true`. One retry on a transport error; HTTP error codes
  * are reported but not retried (the receiver owns its own idempotency).
  *
- * @see \WWU\WithdrawalButton\Api\Webhook
- * @see \WWU\WithdrawalButton\Api\RequestReader
- * @see \WWU\WithdrawalButton\Security\OutboundUrlGuard
- * @package WWU\WithdrawalButton
+ * @see \WebWakeUpWdb\WithdrawalButton\Api\Webhook
+ * @see \WebWakeUpWdb\WithdrawalButton\Api\RequestReader
+ * @see \WebWakeUpWdb\WithdrawalButton\Security\OutboundUrlGuard
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Api;
+namespace WebWakeUpWdb\WithdrawalButton\Api;
 
-use WWU\WithdrawalButton\Debug\Debug;
-use WWU\WithdrawalButton\Security\OutboundUrlGuard;
+use WebWakeUpWdb\WithdrawalButton\Debug\Debug;
+use WebWakeUpWdb\WithdrawalButton\Security\OutboundUrlGuard;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -47,7 +47,7 @@ final class WebhookDispatcher {
 	 * @return void
 	 */
 	public function register(): void {
-		add_action( 'wwu_wb_withdrawal_confirmed', array( $this, 'on_confirmed' ), 20, 5 );
+		add_action( 'webwakeupwdb_withdrawal_confirmed', array( $this, 'on_confirmed' ), 20, 5 );
 		add_action( Webhook::DELIVER_HOOK, array( $this, 'deliver' ), 10, 2 );
 	}
 
@@ -93,7 +93,7 @@ final class WebhookDispatcher {
 		if ( ! OutboundUrlGuard::is_safe_url( $cfg['url'] ) ) {
 			Debug::error( 'webhook', 'blocked_unsafe_url', array( 'request_uid' => $request_uid ) );
 			/** This action documents every delivery outcome (see hooks reference). */
-			do_action( 'wwu_wb_webhook_delivered', false, 0, $request_uid, '' );
+			do_action( 'webwakeupwdb_webhook_delivered', false, 0, $request_uid, '' );
 			return;
 		}
 
@@ -109,7 +109,7 @@ final class WebhookDispatcher {
 		 * @param array  $payload     Default payload (no raw IP).
 		 * @param string $request_uid Request UID.
 		 */
-		$payload = (array) apply_filters( 'wwu_wb_webhook_payload', $payload, $request_uid );
+		$payload = (array) apply_filters( 'webwakeupwdb_webhook_payload', $payload, $request_uid );
 
 		$body        = (string) wp_json_encode( $payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 		$delivery_id = wp_generate_uuid4();
@@ -125,7 +125,7 @@ final class WebhookDispatcher {
 				'headers'            => array(
 					'Content-Type'       => 'application/json; charset=utf-8',
 					'Accept'             => 'application/json',
-					'User-Agent'         => 'WWU-Withdrawal-Button/' . WWU_WB_VERSION,
+					'User-Agent'         => 'WWU-Withdrawal-Button/' . WEBWAKEUPWDB_VERSION,
 					'X-WWU-WB-Event'     => $event,
 					'X-WWU-WB-Delivery'  => $delivery_id,
 					'X-WWU-WB-Signature' => Webhook::sign( $body, $cfg['secret'] ),
@@ -147,7 +147,7 @@ final class WebhookDispatcher {
 					'error'       => $response->get_error_code(),
 				)
 			);
-			do_action( 'wwu_wb_webhook_delivered', false, 0, $request_uid, $delivery_id );
+			do_action( 'webwakeupwdb_webhook_delivered', false, 0, $request_uid, $delivery_id );
 			return;
 		}
 
@@ -172,6 +172,6 @@ final class WebhookDispatcher {
 		 * @param string $request_uid Request UID.
 		 * @param string $delivery_id Per-delivery uuid (the X-WWU-WB-Delivery header).
 		 */
-		do_action( 'wwu_wb_webhook_delivered', $ok, $code, $request_uid, $delivery_id );
+		do_action( 'webwakeupwdb_webhook_delivered', $ok, $code, $request_uid, $delivery_id );
 	}
 }

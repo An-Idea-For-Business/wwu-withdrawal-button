@@ -7,15 +7,15 @@
  * the consumer's declaration, the identified contract, the trader's details, the
  * submission timestamp, the immutable-log hash, and the verifiable link.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\DurableMedium;
+namespace WebWakeUpWdb\WithdrawalButton\DurableMedium;
 
-use WWU\WithdrawalButton\Domain\WithdrawalRequest;
-use WWU\WithdrawalButton\Platform\NormalizedOrder;
+use WebWakeUpWdb\WithdrawalButton\Domain\WithdrawalRequest;
+use WebWakeUpWdb\WithdrawalButton\Platform\NormalizedOrder;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -100,14 +100,14 @@ final class ReceiptBuilder {
 			)
 		);
 
-		$settings = (array) get_option( 'wwu_wb_settings', array() );
+		$settings = (array) get_option( 'webwakeupwdb_settings', array() );
 
 		return array(
 			'name'    => (string) get_bloginfo( 'name' ),
 			'address' => implode( ', ', $address_parts ),
 			// merchant_email may hold a comma-separated notification list; the receipt
 			// shows a single public trader contact, so take the first address.
-			'email'   => \WWU\WithdrawalButton\Security\Sanitizer::first_email( (string) ( $settings['merchant_email'] ?? get_option( 'admin_email' ) ) ),
+			'email'   => \WebWakeUpWdb\WithdrawalButton\Security\Sanitizer::first_email( (string) ( $settings['merchant_email'] ?? get_option( 'admin_email' ) ) ),
 		);
 	}
 

@@ -7,12 +7,12 @@
  * are curated HTML the builder already escaped — the document renders the title
  * and headings escaped, and the body verbatim (builder contract).
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Legal;
+namespace WebWakeUpWdb\WithdrawalButton\Legal;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -73,17 +73,17 @@ final class PolicyDocument {
 	 * @return string
 	 */
 	public function to_html(): string {
-		$out = '<div class="wwu-wb-policy">';
-		$out .= '<h2 class="wwu-wb-policy__title">' . esc_html( $this->title ) . '</h2>';
+		$out = '<div class="webwakeupwdb-policy">';
+		$out .= '<h2 class="webwakeupwdb-policy__title">' . esc_html( $this->title ) . '</h2>';
 		foreach ( $this->sections as $section ) {
 			$id      = isset( $section['id'] ) ? sanitize_html_class( (string) $section['id'] ) : '';
 			$heading = isset( $section['heading'] ) ? (string) $section['heading'] : '';
 			$body    = isset( $section['body_html'] ) ? (string) $section['body_html'] : '';
-			$out    .= '<section class="wwu-wb-policy__section"' . ( '' !== $id ? ' id="wwu-wb-policy-' . esc_attr( $id ) . '"' : '' ) . '>';
+			$out    .= '<section class="webwakeupwdb-policy__section"' . ( '' !== $id ? ' id="webwakeupwdb-policy-' . esc_attr( $id ) . '"' : '' ) . '>';
 			if ( '' !== $heading ) {
-				$out .= '<h3 class="wwu-wb-policy__heading">' . esc_html( $heading ) . '</h3>';
+				$out .= '<h3 class="webwakeupwdb-policy__heading">' . esc_html( $heading ) . '</h3>';
 			}
-			$out .= '<div class="wwu-wb-policy__body">' . $body . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- curated, builder-escaped clause HTML.
+			$out .= '<div class="webwakeupwdb-policy__body">' . $body . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- curated, builder-escaped clause HTML.
 			$out .= '</section>';
 		}
 		$out .= '</div>';

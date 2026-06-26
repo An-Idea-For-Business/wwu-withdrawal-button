@@ -4,7 +4,7 @@
  *
  * The FluentCart counterpart of {@see WooCheckoutConsent}. It uses the FluentCart
  * checkout hooks verified against the official docs + a direct confirmation from
- * the FluentCart team (2026-06-15, docs/analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md):
+ * the FluentCart team (2026-06-15, docs/analysis/webwakeupwdb-fluentcart-hooks-ANALYSIS.md):
  *   - render  → `fluent_cart/before_payment_methods` (ACTION, $data['cart']) — the
  *                team's recommended hook; it fires in the standard, modal AND block
  *                checkout renderers (the block checkout still runs FluentCart's own
@@ -36,26 +36,26 @@
  * so FluentCart exemptions match by PRODUCT ID and by CATEGORY — in parity with
  * WooCommerce (`product_cat`) and EDD (`download_category`).
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Frontend;
+namespace WebWakeUpWdb\WithdrawalButton\Frontend;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use WWU\WithdrawalButton\Core\Services;
-use WWU\WithdrawalButton\Core\Settings;
-use WWU\WithdrawalButton\Domain\ConsentText;
-use WWU\WithdrawalButton\Domain\ExceptionTypes;
-use WWU\WithdrawalButton\Domain\ExemptionResolver;
-use WWU\WithdrawalButton\Mail\ExemptionConfirmation;
-use WWU\WithdrawalButton\Platform\FluentCartAdapter;
-use WWU\WithdrawalButton\Security\ClientInfo;
-use WWU\WithdrawalButton\Storage\LogRepository;
+use WebWakeUpWdb\WithdrawalButton\Core\Services;
+use WebWakeUpWdb\WithdrawalButton\Core\Settings;
+use WebWakeUpWdb\WithdrawalButton\Domain\ConsentText;
+use WebWakeUpWdb\WithdrawalButton\Domain\ExceptionTypes;
+use WebWakeUpWdb\WithdrawalButton\Domain\ExemptionResolver;
+use WebWakeUpWdb\WithdrawalButton\Mail\ExemptionConfirmation;
+use WebWakeUpWdb\WithdrawalButton\Platform\FluentCartAdapter;
+use WebWakeUpWdb\WithdrawalButton\Security\ClientInfo;
+use WebWakeUpWdb\WithdrawalButton\Storage\LogRepository;
 
 /**
  * Checkout-consent capture (FluentCart).
@@ -63,11 +63,11 @@ use WWU\WithdrawalButton\Storage\LogRepository;
 final class FluentCartCheckoutConsent {
 
 	/**
-	 * Field name root for the consent checkboxes (`wwu_wb_consent[<reason>]`).
+	 * Field name root for the consent checkboxes (`webwakeupwdb_consent[<reason>]`).
 	 *
 	 * @var string
 	 */
-	private const FIELD = 'wwu_wb_consent';
+	private const FIELD = 'webwakeupwdb_consent';
 
 	/**
 	 * Register the FluentCart checkout hooks.
@@ -78,7 +78,7 @@ final class FluentCartCheckoutConsent {
 		// `before_payment_methods` is the safer render hook: it fires in the standard,
 		// modal AND block checkout renderers (the FluentCart team's explicit
 		// recommendation, 2026-06-15). `after_payment_methods` only fires in the
-		// standard renderer. See docs/analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md.
+		// standard renderer. See docs/analysis/webwakeupwdb-fluentcart-hooks-ANALYSIS.md.
 		add_action( 'fluent_cart/before_payment_methods', array( $this, 'render_fields' ), 10, 1 );
 		add_filter( 'fluent_cart/checkout/validate_before_process', array( $this, 'validate' ), 10, 2 );
 		add_action( 'fluent_cart/checkout/prepare_other_data', array( $this, 'capture' ), 10, 1 );
@@ -96,19 +96,19 @@ final class FluentCartCheckoutConsent {
 			return;
 		}
 
-		echo '<div class="wwu-wb-consent" style="margin:12px 0;">';
+		echo '<div class="webwakeupwdb-consent" style="margin:12px 0;">';
 		foreach ( array_keys( $map ) as $reason ) {
 			$text = ConsentText::for_reason( (string) $reason );
 			if ( '' === $text ) {
 				continue;
 			}
-			echo '<p class="wwu-wb-consent__row" style="margin:0 0 10px;"><label style="display:block;line-height:1.4;">';
+			echo '<p class="webwakeupwdb-consent__row" style="margin:0 0 10px;"><label style="display:block;line-height:1.4;">';
 			printf(
-				'<input type="checkbox" class="wwu-wb-consent__input" name="%1$s[%2$s]" value="1" required /> ',
+				'<input type="checkbox" class="webwakeupwdb-consent__input" name="%1$s[%2$s]" value="1" required /> ',
 				esc_attr( self::FIELD ),
 				esc_attr( (string) $reason )
 			);
-			echo '<span class="wwu-wb-consent__text">' . esc_html( $text ) . '</span>';
+			echo '<span class="webwakeupwdb-consent__text">' . esc_html( $text ) . '</span>';
 			echo '</label></p>';
 		}
 		echo '</div>';
@@ -137,7 +137,7 @@ final class FluentCartCheckoutConsent {
 				$def   = ExceptionTypes::get( (string) $reason );
 				$label = is_array( $def ) ? (string) ( $def['label'] ?? $reason ) : (string) $reason;
 				return new \WP_Error(
-					'wwu_wb_consent_required',
+					'webwakeupwdb_consent_required',
 					sprintf(
 						/* translators: %s: exemption reason label. */
 						__( 'Please confirm the required acknowledgement for: %s', 'wwu-withdrawal-button' ),
@@ -170,7 +170,7 @@ final class FluentCartCheckoutConsent {
 		}
 
 		// Respect the FluentCart handling mode (off / auto-defer to a native add-on).
-		if ( ! \WWU\WithdrawalButton\Platform\FluentCartAdapter::should_render() ) {
+		if ( ! \WebWakeUpWdb\WithdrawalButton\Platform\FluentCartAdapter::should_render() ) {
 			return;
 		}
 

@@ -10,9 +10,9 @@
  * EDD has no unified "My Account" with a routable endpoint (unlike WooCommerce), so
  * the button links to the plugin's standalone public form page
  * (settings: public_form_page_id), pre-authenticated with the order ref + EDD
- * payment key (?wwu_wb_order=&key=) exactly like the order-email link. Three surfaces,
+ * payment key (?webwakeupwdb_order=&key=) exactly like the order-email link. Three surfaces,
  * all on EDD 3.x hooks verified against the official EDD source — see
- * docs/analysis/wwu-wb-edd-customer-surfaces-ANALYSIS.md:
+ * docs/analysis/webwakeupwdb-edd-customer-surfaces-ANALYSIS.md:
  *
  *  - Purchase RECEIPT ([edd_receipt]) — `edd_order_receipt_after_table`
  *    (`templates/shortcode-receipt.php`), after the receipt table (block context, so
@@ -30,18 +30,18 @@
  * id, and renders nothing when the order is ineligible, already requested, or the
  * public page is unset (fail-safe — never a dead button).
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Frontend;
+namespace WebWakeUpWdb\WithdrawalButton\Frontend;
 
-use WWU\WithdrawalButton\Core\Services;
-use WWU\WithdrawalButton\Core\Settings;
-use WWU\WithdrawalButton\Frontend\ExemptionNoteRenderer;
-use WWU\WithdrawalButton\Platform\NormalizedOrder;
-use WWU\WithdrawalButton\Platform\OrderDataSource;
+use WebWakeUpWdb\WithdrawalButton\Core\Services;
+use WebWakeUpWdb\WithdrawalButton\Core\Settings;
+use WebWakeUpWdb\WithdrawalButton\Frontend\ExemptionNoteRenderer;
+use WebWakeUpWdb\WithdrawalButton\Platform\NormalizedOrder;
+use WebWakeUpWdb\WithdrawalButton\Platform\OrderDataSource;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -103,7 +103,7 @@ final class EddCustomerOrders {
 		}
 		// The hook fires inside the <tr> (between cells), so wrap in a <td> to keep
 		// the row valid; render only when there is something to show.
-		echo '<td class="wwu-wb-history-cell">' . $html . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $html is built + escaped by button_for(); the <td> wrapper is a static literal.
+		echo '<td class="webwakeupwdb-history-cell">' . $html . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $html is built + escaped by button_for(); the <td> wrapper is a static literal.
 	}
 
 	/**
@@ -167,7 +167,7 @@ final class EddCustomerOrders {
 		// A request already exists → show its localized status, never a second button.
 		$status_label = EligibleOrders::request_status_label( $adapter, $order->order_ref );
 		if ( '' !== $status_label ) {
-			return '<p class="wwu-wb-status-notice">' . esc_html( $status_label ) . '</p>';
+			return '<p class="webwakeupwdb-status-notice">' . esc_html( $status_label ) . '</p>';
 		}
 
 		if ( ! Settings::enabled() ) {
@@ -274,7 +274,7 @@ final class EddCustomerOrders {
 		if ( ! is_string( $permalink ) || '' === $permalink ) {
 			return '';
 		}
-		$args = array( 'wwu_wb_order' => rawurlencode( $order->order_ref ) );
+		$args = array( 'webwakeupwdb_order' => rawurlencode( $order->order_ref ) );
 		if ( '' !== $payment_key ) {
 			$args['key'] = rawurlencode( $payment_key );
 		}

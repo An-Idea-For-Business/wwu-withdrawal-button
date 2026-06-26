@@ -2,7 +2,7 @@
 /**
  * Migration 2 — flip the digital auto-exclusion default to OFF.
  *
- * The `wwu_wb_exclusions.auto_detect_virtual` flag was seeded ON, which auto-
+ * The `webwakeupwdb_exclusions.auto_detect_virtual` flag was seeded ON, which auto-
  * excluded immediate-access digital content (Art. 59 lett. o / Art. 16(m)) from
  * the withdrawal button whenever the order was completed. That is legally over-
  * broad: the digital exemption only applies when prior express consent AND an
@@ -16,12 +16,12 @@
  * Merchants who genuinely sell only immediate-access digital goods can re-enable
  * it (future setting) or exclude specific products/categories.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Storage\Database\Migrations;
+namespace WebWakeUpWdb\WithdrawalButton\Storage\Database\Migrations;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -38,7 +38,7 @@ final class Migration_2 {
 	 * @return void
 	 */
 	public static function up(): void {
-		$exclusions = get_option( 'wwu_wb_exclusions' );
+		$exclusions = get_option( 'webwakeupwdb_exclusions' );
 		if ( ! is_array( $exclusions ) ) {
 			return;
 		}
@@ -46,6 +46,6 @@ final class Migration_2 {
 			return;
 		}
 		$exclusions['auto_detect_virtual'] = false;
-		update_option( 'wwu_wb_exclusions', $exclusions );
+		update_option( 'webwakeupwdb_exclusions', $exclusions );
 	}
 }

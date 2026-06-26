@@ -8,14 +8,14 @@
  * a plugin-specific nonce action would mismatch and 403 every authenticated call.
  * We therefore check capability + (for debug endpoints) the audience gate only.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\REST;
+namespace WebWakeUpWdb\WithdrawalButton\REST;
 
-use WWU\WithdrawalButton\Debug\Audience;
+use WebWakeUpWdb\WithdrawalButton\Debug\Audience;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -32,7 +32,7 @@ final class Authentication {
 	 * @return string
 	 */
 	public static function capability(): string {
-		return (string) apply_filters( 'wwu_wb_admin_capability', 'manage_woocommerce' );
+		return (string) apply_filters( 'webwakeupwdb_admin_capability', 'manage_woocommerce' );
 	}
 
 	/**
@@ -44,14 +44,14 @@ final class Authentication {
 		return static function () {
 			if ( ! is_user_logged_in() ) {
 				return new \WP_Error(
-					'wwu_wb_unauthorized',
+					'webwakeupwdb_unauthorized',
 					__( 'Authentication required.', 'wwu-withdrawal-button' ),
 					array( 'status' => 401 )
 				);
 			}
 			if ( ! current_user_can( self::capability() ) ) {
 				return new \WP_Error(
-					'wwu_wb_forbidden',
+					'webwakeupwdb_forbidden',
 					__( 'Insufficient permissions.', 'wwu-withdrawal-button' ),
 					array( 'status' => 403 )
 				);
@@ -73,7 +73,7 @@ final class Authentication {
 	 * @return bool True if the request is allowed.
 	 */
 	public static function enforce_rate_limit( string $bucket, int $max = 120, int $window = 60 ): bool {
-		$key  = 'wwu_wb_rl_' . md5( $bucket . '|' . (int) get_current_user_id() );
+		$key  = 'webwakeupwdb_rl_' . md5( $bucket . '|' . (int) get_current_user_id() );
 		$hits = (int) get_transient( $key );
 		if ( $hits >= $max ) {
 			return false;
@@ -91,21 +91,21 @@ final class Authentication {
 		return static function () {
 			if ( ! is_user_logged_in() ) {
 				return new \WP_Error(
-					'wwu_wb_unauthorized',
+					'webwakeupwdb_unauthorized',
 					__( 'Authentication required.', 'wwu-withdrawal-button' ),
 					array( 'status' => 401 )
 				);
 			}
 			if ( ! current_user_can( self::capability() ) ) {
 				return new \WP_Error(
-					'wwu_wb_forbidden',
+					'webwakeupwdb_forbidden',
 					__( 'Insufficient permissions.', 'wwu-withdrawal-button' ),
 					array( 'status' => 403 )
 				);
 			}
 			if ( ! Audience::is_current_user() ) {
 				return new \WP_Error(
-					'wwu_wb_audience_closed',
+					'webwakeupwdb_audience_closed',
 					__( 'Debug is not enabled for your account. Enable it under WWU Withdrawal Button → Settings → Debug.', 'wwu-withdrawal-button' ),
 					array( 'status' => 403 )
 				);

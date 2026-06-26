@@ -22,14 +22,14 @@
  *   - DATETIME (never TIMESTAMP): TIMESTAMP can auto-update on row change in some
  *     MySQL configurations, which would silently destroy tamper-evidence.
  *
- * @see \WWU\WithdrawalButton\Storage\LogRepository
- * @see \WWU\WithdrawalButton\Storage\LogChain
- * @package WWU\WithdrawalButton
+ * @see \WebWakeUpWdb\WithdrawalButton\Storage\LogRepository
+ * @see \WebWakeUpWdb\WithdrawalButton\Storage\LogChain
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Storage\Database;
+namespace WebWakeUpWdb\WithdrawalButton\Storage\Database;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -45,7 +45,7 @@ final class LogTable {
 	 *
 	 * @var string
 	 */
-	public const SUFFIX = 'wwu_wb_log';
+	public const SUFFIX = 'webwakeupwdb_log';
 
 	/**
 	 * Fully-qualified table name including the site table prefix.

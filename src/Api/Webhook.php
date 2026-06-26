@@ -3,18 +3,18 @@
  * Outbound-webhook configuration + signing helpers.
  *
  * The secret is a shared HMAC key: it MUST be stored retrievable (we sign every
- * delivery with it) so it lives in the `wwu_wb_webhook` option (autoload no) and
+ * delivery with it) so it lives in the `webwakeupwdb_webhook` option (autoload no) and
  * is only ever shown masked in the admin UI. It is never written to a log, a
  * snapshot, or a debug entry. The signature scheme mirrors GitHub webhooks
  * (`sha256=<hex HMAC-SHA256(body, secret)>`) so receivers can use familiar
  * verification code.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Api;
+namespace WebWakeUpWdb\WithdrawalButton\Api;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -30,14 +30,14 @@ final class Webhook {
 	 *
 	 * @var string
 	 */
-	public const OPTION = 'wwu_wb_webhook';
+	public const OPTION = 'webwakeupwdb_webhook';
 
 	/**
 	 * Single-event hook that performs an async delivery.
 	 *
 	 * @var string
 	 */
-	public const DELIVER_HOOK = 'wwu_wb_deliver_webhook';
+	public const DELIVER_HOOK = 'webwakeupwdb_deliver_webhook';
 
 	/**
 	 * Read the webhook config with a stable shape.

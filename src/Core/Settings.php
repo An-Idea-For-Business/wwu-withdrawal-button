@@ -7,12 +7,12 @@
  * the duration of the request so those reads are a single array lookup instead of
  * a repeated get_option() + cast.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Core;
+namespace WebWakeUpWdb\WithdrawalButton\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -49,7 +49,7 @@ final class Settings {
 	 * @return array
 	 */
 	public static function main(): array {
-		return self::get( 'wwu_wb_settings' );
+		return self::get( 'webwakeupwdb_settings' );
 	}
 
 	/**

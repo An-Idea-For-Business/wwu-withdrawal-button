@@ -2,26 +2,26 @@
 /**
  * Supplies an order's captured exemption-consent entries to the evaluator.
  *
- * The {@see \WWU\WithdrawalButton\Domain\ArticleFiftyNineEvaluator} asks, via the
- * `wwu_wb_exemption_consent` filter, "was the consumer's express consent +
+ * The {@see \WebWakeUpWdb\WithdrawalButton\Domain\ArticleFiftyNineEvaluator} asks, via the
+ * `webwakeupwdb_exemption_consent` filter, "was the consumer's express consent +
  * acknowledgement captured for this conditional exemption?". This reader answers
  * by reading the consent entries the checkout-consent layer stored on the order
- * meta (`_wwu_wb_consent`), through the platform adapter — so it is platform-
+ * meta (`_webwakeupwdb_consent`), through the platform adapter — so it is platform-
  * agnostic: any platform whose adapter persisted the entries (WooCommerce today;
  * FluentCart once its checkout hook lands) is understood without changing the
  * evaluator.
  *
  * Reading happens through the adapter's HPOS-safe get_meta(), never raw post meta.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Frontend;
+namespace WebWakeUpWdb\WithdrawalButton\Frontend;
 
-use WWU\WithdrawalButton\Core\Services;
-use WWU\WithdrawalButton\Platform\NormalizedOrder;
+use WebWakeUpWdb\WithdrawalButton\Core\Services;
+use WebWakeUpWdb\WithdrawalButton\Platform\NormalizedOrder;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -38,7 +38,7 @@ final class ConsentReader {
 	 * @return void
 	 */
 	public function register(): void {
-		add_filter( 'wwu_wb_exemption_consent', array( $this, 'provide' ), 10, 4 );
+		add_filter( 'webwakeupwdb_exemption_consent', array( $this, 'provide' ), 10, 4 );
 	}
 
 	/**

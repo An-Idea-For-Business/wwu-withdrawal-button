@@ -1,17 +1,17 @@
 <?php
 /**
- * PSR-4 autoloader for the WWU\WithdrawalButton namespace.
+ * PSR-4 autoloader for the WebWakeUpWdb\WithdrawalButton namespace.
  *
  * No Composer runtime dependency: this maps the plugin namespace onto the
  * src/ directory. The bundled Dompdf library has its own Composer autoloader,
  * loaded on demand by the PdfBuilder.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton;
+namespace WebWakeUpWdb\WithdrawalButton;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -27,7 +27,7 @@ final class Autoloader {
 	 *
 	 * @var string
 	 */
-	private const PREFIX = 'WWU\\WithdrawalButton\\';
+	private const PREFIX = 'WebWakeUpWdb\\WithdrawalButton\\';
 
 	/**
 	 * Whether register() has already run (idempotency guard).
@@ -62,7 +62,7 @@ final class Autoloader {
 
 		$relative = substr( $class, strlen( self::PREFIX ) );
 		$relative = str_replace( '\\', '/', $relative );
-		$file     = WWU_WB_PATH . '/src/' . $relative . '.php';
+		$file     = WEBWAKEUPWDB_PATH . '/src/' . $relative . '.php';
 
 		if ( is_readable( $file ) ) {
 			require_once $file;

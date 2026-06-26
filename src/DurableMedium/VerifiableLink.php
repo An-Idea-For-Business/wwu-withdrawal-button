@@ -6,12 +6,12 @@
  * consumer can re-download the receipt at any time, as a durable medium must
  * allow; it is unguessable and rate-limited at the endpoint.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\DurableMedium;
+namespace WebWakeUpWdb\WithdrawalButton\DurableMedium;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -29,7 +29,7 @@ final class VerifiableLink {
 	 * @return string
 	 */
 	public static function token( string $request_uid ): string {
-		$secret = \WWU\WithdrawalButton\Security\Secret::get();
+		$secret = \WebWakeUpWdb\WithdrawalButton\Security\Secret::get();
 		return substr( hash_hmac( 'sha256', 'receipt|' . $request_uid, $secret ), 0, 40 );
 	}
 
@@ -51,7 +51,7 @@ final class VerifiableLink {
 	 * @return string
 	 */
 	public static function download_url( string $request_uid ): string {
-		return rest_url( WWU_WB_REST_NAMESPACE . '/receipt/' . rawurlencode( $request_uid ) ) . '?t=' . self::token( $request_uid );
+		return rest_url( WEBWAKEUPWDB_REST_NAMESPACE . '/receipt/' . rawurlencode( $request_uid ) ) . '?t=' . self::token( $request_uid );
 	}
 
 	/**
@@ -61,6 +61,6 @@ final class VerifiableLink {
 	 * @return string
 	 */
 	public static function verify_url( string $request_uid ): string {
-		return rest_url( WWU_WB_REST_NAMESPACE . '/verify/' . rawurlencode( $request_uid ) ) . '?t=' . self::token( $request_uid );
+		return rest_url( WEBWAKEUPWDB_REST_NAMESPACE . '/verify/' . rawurlencode( $request_uid ) ) . '?t=' . self::token( $request_uid );
 	}
 }

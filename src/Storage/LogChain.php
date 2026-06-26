@@ -7,12 +7,12 @@
  * and reports the first broken link, making any insertion, deletion or edit of a
  * historical row detectable.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Storage;
+namespace WebWakeUpWdb\WithdrawalButton\Storage;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -27,7 +27,7 @@ final class LogChain {
 	 * Current chain format version.
 	 *
 	 * v2 (1.1.0+) keys each row hash with the per-site secret (HMAC-SHA256), so a
-	 * DB-write attacker who does NOT also hold `wwu_wb_secret` cannot recompute a
+	 * DB-write attacker who does NOT also hold `webwakeupwdb_secret` cannot recompute a
 	 * forged chain. v1 (pre-1.1.0) used unkeyed SHA-256. Every row stores its own
 	 * `chain_version`, so a mixed chain (legacy v1 rows followed by new v2 rows)
 	 * still verifies — each row is checked with the formula it was written under.
@@ -55,9 +55,9 @@ final class LogChain {
 		if ( $version >= 2 ) {
 			// Keyed: an attacker without the secret cannot reproduce row hashes, so
 			// the chain can no longer be silently rewritten by a DB-write actor.
-			// (An attacker who ALSO reads `wwu_wb_secret` is out of scope for the
+			// (An attacker who ALSO reads `webwakeupwdb_secret` is out of scope for the
 			// chain alone — the external timestamp proof is the cross-check.)
-			return hash_hmac( 'sha256', $message, \WWU\WithdrawalButton\Security\Secret::get() );
+			return hash_hmac( 'sha256', $message, \WebWakeUpWdb\WithdrawalButton\Security\Secret::get() );
 		}
 
 		// v1 legacy: unkeyed SHA-256. Retained so pre-1.1.0 rows keep verifying.
@@ -70,8 +70,8 @@ final class LogChain {
 	 * @return string
 	 */
 	public static function genesis(): string {
-		$secret = \WWU\WithdrawalButton\Security\Secret::get();
-		return hash( 'sha256', 'wwu_wb_genesis|' . $secret );
+		$secret = \WebWakeUpWdb\WithdrawalButton\Security\Secret::get();
+		return hash( 'sha256', 'webwakeupwdb_genesis|' . $secret );
 	}
 
 	/**

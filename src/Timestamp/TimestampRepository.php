@@ -2,14 +2,14 @@
 /**
  * Repository for the trusted-timestamp proofs table.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Timestamp;
+namespace WebWakeUpWdb\WithdrawalButton\Timestamp;
 
-use WWU\WithdrawalButton\Storage\Database\TimestampTable;
+use WebWakeUpWdb\WithdrawalButton\Storage\Database\TimestampTable;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

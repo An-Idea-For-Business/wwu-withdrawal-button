@@ -10,18 +10,18 @@
  * lookup-minted guest token. Failures return identical generic errors so an
  * unauthenticated caller cannot enumerate orders.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\REST\Routes;
+namespace WebWakeUpWdb\WithdrawalButton\REST\Routes;
 
-use WWU\WithdrawalButton\Core\Services;
-use WWU\WithdrawalButton\Domain\WithdrawalRequest;
-use WWU\WithdrawalButton\Frontend\GuestAccess;
-use WWU\WithdrawalButton\Platform\NormalizedOrder;
-use WWU\WithdrawalButton\Platform\OrderDataSource;
+use WebWakeUpWdb\WithdrawalButton\Core\Services;
+use WebWakeUpWdb\WithdrawalButton\Domain\WithdrawalRequest;
+use WebWakeUpWdb\WithdrawalButton\Frontend\GuestAccess;
+use WebWakeUpWdb\WithdrawalButton\Platform\NormalizedOrder;
+use WebWakeUpWdb\WithdrawalButton\Platform\OrderDataSource;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -38,7 +38,7 @@ final class WithdrawalRoute extends AbstractRoute {
 	 * @return \WP_Error
 	 */
 	private function access_denied(): \WP_Error {
-		return $this->error( 'wwu_wb_access_denied', __( 'Invalid request.', 'wwu-withdrawal-button' ), 403 );
+		return $this->error( 'webwakeupwdb_access_denied', __( 'Invalid request.', 'wwu-withdrawal-button' ), 403 );
 	}
 
 	/**
@@ -55,7 +55,7 @@ final class WithdrawalRoute extends AbstractRoute {
 		// GuestAccess) and by order-reference + e-mail verification, not by login. The
 		// permission_callback is declared explicitly on every route below.
 		register_rest_route(
-			WWU_WB_REST_NAMESPACE,
+			WEBWAKEUPWDB_REST_NAMESPACE,
 			'/withdrawal/lookup',
 			array(
 				'methods'             => 'POST',
@@ -65,7 +65,7 @@ final class WithdrawalRoute extends AbstractRoute {
 		);
 
 		register_rest_route(
-			WWU_WB_REST_NAMESPACE,
+			WEBWAKEUPWDB_REST_NAMESPACE,
 			'/withdrawal/statement',
 			array(
 				'methods'             => 'POST',
@@ -75,7 +75,7 @@ final class WithdrawalRoute extends AbstractRoute {
 		);
 
 		register_rest_route(
-			WWU_WB_REST_NAMESPACE,
+			WEBWAKEUPWDB_REST_NAMESPACE,
 			'/withdrawal/confirm',
 			array(
 				'methods'             => 'POST',
@@ -136,7 +136,7 @@ final class WithdrawalRoute extends AbstractRoute {
 	 */
 	public function lookup( \WP_REST_Request $request ) {
 		if ( ! GuestAccess::check_rate_limit() ) {
-			return $this->error( 'wwu_wb_rate_limited', __( 'Too many attempts. Please try again in a few minutes.', 'wwu-withdrawal-button' ), 429 );
+			return $this->error( 'webwakeupwdb_rate_limited', __( 'Too many attempts. Please try again in a few minutes.', 'wwu-withdrawal-button' ), 429 );
 		}
 
 		$order_ref = sanitize_text_field( (string) $request->get_param( 'order_ref' ) );
@@ -170,7 +170,7 @@ final class WithdrawalRoute extends AbstractRoute {
 	 */
 	public function statement( \WP_REST_Request $request ) {
 		if ( ! GuestAccess::check_rate_limit() ) {
-			return $this->error( 'wwu_wb_rate_limited', __( 'Too many attempts. Please try again in a few minutes.', 'wwu-withdrawal-button' ), 429 );
+			return $this->error( 'webwakeupwdb_rate_limited', __( 'Too many attempts. Please try again in a few minutes.', 'wwu-withdrawal-button' ), 429 );
 		}
 		$order_ref = sanitize_text_field( (string) $request->get_param( 'order_ref' ) );
 		$resolved  = $this->resolve( $order_ref );
@@ -190,7 +190,7 @@ final class WithdrawalRoute extends AbstractRoute {
 			)
 		);
 		if ( ! $req->is_valid() ) {
-			return $this->error( 'wwu_wb_invalid_statement', __( 'Please provide your name and a valid email address.', 'wwu-withdrawal-button' ), 422 );
+			return $this->error( 'webwakeupwdb_invalid_statement', __( 'Please provide your name and a valid email address.', 'wwu-withdrawal-button' ), 422 );
 		}
 
 		$result = Services::instance()->withdrawal->submit_statement( $adapter, $order, $req );
@@ -205,7 +205,7 @@ final class WithdrawalRoute extends AbstractRoute {
 	 */
 	public function confirm( \WP_REST_Request $request ) {
 		if ( ! GuestAccess::check_rate_limit() ) {
-			return $this->error( 'wwu_wb_rate_limited', __( 'Too many attempts. Please try again in a few minutes.', 'wwu-withdrawal-button' ), 429 );
+			return $this->error( 'webwakeupwdb_rate_limited', __( 'Too many attempts. Please try again in a few minutes.', 'wwu-withdrawal-button' ), 429 );
 		}
 		$order_ref = sanitize_text_field( (string) $request->get_param( 'order_ref' ) );
 		$resolved  = $this->resolve( $order_ref );
@@ -217,7 +217,7 @@ final class WithdrawalRoute extends AbstractRoute {
 		$request_uid = sanitize_text_field( (string) $request->get_param( 'request_uid' ) );
 		$token       = sanitize_text_field( (string) $request->get_param( 'confirm_token' ) );
 		if ( '' === $request_uid || '' === $token ) {
-			return $this->error( 'wwu_wb_missing_token', __( 'Missing confirmation token. Please start again.', 'wwu-withdrawal-button' ), 400 );
+			return $this->error( 'webwakeupwdb_missing_token', __( 'Missing confirmation token. Please start again.', 'wwu-withdrawal-button' ), 400 );
 		}
 
 		$req    = WithdrawalRequest::from_input(

@@ -13,35 +13,35 @@
  *    (product-ID gating — the document object exposes product IDs, not categories);
  *  - WooCommerce validates the required field SERVER-SIDE on the Store API request
  *    (a tampered client cannot bypass it) and persists it to order meta
- *    `_wc_other/wwu-wb/<name>` automatically;
+ *    `_wc_other/webwakeupwdb/<name>` automatically;
  *  - on `woocommerce_store_api_checkout_order_processed` we read those values, build
- *    the canonical `_wwu_wb_consent` entries (re-deriving the order's conditional
+ *    the canonical `_webwakeupwdb_consent` entries (re-deriving the order's conditional
  *    items via the verified order path, which DOES resolve categories), send the
  *    durable-medium confirmation and append the PII-free immutable-log event —
  *    reusing {@see WooCheckoutConsent::build_consent_entries} + {@see ExemptionConfirmation}.
  *
  * Classic and block checkouts are mutually exclusive per order, and both paths share
- * the `_wwu_wb_consent`/`consent_logged` order meta + the idempotency guard, so there
+ * the `_webwakeupwdb_consent`/`consent_logged` order meta + the idempotency guard, so there
  * is never a double capture. If the API is unavailable (WC < 9.9 or shortcode
  * checkout) this class no-ops and the classic path / fail-safe applies.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  *
- * @see docs/analysis/wwu-wb-fluentcart-hooks-ANALYSIS.md (cross-platform capture notes)
+ * @see docs/analysis/webwakeupwdb-fluentcart-hooks-ANALYSIS.md (cross-platform capture notes)
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Frontend;
+namespace WebWakeUpWdb\WithdrawalButton\Frontend;
 
-use WWU\WithdrawalButton\Core\Services;
-use WWU\WithdrawalButton\Core\Settings;
-use WWU\WithdrawalButton\Domain\ConsentText;
-use WWU\WithdrawalButton\Domain\ExceptionTypes;
-use WWU\WithdrawalButton\Domain\ExemptionResolver;
-use WWU\WithdrawalButton\Mail\ExemptionConfirmation;
-use WWU\WithdrawalButton\Security\ClientInfo;
-use WWU\WithdrawalButton\Storage\LogRepository;
+use WebWakeUpWdb\WithdrawalButton\Core\Services;
+use WebWakeUpWdb\WithdrawalButton\Core\Settings;
+use WebWakeUpWdb\WithdrawalButton\Domain\ConsentText;
+use WebWakeUpWdb\WithdrawalButton\Domain\ExceptionTypes;
+use WebWakeUpWdb\WithdrawalButton\Domain\ExemptionResolver;
+use WebWakeUpWdb\WithdrawalButton\Mail\ExemptionConfirmation;
+use WebWakeUpWdb\WithdrawalButton\Security\ClientInfo;
+use WebWakeUpWdb\WithdrawalButton\Storage\LogRepository;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -57,14 +57,14 @@ final class WooBlockCheckoutConsent {
 	 *
 	 * @var string
 	 */
-	private const NS = 'wwu-wb';
+	private const NS = 'webwakeupwdb';
 
 	/**
 	 * Transient caching the conditional reason → product-id map (bounded query).
 	 *
 	 * @var string
 	 */
-	private const CACHE = 'wwu_wb_conditional_product_ids';
+	private const CACHE = 'webwakeupwdb_conditional_product_ids';
 
 	/**
 	 * Max product ids enumerated into a field's JSON Schema (DoS / payload guard).
@@ -145,7 +145,7 @@ final class WooBlockCheckoutConsent {
 			return;
 		}
 		// Shared idempotency guard with the classic path.
-		if ( '' !== (string) $order->get_meta( WWU_WB_META_PREFIX . 'consent_logged' ) ) {
+		if ( '' !== (string) $order->get_meta( WEBWAKEUPWDB_META_PREFIX . 'consent_logged' ) ) {
 			return;
 		}
 
@@ -186,7 +186,7 @@ final class WooBlockCheckoutConsent {
 			return;
 		}
 
-		$order->update_meta_data( WWU_WB_META_PREFIX . 'consent', $entries );
+		$order->update_meta_data( WEBWAKEUPWDB_META_PREFIX . 'consent', $entries );
 
 		// PII-free immutable-log event (IP lives only on the purgeable order meta).
 		$payload = array();
@@ -220,8 +220,8 @@ final class WooBlockCheckoutConsent {
 			$entries
 		);
 
-		$order->update_meta_data( WWU_WB_META_PREFIX . 'consent_logged', gmdate( 'c' ) );
-		$order->update_meta_data( WWU_WB_META_PREFIX . 'consent_confirmation_sent', $confirmed ? gmdate( 'c' ) : '0' );
+		$order->update_meta_data( WEBWAKEUPWDB_META_PREFIX . 'consent_logged', gmdate( 'c' ) );
+		$order->update_meta_data( WEBWAKEUPWDB_META_PREFIX . 'consent_confirmation_sent', $confirmed ? gmdate( 'c' ) : '0' );
 		$order->save();
 	}
 

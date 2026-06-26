@@ -6,16 +6,16 @@
  * provider (OpenTimestamps by default), stores the pending proof, links it to the
  * log row, and schedules the upgrade cron. The cron later anchors the proof.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Timestamp;
+namespace WebWakeUpWdb\WithdrawalButton\Timestamp;
 
-use WWU\WithdrawalButton\Storage\Database\LogTable;
-use WWU\WithdrawalButton\Storage\LogRepository;
-use WWU\WithdrawalButton\Debug\Debug;
+use WebWakeUpWdb\WithdrawalButton\Storage\Database\LogTable;
+use WebWakeUpWdb\WithdrawalButton\Storage\LogRepository;
+use WebWakeUpWdb\WithdrawalButton\Debug\Debug;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -31,7 +31,7 @@ final class TimestampService {
 	 *
 	 * @var string
 	 */
-	public const CRON_UPGRADE = 'wwu_wb_timestamp_upgrade';
+	public const CRON_UPGRADE = 'webwakeupwdb_timestamp_upgrade';
 
 	/**
 	 * Wire hooks.
@@ -39,7 +39,7 @@ final class TimestampService {
 	 * @return void
 	 */
 	public function register(): void {
-		add_action( 'wwu_wb_log_written', array( $this, 'maybe_stamp' ), 10, 3 );
+		add_action( 'webwakeupwdb_log_written', array( $this, 'maybe_stamp' ), 10, 3 );
 		add_action( self::CRON_UPGRADE, array( $this, 'upgrade_pending' ) );
 
 		if ( ! wp_next_scheduled( self::CRON_UPGRADE ) && 'none' !== $this->provider()->key() ) {
@@ -53,7 +53,7 @@ final class TimestampService {
 	 * @return TimestampProvider
 	 */
 	public function provider(): TimestampProvider {
-		$config = (array) get_option( 'wwu_wb_timestamp', array() );
+		$config = (array) get_option( 'webwakeupwdb_timestamp', array() );
 		// Default 'none' (no external call) when unset — opt-in only (wp.org Guideline 7).
 		$key    = (string) ( $config['provider'] ?? 'none' );
 
@@ -71,7 +71,7 @@ final class TimestampService {
 		 * @param TimestampProvider $provider Provider.
 		 * @param string            $key      Configured provider key.
 		 */
-		return apply_filters( 'wwu_wb_timestamp_provider', $provider, $key );
+		return apply_filters( 'webwakeupwdb_timestamp_provider', $provider, $key );
 	}
 
 	/**
@@ -145,7 +145,7 @@ final class TimestampService {
 		 * @param string $row_hash The stamped hash.
 		 * @param string $provider Provider key.
 		 */
-		do_action( 'wwu_wb_timestamp_anchored', $log_id, $row_hash, $provider->key() );
+		do_action( 'webwakeupwdb_timestamp_anchored', $log_id, $row_hash, $provider->key() );
 		return true;
 	}
 

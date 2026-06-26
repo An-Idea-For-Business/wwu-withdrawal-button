@@ -1,6 +1,6 @@
 <?php
 /**
- * Public read-only automations API (namespace wwu-wb/v1).
+ * Public read-only automations API (namespace webwakeupwdb/v1).
  *
  *   GET /requests                                  — paginated confirmed requests (lean, no email/IP)
  *   GET /requests/{request_uid}                    — one request (email + products, never the IP)
@@ -15,16 +15,16 @@
  * The raw consumer IP is NEVER exposed here; the row_hash is surfaced for external
  * integrity verification instead.
  *
- * @see \WWU\WithdrawalButton\Api\RequestReader
- * @package WWU\WithdrawalButton
+ * @see \WebWakeUpWdb\WithdrawalButton\Api\RequestReader
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\REST\Routes;
+namespace WebWakeUpWdb\WithdrawalButton\REST\Routes;
 
-use WWU\WithdrawalButton\Api\RequestReader;
-use WWU\WithdrawalButton\REST\Authentication;
+use WebWakeUpWdb\WithdrawalButton\Api\RequestReader;
+use WebWakeUpWdb\WithdrawalButton\REST\Authentication;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -51,7 +51,7 @@ final class ApiRoutes extends AbstractRoute {
 		$perm = Authentication::require_admin();
 
 		register_rest_route(
-			WWU_WB_REST_NAMESPACE,
+			WEBWAKEUPWDB_REST_NAMESPACE,
 			'/requests',
 			array(
 				'methods'             => 'GET',
@@ -90,7 +90,7 @@ final class ApiRoutes extends AbstractRoute {
 		);
 
 		register_rest_route(
-			WWU_WB_REST_NAMESPACE,
+			WEBWAKEUPWDB_REST_NAMESPACE,
 			'/requests/(?P<request_uid>[A-Za-z0-9\-]{8,64})',
 			array(
 				'methods'             => 'GET',
@@ -100,7 +100,7 @@ final class ApiRoutes extends AbstractRoute {
 		);
 
 		register_rest_route(
-			WWU_WB_REST_NAMESPACE,
+			WEBWAKEUPWDB_REST_NAMESPACE,
 			'/orders/(?P<platform>[a-z0-9_\-]{1,20})/(?P<order_ref>[A-Za-z0-9_.\-]{1,64})/withdrawal',
 			array(
 				'methods'             => 'GET',
@@ -154,7 +154,7 @@ final class ApiRoutes extends AbstractRoute {
 		$uid    = sanitize_text_field( (string) $request->get_param( 'request_uid' ) );
 		$detail = ( new RequestReader() )->detail( $uid );
 		if ( null === $detail ) {
-			return $this->error( 'wwu_wb_not_found', __( 'No confirmed withdrawal request with that id.', 'wwu-withdrawal-button' ), 404 );
+			return $this->error( 'webwakeupwdb_not_found', __( 'No confirmed withdrawal request with that id.', 'wwu-withdrawal-button' ), 404 );
 		}
 		return $this->success( $detail );
 	}
@@ -176,7 +176,7 @@ final class ApiRoutes extends AbstractRoute {
 
 		$status = ( new RequestReader() )->order_status( $platform, $order_ref );
 		if ( null === $status ) {
-			return $this->error( 'wwu_wb_order_unknown', __( 'No order found for that platform/reference.', 'wwu-withdrawal-button' ), 404 );
+			return $this->error( 'webwakeupwdb_order_unknown', __( 'No order found for that platform/reference.', 'wwu-withdrawal-button' ), 404 );
 		}
 		return $this->success( $status );
 	}
@@ -188,7 +188,7 @@ final class ApiRoutes extends AbstractRoute {
 	 */
 	private function guard_rate(): ?\WP_Error {
 		if ( ! Authentication::enforce_rate_limit( self::RL_BUCKET, 120, 60 ) ) {
-			return $this->error( 'wwu_wb_rate_limited', __( 'Too many requests. Please slow down.', 'wwu-withdrawal-button' ), 429 );
+			return $this->error( 'webwakeupwdb_rate_limited', __( 'Too many requests. Please slow down.', 'wwu-withdrawal-button' ), 429 );
 		}
 		return null;
 	}

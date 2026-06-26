@@ -4,7 +4,7 @@
  *
  * Every token gate in the plugin — guest access tokens (GuestAccess), receipt /
  * verify links (VerifiableLink) and the immutable log's genesis hash (LogChain) —
- * derives from the `wwu_wb_secret` option. If that option were ever empty (e.g.
+ * derives from the `webwakeupwdb_secret` option. If that option were ever empty (e.g.
  * deleted, a partial DB restore, or plugin files dropped in without running
  * activation), an HMAC computed over an empty key becomes attacker-reproducible
  * and tokens could be forged.
@@ -16,12 +16,12 @@
  * longer verify — which is the correct, fail-secure outcome (they can no longer
  * be trusted) rather than silently accepting forgeries.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Security;
+namespace WebWakeUpWdb\WithdrawalButton\Security;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -37,7 +37,7 @@ final class Secret {
 	 *
 	 * @var string
 	 */
-	public const OPTION = 'wwu_wb_secret';
+	public const OPTION = 'webwakeupwdb_secret';
 
 	/**
 	 * Return the HMAC secret, minting and persisting one if absent.

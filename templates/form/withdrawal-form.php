@@ -15,7 +15,7 @@
  * @var string   $confirm_label  Statutory confirmation label (only these words).
  * @var int|null $days_remaining Days left, or null.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
@@ -26,53 +26,53 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <?php
 // phpcs:disable WordPress.Security.NonceVerification.Recommended
-$wwu_wb_key   = isset( $_GET['key'] ) ? sanitize_text_field( wp_unslash( $_GET['key'] ) ) : '';
-$wwu_wb_token = isset( $_GET['access_token'] ) ? sanitize_text_field( wp_unslash( $_GET['access_token'] ) ) : '';
+$webwakeupwdb_key   = isset( $_GET['key'] ) ? sanitize_text_field( wp_unslash( $_GET['key'] ) ) : '';
+$webwakeupwdb_token = isset( $_GET['access_token'] ) ? sanitize_text_field( wp_unslash( $_GET['access_token'] ) ) : '';
 // phpcs:enable WordPress.Security.NonceVerification.Recommended
 ?>
-<div class="wwu-wb-form-wrap" data-no-translation
+<div class="webwakeupwdb-form-wrap" data-no-translation
 	data-order-ref="<?php echo esc_attr( $order_ref ); ?>"
-	data-key="<?php echo esc_attr( $wwu_wb_key ); ?>"
-	data-access-token="<?php echo esc_attr( $wwu_wb_token ); ?>">
+	data-key="<?php echo esc_attr( $webwakeupwdb_key ); ?>"
+	data-access-token="<?php echo esc_attr( $webwakeupwdb_token ); ?>">
 
-	<h2 class="wwu-wb-form-title"><?php echo esc_html( $withdraw_label ); ?></h2>
+	<h2 class="webwakeupwdb-form-title"><?php echo esc_html( $withdraw_label ); ?></h2>
 
 	<?php
 	// Reassuring, plain-language explanation of the process (UX + transparency).
-	echo \WWU\WithdrawalButton\Frontend\Template::render( 'partials/consumer-guidance.php' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the partial escapes its own output.
+	echo \WebWakeUpWdb\WithdrawalButton\Frontend\Template::render( 'partials/consumer-guidance.php' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the partial escapes its own output.
 	?>
 
 	<noscript>
-		<p class="wwu-wb-noscript"><?php esc_html_e( 'JavaScript is required to use the withdrawal form. You may also use the model withdrawal form provided in our terms.', 'wwu-withdrawal-button' ); ?></p>
+		<p class="webwakeupwdb-noscript"><?php esc_html_e( 'JavaScript is required to use the withdrawal form. You may also use the model withdrawal form provided in our terms.', 'wwu-withdrawal-button' ); ?></p>
 	</noscript>
 
-	<form class="wwu-wb-form" data-step="1" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-		<input type="hidden" name="action" value="wwu_wb_noscript_statement" />
+	<form class="webwakeupwdb-form" data-step="1" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+		<input type="hidden" name="action" value="webwakeupwdb_noscript_statement" />
 		<input type="hidden" name="order_ref" value="<?php echo esc_attr( $order_ref ); ?>" />
-		<input type="hidden" name="key" value="<?php echo esc_attr( $wwu_wb_key ); ?>" />
-		<input type="hidden" name="access_token" value="<?php echo esc_attr( $wwu_wb_token ); ?>" />
-		<?php wp_nonce_field( 'wwu_wb_noscript' ); ?>
-		<p class="wwu-wb-field">
-			<label for="wwu-wb-name"><?php esc_html_e( 'Your name', 'wwu-withdrawal-button' ); ?></label>
-			<input type="text" id="wwu-wb-name" name="name" value="<?php echo esc_attr( $name ); ?>" required autocomplete="name" />
+		<input type="hidden" name="key" value="<?php echo esc_attr( $webwakeupwdb_key ); ?>" />
+		<input type="hidden" name="access_token" value="<?php echo esc_attr( $webwakeupwdb_token ); ?>" />
+		<?php wp_nonce_field( 'webwakeupwdb_noscript' ); ?>
+		<p class="webwakeupwdb-field">
+			<label for="webwakeupwdb-name"><?php esc_html_e( 'Your name', 'wwu-withdrawal-button' ); ?></label>
+			<input type="text" id="webwakeupwdb-name" name="name" value="<?php echo esc_attr( $name ); ?>" required autocomplete="name" />
 		</p>
-		<p class="wwu-wb-field">
-			<label for="wwu-wb-order"><?php esc_html_e( 'Order', 'wwu-withdrawal-button' ); ?></label>
-			<input type="text" id="wwu-wb-order" value="<?php echo esc_attr( $order_number ); ?>" readonly />
+		<p class="webwakeupwdb-field">
+			<label for="webwakeupwdb-order"><?php esc_html_e( 'Order', 'wwu-withdrawal-button' ); ?></label>
+			<input type="text" id="webwakeupwdb-order" value="<?php echo esc_attr( $order_number ); ?>" readonly />
 		</p>
-		<p class="wwu-wb-field">
-			<label for="wwu-wb-email"><?php esc_html_e( 'Email for the confirmation', 'wwu-withdrawal-button' ); ?></label>
-			<input type="email" id="wwu-wb-email" name="email" value="<?php echo esc_attr( $email ); ?>" required autocomplete="email" />
+		<p class="webwakeupwdb-field">
+			<label for="webwakeupwdb-email"><?php esc_html_e( 'Email for the confirmation', 'wwu-withdrawal-button' ); ?></label>
+			<input type="email" id="webwakeupwdb-email" name="email" value="<?php echo esc_attr( $email ); ?>" required autocomplete="email" />
 		</p>
-		<p class="wwu-wb-field">
-			<label for="wwu-wb-reason"><?php esc_html_e( 'Reason (optional)', 'wwu-withdrawal-button' ); ?></label>
-			<textarea id="wwu-wb-reason" name="reason" rows="2" placeholder="<?php esc_attr_e( 'You are not required to give a reason.', 'wwu-withdrawal-button' ); ?>"></textarea>
+		<p class="webwakeupwdb-field">
+			<label for="webwakeupwdb-reason"><?php esc_html_e( 'Reason (optional)', 'wwu-withdrawal-button' ); ?></label>
+			<textarea id="webwakeupwdb-reason" name="reason" rows="2" placeholder="<?php esc_attr_e( 'You are not required to give a reason.', 'wwu-withdrawal-button' ); ?>"></textarea>
 		</p>
 
 		<?php if ( ! empty( $items ) && is_array( $items ) ) : ?>
-		<fieldset class="wwu-wb-field wwu-wb-products">
+		<fieldset class="webwakeupwdb-field webwakeupwdb-products">
 			<legend><?php esc_html_e( 'Withdrawing from only some products?', 'wwu-withdrawal-button' ); ?></legend>
-			<p class="wwu-wb-products-help"><?php esc_html_e( 'Tick them — leave empty to withdraw from the whole order. If you bought more than one of an item, you can set how many to withdraw (leave blank for all).', 'wwu-withdrawal-button' ); ?></p>
+			<p class="webwakeupwdb-products-help"><?php esc_html_e( 'Tick them — leave empty to withdraw from the whole order. If you bought more than one of an item, you can set how many to withdraw (leave blank for all).', 'wwu-withdrawal-button' ); ?></p>
 			<?php foreach ( $items as $item ) :
 				$item_name = (string) ( $item['name'] ?? '' );
 				$item_qty  = (int) ( $item['qty'] ?? 1 );
@@ -80,13 +80,13 @@ $wwu_wb_token = isset( $_GET['access_token'] ) ? sanitize_text_field( wp_unslash
 					continue;
 				}
 			?>
-			<label class="wwu-wb-products-item">
+			<label class="webwakeupwdb-products-item">
 				<input type="checkbox" name="products[]" value="<?php echo esc_attr( $item_name ); ?>" />
 				<?php echo esc_html( $item_name ); ?>
 			</label>
 			<?php if ( $item_qty > 1 ) : ?>
-			<label class="wwu-wb-products-qty">
-				<span class="wwu-wb-products-qty-label"><?php
+			<label class="webwakeupwdb-products-qty">
+				<span class="webwakeupwdb-products-qty-label"><?php
 					/* translators: %d is the quantity the consumer ordered. */
 					printf( esc_html__( 'Quantity to withdraw (of %d):', 'wwu-withdrawal-button' ), (int) $item_qty );
 				?></span>
@@ -97,17 +97,17 @@ $wwu_wb_token = isset( $_GET['access_token'] ) ? sanitize_text_field( wp_unslash
 		</fieldset>
 		<?php endif; ?>
 
-		<p class="wwu-wb-actions">
-			<button type="submit" class="wwu-wb-button wwu-wb-continue"><?php esc_html_e( 'Continue', 'wwu-withdrawal-button' ); ?></button>
+		<p class="webwakeupwdb-actions">
+			<button type="submit" class="webwakeupwdb-button webwakeupwdb-continue"><?php esc_html_e( 'Continue', 'wwu-withdrawal-button' ); ?></button>
 		</p>
 	</form>
 
-	<div class="wwu-wb-step2" hidden>
-		<p class="wwu-wb-step2-intro"><?php esc_html_e( 'Please confirm your withdrawal. This is the final step.', 'wwu-withdrawal-button' ); ?></p>
-		<p class="wwu-wb-actions">
-			<button type="button" class="wwu-wb-button wwu-wb-confirm" data-confirm-label="<?php echo esc_attr( $confirm_label ); ?>"><?php echo esc_html( $confirm_label ); ?></button>
+	<div class="webwakeupwdb-step2" hidden>
+		<p class="webwakeupwdb-step2-intro"><?php esc_html_e( 'Please confirm your withdrawal. This is the final step.', 'wwu-withdrawal-button' ); ?></p>
+		<p class="webwakeupwdb-actions">
+			<button type="button" class="webwakeupwdb-button webwakeupwdb-confirm" data-confirm-label="<?php echo esc_attr( $confirm_label ); ?>"><?php echo esc_html( $confirm_label ); ?></button>
 		</p>
 	</div>
 
-	<div class="wwu-wb-result" role="status" aria-live="polite" hidden></div>
+	<div class="webwakeupwdb-result" role="status" aria-live="polite" hidden></div>
 </div>

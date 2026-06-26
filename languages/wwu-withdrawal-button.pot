@@ -184,7 +184,7 @@ msgid "Could not freeze the policy. Please try again."
 msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:227
-msgid "No published withdrawal form page is configured. Guests (and FluentCart customers) cannot withdraw. Create a page with the [wwu_wb_form] shortcode and set it in Settings."
+msgid "No published withdrawal form page is configured. Guests (and FluentCart customers) cannot withdraw. Create a page with the [webwakeupwdb_form] shortcode and set it in Settings."
 msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:231
@@ -245,7 +245,7 @@ msgid "Pre-contractual info shortcode:"
 msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:73
-msgid "The texts below are the ones in use. To replace them with your own wording (no code needed), edit them in <a href=\"%s\">Settings &rarr; Legal clauses</a> — your version then appears here and wherever the <code>[wwu_wb_info]</code> shortcode is used."
+msgid "The texts below are the ones in use. To replace them with your own wording (no code needed), edit them in <a href=\"%s\">Settings &rarr; Legal clauses</a> — your version then appears here and wherever the <code>[webwakeupwdb_info]</code> shortcode is used."
 msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:84
@@ -256,9 +256,9 @@ msgstr ""
 #: src/Admin/ConsentRecordsPage.php:103
 #: src/Admin/RequestsDashboard.php:117
 #: templates/emails/admin-notification.php:30
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:27
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:27
 #: templates/emails/withdrawal-confirmation.php:36
-#: templates/emails/wwu-wb-withdrawal-ack.php:50
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:50
 #: templates/form/withdrawal-form.php:60
 #: templates/myaccount/withdrawal-list.php:72
 #: templates/pdf/receipt-pdf.php:48
@@ -598,7 +598,7 @@ msgid "If you received it, outgoing email works and withdrawal acknowledgements 
 msgstr ""
 
 #: src/Admin/DashboardPage.php:531
-msgid "The PDF library is not available on this site. Install the plugin from the official packaged ZIP to enable PDF export — the policy page and the [wwu_wb_policy] shortcode still work without it."
+msgid "The PDF library is not available on this site. Install the plugin from the official packaged ZIP to enable PDF export — the policy page and the [webwakeupwdb_policy] shortcode still work without it."
 msgstr ""
 
 #: src/Admin/DashboardPage.php:567
@@ -708,9 +708,9 @@ msgstr ""
 
 #: src/Admin/RequestsDashboard.php:118
 #: templates/emails/admin-notification.php:31
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:29
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:29
 #: templates/emails/withdrawal-confirmation.php:38
-#: templates/emails/wwu-wb-withdrawal-ack.php:58
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:58
 #: templates/pdf/receipt-pdf.php:50
 msgid "Consumer"
 msgstr ""
@@ -1335,7 +1335,7 @@ msgid "Legal clauses"
 msgstr ""
 
 #: src/Admin/SettingsPage.php:509
-msgid "Customise the ready-to-paste legal clauses (language: %s). Leave a field empty to use the built-in sample template. When you type your own wording it replaces the default everywhere — the Compliance page and the [wwu_wb_info] shortcode — and the \"sample text\" note is dropped. This is your own text: have your lawyer review it."
+msgid "Customise the ready-to-paste legal clauses (language: %s). Leave a field empty to use the built-in sample template. When you type your own wording it replaces the default everywhere — the Compliance page and the [webwakeupwdb_info] shortcode — and the \"sample text\" note is dropped. This is your own text: have your lawyer review it."
 msgstr ""
 
 #: src/Admin/SettingsPage.php:525
@@ -1715,7 +1715,7 @@ msgid "The right of withdrawal applies <strong>by default to every product</stro
 msgstr ""
 
 #: src/Admin/SettingsPage.php:822
-msgid "For the two conditional reasons the plugin <strong>captures the consent first, then hides the button</strong>: on the <strong>WooCommerce checkout</strong> it adds the required tick-box automatically and stores the agreed wording on the order. Until that tick-box is confirmed — and on platforms/checkouts where capture is not available yet — the button <strong>stays visible, even on digital items</strong> (fail-safe toward the consumer's right). The plugin never hides the button \"on digital\" blindly. The acknowledgement wording is filterable via <code>wwu_wb_consent_text</code>. Seal-based reasons depend on the consumer unsealing after delivery, so they are never auto-hidden."
+msgid "For the two conditional reasons the plugin <strong>captures the consent first, then hides the button</strong>: on the <strong>WooCommerce checkout</strong> it adds the required tick-box automatically and stores the agreed wording on the order. Until that tick-box is confirmed — and on platforms/checkouts where capture is not available yet — the button <strong>stays visible, even on digital items</strong> (fail-safe toward the consumer's right). The plugin never hides the button \"on digital\" blindly. The acknowledgement wording is filterable via <code>webwakeupwdb_consent_text</code>. Seal-based reasons depend on the consumer unsealing after delivery, so they are never auto-hidden."
 msgstr ""
 
 #: src/Admin/SettingsPage.php:824
@@ -2352,9 +2352,9 @@ msgid "please verify whether the request is still valid."
 msgstr ""
 
 #: templates/emails/admin-notification.php:32
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:28
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:28
 #: templates/emails/withdrawal-confirmation.php:37
-#: templates/emails/wwu-wb-withdrawal-ack.php:54
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:54
 #: templates/pdf/receipt-pdf.php:49
 msgid "Goods / services"
 msgstr ""
@@ -2376,69 +2376,69 @@ msgstr ""
 msgid "View the evidence record"
 msgstr ""
 
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:24
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:24
 #: templates/emails/withdrawal-confirmation.php:32
-#: templates/emails/wwu-wb-withdrawal-ack.php:42
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:42
 msgid "Dear %s,"
 msgstr ""
 
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:25
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:25
 #: templates/emails/withdrawal-confirmation.php:33
-#: templates/emails/wwu-wb-withdrawal-ack.php:44
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:44
 msgid "We confirm that we have received your withdrawal from the following distance contract. This message is your acknowledgement of receipt on a durable medium."
 msgstr ""
 
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:31
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:31
 #: templates/emails/withdrawal-confirmation.php:40
-#: templates/emails/wwu-wb-withdrawal-ack.php:63
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:63
 #: templates/form/withdrawal-form.php:68
 #: templates/pdf/receipt-pdf.php:52
 msgid "Reason (optional)"
 msgstr ""
 
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:33
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:33
 #: templates/emails/withdrawal-confirmation.php:45
-#: templates/emails/wwu-wb-withdrawal-ack.php:74
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:74
 #: templates/pdf/receipt-pdf.php:57
 msgid "Date and time of submission"
 msgstr ""
 
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:35
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:35
 #: templates/emails/withdrawal-confirmation.php:49
-#: templates/emails/wwu-wb-withdrawal-ack.php:79
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:79
 msgid "Addressee (trader):"
 msgstr ""
 
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:42
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:42
 msgid "Download your receipt (PDF):"
 msgstr ""
 
-#: templates/emails/plain/wwu-wb-withdrawal-ack.php:45
+#: templates/emails/plain/webwakeupwdb-withdrawal-ack.php:45
 msgid "Verify this receipt:"
 msgstr ""
 
 #: templates/emails/withdrawal-confirmation.php:43
-#: templates/emails/wwu-wb-withdrawal-ack.php:69
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:69
 #: templates/pdf/receipt-pdf.php:55
 msgid "Products withdrawn"
 msgstr ""
 
 #: templates/emails/withdrawal-confirmation.php:54
-#: templates/emails/wwu-wb-withdrawal-ack.php:84
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:84
 msgid "Download your receipt (PDF)"
 msgstr ""
 
 #: templates/emails/withdrawal-confirmation.php:58
-#: templates/emails/wwu-wb-withdrawal-ack.php:88
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:88
 msgid "Evidence reference:"
 msgstr ""
 
 #: templates/emails/withdrawal-confirmation.php:59
-#: templates/emails/wwu-wb-withdrawal-ack.php:90
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:90
 msgid "Verify this receipt"
 msgstr ""
 
-#: templates/emails/wwu-wb-withdrawal-ack.php:46
+#: templates/emails/webwakeupwdb-withdrawal-ack.php:46
 msgid "Withdrawal details"
 msgstr ""
 

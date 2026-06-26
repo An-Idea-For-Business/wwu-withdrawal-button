@@ -4,15 +4,15 @@
  *
  * Resolution order: {stylesheet}/wwu-withdrawal-button/{name} →
  * {template}/wwu-withdrawal-button/{name} → plugin templates/{name}. The final
- * path passes through the wwu_wb_template_path filter and is realpath-confined to
+ * path passes through the webwakeupwdb_template_path filter and is realpath-confined to
  * a trusted directory to prevent local file inclusion via a hostile filter.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Frontend;
+namespace WebWakeUpWdb\WithdrawalButton\Frontend;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -54,14 +54,14 @@ final class Template {
 	 * populates the real template variables (a template arg named "name",
 	 * "args" or "template" would otherwise be skipped by EXTR_SKIP).
 	 *
-	 * @param string $wwu_wb_template_file Absolute template path.
-	 * @param array  $wwu_wb_template_vars Variables to expose.
+	 * @param string $webwakeupwdb_template_file Absolute template path.
+	 * @param array  $webwakeupwdb_template_vars Variables to expose.
 	 * @return string
 	 */
-	private static function load_in_scope( string $wwu_wb_template_file, array $wwu_wb_template_vars ): string {
+	private static function load_in_scope( string $webwakeupwdb_template_file, array $webwakeupwdb_template_vars ): string {
 		ob_start();
-		extract( $wwu_wb_template_vars, EXTR_SKIP ); // phpcs:ignore WordPress.PHP.DontExtract.extract_extract
-		include $wwu_wb_template_file;
+		extract( $webwakeupwdb_template_vars, EXTR_SKIP ); // phpcs:ignore WordPress.PHP.DontExtract.extract_extract
+		include $webwakeupwdb_template_file;
 		return (string) ob_get_clean();
 	}
 
@@ -76,7 +76,7 @@ final class Template {
 		$name = ltrim( str_replace( array( '..', "\0" ), '', $name ), '/' );
 
 		$theme = locate_template( array( self::THEME_DIR . $name ) );
-		$path  = $theme ? $theme : WWU_WB_PATH . '/templates/' . $name;
+		$path  = $theme ? $theme : WEBWAKEUPWDB_PATH . '/templates/' . $name;
 
 		/**
 		 * Filter the resolved template path.
@@ -85,7 +85,7 @@ final class Template {
 		 * @param string $name Template name.
 		 * @param array  $args Template args.
 		 */
-		$path = (string) apply_filters( 'wwu_wb_template_path', $path, $name, $args );
+		$path = (string) apply_filters( 'webwakeupwdb_template_path', $path, $name, $args );
 
 		// Confine to trusted directories (plugin templates or active theme).
 		$real = realpath( $path );
@@ -93,7 +93,7 @@ final class Template {
 			return '';
 		}
 		$trusted = array(
-			realpath( WWU_WB_PATH . '/templates' ),
+			realpath( WEBWAKEUPWDB_PATH . '/templates' ),
 			realpath( get_stylesheet_directory() ),
 			realpath( get_template_directory() ),
 		);

@@ -9,12 +9,12 @@
  * large networks. New sites created after a network activation are provisioned
  * via the wp_initialize_site hook (wired in Plugin::register_hooks()).
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Core;
+namespace WebWakeUpWdb\WithdrawalButton\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -37,7 +37,7 @@ final class Install {
 	 *
 	 * @var string
 	 */
-	public const CRON_COMPLETE_NETWORK = 'wwu_wb_complete_network_activation';
+	public const CRON_COMPLETE_NETWORK = 'webwakeupwdb_complete_network_activation';
 
 	/**
 	 * Autoloaded flag option: '1' means a one-time rewrite-rules flush is pending
@@ -47,7 +47,7 @@ final class Install {
 	 *
 	 * @var string
 	 */
-	public const OPTION_FLUSH_PENDING = 'wwu_wb_flush_pending';
+	public const OPTION_FLUSH_PENDING = 'webwakeupwdb_flush_pending';
 
 	/**
 	 * Activation entry point.
@@ -123,7 +123,7 @@ final class Install {
 		self::ensure_secret();
 		self::ensure_form_page();
 
-		Migrator::migrate( (int) get_option( Migrator::OPTION_DB_VERSION, 0 ), (int) WWU_WB_SCHEMA_VERSION );
+		Migrator::migrate( (int) get_option( Migrator::OPTION_DB_VERSION, 0 ), (int) WEBWAKEUPWDB_SCHEMA_VERSION );
 
 		// The WooCommerce My Account withdrawal tab is a rewrite endpoint registered
 		// on `init` by the frontend layer. During this activation request the plugin
@@ -139,7 +139,7 @@ final class Install {
 		ConsentRetention::schedule();
 
 		// Invalidate any Complianz blocked-scripts cache so our marker is honoured.
-		\WWU\WithdrawalButton\Compat\Complianz::bust_cache();
+		\WebWakeUpWdb\WithdrawalButton\Compat\Complianz::bust_cache();
 	}
 
 	/**
@@ -174,7 +174,7 @@ final class Install {
 		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
-		if ( ! is_plugin_active_for_network( WWU_WB_PLUGIN_BASENAME ) ) {
+		if ( ! is_plugin_active_for_network( WEBWAKEUPWDB_PLUGIN_BASENAME ) ) {
 			return;
 		}
 		switch_to_blog( (int) $new_site->blog_id );
@@ -190,7 +190,7 @@ final class Install {
 	 */
 	private static function seed_default_options(): void {
 		add_option(
-			'wwu_wb_settings',
+			'webwakeupwdb_settings',
 			array(
 				'enabled'              => false,
 				'endpoint_slug'        => 'wwu-withdrawal',
@@ -207,7 +207,7 @@ final class Install {
 				'merchant_email'       => get_option( 'admin_email' ),
 				'retention_years'      => 10,
 				'consent_capture_ip'   => true,
-				'go_live_date'         => WWU_WB_GO_LIVE_DATE,
+				'go_live_date'         => WEBWAKEUPWDB_GO_LIVE_DATE,
 				/*
 				 * Consumer-facing copy overrides. Both default to '' which means the
 				 * built-in i18n text is used; non-empty values are rendered as-is
@@ -233,7 +233,7 @@ final class Install {
 		);
 
 		add_option(
-			'wwu_wb_applicability',
+			'webwakeupwdb_applicability',
 			array(
 				'mode'                 => 'eu_eea_only',
 				'custom_countries'     => array(),
@@ -244,10 +244,10 @@ final class Install {
 		);
 
 		// Read only inside the withdrawal flow → not autoloaded on every page.
-		add_option( 'wwu_wb_labels', array(), '', 'no' );
+		add_option( 'webwakeupwdb_labels', array(), '', 'no' );
 
 		add_option(
-			'wwu_wb_exclusions',
+			'webwakeupwdb_exclusions',
 			array(
 				// Per-reason exemption map: { '<59_x>': { products:[], categories:[] } }.
 				// The merchant tags products/categories under a specific statutory
@@ -265,7 +265,7 @@ final class Install {
 		);
 
 		add_option(
-			'wwu_wb_timestamp',
+			'webwakeupwdb_timestamp',
 			array(
 				// External calls are OPT-IN (wp.org Guideline 7: no phoning home without
 				// explicit consent). Default 'none' = the local hash-chained log still
@@ -282,7 +282,7 @@ final class Install {
 		);
 
 		add_option(
-			'wwu_wb_compliance',
+			'webwakeupwdb_compliance',
 			array(
 				'model_form_published' => false,
 				'privacy_updated'      => false,
@@ -294,7 +294,7 @@ final class Install {
 		);
 
 		add_option(
-			'wwu_wb_debug',
+			'webwakeupwdb_debug',
 			array(
 				'enabled'       => false,
 				'mode'          => 'all_admins',
@@ -311,7 +311,7 @@ final class Install {
 		// (we sign every delivery) and only ever shown masked. Autoload no: it is
 		// read only at delivery time, never on a front-end page.
 		add_option(
-			'wwu_wb_webhook',
+			'webwakeupwdb_webhook',
 			array(
 				'enabled' => false,
 				'url'     => '',
@@ -325,7 +325,7 @@ final class Install {
 	}
 
 	/**
-	 * Ensure a published page with the [wwu_wb_form] shortcode exists, so guests
+	 * Ensure a published page with the [webwakeupwdb_form] shortcode exists, so guests
 	 * (and FluentCart customers) always have a reachable withdrawal surface. The
 	 * page id is stored in settings['public_form_page_id'].
 	 *
@@ -336,7 +336,7 @@ final class Install {
 			'public_form_page_id',
 			__( 'Right of withdrawal', 'wwu-withdrawal-button' ),
 			'right-of-withdrawal',
-			'[wwu_wb_form]',
+			'[webwakeupwdb_form]',
 			'publish'
 		);
 	}
@@ -345,7 +345,7 @@ final class Install {
 	 * Ensure the consolidated "Right of withdrawal — information notice" policy
 	 * page exists. Created as a DRAFT (the merchant publishes it explicitly).
 	 * Stored in settings['policy_page_id']. Idempotent + self-healing (recreated
-	 * if trashed/deleted). Content is the [wwu_wb_policy] shortcode. {@see PolicyBuilder}.
+	 * if trashed/deleted). Content is the [webwakeupwdb_policy] shortcode. {@see PolicyBuilder}.
 	 *
 	 * @return int The policy page id (0 on failure).
 	 */
@@ -354,7 +354,7 @@ final class Install {
 			'policy_page_id',
 			__( 'Right of withdrawal — information notice', 'wwu-withdrawal-button' ),
 			'withdrawal-policy',
-			'[wwu_wb_policy]',
+			'[webwakeupwdb_policy]',
 			'draft'
 		);
 	}
@@ -374,7 +374,7 @@ final class Install {
 	 * @return int The page id (0 on failure).
 	 */
 	private static function ensure_page( string $key, string $title, string $slug, string $content, string $status ): int {
-		$settings = (array) get_option( 'wwu_wb_settings', array() );
+		$settings = (array) get_option( 'webwakeupwdb_settings', array() );
 		$page_id  = (int) ( $settings[ $key ] ?? 0 );
 
 		if ( $page_id > 0 && 'page' === get_post_type( $page_id ) && 'trash' !== get_post_status( $page_id ) ) {
@@ -394,7 +394,7 @@ final class Install {
 
 		if ( ! is_wp_error( $new_id ) && $new_id > 0 ) {
 			$settings[ $key ] = (int) $new_id;
-			update_option( 'wwu_wb_settings', $settings );
+			update_option( 'webwakeupwdb_settings', $settings );
 			return (int) $new_id;
 		}
 
@@ -411,7 +411,7 @@ final class Install {
 		// Delegate to the central Secret accessor, which mints + persists the
 		// secret if it is missing (and is also the fail-safe used by every token
 		// gate at runtime, so the key is never an empty string).
-		\WWU\WithdrawalButton\Security\Secret::get();
+		\WebWakeUpWdb\WithdrawalButton\Security\Secret::get();
 	}
 
 	/**
@@ -424,7 +424,7 @@ final class Install {
 	public static function deactivate( bool $network_wide ): void {
 		wp_clear_scheduled_hook( self::CRON_COMPLETE_NETWORK );
 		ConsentRetention::unschedule();
-		\WWU\WithdrawalButton\Timestamp\TimestampService::clear_cron();
+		\WebWakeUpWdb\WithdrawalButton\Timestamp\TimestampService::clear_cron();
 		flush_rewrite_rules( false );
 	}
 }

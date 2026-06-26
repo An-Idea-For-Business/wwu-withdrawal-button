@@ -10,7 +10,7 @@
  *  2. renders one required acknowledgement checkbox per reason at checkout;
  *  3. blocks checkout server-side until each required box is ticked;
  *  4. stores the agreed wording (verbatim + SHA-256 hash + timestamp + IP) on the
- *     order meta `_wwu_wb_consent`, which {@see ConsentReader} feeds back to the
+ *     order meta `_webwakeupwdb_consent`, which {@see ConsentReader} feeds back to the
  *     evaluator so the button is then legitimately hidden for those items;
  *  5. writes an order note + an append-only immutable-log event as durable
  *     evidence the consent existed.
@@ -20,20 +20,20 @@
  * `woocommerce_checkout_create_order`. The block-based Checkout (Store API) does
  * not fire these and needs a separate integration — tracked as a follow-up.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Frontend;
+namespace WebWakeUpWdb\WithdrawalButton\Frontend;
 
-use WWU\WithdrawalButton\Core\Settings;
-use WWU\WithdrawalButton\Domain\ConsentText;
-use WWU\WithdrawalButton\Domain\ExceptionTypes;
-use WWU\WithdrawalButton\Domain\ExemptionResolver;
-use WWU\WithdrawalButton\Mail\ExemptionConfirmation;
-use WWU\WithdrawalButton\Security\ClientInfo;
-use WWU\WithdrawalButton\Storage\LogRepository;
+use WebWakeUpWdb\WithdrawalButton\Core\Settings;
+use WebWakeUpWdb\WithdrawalButton\Domain\ConsentText;
+use WebWakeUpWdb\WithdrawalButton\Domain\ExceptionTypes;
+use WebWakeUpWdb\WithdrawalButton\Domain\ExemptionResolver;
+use WebWakeUpWdb\WithdrawalButton\Mail\ExemptionConfirmation;
+use WebWakeUpWdb\WithdrawalButton\Security\ClientInfo;
+use WebWakeUpWdb\WithdrawalButton\Storage\LogRepository;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -45,11 +45,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class WooCheckoutConsent {
 
 	/**
-	 * Field name root for the consent checkboxes (`wwu_wb_consent[<reason>]`).
+	 * Field name root for the consent checkboxes (`webwakeupwdb_consent[<reason>]`).
 	 *
 	 * @var string
 	 */
-	private const FIELD = 'wwu_wb_consent';
+	private const FIELD = 'webwakeupwdb_consent';
 
 	/**
 	 * Register the WooCommerce checkout hooks.
@@ -74,7 +74,7 @@ final class WooCheckoutConsent {
 			return;
 		}
 
-		echo '<div class="wwu-wb-consent" style="margin:12px 0;">';
+		echo '<div class="webwakeupwdb-consent" style="margin:12px 0;">';
 		foreach ( $detail as $reason => $info ) {
 			$text = ConsentText::for_reason( (string) $reason );
 			if ( '' === $text ) {
@@ -82,17 +82,17 @@ final class WooCheckoutConsent {
 			}
 			$names = implode( ', ', array_map( 'sanitize_text_field', (array) $info['names'] ) );
 
-			echo '<p class="wwu-wb-consent__row" style="margin:0 0 10px;">';
+			echo '<p class="webwakeupwdb-consent__row" style="margin:0 0 10px;">';
 			echo '<label style="display:block;line-height:1.4;">';
 			printf(
-				'<input type="checkbox" class="wwu-wb-consent__input" name="%1$s[%2$s]" value="1" required /> ',
+				'<input type="checkbox" class="webwakeupwdb-consent__input" name="%1$s[%2$s]" value="1" required /> ',
 				esc_attr( self::FIELD ),
 				esc_attr( (string) $reason )
 			);
-			echo '<span class="wwu-wb-consent__text">' . esc_html( $text ) . '</span>';
+			echo '<span class="webwakeupwdb-consent__text">' . esc_html( $text ) . '</span>';
 			echo '</label>';
 			if ( '' !== $names ) {
-				echo '<span class="wwu-wb-consent__items" style="display:block;font-size:12px;color:#555;margin-top:2px;">'
+				echo '<span class="webwakeupwdb-consent__items" style="display:block;font-size:12px;color:#555;margin-top:2px;">'
 					. esc_html(
 						sprintf(
 							/* translators: %s: comma-separated list of product names. */
@@ -162,14 +162,14 @@ final class WooCheckoutConsent {
 			return;
 		}
 		// update_meta_data on the in-flight order persists when WooCommerce saves it.
-		$order->update_meta_data( WWU_WB_META_PREFIX . 'consent', $entries );
+		$order->update_meta_data( WEBWAKEUPWDB_META_PREFIX . 'consent', $entries );
 	}
 
 	/**
 	 * The client IP to store with the consent, honouring the merchant's setting.
 	 *
 	 * The IP is the most exposed field under the GDPR strict-necessity test, so the
-	 * merchant can turn it off (`wwu_wb_settings['consent_capture_ip']`, default on).
+	 * merchant can turn it off (`webwakeupwdb_settings['consent_capture_ip']`, default on).
 	 * It is stored ONLY on the order meta (purgeable), never in the immutable log.
 	 *
 	 * @return string
@@ -198,13 +198,13 @@ final class WooCheckoutConsent {
 			return;
 		}
 
-		$entries = $order->get_meta( WWU_WB_META_PREFIX . 'consent' );
+		$entries = $order->get_meta( WEBWAKEUPWDB_META_PREFIX . 'consent' );
 		if ( ! is_array( $entries ) || empty( $entries ) ) {
 			return;
 		}
 
 		// Idempotency: only record the evidence once, even if the hook re-fires.
-		if ( '' !== (string) $order->get_meta( WWU_WB_META_PREFIX . 'consent_logged' ) ) {
+		if ( '' !== (string) $order->get_meta( WEBWAKEUPWDB_META_PREFIX . 'consent_logged' ) ) {
 			return;
 		}
 
@@ -225,7 +225,7 @@ final class WooCheckoutConsent {
 		);
 
 		// Immutable-log evidence event. PII-FREE on purpose: the IP + verbatim text
-		// live ONLY on the order meta (_wwu_wb_consent), which the retention purge can
+		// live ONLY on the order meta (_webwakeupwdb_consent), which the retention purge can
 		// anonymise. The hash-chained log keeps just the text_hash + reason + timestamp,
 		// so it stays tamper-evident AND purge-compatible (the chain is never rewritten).
 		$payload = array();
@@ -264,8 +264,8 @@ final class WooCheckoutConsent {
 			$entries
 		);
 
-		$order->update_meta_data( WWU_WB_META_PREFIX . 'consent_logged', gmdate( 'c' ) );
-		$order->update_meta_data( WWU_WB_META_PREFIX . 'consent_confirmation_sent', $confirmed ? gmdate( 'c' ) : '0' );
+		$order->update_meta_data( WEBWAKEUPWDB_META_PREFIX . 'consent_logged', gmdate( 'c' ) );
+		$order->update_meta_data( WEBWAKEUPWDB_META_PREFIX . 'consent_confirmation_sent', $confirmed ? gmdate( 'c' ) : '0' );
 		$order->save();
 	}
 

@@ -7,24 +7,24 @@
  * F0. Later phases add the platform adapters, frontend surfaces, durable-medium,
  * timestamping, compatibility and shortcodes by extending register_services().
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Core;
+namespace WebWakeUpWdb\WithdrawalButton\Core;
 
-use WWU\WithdrawalButton\Admin\AdminController;
-use WWU\WithdrawalButton\Compat\CacheExclusions;
-use WWU\WithdrawalButton\Compat\Complianz;
-use WWU\WithdrawalButton\Compat\ComplianzDocuments;
-use WWU\WithdrawalButton\DurableMedium\ConfirmationDispatcher;
-use WWU\WithdrawalButton\Frontend\Assets;
-use WWU\WithdrawalButton\Frontend\WooMyAccount;
-use WWU\WithdrawalButton\Platform\WooCommerce\OrderStatus;
-use WWU\WithdrawalButton\REST\RestApi;
-use WWU\WithdrawalButton\Shortcodes\Shortcodes;
-use WWU\WithdrawalButton\Timestamp\TimestampService;
+use WebWakeUpWdb\WithdrawalButton\Admin\AdminController;
+use WebWakeUpWdb\WithdrawalButton\Compat\CacheExclusions;
+use WebWakeUpWdb\WithdrawalButton\Compat\Complianz;
+use WebWakeUpWdb\WithdrawalButton\Compat\ComplianzDocuments;
+use WebWakeUpWdb\WithdrawalButton\DurableMedium\ConfirmationDispatcher;
+use WebWakeUpWdb\WithdrawalButton\Frontend\Assets;
+use WebWakeUpWdb\WithdrawalButton\Frontend\WooMyAccount;
+use WebWakeUpWdb\WithdrawalButton\Platform\WooCommerce\OrderStatus;
+use WebWakeUpWdb\WithdrawalButton\REST\RestApi;
+use WebWakeUpWdb\WithdrawalButton\Shortcodes\Shortcodes;
+use WebWakeUpWdb\WithdrawalButton\Timestamp\TimestampService;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -118,13 +118,13 @@ final class Plugin {
 		$this->rest_api = new RestApi();
 		$this->rest_api->register();
 
-		$services = \WWU\WithdrawalButton\Core\Services::instance();
+		$services = \WebWakeUpWdb\WithdrawalButton\Core\Services::instance();
 
 		// WooCommerce-specific surfaces (status + My Account) when WooCommerce is active.
 		if ( null !== $services->platforms->get( 'woocommerce' ) ) {
 			( new OrderStatus() )->register();
 			( new WooMyAccount() )->register();
-			( new \WWU\WithdrawalButton\Mail\OrderEmailLink() )->register();
+			( new \WebWakeUpWdb\WithdrawalButton\Mail\OrderEmailLink() )->register();
 
 			// Register the acknowledgement as a first-class WC_Email so it appears
 			// under WooCommerce → Emails (branding + customiser + theme override).
@@ -134,40 +134,40 @@ final class Plugin {
 			add_filter(
 				'woocommerce_email_classes',
 				static function ( $emails ) {
-					$emails[ \WWU\WithdrawalButton\Mail\WooAckEmail::CLASS_KEY ] = new \WWU\WithdrawalButton\Mail\WooAckEmail();
+					$emails[ \WebWakeUpWdb\WithdrawalButton\Mail\WooAckEmail::CLASS_KEY ] = new \WebWakeUpWdb\WithdrawalButton\Mail\WooAckEmail();
 					return $emails;
 				}
 			);
 
 			// Record reimbursements against a withdrawal in the evidence log.
-			( new \WWU\WithdrawalButton\Platform\WooRefundRecorder() )->register();
+			( new \WebWakeUpWdb\WithdrawalButton\Platform\WooRefundRecorder() )->register();
 
 			// Capture the consumer's consent + acknowledgement at checkout for the two
 			// conditional exemptions (digital immediate / service performed). Classic
 			// checkout (shortcode) + block Checkout (Store API, Additional Checkout
 			// Fields API) — mutually exclusive per order, sharing the same order meta.
-			( new \WWU\WithdrawalButton\Frontend\WooCheckoutConsent() )->register();
-			( new \WWU\WithdrawalButton\Frontend\WooBlockCheckoutConsent() )->register();
+			( new \WebWakeUpWdb\WithdrawalButton\Frontend\WooCheckoutConsent() )->register();
+			( new \WebWakeUpWdb\WithdrawalButton\Frontend\WooBlockCheckoutConsent() )->register();
 		}
 
 		// FluentCart portal injection + checkout consent capture + the {{wwu.recesso_url}}
 		// e-mail merge tag when FluentCart is active.
 		if ( null !== $services->platforms->get( 'fluentcart' ) ) {
-			( new \WWU\WithdrawalButton\Frontend\FluentCartPortal() )->register();
-			( new \WWU\WithdrawalButton\Frontend\FluentCartCheckoutConsent() )->register();
-			( new \WWU\WithdrawalButton\Mail\FluentCartWithdrawalTag() )->register();
+			( new \WebWakeUpWdb\WithdrawalButton\Frontend\FluentCartPortal() )->register();
+			( new \WebWakeUpWdb\WithdrawalButton\Frontend\FluentCartCheckoutConsent() )->register();
+			( new \WebWakeUpWdb\WithdrawalButton\Mail\FluentCartWithdrawalTag() )->register();
 		}
 
 		// EDD customer-facing surfaces (receipt + purchase-history button, e-mail link)
 		// and checkout consent capture when Easy Digital Downloads is active.
 		if ( null !== $services->platforms->get( 'edd' ) ) {
-			( new \WWU\WithdrawalButton\Frontend\EddCustomerOrders() )->register();
-			( new \WWU\WithdrawalButton\Frontend\EddCheckoutConsent() )->register();
+			( new \WebWakeUpWdb\WithdrawalButton\Frontend\EddCustomerOrders() )->register();
+			( new \WebWakeUpWdb\WithdrawalButton\Frontend\EddCheckoutConsent() )->register();
 		}
 
 		// Feed captured exemption consent (any platform's order meta) back to the
 		// evaluator so conditional exemptions hide the button only once consent exists.
-		( new \WWU\WithdrawalButton\Frontend\ConsentReader() )->register();
+		( new \WebWakeUpWdb\WithdrawalButton\Frontend\ConsentReader() )->register();
 
 		// Daily retention purge: anonymise the IP on stored consents past the horizon.
 		( new ConsentRetention() )->register();
@@ -176,9 +176,9 @@ final class Plugin {
 		( new Assets() )->register();
 
 		// No-JavaScript fallback flow (admin-post handlers).
-		( new \WWU\WithdrawalButton\Frontend\NoScriptFlow() )->register();
+		( new \WebWakeUpWdb\WithdrawalButton\Frontend\NoScriptFlow() )->register();
 
-		// Durable-medium acknowledgement: listens on wwu_wb_withdrawal_confirmed.
+		// Durable-medium acknowledgement: listens on webwakeupwdb_withdrawal_confirmed.
 		( new ConfirmationDispatcher() )->register();
 
 		// Trusted timestamping (OpenTimestamps) of the immutable-log hash.
@@ -186,13 +186,13 @@ final class Plugin {
 
 		// Outbound webhook for automations: async HMAC delivery on withdrawal
 		// confirmed (no-op unless the merchant configured it under Integrations).
-		( new \WWU\WithdrawalButton\Api\WebhookDispatcher() )->register();
+		( new \WebWakeUpWdb\WithdrawalButton\Api\WebhookDispatcher() )->register();
 
 		// Shortcodes (button / form / status / model form / info).
 		( new Shortcodes() )->register();
 
 		// Gutenberg block (server-rendered wrapper over the form shortcode).
-		( new \WWU\WithdrawalButton\Frontend\Blocks() )->register();
+		( new \WebWakeUpWdb\WithdrawalButton\Frontend\Blocks() )->register();
 
 		// Ecosystem compatibility (Complianz consent-block whitelist + opt-in document
 		// injection + cache exclusions). All no-op unless their host plugin is active.
