@@ -91,6 +91,7 @@ final class SettingsPage {
 		$this->render_platforms_section( $settings );
 		$this->render_guidance_section( $settings );
 		$this->render_clauses_section( $settings );
+		$this->render_complianz_section( $settings );
 		$this->render_exemptions_section();
 		$this->render_receipt_section( $settings );
 		$this->render_integrations_section();
@@ -141,6 +142,92 @@ final class SettingsPage {
 		) . '</p>';
 
 		echo '</div>';
+	}
+
+	/**
+	 * Render the "Complianz documents" section — two opt-in toggles (Privacy always;
+	 * Terms gated on the complianz-terms-conditions companion) that append the
+	 * withdrawal clauses to those documents, each with a live "what will be added"
+	 * preview and a lawyer-review disclaimer. The whole block hides when Complianz
+	 * is not active.
+	 *
+	 * @param array $settings Current settings.
+	 * @return void
+	 */
+	private function render_complianz_section( array $settings ): void {
+		if ( ! \WWU\WithdrawalButton\Compat\ComplianzDocuments::is_complianz_active() ) {
+			return;
+		}
+		$lang           = strtolower( substr( determine_locale(), 0, 2 ) );
+		$inject_privacy = ! empty( $settings['complianz_inject_privacy'] );
+		$inject_terms   = ! empty( $settings['complianz_inject_terms'] );
+		$companion      = \WWU\WithdrawalButton\Compat\ComplianzDocuments::terms_companion_active();
+		$docs           = new \WWU\WithdrawalButton\Compat\ComplianzDocuments();
+
+		echo '<h2>' . esc_html__( 'Complianz documents', 'wwu-withdrawal-button' ) . '</h2>';
+		echo '<div class="notice notice-warning inline" style="margin:.5em 0 1em;"><p>'
+			. esc_html__( 'These toggles add ready-made withdrawal clauses to your Complianz Privacy Policy and Terms. They are generic templates that complement — not replace — your own legal texts; have them reviewed by your lawyer. Nothing is added until you turn a toggle on, and turning it off removes the clauses on the next regeneration.', 'wwu-withdrawal-button' )
+			. '</p></div>';
+
+		echo '<table class="form-table" role="presentation"><tbody>';
+
+		// Privacy Policy — always available in Complianz.
+		echo '<tr><th scope="row">' . esc_html__( 'Privacy Policy', 'wwu-withdrawal-button' ) . '</th><td>';
+		echo '<label><input type="checkbox" name="complianz_inject_privacy" value="1" ' . checked( $inject_privacy, true, false ) . ' /> ';
+		echo esc_html__( 'Add the right-of-withdrawal record-keeping clauses to my Complianz Privacy Policy.', 'wwu-withdrawal-button' ) . '</label>';
+		echo $this->complianz_preview( $docs->preview_elements( 'privacy-policy', $lang ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside complianz_preview().
+		echo '</td></tr>';
+
+		// Terms & Conditions — only exists with the companion add-on.
+		echo '<tr><th scope="row">' . esc_html__( 'Terms & Conditions', 'wwu-withdrawal-button' ) . '</th><td>';
+		if ( $companion ) {
+			echo '<label><input type="checkbox" name="complianz_inject_terms" value="1" ' . checked( $inject_terms, true, false ) . ' /> ';
+			echo esc_html__( 'Add the withdrawal article (and the online / Annex I-B modality) to my Complianz Terms & Conditions.', 'wwu-withdrawal-button' ) . '</label>';
+			echo $this->complianz_preview( $docs->preview_elements( 'terms-conditions', $lang ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside complianz_preview().
+		} else {
+			echo '<label><input type="checkbox" disabled /> ';
+			echo esc_html__( 'Add the withdrawal article to my Complianz Terms & Conditions.', 'wwu-withdrawal-button' ) . '</label>';
+			echo '<p class="description">' . wp_kses_post(
+				sprintf(
+					/* translators: %s: link to the Complianz Terms & Conditions add-on. */
+					__( 'Complianz does not generate a Terms &amp; Conditions document on its own. Install the free %s to enable this.', 'wwu-withdrawal-button' ),
+					'<a href="https://wordpress.org/plugins/complianz-terms-conditions/" target="_blank" rel="noopener">Complianz — Terms &amp; Conditions</a>'
+				)
+			) . '</p>';
+			// The disabled checkbox posts nothing; preserve a previously-saved opt-in
+			// (harmless no-op while the companion is gone, resumes when reinstalled).
+			if ( $inject_terms ) {
+				echo '<input type="hidden" name="complianz_inject_terms" value="1" />';
+			}
+		}
+		echo '</td></tr>';
+
+		echo '</tbody></table>';
+	}
+
+	/**
+	 * Render a read-only "what will be added" preview from a Complianz element list
+	 * (title + content), collapsed by default.
+	 *
+	 * @param array $elements Element definitions from ComplianzDocuments::preview_elements().
+	 * @return string Safe HTML ('' when empty).
+	 */
+	private function complianz_preview( array $elements ): string {
+		if ( empty( $elements ) ) {
+			return '';
+		}
+		$out  = '<details class="wwu-wb-clause" style="margin-top:.5em;"><summary>' . esc_html__( 'Preview what will be added', 'wwu-withdrawal-button' ) . '</summary>';
+		$out .= '<div style="border:1px solid #c3c4c7;border-radius:4px;padding:.6em 1em;margin-top:.4em;background:#fff;">';
+		foreach ( $elements as $el ) {
+			if ( ! empty( $el['title'] ) ) {
+				$out .= '<p style="font-weight:600;margin:.4em 0 .2em;">' . esc_html( (string) $el['title'] ) . '</p>';
+			}
+			if ( isset( $el['content'] ) && '' !== (string) $el['content'] ) {
+				$out .= '<p style="margin:0 0 .6em;color:#444;">' . esc_html( (string) $el['content'] ) . '</p>';
+			}
+		}
+		$out .= '</div></details>';
+		return $out;
 	}
 
 	/**
@@ -1105,6 +1192,10 @@ final class SettingsPage {
 		$settings['fluentcart_mode'] = Sanitizer::enum( wp_unslash( $_POST['fluentcart_mode'] ?? '' ), array( 'auto', 'always', 'off' ), 'auto' );
 		$new_slug                    = sanitize_title( (string) wp_unslash( $_POST['endpoint_slug'] ?? 'wwu-withdrawal' ) );
 		$settings['endpoint_slug']   = '' !== $new_slug ? $new_slug : 'wwu-withdrawal';
+		// Complianz document injection (opt-in, default off): append the withdrawal
+		// clauses to the merchant's Complianz Privacy Policy / Terms documents.
+		$settings['complianz_inject_privacy'] = Sanitizer::bool( wp_unslash( $_POST['complianz_inject_privacy'] ?? '' ) );
+		$settings['complianz_inject_terms']   = Sanitizer::bool( wp_unslash( $_POST['complianz_inject_terms'] ?? '' ) );
 		update_option( 'wwu_wb_settings', $settings );
 
 		// Legal clause overrides (Settings -> Legal clauses), per type for the current
@@ -1238,6 +1329,8 @@ final class SettingsPage {
 		Audience::reset_cache();
 		\WWU\WithdrawalButton\Core\Settings::flush();
 		\WWU\WithdrawalButton\Compat\Complianz::bust_cache();
+		// Regenerate Complianz documents so a changed injection toggle is reflected.
+		\WWU\WithdrawalButton\Compat\ComplianzDocuments::flush();
 
 		wp_safe_redirect(
 			add_query_arg(

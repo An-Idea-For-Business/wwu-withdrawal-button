@@ -17,6 +17,7 @@ namespace WWU\WithdrawalButton\Core;
 use WWU\WithdrawalButton\Admin\AdminController;
 use WWU\WithdrawalButton\Compat\CacheExclusions;
 use WWU\WithdrawalButton\Compat\Complianz;
+use WWU\WithdrawalButton\Compat\ComplianzDocuments;
 use WWU\WithdrawalButton\DurableMedium\ConfirmationDispatcher;
 use WWU\WithdrawalButton\Frontend\Assets;
 use WWU\WithdrawalButton\Frontend\WooMyAccount;
@@ -193,8 +194,10 @@ final class Plugin {
 		// Gutenberg block (server-rendered wrapper over the form shortcode).
 		( new \WWU\WithdrawalButton\Frontend\Blocks() )->register();
 
-		// Ecosystem compatibility (Complianz consent-block whitelist + cache exclusions).
+		// Ecosystem compatibility (Complianz consent-block whitelist + opt-in document
+		// injection + cache exclusions). All no-op unless their host plugin is active.
 		( new Complianz() )->register();
+		( new ComplianzDocuments() )->register();
 		( new CacheExclusions() )->register();
 
 		if ( is_admin() ) {

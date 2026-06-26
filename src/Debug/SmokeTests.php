@@ -53,6 +53,7 @@ final class SmokeTests {
 		'exemption_note'      => 'suite_exemption_note',
 		'automations'         => 'suite_automations',
 		'policy'              => 'suite_policy',
+		'complianz_docs'      => 'suite_complianz_docs',
 	);
 
 	/**
@@ -169,6 +170,65 @@ final class SmokeTests {
 				'status' => 'skip',
 				'output' => 'Dompdf not available (source install) — PDF render skipped.',
 			);
+		}
+
+		return $tests;
+	}
+
+	/**
+	 * Suite: Complianz document injection (ComplianzDocuments).
+	 *
+	 * @return array
+	 */
+	private function suite_complianz_docs(): array {
+		$tests = array();
+		$docs  = new \WWU\WithdrawalButton\Compat\ComplianzDocuments();
+
+		// preview_elements() — pure, no option dependency.
+		$priv  = $docs->preview_elements( 'privacy-policy', 'en' );
+		$terms = $docs->preview_elements( 'terms-conditions', 'en' );
+		$tests[] = $this->assert( 'complianz.preview.privacy_nonempty', ! empty( $priv ), 'Privacy preview has elements.' );
+		$tests[] = $this->assert( 'complianz.preview.terms_nonempty', ! empty( $terms ), 'Terms preview has elements.' );
+
+		$all_prefixed = true;
+		foreach ( array_merge( array_keys( $priv ), array_keys( $terms ) ) as $key ) {
+			if ( 0 !== strpos( (string) $key, 'wwu_wb_' ) ) {
+				$all_prefixed = false;
+				break;
+			}
+		}
+		$tests[] = $this->assert( 'complianz.keys.prefixed', $all_prefixed, 'All element keys are wwu_wb_-prefixed (no collision with Complianz keys).' );
+
+		$has_body = false;
+		foreach ( $priv as $el ) {
+			if ( ! empty( $el['title'] ) || isset( $el['content'] ) ) {
+				$has_body = true;
+				break;
+			}
+		}
+		$tests[] = $this->assert( 'complianz.preview.has_title_or_content', $has_body, 'Preview elements carry a title or content.' );
+
+		// inject(): region gate — non-EU is untouched (regardless of toggles).
+		$tests[] = $this->assert( 'complianz.inject.non_eu_noop', array() === $docs->inject( array(), 'us', 'privacy-policy', array() ), 'Non-EU region: nothing injected.' );
+
+		// inject(): EU + type + toggle. Mutates the main settings option to flip the
+		// two toggles, restored in finally (only the two keys change; rest preserved).
+		$saved = get_option( 'wwu_wb_settings' );
+		try {
+			$base = is_array( $saved ) ? $saved : array();
+			update_option( 'wwu_wb_settings', array_merge( $base, array( 'complianz_inject_privacy' => true, 'complianz_inject_terms' => false ) ) );
+			$on = $docs->inject( array(), 'eu', 'privacy-policy', array() );
+			$tests[] = $this->assert( 'complianz.inject.privacy_on', isset( $on['wwu_wb_withdrawal_privacy'] ), 'Privacy toggle on: clauses injected for EU privacy-policy.' );
+			$tests[] = $this->assert( 'complianz.inject.terms_off', array() === $docs->inject( array(), 'eu', 'terms-conditions', array() ), 'Terms toggle off: nothing injected for EU terms-conditions.' );
+
+			update_option( 'wwu_wb_settings', array_merge( $base, array( 'complianz_inject_privacy' => false ) ) );
+			$tests[] = $this->assert( 'complianz.inject.privacy_off', array() === $docs->inject( array(), 'eu', 'privacy-policy', array() ), 'Privacy toggle off: nothing injected.' );
+		} finally {
+			if ( false === $saved ) {
+				delete_option( 'wwu_wb_settings' );
+			} else {
+				update_option( 'wwu_wb_settings', $saved );
+			}
 		}
 
 		return $tests;

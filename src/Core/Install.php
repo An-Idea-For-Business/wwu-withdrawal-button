@@ -196,6 +196,11 @@ final class Install {
 				'endpoint_slug'        => 'wwu-withdrawal',
 				'public_form_page_id'  => 0,
 				'policy_page_id'       => 0,
+				// Complianz document injection (opt-in, default off): append the
+				// withdrawal clauses to the merchant's Complianz Privacy Policy and
+				// (with the complianz-terms-conditions companion) Terms & Conditions.
+				'complianz_inject_privacy' => false,
+				'complianz_inject_terms'   => false,
 				'withdrawal_window_days' => 14,
 				'send_pdf'             => true,
 				'receipt_link_enabled' => true,
