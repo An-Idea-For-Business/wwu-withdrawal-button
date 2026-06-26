@@ -42,6 +42,8 @@ final class ComplianceStatusPage {
 		echo '<div class="wrap wwu-wb-wrap">';
 		echo '<h1>' . esc_html__( 'Compliance', 'wwu-withdrawal-button' ) . '</h1>';
 
+		$this->maybe_render_policy_notice();
+
 		// Go-live.
 		$this->render_go_live( $go_live );
 
@@ -86,6 +88,9 @@ final class ComplianceStatusPage {
 			echo '</details>';
 		}
 
+		// Consolidated "Right of withdrawal" notice (assembled policy).
+		$this->render_policy();
+
 		// Environment warnings.
 		$this->render_warnings();
 
@@ -124,6 +129,83 @@ final class ComplianceStatusPage {
 			}
 		} catch ( \Exception $e ) {
 			echo '<p>' . esc_html( $go_live ) . '</p>';
+		}
+	}
+
+	/**
+	 * The consolidated "Right of withdrawal" notice — a single document assembled
+	 * live from the merchant's settings + selected exemptions. Offers: open/create
+	 * the auto-updating policy page ([wwu_wb_policy]), freeze it to static HTML, and
+	 * a collapsible live preview. The global "complements, not replaces" disclaimer
+	 * comes from PolicyBuilder.
+	 *
+	 * @return void
+	 */
+	private function render_policy(): void {
+		$settings  = (array) get_option( 'wwu_wb_settings', array() );
+		$policy_id = (int) ( $settings['policy_page_id'] ?? 0 );
+		$policy_ok = $policy_id > 0 && 'page' === get_post_type( $policy_id ) && 'trash' !== get_post_status( $policy_id );
+
+		echo '<h2>' . esc_html__( 'Right of withdrawal — information notice', 'wwu-withdrawal-button' ) . '</h2>';
+		echo '<p>' . esc_html__( 'A single consolidated notice, assembled live from your settings and the exemptions you selected. It complements — it does not replace — your Terms of Sale. Publish it on a page and link it from your footer, or freeze a static copy.', 'wwu-withdrawal-button' ) . '</p>';
+
+		echo '<p>';
+		if ( $policy_ok ) {
+			$edit_url = get_edit_post_link( $policy_id, 'url' );
+			$open_url = ( is_string( $edit_url ) && '' !== $edit_url ) ? $edit_url : (string) get_permalink( $policy_id );
+			$status   = ( 'publish' === get_post_status( $policy_id ) )
+				? esc_html__( 'Published', 'wwu-withdrawal-button' )
+				: esc_html__( 'Draft', 'wwu-withdrawal-button' );
+			echo '<a class="button" href="' . esc_url( $open_url ) . '">' . esc_html__( 'Open the policy page', 'wwu-withdrawal-button' ) . '</a> ';
+			echo '<span class="wwu-wb-badge wwu-wb-badge--ok" style="margin-left:.4em;">' . esc_html( $status ) . '</span> ';
+		} else {
+			$create = wp_nonce_url( admin_url( 'admin-post.php?action=wwu_wb_recreate_page&which=policy' ), DashboardPage::RECREATE_PAGE_NONCE );
+			echo '<a class="button button-primary" href="' . esc_url( $create ) . '">' . esc_html__( 'Create the policy page (draft)', 'wwu-withdrawal-button' ) . '</a> ';
+		}
+		$freeze = wp_nonce_url( admin_url( 'admin-post.php?action=wwu_wb_freeze_policy' ), DashboardPage::FREEZE_POLICY_NONCE );
+		echo '<a class="button" href="' . esc_url( $freeze ) . '">' . esc_html__( 'Freeze to static HTML', 'wwu-withdrawal-button' ) . '</a>';
+		echo '</p>';
+
+		echo '<p class="description">'
+			. esc_html__( 'Auto-updating shortcode:', 'wwu-withdrawal-button' ) . ' <code>[wwu_wb_policy]</code>. '
+			. esc_html__( '“Freeze” snapshots the current text into the page as plain HTML so it stops changing; to return to the auto-updating version, edit the page and put the shortcode back.', 'wwu-withdrawal-button' )
+			. '</p>';
+
+		// Collapsible live preview of the assembled notice. Admin-only; the HTML is
+		// builder-escaped, and wp_kses_post is a defensive second pass.
+		$preview = '<div class="wwu-wb-policy-wrap">'
+			. \WWU\WithdrawalButton\Legal\PolicyBuilder::disclaimer_html()
+			. \WWU\WithdrawalButton\Legal\PolicyBuilder::build()->to_html()
+			. '</div>';
+		echo '<details class="wwu-wb-clause"><summary>' . esc_html__( 'Preview the assembled notice', 'wwu-withdrawal-button' ) . '</summary>';
+		echo '<div class="wwu-wb-policy-preview" style="border:1px solid #c3c4c7;border-radius:4px;padding:1em 1.2em;margin-top:.6em;background:#fff;">';
+		echo wp_kses_post( $preview );
+		echo '</div></details>';
+	}
+
+	/**
+	 * Success/failure notice after a policy page create/recreate or a freeze action
+	 * (both redirect back to this page via PRG).
+	 *
+	 * @return void
+	 */
+	private function maybe_render_policy_notice(): void {
+		// Display-only flags set by the nonce-checked PRG redirects in DashboardPage.
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		$recreated = isset( $_GET['wwu_wb_page_recreated'] ) ? sanitize_key( wp_unslash( $_GET['wwu_wb_page_recreated'] ) ) : '';
+		$frozen    = isset( $_GET['wwu_wb_policy_frozen'] ) ? sanitize_key( wp_unslash( $_GET['wwu_wb_policy_frozen'] ) ) : '';
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+		if ( 'policy' === $recreated ) {
+			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'The withdrawal policy page has been created as a draft — review and publish it.', 'wwu-withdrawal-button' ) . '</p></div>';
+		} elseif ( 'fail' === $recreated ) {
+			echo '<div class="notice notice-error is-dismissible"><p>' . esc_html__( 'Could not create the policy page. Please try again.', 'wwu-withdrawal-button' ) . '</p></div>';
+		}
+
+		if ( '1' === $frozen ) {
+			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'The policy was frozen into static HTML on the policy page. It will no longer update automatically until you put the shortcode back.', 'wwu-withdrawal-button' ) . '</p></div>';
+		} elseif ( 'fail' === $frozen ) {
+			echo '<div class="notice notice-error is-dismissible"><p>' . esc_html__( 'Could not freeze the policy. Please try again.', 'wwu-withdrawal-button' ) . '</p></div>';
 		}
 	}
 

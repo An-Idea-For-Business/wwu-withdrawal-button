@@ -63,6 +63,7 @@ final class DashboardPage {
 	 * @var string
 	 */
 	public const RECREATE_PAGE_NONCE = 'wwu_wb_recreate_page';
+	public const FREEZE_POLICY_NONCE = 'wwu_wb_freeze_policy';
 
 	/**
 	 * Render the dashboard.
@@ -470,6 +471,44 @@ final class DashboardPage {
 		}
 
 		wp_safe_redirect( add_query_arg( 'wwu_wb_page_recreated', $id > 0 ? $which : 'fail', $redirect ) );
+		exit;
+	}
+
+	/**
+	 * Freeze the consolidated policy into static HTML on the policy page.
+	 *
+	 * The page normally renders the live [wwu_wb_policy] shortcode (auto-updates
+	 * from settings). "Freeze" snapshots the currently-assembled notice into the
+	 * page content as plain HTML so it stays fixed (e.g. to archive a version, or
+	 * to stop it changing). The page is created first if missing. To return to the
+	 * auto-updating version, edit the page and put the [wwu_wb_policy] shortcode
+	 * back (or trash it and recreate it). Capability + nonce gated; PRG redirect.
+	 *
+	 * @return void
+	 */
+	public function handle_freeze_policy(): void {
+		if ( ! current_user_can( Authentication::capability() ) ) {
+			wp_die( esc_html__( 'Insufficient permissions.', 'wwu-withdrawal-button' ) );
+		}
+		check_admin_referer( self::FREEZE_POLICY_NONCE );
+
+		$page_id = Install::ensure_policy_page();
+		$ok      = false;
+		if ( $page_id > 0 ) {
+			$doc    = \WWU\WithdrawalButton\Legal\PolicyBuilder::build();
+			$frozen = '<div class="wwu-wb-policy-wrap">' . \WWU\WithdrawalButton\Legal\PolicyBuilder::disclaimer_html() . $doc->to_html() . '</div>';
+			$result = wp_update_post(
+				array(
+					'ID'           => $page_id,
+					'post_content' => $frozen,
+				),
+				true
+			);
+			$ok = ! is_wp_error( $result ) && (int) $result > 0;
+		}
+
+		$redirect = admin_url( 'admin.php?page=' . AdminController::COMPLIANCE_SLUG );
+		wp_safe_redirect( add_query_arg( 'wwu_wb_policy_frozen', $ok ? '1' : 'fail', $redirect ) );
 		exit;
 	}
 

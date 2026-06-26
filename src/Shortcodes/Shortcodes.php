@@ -68,11 +68,7 @@ final class Shortcodes {
 		}
 		$doc = \WWU\WithdrawalButton\Legal\PolicyBuilder::build( sanitize_text_field( (string) $atts['lang'] ), $opts );
 
-		$disclaimer = '<p class="wwu-wb-policy__disclaimer">'
-			. esc_html__( 'This notice complements — and does not replace — your Terms of Sale and pre-contractual information. It is a generic template; have it reviewed by your own legal counsel.', 'wwu-withdrawal-button' )
-			. '</p>';
-
-		return '<div class="wwu-wb-policy-wrap">' . $disclaimer . $doc->to_html() . '</div>';
+		return '<div class="wwu-wb-policy-wrap">' . \WWU\WithdrawalButton\Legal\PolicyBuilder::disclaimer_html() . $doc->to_html() . '</div>';
 	}
 
 	/**

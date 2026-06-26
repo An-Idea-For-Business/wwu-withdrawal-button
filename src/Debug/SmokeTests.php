@@ -52,6 +52,7 @@ final class SmokeTests {
 		'withdrawal_request'  => 'suite_withdrawal_request',
 		'exemption_note'      => 'suite_exemption_note',
 		'automations'         => 'suite_automations',
+		'policy'              => 'suite_policy',
 	);
 
 	/**
@@ -105,6 +106,55 @@ final class SmokeTests {
 			'summary' => $summary,
 			'suites'  => $report,
 		);
+	}
+
+	/**
+	 * Suite: the consolidated withdrawal policy (PolicyBuilder + PolicyDocument).
+	 *
+	 * @return array
+	 */
+	private function suite_policy(): array {
+		$tests   = array();
+		$builder = '\WWU\WithdrawalButton\Legal\PolicyBuilder';
+		$ids_of  = static function ( $doc ) {
+			return array_map(
+				static function ( $section ) {
+					return isset( $section['id'] ) ? (string) $section['id'] : '';
+				},
+				$doc->sections()
+			);
+		};
+
+		$doc = $builder::build( 'en' );
+		$ids = $ids_of( $doc );
+
+		$tests[] = $this->assert( 'policy.has_title', '' !== $doc->title(), 'Document has a title.' );
+		foreach ( array( 'right', 'how', 'refund', 'privacy', 'trader' ) as $must ) {
+			$tests[] = $this->assert( 'policy.section.' . $must, in_array( $must, $ids, true ), 'Section "' . $must . '" present (got: ' . wp_json_encode( $ids ) . ').' );
+		}
+		$tests[] = $this->assert( 'policy.html_wrapped', false !== strpos( $doc->to_html(), 'wwu-wb-policy' ), 'to_html() wraps content in .wwu-wb-policy.' );
+		$tests[] = $this->assert( 'policy.plain_nonempty', '' !== trim( $doc->to_plain() ), 'to_plain() is non-empty.' );
+
+		// Exceptions section: present iff at least one exemption reason has targets.
+		$saved = get_option( 'wwu_wb_exclusions' );
+
+		update_option( 'wwu_wb_exclusions', array( 'by_reason' => array() ) );
+		$tests[] = $this->assert( 'policy.exceptions.absent_when_none', ! in_array( 'exceptions', $ids_of( $builder::build( 'en' ) ), true ), 'Exceptions section omitted when no exemptions configured.' );
+
+		update_option( 'wwu_wb_exclusions', array( 'by_reason' => array( '59_c' => array( 'products' => array( 123 ), 'categories' => array() ) ) ) );
+		$tests[] = $this->assert( 'policy.exceptions.present_when_set', in_array( 'exceptions', $ids_of( $builder::build( 'en' ) ), true ), 'Exceptions section present when an exemption reason has targets.' );
+
+		if ( false === $saved ) {
+			delete_option( 'wwu_wb_exclusions' );
+		} else {
+			update_option( 'wwu_wb_exclusions', $saved );
+		}
+
+		// Section allow-list (shortcode sections="right").
+		$only_ids = $ids_of( $builder::build( 'en', array( 'sections' => array( 'right' ) ) ) );
+		$tests[] = $this->assert( 'policy.sections_allowlist', array( 'right' ) === $only_ids, 'sections allow-list keeps only the requested ids (got: ' . wp_json_encode( $only_ids ) . ').' );
+
+		return $tests;
 	}
 
 	/**

@@ -81,6 +81,20 @@ final class PolicyBuilder {
 	}
 
 	/**
+	 * The single global disclaimer shown with the assembled policy — both the live
+	 * shortcode and the frozen static copy render it, so the wording stays in one
+	 * place: the notice complements (does not replace) the merchant's own legal
+	 * texts, and is a generic template to have reviewed by counsel.
+	 *
+	 * @return string Safe HTML paragraph.
+	 */
+	public static function disclaimer_html(): string {
+		return '<p class="wwu-wb-policy__disclaimer">'
+			. esc_html__( 'This notice complements — and does not replace — your Terms of Sale and pre-contractual information. It is a generic template; have it reviewed by your own legal counsel.', 'wwu-withdrawal-button' )
+			. '</p>';
+	}
+
+	/**
 	 * Section 1 — the right and the period.
 	 *
 	 * @param string $lang Language.
