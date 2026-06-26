@@ -142,10 +142,15 @@ final class SmokeTests {
 		// settings. (Run smoke tests off peak; the window is a single request.)
 		$saved = get_option( 'webwakeupwdb_exclusions' );
 		try {
+			// PolicyBuilder reads exclusions via Settings::get(), which caches per
+			// request; update_option() alone does not bust that cache, so we flush
+			// after each mutation or the second build() would read the first value.
 			update_option( 'webwakeupwdb_exclusions', array( 'by_reason' => array() ) );
+			\WebWakeUpWdb\WithdrawalButton\Core\Settings::flush( 'webwakeupwdb_exclusions' );
 			$tests[] = $this->assert( 'policy.exceptions.absent_when_none', ! in_array( 'exceptions', $ids_of( $builder::build( 'en' ) ), true ), 'Exceptions section omitted when no exemptions configured.' );
 
 			update_option( 'webwakeupwdb_exclusions', array( 'by_reason' => array( '59_c' => array( 'products' => array( 123 ), 'categories' => array() ) ) ) );
+			\WebWakeUpWdb\WithdrawalButton\Core\Settings::flush( 'webwakeupwdb_exclusions' );
 			$tests[] = $this->assert( 'policy.exceptions.present_when_set', in_array( 'exceptions', $ids_of( $builder::build( 'en' ) ), true ), 'Exceptions section present when an exemption reason has targets.' );
 		} finally {
 			if ( false === $saved ) {
@@ -153,6 +158,7 @@ final class SmokeTests {
 			} else {
 				update_option( 'webwakeupwdb_exclusions', $saved );
 			}
+			\WebWakeUpWdb\WithdrawalButton\Core\Settings::flush( 'webwakeupwdb_exclusions' );
 		}
 
 		// Section allow-list (shortcode sections="right").

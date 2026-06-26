@@ -3,6 +3,16 @@
 All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); the project uses Semantic Versioning.
 
+## [1.3.1] — 2026-06-26 — Legal Documents (A+B+C) + WordPress.org prefix rename + custom-table migration
+
+First public 1.3.x build (1.3.0 was a pre-release candidate, never shipped to the directory; folded in here). Carries the **Legal Documents** feature — a consolidated "Right of withdrawal" notice (`[webwakeupwdb_policy]` shortcode + auto-created page + freeze-to-static-HTML + PDF + the Compliance sub-section), opt-in **Complianz** Privacy/Terms injection, and the `wwu-tools/wwu-i18n.php` pipeline with it/de/es/fr/sv translations — and the **WordPress.org-compliance prefix rename** (`wwu` / `WWU_WB_*` → `webwakeupwdb` / `WEBWAKEUPWDB_*` across constants, options, hooks, shortcodes, the PHP namespace `WebWakeUpWdb\WithdrawalButton`, the REST namespace and classes; slug + text domain unchanged). See `readme.txt` for the merchant-facing summary. **This build fixes the upgrade migration:**
+
+- **`Migration_5` — rename the custom DB tables.** The 1.3.0 prefix adoption renamed options, order-meta and the auto-created pages to `webwakeupwdb_*` but **not** the two custom tables, so an upgraded install kept `…wwu_wb_log` / `…wwu_wb_timestamps` while the new code looked for `…webwakeupwdb_log` / `…webwakeupwdb_timestamps` — the immutable evidence log and the timestamp store silently broke. `Migration_5` renames them in place (idempotent: only when the old table exists and the new one does not, then `dbDelta` to guarantee the schema). A clean 1.3.x install (tables created under the new name by `Migration_1`) is a no-op. `WEBWAKEUPWDB_SCHEMA_VERSION` 4 → 5. `src/Storage/Database/Migrations/Migration_5.php`.
+- **`Migrator::maybe_adopt_legacy_prefix()` no longer calls `wp_update_post()`** (landed just before this entry): the page-shortcode rewrite ran on `plugins_loaded` and, under WP-CLI, the `wp_insert_post()` revision cascade read the not-yet-defined `WP_POST_REVISIONS` constant and fataled the deploy. Now a low-level `$wpdb->update( $wpdb->posts, … )` + `clean_post_cache()`; `Migration_4` is the idempotent belt for installs whose adoption already ran.
+- **Smoke fix (test-only).** `policy.exceptions.present_when_set` now flushes the per-request `Settings` cache between option mutations (PolicyBuilder reads exclusions via `Settings::get()`, which caches), so the second `build()` sees the new value. Closes the 4 failures observed on the upgraded test subsite (3 × missing-table + 1 × cache).
+
+PHP lint 0 errors.
+
 ## [1.2.13] — 2026-06-25 — Partial withdrawal: per-item quantity
 
 Extends the partial-withdrawal product selection (alpha.42) so a consumer can declare a **quantity per line** — "withdraw from 1 of the 3 I bought" — not just which products. From issue [#47](https://github.com/An-Idea-For-Business/wwu-withdrawal-button/issues/47). Additive and fully back-compatible.

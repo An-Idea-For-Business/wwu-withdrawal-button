@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -126,11 +126,11 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 
 == Changelog ==
 
-= 1.3.0 =
+= 1.3.1 =
 * **New — a consolidated "Right of withdrawal" information notice.** A single notice is assembled live from your settings and the Art. 59 exceptions you selected, delivered three ways: the `[webwakeupwdb_policy]` shortcode, an auto-created page (one click to recreate if you delete it), and a downloadable **PDF**. Manage it under **Compliance → "Informativa sul diritto di recesso"** — preview it, create/open the page, **freeze** it to static HTML, or download the PDF. It **complements — it does not replace** — your Terms; a disclaimer says so on every surface.
 * **New — add the withdrawal clauses to your Complianz documents (opt-in).** Two toggles under **Settings → Complianz documents** append the clauses to your Complianz **Privacy Policy** (always) and **Terms & Conditions** (with Complianz's free Terms & Conditions add-on). Off by default, **EU only**, with a live "what will be added" preview; turning a toggle off removes them again on the next regeneration. They **complement, not replace** your own legal texts.
 * **Translations.** All five shipped locales — Italian, German, Spanish, French and Swedish — now cover the new strings (~99–100%; Swedish awaits a final native review).
-* **WordPress.org compliance — unique plugin prefix.** Every internal identifier was renamed from the short `wwu` prefix to the distinct **`webwakeupwdb`** prefix (constants, options, hooks & filters, shortcodes, the PHP namespace, the REST namespace, classes and the JS data object), as requested by the Plugins Team review. Existing installs migrate automatically on upgrade — settings, exemption-consent evidence and the auto-created pages are all preserved — and a clean install is unaffected. **Developers:** custom code using the old names (`wwu_wb_*` hooks/filters, the `[wwu_wb_*]` shortcodes) must switch to the new `webwakeupwdb_*` names.
+* **WordPress.org compliance — unique plugin prefix.** Every internal identifier was renamed from the short `wwu` prefix to the distinct **`webwakeupwdb`** prefix (constants, options, hooks & filters, shortcodes, the PHP namespace, the REST namespace, classes and the JS data object), as requested by the Plugins Team review. Existing installs migrate automatically on upgrade — settings, exemption-consent evidence, the immutable log/timestamp tables and the auto-created pages are all preserved — and a clean install is unaffected. **Developers:** custom code using the old names (`wwu_wb_*` hooks/filters, the `[wwu_wb_*]` shortcodes) must switch to the new `webwakeupwdb_*` names.
 
 = 1.2.13 =
 * **Partial withdrawal: choose a quantity per item.** When you withdraw from only some products and you bought more than one of an item, you can now enter **how many** to withdraw (e.g. 1 of 3) — an optional number field next to each line, no JavaScript required; leave it blank to withdraw the whole line. The chosen quantity appears on the durable-medium receipt (email + PDF), in the Requests dashboard and in the read-only REST API. Informational only (you still process the refund). Fully back-compatible: the existing `products` data is unchanged — a new additive `product_quantities` field carries the amounts. Requested in issue #47.
