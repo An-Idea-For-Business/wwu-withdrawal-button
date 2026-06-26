@@ -28,6 +28,6 @@
 2. **Runtime** — load the IT site and confirm the new policy / Complianz / freeze strings render in Italian (the `.mo` is what WP loads).
 
 ## Residual / deferred (before 1.3.0)
-- **DE / FR / ES**: the 72 new strings are present-but-empty in those `.po`; fill them via the tool (`untranslated <locale>` → translate → `apply` → `compile`). **SV** pending Daniel's native review.
+- **DE / FR / ES / SV**: ✅ done same-day (1.3.0-alpha.4) — translated via the pipeline + 4 parallel Sonnet sub-agents (DE 99% / ES 99% / FR 99% / SV 100%), `.mo` recompiled. Two sub-agents first emitted malformed JSON (straight-quote escaping) + one was incomplete; caught by a `node`/`php` JSON validation gate and re-run with a "use typographic quotes, validate before finishing" instruction. **SV still awaits Daniel's native review** (machine-assisted draft).
 - The `wwu-i18n.php` tool is **untracked** (workspace-level; no git repo at/above `Projects/`). It lives on disk and works; back it up with the rest of `wwu-tools/`.
 - At 1.3.0 release: readme/README/CHANGELOG + the marketing pages (standing rule).
