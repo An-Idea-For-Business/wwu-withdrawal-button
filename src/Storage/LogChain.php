@@ -71,7 +71,12 @@ final class LogChain {
 	 */
 	public static function genesis(): string {
 		$secret = \WebWakeUpWdb\WithdrawalButton\Security\Secret::get();
-		return hash( 'sha256', 'webwakeupwdb_genesis|' . $secret );
+		// FROZEN cryptographic seed — must NEVER be renamed. This opaque literal is
+		// baked into the genesis hash of every immutable-log row ever written; it
+		// predates the 1.3.x identifier rename (wwu -> webwakeupwdb) and is data, not a
+		// code identifier. Changing it re-bases the genesis and breaks the hash chain
+		// for all existing evidence on upgrade, so it stays the original 'wwu_wb_genesis'.
+		return hash( 'sha256', 'wwu_wb_genesis|' . $secret );
 	}
 
 	/**

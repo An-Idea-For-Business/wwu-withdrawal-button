@@ -3,7 +3,7 @@
  * Plugin Name:          WWU Right of Withdrawal for Popular Ecommerce Platforms
  * Plugin URI:           https://webwakeup.it/wwu-withdrawal-button/
  * Description:          EU online right-of-withdrawal function ("withdrawal button", Art. 11a Dir. 2011/83/EU as amended by Dir. (EU) 2023/2673; Italy: Art. 54-bis Codice del Consumo). Adds the legally-mandated, statutory-labelled two-step withdrawal flow, durable-medium acknowledgement (email + PDF + verifiable link) and a tamper-evident immutable log to WooCommerce, FluentCart & Easy Digital Downloads. Applies from 19 June 2026.
- * Version:              1.3.1
+ * Version:              1.3.2
  * Requires at least:    5.8
  * Requires PHP:         8.1
  * Author:               mredodos, Matteo Alfieri (An Idea for Business), WebWakeUp
@@ -40,7 +40,7 @@ if ( defined( 'WEBWAKEUPWDB_VERSION' ) ) {
  * Constants
  * ---------------------------------------------------------------------------
  */
-define( 'WEBWAKEUPWDB_VERSION', '1.3.1' );
+define( 'WEBWAKEUPWDB_VERSION', '1.3.2' );
 define( 'WEBWAKEUPWDB_MIN_PHP', '8.1' );
 define( 'WEBWAKEUPWDB_MIN_WP', '5.8' );
 define( 'WEBWAKEUPWDB_PLUGIN_FILE', __FILE__ );
