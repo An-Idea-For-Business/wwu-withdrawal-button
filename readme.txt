@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 1.3.0-alpha.1
+Stable tag: 1.3.0-alpha.2
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -125,6 +125,9 @@ The plugin records withdrawal declarations (name, identified contract, email, IP
 For the conditional Art. 59 exemptions, the plugin also stores the consumer's checkout consent + acknowledgement (the agreed wording, a hash, the date/time and — unless you turn it off — the IP) as evidence to prove the exemption is valid. The lawful basis is **legitimate interest** (GDPR Art. 6(1)(f); defence of legal claims), **not** GDPR consent. The IP lives only on the order (never in the immutable log) and is automatically anonymised once the retention period lapses. A second ready-to-paste privacy clause is generated for this processing.
 
 == Changelog ==
+
+= 1.3.0-alpha.2 =
+* **New — add the withdrawal clauses to your Complianz documents** (Phase B). If you use Complianz, two opt-in toggles under **Settings → Complianz documents** append the right-of-withdrawal clauses to your **Privacy Policy** (always) and **Terms & Conditions** (when Complianz's free Terms & Conditions add-on is installed). Off by default, **EU only**, with a live "what will be added" preview — turning a toggle off removes the clauses again on the next regeneration. They **complement, not replace** your own legal texts (have your lawyer review them).
 
 = 1.3.0-alpha.1 =
 * **New — a consolidated "Right of withdrawal" information notice** (Phase A of the Legal Documents feature). One notice is assembled live from your settings and the exceptions you selected, and delivered three ways: the `[wwu_wb_policy]` shortcode, an auto-created **draft page** (one click to recreate if you delete it), and a downloadable **PDF**. Manage it under **Compliance → "Informativa sul diritto di recesso"**: preview it, create/open the page, **freeze** it to static HTML, or download the PDF. It **complements — it does not replace** — your Terms; a disclaimer says so on every surface. Pre-release for testing; the Complianz injection and the translation tooling arrive in the next alphas.
