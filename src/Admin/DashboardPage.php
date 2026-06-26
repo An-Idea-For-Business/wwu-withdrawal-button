@@ -64,6 +64,7 @@ final class DashboardPage {
 	 */
 	public const RECREATE_PAGE_NONCE = 'wwu_wb_recreate_page';
 	public const FREEZE_POLICY_NONCE = 'wwu_wb_freeze_policy';
+	public const POLICY_PDF_NONCE    = 'wwu_wb_policy_pdf';
 
 	/**
 	 * Render the dashboard.
@@ -509,6 +510,44 @@ final class DashboardPage {
 
 		$redirect = admin_url( 'admin.php?page=' . AdminController::COMPLIANCE_SLUG );
 		wp_safe_redirect( add_query_arg( 'wwu_wb_policy_frozen', $ok ? '1' : 'fail', $redirect ) );
+		exit;
+	}
+
+	/**
+	 * Stream the consolidated policy as a downloadable PDF (plain branding, mirrors
+	 * the receipt PDF). Capability + nonce gated. If the PDF library is unavailable
+	 * the merchant is told to install the packaged ZIP instead of getting a broken
+	 * download — the policy page and [wwu_wb_policy] shortcode work without it.
+	 *
+	 * @return void
+	 */
+	public function handle_policy_pdf(): void {
+		if ( ! current_user_can( Authentication::capability() ) ) {
+			wp_die( esc_html__( 'Insufficient permissions.', 'wwu-withdrawal-button' ) );
+		}
+		check_admin_referer( self::POLICY_PDF_NONCE );
+
+		if ( ! \WWU\WithdrawalButton\DurableMedium\PdfBuilder::is_available() ) {
+			wp_die( esc_html__( 'The PDF library is not available on this site. Install the plugin from the official packaged ZIP to enable PDF export — the policy page and the [wwu_wb_policy] shortcode still work without it.', 'wwu-withdrawal-button' ) );
+		}
+
+		$doc  = \WWU\WithdrawalButton\Legal\PolicyBuilder::build();
+		$html = \WWU\WithdrawalButton\Frontend\Template::render(
+			'pdf/policy-pdf.php',
+			array(
+				'content_html'    => $doc->to_html(),
+				'disclaimer_html' => \WWU\WithdrawalButton\Legal\PolicyBuilder::disclaimer_html(),
+				'site_name'       => (string) get_bloginfo( 'name' ),
+				'generated_local' => wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ) ),
+			)
+		);
+		$bytes = ( new \WWU\WithdrawalButton\DurableMedium\PdfBuilder() )->render( $html );
+
+		nocache_headers();
+		header( 'Content-Type: application/pdf' );
+		header( 'Content-Disposition: attachment; filename="withdrawal-policy.pdf"' );
+		header( 'Content-Length: ' . (string) strlen( (string) $bytes ) );
+		echo $bytes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- binary PDF stream.
 		exit;
 	}
 

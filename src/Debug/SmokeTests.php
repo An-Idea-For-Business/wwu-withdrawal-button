@@ -154,6 +154,19 @@ final class SmokeTests {
 		$only_ids = $ids_of( $builder::build( 'en', array( 'sections' => array( 'right' ) ) ) );
 		$tests[] = $this->assert( 'policy.sections_allowlist', array( 'right' ) === $only_ids, 'sections allow-list keeps only the requested ids (got: ' . wp_json_encode( $only_ids ) . ').' );
 
+		// PDF surface (skip when Dompdf is not bundled, e.g. a plain source install).
+		if ( \WWU\WithdrawalButton\DurableMedium\PdfBuilder::is_available() ) {
+			$pdf_html = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>' . $builder::build( 'en' )->to_html() . '</body></html>';
+			$pdf      = ( new \WWU\WithdrawalButton\DurableMedium\PdfBuilder() )->render( $pdf_html );
+			$tests[]  = $this->assert( 'policy.pdf.renders', is_string( $pdf ) && 0 === strpos( (string) $pdf, '%PDF' ), 'PolicyBuilder HTML renders to a %PDF document.' );
+		} else {
+			$tests[] = array(
+				'name'   => 'policy.pdf.renders',
+				'status' => 'skip',
+				'output' => 'Dompdf not available (source install) — PDF render skipped.',
+			);
+		}
+
 		return $tests;
 	}
 

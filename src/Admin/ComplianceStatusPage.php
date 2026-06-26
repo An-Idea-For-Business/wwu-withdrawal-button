@@ -164,6 +164,10 @@ final class ComplianceStatusPage {
 		}
 		$freeze = wp_nonce_url( admin_url( 'admin-post.php?action=wwu_wb_freeze_policy' ), DashboardPage::FREEZE_POLICY_NONCE );
 		echo '<a class="button" href="' . esc_url( $freeze ) . '">' . esc_html__( 'Freeze to static HTML', 'wwu-withdrawal-button' ) . '</a>';
+		if ( \WWU\WithdrawalButton\DurableMedium\PdfBuilder::is_available() ) {
+			$pdf = wp_nonce_url( admin_url( 'admin-post.php?action=wwu_wb_policy_pdf' ), DashboardPage::POLICY_PDF_NONCE );
+			echo ' <a class="button" href="' . esc_url( $pdf ) . '">' . esc_html__( 'Download PDF', 'wwu-withdrawal-button' ) . '</a>';
+		}
 		echo '</p>';
 
 		echo '<p class="description">'
