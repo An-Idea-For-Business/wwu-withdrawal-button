@@ -184,10 +184,6 @@ msgstr ""
 msgid "customised"
 msgstr ""
 
-#: src/Admin/ConsentRecordsPage.php:110
-msgid "No consent records yet."
-msgstr "Aún no hay registros de consentimiento."
-
 #: src/Admin/ConsentRecordsPage.php:116
 #: src/Admin/RequestsDashboard.php:117
 #: templates/emails/admin-notification.php:30
@@ -272,10 +268,6 @@ msgstr "Permisos insuficientes."
 msgid "Evidence of the consumers' express consent + acknowledgement captured at checkout for the two conditional Art. 59 exemptions (digital content with immediate access; service fully performed). Keep it to discharge your burden of proof — it is evidence, not a legally-named \"register\". Physical products never appear here: they always keep the 14-day right of withdrawal."
 msgstr "Evidencia del consentimiento expreso de los consumidores + reconocimiento capturado en el pago para las dos exenciones condicionales del Art. 59 (contenido digital con acceso inmediato; servicio completamente prestado). Conu00e9rvelo para cumplir su carga probatoria — es una evidencia, no un «registro» legalmente denominado. Los productos físicos nunca aparecen aquí: siempre conservan el derecho de desistimiento de 14 días."
 
-#: src/Admin/ConsentRecordsPage.php:70
-msgid "WooCommerce is not active. Checkout consent is captured on WooCommerce today, so there are no records to show."
-msgstr "WooCommerce no está activo. El consentimiento en el proceso de pago se captura en WooCommerce actualmente, por lo que no hay registros que mostrar."
-
 #: src/Admin/ConsentRecordsPage.php:78
 msgid "Export to CSV"
 msgstr "Exportar a CSV"
@@ -308,10 +300,6 @@ msgstr "Publicada — esta es la página pública que usan los visitantes (compr
 #: src/Admin/DashboardPage.php:113
 msgid "View page"
 msgstr "Ver página"
-
-#: src/Admin/DashboardPage.php:119
-msgid "No published form page yet. Guests without an account need one. Re-activate the plugin to create it automatically, or publish a page containing the [wwu_wb_form] shortcode."
-msgstr "Todavía no hay ninguna página de formulario publicada. Los visitantes sin cuenta la necesitan. Reactive el plugin para crearla automáticamente, o publique una página que contenga el shortcode [wwu_wb_form]."
 
 #: src/Admin/DashboardPage.php:125
 msgid "Sending through %s. Use the test below to confirm it reaches your inbox."
@@ -1133,22 +1121,6 @@ msgstr "Durante cuánto tiempo conservar el registro inalterable (por defecto 10
 msgid "Trusted timestamp"
 msgstr "Sello de tiempo de confianza"
 
-#: src/Admin/SettingsPage.php:493
-msgid "OpenTimestamps (free, Bitcoin-anchored — recommended)"
-msgstr "OpenTimestamps (gratuito, anclado en Bitcoin — recomendado)"
-
-#: src/Admin/SettingsPage.php:494
-msgid "RFC 3161 timestamp authority (immediate; eIDAS-qualified options)"
-msgstr "Autoridad de sellado de tiempo RFC 3161 (inmediato; opciones cualificadas eIDAS)"
-
-#: src/Admin/SettingsPage.php:495
-msgid "None (the hash chain alone is the evidence)"
-msgstr "Ninguno (la cadena de hash por sí sola constituye la prueba)"
-
-#: src/Admin/SettingsPage.php:501
-msgid "Only a one-way hash leaves your site — never personal data. OpenTimestamps anchors to Bitcoin (free, ~hours). RFC 3161 gets an immediate signed token from a Time-Stamp Authority."
-msgstr "Solo un hash unidireccional sale de su sitio — nunca datos personales. OpenTimestamps ancla en Bitcoin (gratuito, ~horas). RFC 3161 obtiene un token firmado inmediato de una Autoridad de Sellado de Tiempo."
-
 #: src/Admin/SettingsPage.php:505
 msgid "RFC 3161 — TSA endpoint"
 msgstr "RFC 3161 — endpoint de la TSA"
@@ -1192,10 +1164,6 @@ msgstr "Vista previa del correo de acuse de recibo"
 #: src/Admin/SettingsPage.php:527
 msgid "Opens a sample of the email the consumer receives. On WooCommerce it uses your store's email branding (header, footer, colours) exactly as it will be sent."
 msgstr "Abre una muestra del correo que recibirá el consumidor. En WooCommerce utiliza la imagen corporativa de correo de su tienda (encabezado, pie, colores) exactamente como se enviará."
-
-#: src/Admin/SettingsPage.php:544
-msgid "Free, Bitcoin-anchored, no account — the default. Proof completes after a block (~hours)."
-msgstr "Gratuito, anclado en Bitcoin, sin cuenta — la opción predeterminada. La prueba se completa tras un bloque (~horas)."
 
 #: src/Admin/SettingsPage.php:545
 msgid "Free RFC 3161. Its /qualified endpoint is eIDAS-qualified and needs no account — recommended free option."
@@ -1252,14 +1220,6 @@ msgstr "Producto de muestra × 1"
 #: src/Admin/SettingsPage.php:64
 msgid "WWU Withdrawal Button — Settings"
 msgstr "WWU Withdrawal Button — Ajustes"
-
-#: src/Admin/SettingsPage.php:646
-msgid "Appearance — Custom CSS"
-msgstr "Apariencia — CSS personalizado"
-
-#: src/Admin/SettingsPage.php:647
-msgid "Paste CSS to restyle any element of the withdrawal flow on your site. It is loaded after the plugin styles, so it always wins. Tip: override the CSS variables below for quick color/shape changes, or target the classes for full control."
-msgstr "Pegue CSS para rediseñar cualquier elemento del flujo de desistimiento en su sitio. Se carga después de los estilos del plugin, por lo que siempre tiene prioridad. Consejo: sobrescriba las variables CSS que aparecen a continuación para cambios rápidos de color o forma, o apunte a las clases para un control total."
 
 #: src/Admin/SettingsPage.php:648
 msgid "Compliance note:"
@@ -2224,10 +2184,6 @@ msgstr "No está obligado a indicar un motivo."
 msgid "Withdrawing from only some products?"
 msgstr "¿Desistes solo de algunos productos?"
 
-#: templates/form/withdrawal-form.php:75
-msgid "Tick them — leave empty to withdraw from the whole order."
-msgstr "Márcalos — deja vacío para desistir de todo el pedido."
-
 #: templates/form/withdrawal-form.php:92
 msgid "Continue"
 msgstr "Continuar"
@@ -2369,3 +2325,293 @@ msgstr "Comprobado el %s."
 msgid "WWU Withdrawal Button requires PHP %1$s or higher. You are running PHP %2$s."
 msgstr "WWU Withdrawal Button requiere PHP %1$s o superior. Está ejecutando PHP %2$s."
 
+#: src/Admin/AdminController.php:170
+msgid "WWU Withdrawal Button — action recommended: turn on the trusted timestamp."
+msgstr ""
+
+#: src/Admin/AdminController.php:172
+msgid "The plugin is live but trusted timestamping is OFF, so your withdrawal records have no independent \"data certa\" — the legally decisive proof of when each withdrawal was received (the fact the statutory 14-day deadline turns on). Turn it on now: it is free, and only an anonymous one-way hash ever leaves your site (never personal data)."
+msgstr ""
+
+#: src/Admin/AdminController.php:174
+msgid "Enable trusted timestamping →"
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:149
+#: src/Core/Install.php:355
+#: src/Legal/PolicyBuilder.php:78
+msgid "Right of withdrawal — information notice"
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:150
+msgid "A single consolidated notice, assembled live from your settings and the exemptions you selected. It complements — it does not replace — your Terms of Sale. Publish it on a page and link it from your footer, or freeze a static copy."
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:157
+msgid "Published"
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:158
+msgid "Draft"
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:159
+msgid "Open the policy page"
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:163
+msgid "Create the policy page (draft)"
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:166
+msgid "Freeze to static HTML"
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:169
+msgid "Download PDF"
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:174
+msgid "Auto-updating shortcode:"
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:175
+msgid "“Freeze” snapshots the current text into the page as plain HTML so it stops changing; to return to the auto-updating version, edit the page and put the shortcode back."
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:184
+msgid "Preview the assembled notice"
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:204
+msgid "The withdrawal policy page has been created as a draft — review and publish it."
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:206
+msgid "Could not create the policy page. Please try again."
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:210
+msgid "The policy was frozen into static HTML on the policy page. It will no longer update automatically until you put the shortcode back."
+msgstr ""
+
+#: src/Admin/ComplianceStatusPage.php:212
+msgid "Could not freeze the policy. Please try again."
+msgstr ""
+
+#: src/Admin/ConsentRecordsPage.php:104
+msgid "Platform"
+msgstr ""
+
+#: src/Admin/ConsentRecordsPage.php:92
+msgid "No consent records yet. Consent is captured at checkout for the conditional Art. 59 exemptions on WooCommerce, Easy Digital Downloads and FluentCart."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:134
+msgid "No published form page found — it may have been deleted or trashed. Guests without an account need one; recreate it in one click:"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:135
+msgid "Recreate the page"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:149
+msgid "Withdrawal policy page"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:151
+msgid "Published — a consolidated \"Right of withdrawal\" notice assembled from your settings and exemptions."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:152
+msgid "Created as a draft — review it and publish when ready."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:153
+msgid "Open page"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:160
+msgid "Withdrawal policy page (optional)"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:161
+msgid "A single consolidated \"Right of withdrawal\" notice (assembled from your settings + exemptions) you can link from your footer. Create it as a draft to review:"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:162
+msgid "Create the policy page"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:196
+msgid "Trusted timestamp — legal \"data certa\" (recommended)"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:200
+msgid "Enabled (%s). Each confirmed withdrawal is anchored to an independent, tamper-proof timestamp — the legally decisive proof of WHEN it was received."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:203
+msgid "OFF — please turn this on. The log is already tamper-evident, but a trusted timestamp adds an independent \"data certa\": proof of the exact date and time a withdrawal was received, which is the fact the statutory 14-day deadline turns on. OpenTimestamps is free and sends only an anonymous one-way hash — never personal data."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:204
+msgid "Enable it now"
+msgstr ""
+
+#: src/Admin/DashboardPage.php:531
+msgid "The PDF library is not available on this site. Install the plugin from the official packaged ZIP to enable PDF export — the policy page and the [wwu_wb_policy] shortcode still work without it."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:567
+msgid "Could not recreate the page. Please try again, or create it manually with the relevant shortcode."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:571
+msgid "The withdrawal policy page has been recreated as a draft — review and publish it."
+msgstr ""
+
+#: src/Admin/DashboardPage.php:572
+msgid "The withdrawal form page has been recreated and published."
+msgstr ""
+
+#: src/Admin/RequestsDashboard.php:149
+#: src/DurableMedium/ReceiptBuilder.php:57
+msgid "%1$s × %2$d"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:167
+msgid "Complianz documents"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:169
+msgid "These toggles add ready-made withdrawal clauses to your Complianz Privacy Policy and Terms. They are generic templates that complement — not replace — your own legal texts; have them reviewed by your lawyer. Nothing is added until you turn a toggle on, and turning it off removes the clauses on the next regeneration."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:175
+msgid "Privacy Policy"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:177
+msgid "Add the right-of-withdrawal record-keeping clauses to my Complianz Privacy Policy."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:182
+msgid "Terms & Conditions"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:185
+msgid "Add the withdrawal article (and the online / Annex I-B modality) to my Complianz Terms & Conditions."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:189
+msgid "Add the withdrawal article to my Complianz Terms & Conditions."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:193
+msgid "Complianz does not generate a Terms &amp; Conditions document on its own. Install the free %s to enable this."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:219
+msgid "Preview what will be added"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:580
+msgid "None — no external calls (default; the hash chain alone is the evidence)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:581
+msgid "OpenTimestamps (opt-in; free, Bitcoin-anchored; sends only a one-way hash)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:582
+msgid "RFC 3161 timestamp authority (opt-in; immediate; eIDAS-qualified options)"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:588
+msgid "Recommended — turn this on."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:588
+msgid "A trusted timestamp gives you an independent \"data certa\": proof of the exact date and time each withdrawal was received — the fact the statutory 14-day deadline turns on. It is OFF by default (the plugin makes no external call until you pick a provider here). When enabled, only a one-way hash ever leaves your site — never personal data: OpenTimestamps anchors it to Bitcoin (free, completes in ~hours); RFC 3161 returns an immediate signed token from a Time-Stamp Authority."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:631
+msgid "Free, Bitcoin-anchored, no account (opt-in). Proof completes after a block (~hours)."
+msgstr ""
+
+#: src/Admin/SettingsPage.php:731
+msgid "Appearance — styling reference"
+msgstr ""
+
+#: src/Admin/SettingsPage.php:732
+msgid "To restyle the withdrawal flow, add your rules in Appearance → Customize → Additional CSS (built into WordPress), targeting the CSS variables and classes listed below — they load after the plugin styles, so your overrides win."
+msgstr ""
+
+#: src/Compat/ComplianzDocuments.php:117
+msgid "You may withdraw using the model withdrawal form (Annex I-B) or directly online through the \"withdraw from contract\" function available in your order area throughout the withdrawal period."
+msgstr ""
+
+#: src/Compat/ComplianzDocuments.php:131
+msgid "Right-of-withdrawal records"
+msgstr ""
+
+#: src/Legal/PolicyBuilder.php:107
+msgid "You have %d days to withdraw from this contract without giving any reason. The period runs from the day you (or a third party you indicate) take physical possession of the goods, or from the conclusion of the contract for services and digital content."
+msgstr ""
+
+#: src/Legal/PolicyBuilder.php:111
+msgid "Your right of withdrawal"
+msgstr ""
+
+#: src/Legal/PolicyBuilder.php:121
+msgid "How to withdraw"
+msgstr ""
+
+#: src/Legal/PolicyBuilder.php:132
+msgid "If you withdraw, we reimburse all payments received from you, including standard delivery costs, without undue delay and no later than 14 days from the day we are informed of your decision. We use the same means of payment you used, at no cost to you. For goods, we may withhold the refund until we receive the goods back or you provide proof of return; you must send the goods back without undue delay and within 14 days, bearing the direct cost of return unless we agreed otherwise. You are only liable for any diminished value resulting from handling beyond what is necessary to establish the nature, characteristics and functioning of the goods."
+msgstr ""
+
+#: src/Legal/PolicyBuilder.php:133
+msgid "Refunds and returns"
+msgstr ""
+
+#: src/Legal/PolicyBuilder.php:166
+msgid "This exception applies only where your prior express consent and acknowledgement were captured at checkout; otherwise the right of withdrawal still applies."
+msgstr ""
+
+#: src/Legal/PolicyBuilder.php:175
+msgid "For some of the products or services in this shop, the law excludes or limits the right of withdrawal:"
+msgstr ""
+
+#: src/Legal/PolicyBuilder.php:177
+msgid "Exceptions that apply to this shop"
+msgstr ""
+
+#: src/Legal/PolicyBuilder.php:188
+msgid "Evidence and privacy"
+msgstr ""
+
+#: src/Legal/PolicyBuilder.php:208
+msgid "Contact for withdrawals: %s"
+msgstr ""
+
+#: src/Legal/PolicyBuilder.php:211
+msgid "Who we are"
+msgstr ""
+
+#: src/Legal/PolicyBuilder.php:93
+msgid "This notice complements — and does not replace — your Terms of Sale and pre-contractual information. It is a generic template; have it reviewed by your own legal counsel."
+msgstr ""
+
+#: templates/form/withdrawal-form.php:75
+msgid "Tick them — leave empty to withdraw from the whole order. If you bought more than one of an item, you can set how many to withdraw (leave blank for all)."
+msgstr ""
+
+#: templates/form/withdrawal-form.php:91
+msgid "Quantity to withdraw (of %d):"
+msgstr ""
+
+#: templates/form/withdrawal-form.php:93
+msgid "all %d"
+msgstr ""
