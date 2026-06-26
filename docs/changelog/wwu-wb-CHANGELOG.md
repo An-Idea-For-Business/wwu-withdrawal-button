@@ -3,6 +3,15 @@
 All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); the project uses Semantic Versioning.
 
+## [1.3.2] — 2026-06-26 — Fix: evidence-log hash-chain genesis seed (upgrade regression)
+
+The 1.3.0 WordPress.org prefix rename (`s/wwu_wb_/webwakeupwdb_/`) swept up a literal that is **not** a code identifier: the genesis seed in `LogChain::genesis()` (`'wwu_wb_genesis|'` → `'webwakeupwdb_genesis|'`). That seed is baked into the genesis hash of every immutable-log row ever written, so changing it re-based the genesis and broke chain verification at row 1 on any install carrying pre-1.3 rows. It surfaced only once `Migration_5` (1.3.1) populated the renamed log table on the test subsite: `log.chain_intact` went red while `log.genesis_stable` stayed green — the seed is deterministic but no longer matched the stored rows.
+
+- Restored the seed to the original `'wwu_wb_genesis'` and annotated it as a **frozen cryptographic constant** — data, not an identifier; it must never be renamed. `src/Storage/LogChain.php`.
+- **Blast radius verified:** the only other HMAC seeds — `'receipt|'` (`VerifiableLink`), `'guest'` (`GuestAccess`), the webhook body (`Webhook::sign`) — are prefix-free and were untouched, so verifiable receipt links and guest tokens kept working; only the log chain's genesis was affected. The per-site `webwakeupwdb_secret` is preserved by the option adoption (renamed in the adoption's option pass, before any `Secret::get()` mint), so restoring the seed re-validates the existing chain rather than re-keying it.
+
+PHP lint 0 errors.
+
 ## [1.3.1] — 2026-06-26 — Legal Documents (A+B+C) + WordPress.org prefix rename + custom-table migration
 
 First public 1.3.x build (1.3.0 was a pre-release candidate, never shipped to the directory; folded in here). Carries the **Legal Documents** feature — a consolidated "Right of withdrawal" notice (`[webwakeupwdb_policy]` shortcode + auto-created page + freeze-to-static-HTML + PDF + the Compliance sub-section), opt-in **Complianz** Privacy/Terms injection, and the `wwu-tools/wwu-i18n.php` pipeline with it/de/es/fr/sv translations — and the **WordPress.org-compliance prefix rename** (`wwu` / `WWU_WB_*` → `webwakeupwdb` / `WEBWAKEUPWDB_*` across constants, options, hooks, shortcodes, the PHP namespace `WebWakeUpWdb\WithdrawalButton`, the REST namespace and classes; slug + text domain unchanged). See `readme.txt` for the merchant-facing summary. **This build fixes the upgrade migration:**
