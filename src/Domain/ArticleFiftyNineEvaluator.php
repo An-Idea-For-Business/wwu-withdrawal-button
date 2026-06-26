@@ -6,16 +6,16 @@
  * exceptions. This evaluator decides, per order, whether at least one line item
  * still carries a right of withdrawal (mixed carts: show the function if ANY
  * item is withdrawable). Auto-detection is conservative; merchants override via
- * excluded products/categories and the wwu_wb_excluded_product_ids filter.
+ * excluded products/categories and the webwakeupwdb_excluded_product_ids filter.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Domain;
+namespace WebWakeUpWdb\WithdrawalButton\Domain;
 
-use WWU\WithdrawalButton\Platform\NormalizedOrder;
+use WebWakeUpWdb\WithdrawalButton\Platform\NormalizedOrder;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -82,7 +82,7 @@ final class ArticleFiftyNineEvaluator {
 		// Legacy crude auto-detect (default OFF since alpha.24): delivered virtual/
 		// downloadable content on a completed order. Kept for back-compat; the proper
 		// path is tagging '59_o' and capturing consent.
-		$settings = (array) \WWU\WithdrawalButton\Core\Settings::get( 'wwu_wb_exclusions' );
+		$settings = (array) \WebWakeUpWdb\WithdrawalButton\Core\Settings::get( 'webwakeupwdb_exclusions' );
 		if ( ! empty( $settings['auto_detect_virtual'] ) ) {
 			$is_digital = ! empty( $item['virtual'] ) || ! empty( $item['downloadable'] );
 			if ( $is_digital && 'completed' === $order->status ) {
@@ -97,7 +97,7 @@ final class ArticleFiftyNineEvaluator {
 	 * Whether the consumer's express consent + acknowledgement was captured for a
 	 * conditional exemption on this order (Art. 16(1)(a)/(m); Art. 59(1)(a)/(o)).
 	 *
-	 * The consent is provided through the `wwu_wb_exemption_consent` filter, which
+	 * The consent is provided through the `webwakeupwdb_exemption_consent` filter, which
 	 * the checkout-consent layer (P2) hooks to return the order's stored consent
 	 * entries. Until that layer ships, the filter returns nothing → consent is never
 	 * present → conditional reasons keep the button.
@@ -116,7 +116,7 @@ final class ArticleFiftyNineEvaluator {
 		 * @param array           $item    Line item being evaluated.
 		 * @param string          $reason  Reason id.
 		 */
-		$consent = (array) apply_filters( 'wwu_wb_exemption_consent', array(), $order, $item, $reason );
+		$consent = (array) apply_filters( 'webwakeupwdb_exemption_consent', array(), $order, $item, $reason );
 		if ( empty( $consent ) ) {
 			return false;
 		}

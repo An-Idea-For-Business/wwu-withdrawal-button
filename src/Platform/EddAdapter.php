@@ -11,14 +11,14 @@
  * A "download" is the `download` CPT; its categories live in the `download_category`
  * taxonomy, so EDD exemptions are BOTH product-id and category aware.
  *
- * Verified against official EDD sources — see docs/specs/wwu-wb-edd-integration-SPEC.md.
+ * Verified against official EDD sources — see docs/specs/webwakeupwdb-edd-integration-SPEC.md.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Platform;
+namespace WebWakeUpWdb\WithdrawalButton\Platform;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -188,7 +188,7 @@ final class EddAdapter implements OrderDataSource, SubscriptionAware {
 	 * legitimate withdrawal button is never hidden. We only act on the high-confidence
 	 * EDD Recurring renewal status; renewal orders that EDD completes with a plain
 	 * 'complete' status may not be detected here — by design (over-showing the button is
-	 * the safe failure). Integrators can refine via the `wwu_wb_order_is_renewal` filter.
+	 * the safe failure). Integrators can refine via the `webwakeupwdb_order_is_renewal` filter.
 	 */
 	public function is_renewal_order( string $order_ref ): bool {
 		$is_renewal = false;
@@ -210,7 +210,7 @@ final class EddAdapter implements OrderDataSource, SubscriptionAware {
 		 * @param string $order_ref  Order reference.
 		 * @param string $platform   Adapter key.
 		 */
-		return (bool) apply_filters( 'wwu_wb_order_is_renewal', $is_renewal, $order_ref, $this->key() );
+		return (bool) apply_filters( 'webwakeupwdb_order_is_renewal', $is_renewal, $order_ref, $this->key() );
 	}
 
 	/**
@@ -356,7 +356,7 @@ final class EddAdapter implements OrderDataSource, SubscriptionAware {
 		if ( ! function_exists( 'edd_get_order_meta' ) ) {
 			return '';
 		}
-		$value = edd_get_order_meta( (int) $order_ref, 'wwu_wb_' . $key, true );
+		$value = edd_get_order_meta( (int) $order_ref, 'webwakeupwdb_' . $key, true );
 		return ( null === $value || false === $value ) ? '' : $value;
 	}
 
@@ -365,7 +365,7 @@ final class EddAdapter implements OrderDataSource, SubscriptionAware {
 	 */
 	public function set_meta( string $order_ref, string $key, $value ): void {
 		if ( function_exists( 'edd_update_order_meta' ) ) {
-			edd_update_order_meta( (int) $order_ref, 'wwu_wb_' . $key, $value );
+			edd_update_order_meta( (int) $order_ref, 'webwakeupwdb_' . $key, $value );
 		}
 	}
 
@@ -438,7 +438,7 @@ final class EddAdapter implements OrderDataSource, SubscriptionAware {
 		 * @param bool   $found     Whether a VAT number was detected.
 		 * @param string $order_ref Order id.
 		 */
-		return (bool) apply_filters( 'wwu_wb_edd_order_has_vat_number', '' !== $vat, $order_ref );
+		return (bool) apply_filters( 'webwakeupwdb_edd_order_has_vat_number', '' !== $vat, $order_ref );
 	}
 
 	/**

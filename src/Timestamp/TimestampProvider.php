@@ -5,12 +5,12 @@
  * Pluggable so the free OpenTimestamps default can be swapped for an RFC 3161 /
  * eIDAS qualified provider later without touching the call sites.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Timestamp;
+namespace WebWakeUpWdb\WithdrawalButton\Timestamp;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

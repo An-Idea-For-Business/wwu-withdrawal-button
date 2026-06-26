@@ -8,14 +8,14 @@
  * client). Anchoring is asynchronous (≈30 min–2 h, one Bitcoin block); the
  * upgrade poller completes the proof later.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Timestamp;
+namespace WebWakeUpWdb\WithdrawalButton\Timestamp;
 
-use WWU\WithdrawalButton\Debug\Debug;
+use WebWakeUpWdb\WithdrawalButton\Debug\Debug;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -56,7 +56,7 @@ final class OpenTimestampsProvider implements TimestampProvider {
 		 *
 		 * @param string[] $calendars Calendar base URLs.
 		 */
-		return (array) apply_filters( 'wwu_wb_ots_calendars', self::CALENDARS );
+		return (array) apply_filters( 'webwakeupwdb_ots_calendars', self::CALENDARS );
 	}
 
 	/**
@@ -77,10 +77,10 @@ final class OpenTimestampsProvider implements TimestampProvider {
 
 		foreach ( $this->calendars() as $base ) {
 			$url = trailingslashit( $base ) . 'digest';
-			// SSRF guard: a filter (wwu_wb_ots_calendars) can repoint the calendar list,
+			// SSRF guard: a filter (webwakeupwdb_ots_calendars) can repoint the calendar list,
 			// so re-validate at request time and never follow redirects (parity with the
 			// webhook + RFC 3161 callers).
-			if ( ! \WWU\WithdrawalButton\Security\OutboundUrlGuard::is_safe_url( $url ) ) {
+			if ( ! \WebWakeUpWdb\WithdrawalButton\Security\OutboundUrlGuard::is_safe_url( $url ) ) {
 				continue;
 			}
 			$response = wp_remote_post(
@@ -125,7 +125,7 @@ final class OpenTimestampsProvider implements TimestampProvider {
 
 		foreach ( $this->calendars() as $base ) {
 			$url = trailingslashit( $base ) . 'timestamp/' . $commitment_hex;
-			if ( ! \WWU\WithdrawalButton\Security\OutboundUrlGuard::is_safe_url( $url ) ) {
+			if ( ! \WebWakeUpWdb\WithdrawalButton\Security\OutboundUrlGuard::is_safe_url( $url ) ) {
 				continue;
 			}
 			$response = wp_remote_get(

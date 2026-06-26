@@ -7,12 +7,12 @@
  * that captures the SPECIFIC failure reason so callers can surface a detailed
  * message to the admin instead of a generic "email failed".
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Mail;
+namespace WebWakeUpWdb\WithdrawalButton\Mail;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -88,7 +88,7 @@ final class Mailer {
 			$sent = wp_mail( $to, $subject, $html, $headers, $attachments );
 		} catch ( \Throwable $e ) {
 			$this->last_error = self::cap( $e->getMessage() );
-			\WWU\WithdrawalButton\Debug\Debug::error( 'durable_medium', 'mail.exception', array( 'error' => $this->last_error ) );
+			\WebWakeUpWdb\WithdrawalButton\Debug\Debug::error( 'durable_medium', 'mail.exception', array( 'error' => $this->last_error ) );
 			error_log( '[WWU Withdrawal Button] wp_mail threw during send: ' . $e->getMessage() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 			$sent = false;
 		} finally {

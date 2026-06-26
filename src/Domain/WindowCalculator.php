@@ -8,14 +8,14 @@
  * to an unknown delivery date) would itself be a dark-pattern/compliance risk.
  * The merchant decides final validity of any late request.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Domain;
+namespace WebWakeUpWdb\WithdrawalButton\Domain;
 
-use WWU\WithdrawalButton\Platform\NormalizedOrder;
+use WebWakeUpWdb\WithdrawalButton\Platform\NormalizedOrder;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -33,7 +33,7 @@ final class WindowCalculator {
 	 * @return int
 	 */
 	public function window_days( NormalizedOrder $order ): int {
-		$settings = \WWU\WithdrawalButton\Core\Settings::main();
+		$settings = \WebWakeUpWdb\WithdrawalButton\Core\Settings::main();
 		$days     = isset( $settings['withdrawal_window_days'] ) ? (int) $settings['withdrawal_window_days'] : 14;
 		/**
 		 * Filter the withdrawal-window length (days) for an order.
@@ -41,7 +41,7 @@ final class WindowCalculator {
 		 * @param int             $days  Window length.
 		 * @param NormalizedOrder $order The order.
 		 */
-		$days = (int) apply_filters( 'wwu_wb_withdrawal_window_days', $days, $order );
+		$days = (int) apply_filters( 'webwakeupwdb_withdrawal_window_days', $days, $order );
 		return max( 1, min( 365, $days ) );
 	}
 
@@ -65,7 +65,7 @@ final class WindowCalculator {
 		 * @param NormalizedOrder    $order    Order.
 		 * @param int                $days     Window length.
 		 */
-		return apply_filters( 'wwu_wb_compute_deadline', $deadline, $order, $days );
+		return apply_filters( 'webwakeupwdb_compute_deadline', $deadline, $order, $days );
 	}
 
 	/**

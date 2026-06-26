@@ -18,7 +18,7 @@
  * @var string $site_name      Site name.
  * @var string $verified_human Localised "verified at" datetime.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
@@ -38,29 +38,29 @@ $bad_color = '#b3261e';
 	<title><?php esc_html_e( 'Withdrawal receipt verification', 'wwu-withdrawal-button' ); ?></title>
 	<style>
 		body { margin: 0; background: #f4f5f7; color: #1d2327; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; }
-		.wwu-wb-vbox { max-width: 600px; margin: 5vh auto; background: #fff; border: 1px solid #e2e4e7; border-radius: 10px; padding: 32px; }
-		.wwu-wb-vbadge { display: inline-block; padding: 6px 14px; border-radius: 999px; font-weight: 700; color: #fff; }
+		.webwakeupwdb-vbox { max-width: 600px; margin: 5vh auto; background: #fff; border: 1px solid #e2e4e7; border-radius: 10px; padding: 32px; }
+		.webwakeupwdb-vbadge { display: inline-block; padding: 6px 14px; border-radius: 999px; font-weight: 700; color: #fff; }
 		h1 { font-size: 1.4rem; margin: 0 0 4px; }
-		.wwu-wb-vsub { color: #646970; margin: 0 0 24px; }
+		.webwakeupwdb-vsub { color: #646970; margin: 0 0 24px; }
 		dl { display: grid; grid-template-columns: max-content 1fr; gap: 8px 16px; margin: 0 0 24px; }
 		dt { color: #646970; }
 		dd { margin: 0; font-weight: 600; word-break: break-word; }
 		code { background: #f0f0f1; padding: 2px 6px; border-radius: 4px; font-size: 0.85em; }
-		.wwu-wb-vfoot { color: #646970; font-size: 0.85rem; border-top: 1px solid #e2e4e7; padding-top: 16px; }
+		.webwakeupwdb-vfoot { color: #646970; font-size: 0.85rem; border-top: 1px solid #e2e4e7; padding-top: 16px; }
 	</style>
 </head>
 <body>
-	<div class="wwu-wb-vbox">
+	<div class="webwakeupwdb-vbox">
 		<p>
 			<?php if ( $intact ) : ?>
-				<span class="wwu-wb-vbadge" style="background: <?php echo esc_attr( $ok_color ); ?>;">&#10003; <?php esc_html_e( 'Verified — record intact', 'wwu-withdrawal-button' ); ?></span>
+				<span class="webwakeupwdb-vbadge" style="background: <?php echo esc_attr( $ok_color ); ?>;">&#10003; <?php esc_html_e( 'Verified — record intact', 'wwu-withdrawal-button' ); ?></span>
 			<?php else : ?>
-				<span class="wwu-wb-vbadge" style="background: <?php echo esc_attr( $bad_color ); ?>;">&#10007; <?php esc_html_e( 'Record could not be verified', 'wwu-withdrawal-button' ); ?></span>
+				<span class="webwakeupwdb-vbadge" style="background: <?php echo esc_attr( $bad_color ); ?>;">&#10007; <?php esc_html_e( 'Record could not be verified', 'wwu-withdrawal-button' ); ?></span>
 			<?php endif; ?>
 		</p>
 
 		<h1><?php esc_html_e( 'Withdrawal receipt verification', 'wwu-withdrawal-button' ); ?></h1>
-		<p class="wwu-wb-vsub"><?php echo esc_html( $site_name ); ?></p>
+		<p class="webwakeupwdb-vsub"><?php echo esc_html( $site_name ); ?></p>
 
 		<dl>
 			<dt><?php esc_html_e( 'Order', 'wwu-withdrawal-button' ); ?></dt>
@@ -76,7 +76,7 @@ $bad_color = '#b3261e';
 			<dd><code><?php echo esc_html( $row_hash ); ?></code></dd>
 		</dl>
 
-		<p class="wwu-wb-vfoot">
+		<p class="webwakeupwdb-vfoot">
 			<?php
 			echo esc_html(
 				$intact

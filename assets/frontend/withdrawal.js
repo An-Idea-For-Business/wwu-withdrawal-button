@@ -2,15 +2,15 @@
  * WWU Withdrawal Button — frontend two-step controller (vanilla JS).
  *
  * Step 1 submits the withdrawal statement and receives a single-use confirmation
- * token; Step 2 confirms. Talks to the wwu-wb REST endpoints with X-WP-Nonce.
+ * token; Step 2 confirms. Talks to the webwakeupwdb REST endpoints with X-WP-Nonce.
  * Progressive: with JS disabled, the form shows a noscript fallback.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 ( function () {
 	'use strict';
 
-	var data = window.wwuWbData || {};
+	var data = window.webwakeupwdbData || {};
 	var i18n = data.i18n || {};
 
 	if ( ! data.restUrl ) {
@@ -47,16 +47,16 @@
 	/**
 	 * Wire a single withdrawal form wrapper.
 	 *
-	 * @param {HTMLElement} wrap The .wwu-wb-form-wrap element.
+	 * @param {HTMLElement} wrap The .webwakeupwdb-form-wrap element.
 	 */
 	function initForm( wrap ) {
 		var orderRef = wrap.getAttribute( 'data-order-ref' ) || '';
 		var key = wrap.getAttribute( 'data-key' ) || '';
 		var accessToken = wrap.getAttribute( 'data-access-token' ) || '';
-		var form = wrap.querySelector( '.wwu-wb-form' );
-		var step2 = wrap.querySelector( '.wwu-wb-step2' );
-		var confirmBtn = wrap.querySelector( '.wwu-wb-confirm' );
-		var result = wrap.querySelector( '.wwu-wb-result' );
+		var form = wrap.querySelector( '.webwakeupwdb-form' );
+		var step2 = wrap.querySelector( '.webwakeupwdb-step2' );
+		var confirmBtn = wrap.querySelector( '.webwakeupwdb-confirm' );
+		var result = wrap.querySelector( '.webwakeupwdb-result' );
 		var state = { requestUid: '', confirmToken: '' };
 
 		if ( ! form || ! step2 || ! confirmBtn || ! result ) {
@@ -83,13 +83,13 @@
 		function showResult( message, isError ) {
 			result.hidden = false;
 			result.textContent = message;
-			result.className = 'wwu-wb-result' + ( isError ? ' is-error' : ' is-success' );
+			result.className = 'webwakeupwdb-result' + ( isError ? ' is-error' : ' is-success' );
 		}
 
 		// Step 1 — submit the statement.
 		form.addEventListener( 'submit', function ( ev ) {
 			ev.preventDefault();
-			var btn = form.querySelector( '.wwu-wb-continue' );
+			var btn = form.querySelector( '.webwakeupwdb-continue' );
 			var fields = readFields();
 			if ( btn ) {
 				btn.disabled = true;
@@ -130,16 +130,16 @@
 	 * Wire the guest lookup form (order number + email → access token → form).
 	 *
 	 * On success the server returns a token bound to (order_ref, email); we reload
-	 * the same page with ?wwu_wb_order & ?access_token so the server renders the
+	 * the same page with ?webwakeupwdb_order & ?access_token so the server renders the
 	 * two-step form. On failure we show a single generic message (no enumeration).
 	 *
-	 * @param {HTMLElement} form The .wwu-wb-lookup form element.
+	 * @param {HTMLElement} form The .webwakeupwdb-lookup form element.
 	 */
 	function initLookup( form ) {
 		form.addEventListener( 'submit', function ( ev ) {
 			ev.preventDefault();
 			var btn = form.querySelector( 'button[type="submit"]' );
-			var result = form.querySelector( '.wwu-wb-result' );
+			var result = form.querySelector( '.webwakeupwdb-result' );
 			var orderRef = ( form.querySelector( '[name="order_ref"]' ) || {} ).value || '';
 			var email = ( form.querySelector( '[name="email"]' ) || {} ).value || '';
 			var label = btn ? btn.textContent : '';
@@ -151,7 +151,7 @@
 
 			post( 'withdrawal/lookup', { order_ref: orderRef, email: email } ).then( function ( res ) {
 				var url = new URL( window.location.href );
-				url.searchParams.set( 'wwu_wb_order', res.order_ref );
+				url.searchParams.set( 'webwakeupwdb_order', res.order_ref );
 				url.searchParams.set( 'access_token', res.access_token );
 				window.location.assign( url.toString() );
 			} ).catch( function () {
@@ -159,7 +159,7 @@
 				if ( result ) {
 					result.hidden = false;
 					result.textContent = i18n.lookupFailed || 'If those details match an eligible order, you can continue. Please check and try again.';
-					result.className = 'wwu-wb-result is-error';
+					result.className = 'webwakeupwdb-result is-error';
 				}
 				if ( btn ) {
 					btn.disabled = false;
@@ -170,10 +170,10 @@
 	}
 
 	document.addEventListener( 'DOMContentLoaded', function () {
-		var wraps = document.querySelectorAll( '.wwu-wb-form-wrap:not(.wwu-wb-lookup)' );
+		var wraps = document.querySelectorAll( '.webwakeupwdb-form-wrap:not(.webwakeupwdb-lookup)' );
 		Array.prototype.forEach.call( wraps, initForm );
 
-		var lookups = document.querySelectorAll( '.wwu-wb-lookup' );
+		var lookups = document.querySelectorAll( '.webwakeupwdb-lookup' );
 		Array.prototype.forEach.call( lookups, initLookup );
 	} );
 }() );

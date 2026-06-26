@@ -2,7 +2,8 @@
 
 - **Slug:** `wwu-wb` · **Feature:** `legal-documents`
 - **Target version:** `1.3.0` (minor — significant new feature set)
-- **Status:** DRAFT (awaiting user confirmation before implementation)
+- **Status:** CONFIRMED 2026-06-25 — Phase A in progress. Done: `PolicyBuilder` + `PolicyDocument`, `[wwu_wb_policy]` shortcode, auto-page + one-click recreate (form + policy), **freeze-to-static-HTML**, Compliance "Informativa sul diritto di recesso" sub-section (preview + buttons), `policy` smoke suite, theme-inheriting CSS. Pending in A: PDF surface, strengthened-defaults review (clauses already substantive). Phases B (Complianz injection) + C (`wwu-tools/wwu-i18n.php`) next. All 6 open questions resolved (see §12).
+- **Reality note:** the assembler reads the exclusions option as **`wwu_wb_exclusions`** (not `wwu_wb_exemptions`); this SPEC has been corrected. Delivery actions implemented as `admin_post_wwu_wb_recreate_page` (`which=policy|form`) + `admin_post_wwu_wb_freeze_policy` (see §6), not a policy-specific `create_policy_page`.
 - **Author:** Claude (Opus) with Edoardo
 - **Created:** 2026-06-19
 - **Recon sources:** `docs/analysis/wwu-wb-complianz-i18n-law-recon-2026-06-19-ANALYSIS.md` (online: Complianz hook schema, EU/IT law checklist, i18n tooling) + in-session local scan (ClauseLibrary, ExceptionTypes, settings, Install, Shortcodes, PdfBuilder).
@@ -29,7 +30,7 @@ Plus an enabling dev-tool: **`wwu-tools/wwu-i18n.php`**, a reusable, validated t
 
 ### Goals
 - One **dynamic assembler** (`PolicyBuilder`) that is the single source of truth for the consolidated policy, rendered to Page + shortcode/block + PDF.
-- The policy reflects **live settings**: `withdrawal_window_days`, trader info, applicability countries, and the **selected exemptions** (`wwu_wb_exemptions['by_reason']`) rendered with their `legal_ref` + plain-language line.
+- The policy reflects **live settings**: `withdrawal_window_days`, trader info, applicability countries, and the **selected exemptions** (`wwu_wb_exclusions['by_reason']`) rendered with their `legal_ref` + plain-language line.
 - **Opt-in Complianz injection** into `terms-conditions` and `privacy-statement` with independent toggles; inject the merchant's **override** when present, else the strengthened default.
 - **Strengthened defaults** covering the legal checklist, still generic + safe, fully i18n + interpolated.
 - **`wwu-tools/wwu-i18n.php`** robust pipeline (extract / apply / compile / status, with `msgfmt --check` gate) reusable across all WWU plugins.
@@ -66,14 +67,14 @@ PolicyBuilder::build( string $lang, array $opts = [] ): PolicyDocument
 1. **Right & period** — the 14-day (or configured) right, start trigger, no-reason. (`precontractual` clause + `withdrawal_window_days`.)
 2. **How to withdraw (the online button)** — the statutory button modality + the Annex I-B model form + the durable-medium acknowledgement. (`terms` clause + `[wwu_wb_model_form]`.)
 3. **Refund & return of goods** — 14-day refund, same payment method, return window. (Art. 13/14.)
-4. **Exceptions that apply to this shop** — iterates the merchant's selected exemptions from `wwu_wb_exemptions['by_reason']`, rendering for each: `ExceptionTypes::get($id)['label']` + `['legal_ref']` + a plain-language consumer line derived from `['hint']`. Conditional ones note the consent requirement. **If none selected → this section is omitted** (coherence).
+4. **Exceptions that apply to this shop** — iterates the merchant's selected exemptions from `wwu_wb_exclusions['by_reason']`, rendering for each: `ExceptionTypes::get($id)['label']` + `['legal_ref']` + a plain-language consumer line derived from `['hint']`. Conditional ones note the consent requirement. **If none selected → this section is omitted** (coherence).
 5. **Evidence & privacy** — the withdrawal-log + exemption-consent privacy clauses. (`privacy` + `consent_privacy`.)
 6. **Trader identity** — site name / address / `merchant_email` (first address only, via `Sanitizer::first_email`).
 
-The builder reads: `ClauseLibrary::get($type,$lang)` (override-aware), `wwu_wb_settings` (window, trader, send_pdf), `wwu_wb_applicability` (countries), `wwu_wb_exemptions['by_reason']` (selected reasons), `ExceptionTypes::all()` (labels/refs). All text via `__()`.
+The builder reads: `ClauseLibrary::get($type,$lang)` (override-aware), `wwu_wb_settings` (window, trader, send_pdf), `wwu_wb_applicability` (countries), `wwu_wb_exclusions['by_reason']` (selected reasons), `ExceptionTypes::all()` (labels/refs). All text via `__()`.
 
 ### 4.2 Delivery surfaces
-- **Page:** `Install::ensure_policy_page()` (mirrors existing `ensure_form_page()` at `Install.php:326`), `wp_insert_post` with `post_status = 'draft'`, content = the `[wwu_wb_policy]` shortcode (keeps it live), stores `wwu_wb_settings['policy_page_id']`. A new admin action `admin_post_wwu_wb_create_policy_page` (nonce + capability) creates/links it. The page is **never auto-published**; merchant publishes from the normal WP editor or a "Publish" button that flips status with a confirm.
+- **Page:** `Install::ensure_policy_page()` (mirrors `ensure_form_page()`), `wp_insert_post` with `post_status = 'draft'`, content = the `[wwu_wb_policy]` shortcode (keeps it live), stores `wwu_wb_settings['policy_page_id']`; idempotent + self-healing. The generic admin action `admin_post_wwu_wb_recreate_page` with `which=policy` (nonce + capability) creates/links it — the same action serves the form page (`which=form`), so a deleted/trashed page is one click to restore. The page is **never auto-published**; the merchant publishes from the normal WP editor. A **`admin_post_wwu_wb_freeze_policy`** action snapshots the currently-assembled notice into the page as static HTML (then it stops auto-updating until the shortcode is put back).
 - **Shortcode + block:** `[wwu_wb_policy]` registered in `Shortcodes.php` (joins `wwu_wb_button/form/status/model_form/info`). Renders `PolicyBuilder::build(current_lang)->to_html()` wrapped in `.wwu-wb-policy` + a dismissible disclaimer. A thin Gutenberg block (`wwu-wb/policy`) wraps the shortcode (server-rendered).
 - **PDF:** new `templates/pdf/policy-pdf.php` (mirrors `templates/pdf/receipt-pdf.php`, CSS 2.1, DejaVu fonts) rendered by the existing `PdfBuilder::render()`. A "Download policy PDF" button (admin + optional front-end via `?wwu_wb_policy_pdf=1` gated) streams it.
 
@@ -113,7 +114,7 @@ A CLI dispatcher (hard CLI gate, like the other wwu-tools) with subcommands:
 | `policy_pdf_public` | bool | false | Allow front-end policy-PDF download. |
 
 ### 5.2 Reused (read-only by the builder)
-`wwu_wb_clauses` (overrides `[type][lang]`), `wwu_wb_settings.withdrawal_window_days|merchant_email|send_pdf`, `wwu_wb_applicability.mode|custom_countries`, `wwu_wb_exemptions.by_reason` (selected reasons → product/category targeting), `ExceptionTypes::all()` (static registry: id/label/legal_ref/conditional/consent_kind/seal_based/hint).
+`wwu_wb_clauses` (overrides `[type][lang]`), `wwu_wb_settings.withdrawal_window_days|merchant_email|send_pdf`, `wwu_wb_applicability.mode|custom_countries`, `wwu_wb_exclusions.by_reason` (selected reasons → product/category targeting), `ExceptionTypes::all()` (static registry: id/label/legal_ref/conditional/consent_kind/seal_based/hint).
 
 ### 5.3 No new DB tables. No schema migration. The policy is assembled on the fly; only the new option keys persist.
 
@@ -129,7 +130,7 @@ A CLI dispatcher (hard CLI gate, like the other wwu-tools) with subcommands:
   - `wwu_wb_policy_sections( array $sections, string $lang )` — add/remove/reorder sections.
   - `wwu_wb_policy_section_html( string $html, string $section_id, string $lang )`.
   - `wwu_wb_complianz_elements( array $elements, string $type, string $lang )` — last-chance edit before injection.
-- Admin actions: `admin_post_wwu_wb_create_policy_page`, `admin_post_wwu_wb_publish_policy_page`, `admin_post_wwu_wb_policy_pdf` (all nonce + `Authentication::capability()`).
+- Admin actions — **implemented:** `admin_post_wwu_wb_recreate_page` (`which=policy|form`, create/recreate) + `admin_post_wwu_wb_freeze_policy` (snapshot the assembled notice into the page as static HTML). **Planned (PDF phase):** `admin_post_wwu_wb_policy_pdf`. All nonce + `Authentication::capability()`.
 - CLI: `php wwu-tools/wwu-i18n.php <extract|merge|untranslated|apply|compile|status> …`.
 
 ---
@@ -193,6 +194,15 @@ A CLI dispatcher (hard CLI gate, like the other wwu-tools) with subcommands:
 
 ## 12. Open Questions
 
+**RESOLVED 2026-06-25 (confirmed with Edoardo before coding):**
+1. Terms companion → **depend on `complianz-terms-conditions` + guide** (Terms toggle disabled with a notice when the companion is missing); Privacy injection always available.
+2. Policy page content → **store the `[wwu_wb_policy]` shortcode** (always current) + an optional "freeze to static HTML" button.
+3. PDF branding → **plain** (like the receipt), MVP.
+4. Strengthened defaults language → **IT + EN now**, regenerate `.pot`, then DE/FR/ES via the new i18n tool (SV pending Daniel's review).
+5. Document label → **"Informativa sul diritto di recesso"** + a sub-line clarifying it *complements, not replaces*, the Terms / pre-contractual information.
+6. i18n tool → **build `wwu-tools/wwu-i18n.php` WWU-wide now** (Phase C).
+
+Original open questions (kept for the record):
 1. **Terms companion dependency:** ship requiring `complianz-terms-conditions` for Terms injection (cleanest) vs self-register the type via `cmplz_pages_load_types` (more autonomous, more surface). MVP leans "depend + guide"; confirm.
 2. **Policy page content:** store the `[wwu_wb_policy]` shortcode (stays live, re-renders) vs bake the rendered HTML at create time (static snapshot the merchant edits freely). Shortcode = always current; snapshot = merchant control. Recommend **shortcode**, with a "freeze to static" button as an option.
 3. **PDF letterhead/branding:** plain (like the receipt) vs include site logo/colours. MVP plain.

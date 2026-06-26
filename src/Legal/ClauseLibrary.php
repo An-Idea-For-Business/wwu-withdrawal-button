@@ -7,12 +7,12 @@
  * provided in full; other languages fall back to English with a review note.
  * Every clause ends with a reminder to have local counsel review it.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Legal;
+namespace WebWakeUpWdb\WithdrawalButton\Legal;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -26,11 +26,11 @@ final class ClauseLibrary {
 	/**
 	 * Option holding merchant clause overrides, shape `[ type => [ lang => text ] ]`.
 	 * Autoload:no — read only when a clause is rendered (Compliance page or the
-	 * [wwu_wb_info] shortcode). Empty / absent means the built-in template is used.
+	 * [webwakeupwdb_info] shortcode). Empty / absent means the built-in template is used.
 	 *
 	 * @var string
 	 */
-	public const OPTION = 'wwu_wb_clauses';
+	public const OPTION = 'webwakeupwdb_clauses';
 
 	/**
 	 * Clause text keyed by type then language.
@@ -84,7 +84,7 @@ final class ClauseLibrary {
 		// or the [EN] prefix. Still filterable for developers.
 		$override = self::override( $type, $lang );
 		if ( '' !== $override ) {
-			return (string) apply_filters( 'wwu_wb_clause_text', $override, $type, $lang );
+			return (string) apply_filters( 'webwakeupwdb_clause_text', $override, $type, $lang );
 		}
 
 		$set       = self::CLAUSES[ $type ];
@@ -93,7 +93,7 @@ final class ClauseLibrary {
 		/**
 		 * Filter a ready-to-paste legal clause body before the sample-text
 		 * disclaimer is appended. Lets a site replace the default wording with its
-		 * own — applies to both the Compliance admin page and the [wwu_wb_info]
+		 * own — applies to both the Compliance admin page and the [webwakeupwdb_info]
 		 * shortcode output.
 		 *
 		 * @since 1.2.1
@@ -101,7 +101,7 @@ final class ClauseLibrary {
 		 * @param string $type Clause type: precontractual, terms, privacy or consent_privacy.
 		 * @param string $lang Two-letter language code.
 		 */
-		$text      = (string) apply_filters( 'wwu_wb_clause_text', $text, $type, $lang );
+		$text      = (string) apply_filters( 'webwakeupwdb_clause_text', $text, $type, $lang );
 
 		$review    = self::DISCLAIMER[ $lang ] ?? self::DISCLAIMER['en'];
 		$localised = isset( $set[ $lang ] );

@@ -5,12 +5,12 @@
  * Adapters (WooCommerce, FluentCart) normalise their native order into this
  * shape so the Domain layer never touches platform internals.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Platform;
+namespace WebWakeUpWdb\WithdrawalButton\Platform;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -146,7 +146,7 @@ final class NormalizedOrder {
 	 *
 	 * Informational only — WindowCalculator never hides the button on this value;
 	 * integrators with a real delivery date can refine it via the
-	 * `wwu_wb_compute_deadline` filter.
+	 * `webwakeupwdb_compute_deadline` filter.
 	 *
 	 * @return \DateTimeImmutable|null
 	 */

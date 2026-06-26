@@ -15,14 +15,14 @@
  * consumer unsealing after delivery, which cannot be known at order time, so they
  * never auto-hide the button (the merchant assesses on return).
  *
- * Filterable via `wwu_wb_exception_types` so an integrator can extend/override.
+ * Filterable via `webwakeupwdb_exception_types` so an integrator can extend/override.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Domain;
+namespace WebWakeUpWdb\WithdrawalButton\Domain;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -81,7 +81,7 @@ final class ExceptionTypes {
 		 *
 		 * @param array $types Reason id => definition.
 		 */
-		$types = (array) apply_filters( 'wwu_wb_exception_types', $types );
+		$types = (array) apply_filters( 'webwakeupwdb_exception_types', $types );
 
 		// Inject a plain-language input→outcome example per reason (Standard #12),
 		// unless an integrator already supplied one via the filter.

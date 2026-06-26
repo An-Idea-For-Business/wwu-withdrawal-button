@@ -1,17 +1,17 @@
 <?php
 /**
- * GET /wwu-wb/v1/debug/snapshot — Collector snapshot for support tickets / AI agents.
+ * GET /webwakeupwdb/v1/debug/snapshot — Collector snapshot for support tickets / AI agents.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\REST\Routes;
+namespace WebWakeUpWdb\WithdrawalButton\REST\Routes;
 
-use WWU\WithdrawalButton\Debug\Debug;
-use WWU\WithdrawalButton\Debug\Collector;
-use WWU\WithdrawalButton\REST\Authentication;
+use WebWakeUpWdb\WithdrawalButton\Debug\Debug;
+use WebWakeUpWdb\WithdrawalButton\Debug\Collector;
+use WebWakeUpWdb\WithdrawalButton\REST\Authentication;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -29,7 +29,7 @@ final class DebugRoute extends AbstractRoute {
 	 */
 	public function register(): void {
 		register_rest_route(
-			WWU_WB_REST_NAMESPACE,
+			WEBWAKEUPWDB_REST_NAMESPACE,
 			'/debug/snapshot',
 			array(
 				'methods'             => 'GET',

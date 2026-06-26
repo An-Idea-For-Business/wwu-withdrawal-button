@@ -2,27 +2,27 @@
 /**
  * Sends the durable-medium acknowledgement of receipt on withdrawal confirmation.
  *
- * Listens on wwu_wb_withdrawal_confirmed and, "without undue delay" (synchronously
+ * Listens on webwakeupwdb_withdrawal_confirmed and, "without undue delay" (synchronously
  * on the request), renders the receipt (email HTML + PDF), stores the PDF, mints
  * the verifiable link, emails the consumer and notifies the merchant, then logs
  * the receipt_sent event. All rendering is locale-switched to the consumer's
  * language so the receipt is in the language they bought in.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\DurableMedium;
+namespace WebWakeUpWdb\WithdrawalButton\DurableMedium;
 
-use WWU\WithdrawalButton\Core\Services;
-use WWU\WithdrawalButton\Domain\WithdrawalRequest;
-use WWU\WithdrawalButton\Frontend\Template;
-use WWU\WithdrawalButton\Mail\Mailer;
-use WWU\WithdrawalButton\Platform\NormalizedOrder;
-use WWU\WithdrawalButton\Platform\OrderDataSource;
-use WWU\WithdrawalButton\Storage\LogRepository;
-use WWU\WithdrawalButton\Debug\Debug;
+use WebWakeUpWdb\WithdrawalButton\Core\Services;
+use WebWakeUpWdb\WithdrawalButton\Domain\WithdrawalRequest;
+use WebWakeUpWdb\WithdrawalButton\Frontend\Template;
+use WebWakeUpWdb\WithdrawalButton\Mail\Mailer;
+use WebWakeUpWdb\WithdrawalButton\Platform\NormalizedOrder;
+use WebWakeUpWdb\WithdrawalButton\Platform\OrderDataSource;
+use WebWakeUpWdb\WithdrawalButton\Storage\LogRepository;
+use WebWakeUpWdb\WithdrawalButton\Debug\Debug;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -39,7 +39,7 @@ final class ConfirmationDispatcher {
 	 * @return void
 	 */
 	public function register(): void {
-		add_action( 'wwu_wb_withdrawal_confirmed', array( $this, 'dispatch' ), 10, 5 );
+		add_action( 'webwakeupwdb_withdrawal_confirmed', array( $this, 'dispatch' ), 10, 5 );
 	}
 
 	/**
@@ -53,7 +53,7 @@ final class ConfirmationDispatcher {
 	 * @return bool True if the consumer acknowledgement was handed to the mailer.
 	 */
 	public function dispatch( string $request_uid, NormalizedOrder $order, WithdrawalRequest $req, int $log_id, OrderDataSource $adapter ): bool {
-		$settings = (array) get_option( 'wwu_wb_settings', array() );
+		$settings = (array) get_option( 'webwakeupwdb_settings', array() );
 
 		$log_repo = new LogRepository();
 		$log_row  = $log_repo->find( $request_uid, 'confirmed' ) ?? array();
@@ -107,7 +107,7 @@ final class ConfirmationDispatcher {
 		 * @param array $data  Receipt data.
 		 */
 		$email = (array) apply_filters(
-			'wwu_wb_email_content',
+			'webwakeupwdb_email_content',
 			array(
 				'to'          => $req->email,
 				'subject'     => $subject,
@@ -130,7 +130,7 @@ final class ConfirmationDispatcher {
 		if ( 'woocommerce' === $order->platform && function_exists( 'WC' ) && WC() && method_exists( WC(), 'mailer' ) ) {
 			try {
 				$wc_emails = WC()->mailer()->get_emails();
-				$key       = \WWU\WithdrawalButton\Mail\WooAckEmail::CLASS_KEY;
+				$key       = \WebWakeUpWdb\WithdrawalButton\Mail\WooAckEmail::CLASS_KEY;
 				if ( isset( $wc_emails[ $key ] ) && method_exists( $wc_emails[ $key ], 'trigger' ) ) {
 					$sent = (bool) $wc_emails[ $key ]->trigger( $data, (string) $email['to'], (array) $email['attachments'] );
 				}
@@ -160,7 +160,7 @@ final class ConfirmationDispatcher {
 			// the captured SMTP/transport reason, not a generic "email failed".
 			$reason = '' !== $fail_reason ? $fail_reason : 'The mail transport reported no specific error (check the SMTP plugin + PHP error log).';
 			Debug::error( 'durable_medium', 'receipt.email_failed', array( 'request_uid' => $request_uid, 'reason' => $reason ) );
-			set_transient( 'wwu_wb_mail_failed', array( 'uid' => $request_uid, 'reason' => $reason ), WEEK_IN_SECONDS );
+			set_transient( 'webwakeupwdb_mail_failed', array( 'uid' => $request_uid, 'reason' => $reason ), WEEK_IN_SECONDS );
 			$log_repo->append(
 				array(
 					'request_uid'    => $request_uid,
@@ -216,7 +216,7 @@ final class ConfirmationDispatcher {
 		 * @param string $channel     'email' or 'email+pdf'.
 		 * @param array  $data        Receipt data.
 		 */
-		do_action( 'wwu_wb_receipt_sent', $request_uid, '' !== $pdf_path ? 'email+pdf' : 'email', $data );
+		do_action( 'webwakeupwdb_receipt_sent', $request_uid, '' !== $pdf_path ? 'email+pdf' : 'email', $data );
 
 		return $sent;
 	}

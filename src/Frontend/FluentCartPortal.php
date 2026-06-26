@@ -24,19 +24,19 @@
  * used (`fluent_cart/email_notification_merge_tags`) does not exist in the official
  * docs, and `fluent_cart/editor_shortcodes` only populates the editor picker with
  * no documented value-resolver — so a tag would render literally in sent mail.
- * The standalone `[wwu_wb_form]` page stays available as a universal fallback.
+ * The standalone `[webwakeupwdb_form]` page stays available as a universal fallback.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Frontend;
+namespace WebWakeUpWdb\WithdrawalButton\Frontend;
 
-use WWU\WithdrawalButton\Core\Services;
-use WWU\WithdrawalButton\Core\Settings;
-use WWU\WithdrawalButton\Frontend\ExemptionNoteRenderer;
-use WWU\WithdrawalButton\Platform\NormalizedOrder;
+use WebWakeUpWdb\WithdrawalButton\Core\Services;
+use WebWakeUpWdb\WithdrawalButton\Core\Settings;
+use WebWakeUpWdb\WithdrawalButton\Frontend\ExemptionNoteRenderer;
+use WebWakeUpWdb\WithdrawalButton\Platform\NormalizedOrder;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -74,7 +74,7 @@ final class FluentCartPortal {
 
 		// The portal page renders our CSS/JS-dependent chooser; force the bundle to
 		// load on it (the standard context gate cannot see the FluentCart portal).
-		add_filter( 'wwu_wb_force_enqueue_frontend', array( $this, 'maybe_enqueue_on_portal' ), 10, 1 );
+		add_filter( 'webwakeupwdb_force_enqueue_frontend', array( $this, 'maybe_enqueue_on_portal' ), 10, 1 );
 	}
 
 	/**
@@ -112,12 +112,12 @@ final class FluentCartPortal {
 	public function render_endpoint( ...$args ): void {
 		( new Assets() )->ensure();
 
-		$heading = '<h2 class="wwu-wb-portal__title">' . esc_html__( 'Right of withdrawal', 'wwu-withdrawal-button' ) . '</h2>';
+		$heading = '<h2 class="webwakeupwdb-portal__title">' . esc_html__( 'Right of withdrawal', 'wwu-withdrawal-button' ) . '</h2>';
 		$chooser = EligibleOrders::render_for_user( get_current_user_id() );
 
 		// FluentCart ECHOES the endpoint output (its return value is ignored), so we
 		// echo. The heading is escaped above; EligibleOrders escapes its own output.
-		echo '<div class="wwu-wb-portal">' . $heading . $chooser . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- heading escaped above; chooser escapes internally.
+		echo '<div class="webwakeupwdb-portal">' . $heading . $chooser . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- heading escaped above; chooser escapes internally.
 	}
 
 	/**
@@ -168,9 +168,9 @@ final class FluentCartPortal {
 		$text = esc_html__( 'Changed your mind? You can exercise your right of withdrawal on eligible orders.', 'wwu-withdrawal-button' );
 		$cta  = esc_html__( 'Open the withdrawal page', 'wwu-withdrawal-button' );
 
-		$banner  = '<div class="wwu-wb-portal-banner">';
+		$banner  = '<div class="webwakeupwdb-portal-banner">';
 		$banner .= '<p>' . $text . ' ';
-		$banner .= '<a class="wwu-wb-portal-banner__link" href="' . esc_url( $url ) . '">' . $cta . '</a></p>';
+		$banner .= '<a class="webwakeupwdb-portal-banner__link" href="' . esc_url( $url ) . '">' . $cta . '</a></p>';
 		$banner .= '</div>';
 
 		if ( ! isset( $data['sections_parts'] ) || ! is_array( $data['sections_parts'] ) ) {
@@ -194,7 +194,7 @@ final class FluentCartPortal {
 
 		// FluentCart handling can be off, or auto-deferred to FluentCart's own
 		// withdrawal add-on — then render no portal button (avoid a duplicate).
-		if ( ! \WWU\WithdrawalButton\Platform\FluentCartAdapter::should_render() ) {
+		if ( ! \WebWakeUpWdb\WithdrawalButton\Platform\FluentCartAdapter::should_render() ) {
 			return $sections;
 		}
 
@@ -216,7 +216,7 @@ final class FluentCartPortal {
 		// status instead of the button — never offer to withdraw a second time.
 		$status_label = EligibleOrders::request_status_label( $adapter, $order->order_ref );
 		if ( '' !== $status_label ) {
-			$notice = '<p class="wwu-wb-status-notice">' . esc_html( $status_label ) . '</p>';
+			$notice = '<p class="webwakeupwdb-status-notice">' . esc_html( $status_label ) . '</p>';
 			$sections['after_summary'] = ( $sections['after_summary'] ?? '' ) . $notice;
 			return $sections;
 		}
@@ -287,7 +287,7 @@ final class FluentCartPortal {
 
 		$url = $this->standalone_page_url();
 		$url = '' !== $url
-			? add_query_arg( 'wwu_wb_order', rawurlencode( $order->order_ref ), $url )
+			? add_query_arg( 'webwakeupwdb_order', rawurlencode( $order->order_ref ), $url )
 			: '#';
 
 		return Template::render(
@@ -334,7 +334,7 @@ final class FluentCartPortal {
 	 * @return string
 	 */
 	private function standalone_page_url(): string {
-		$settings = (array) get_option( 'wwu_wb_settings', array() );
+		$settings = (array) get_option( 'webwakeupwdb_settings', array() );
 		$page_id  = (int) ( $settings['public_form_page_id'] ?? 0 );
 		if ( $page_id <= 0 ) {
 			return '';

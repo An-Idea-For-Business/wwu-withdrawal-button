@@ -6,7 +6,7 @@
  * WC_Email so it appears under WooCommerce → Settings → Emails, inherits the
  * store's email branding (logo, base colour, header/footer) and is customisable
  * (subject, heading, additional content, email type) and template-overridable in
- * the theme (woocommerce/emails/wwu-wb-withdrawal-ack.php).
+ * the theme (woocommerce/emails/webwakeupwdb-withdrawal-ack.php).
  *
  * COMPLIANCE NOTE — the acknowledgement is legally MANDATORY. The WooCommerce
  * enable/disable toggle here only controls whether this *branded* version is used:
@@ -22,12 +22,12 @@
  * is therefore only ever autoloaded from inside the woocommerce_email_classes
  * filter callback (which fires after WooCommerce init) — never at plugin boot.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Mail;
+namespace WebWakeUpWdb\WithdrawalButton\Mail;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -47,7 +47,7 @@ class WooAckEmail extends \WC_Email {
 	 *
 	 * @var string
 	 */
-	public const CLASS_KEY = 'WWU_WB_Withdrawal_Ack';
+	public const CLASS_KEY = 'WEBWAKEUPWDB_Withdrawal_Ack';
 
 	/**
 	 * Receipt data for the current send (set by trigger()).
@@ -60,14 +60,14 @@ class WooAckEmail extends \WC_Email {
 	 * Constructor — declare the email's identity before parent setup.
 	 */
 	public function __construct() {
-		$this->id             = 'wwu_wb_withdrawal_ack';
+		$this->id             = 'webwakeupwdb_withdrawal_ack';
 		$this->customer_email = true;
 		$this->title          = __( 'Withdrawal acknowledgement', 'wwu-withdrawal-button' );
 		$this->description    = __( 'Acknowledgement of receipt sent to the consumer when they withdraw from a contract. This email is legally required (Art. 11a / Art. 54-bis); disabling it here only reverts to a plain built-in template — the acknowledgement is still sent.', 'wwu-withdrawal-button' );
 
-		$this->template_html  = 'emails/wwu-wb-withdrawal-ack.php';
-		$this->template_plain = 'emails/plain/wwu-wb-withdrawal-ack.php';
-		$this->template_base  = WWU_WB_PATH . '/templates/';
+		$this->template_html  = 'emails/webwakeupwdb-withdrawal-ack.php';
+		$this->template_plain = 'emails/plain/webwakeupwdb-withdrawal-ack.php';
+		$this->template_base  = WEBWAKEUPWDB_PATH . '/templates/';
 
 		$this->placeholders = array(
 			'{order_number}' => '',

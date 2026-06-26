@@ -17,16 +17,16 @@
  * request_processed event exists, else `open`. This mirrors the precedence the
  * admin Requests dashboard shows (refunded > processed > open).
  *
- * @see \WWU\WithdrawalButton\Storage\LogRepository
- * @see \WWU\WithdrawalButton\Admin\RequestsDashboard
- * @package WWU\WithdrawalButton
+ * @see \WebWakeUpWdb\WithdrawalButton\Storage\LogRepository
+ * @see \WebWakeUpWdb\WithdrawalButton\Admin\RequestsDashboard
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Api;
+namespace WebWakeUpWdb\WithdrawalButton\Api;
 
-use WWU\WithdrawalButton\Storage\Database\LogTable;
+use WebWakeUpWdb\WithdrawalButton\Storage\Database\LogTable;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

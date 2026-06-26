@@ -5,12 +5,12 @@
  * The raw IP is intentionally captured: Art. 54-bis requires the log to record
  * "data, ora, IP e dati contratto" as evidence (GDPR Art. 6(1)(c)/(f) basis).
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Security;
+namespace WebWakeUpWdb\WithdrawalButton\Security;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -40,7 +40,7 @@ final class ClientInfo {
 		 *
 		 * @param string $raw The REMOTE_ADDR value.
 		 */
-		$raw = (string) apply_filters( 'wwu_wb_client_ip', $raw );
+		$raw = (string) apply_filters( 'webwakeupwdb_client_ip', $raw );
 		$ip  = filter_var( $raw, FILTER_VALIDATE_IP );
 		return $ip ? $ip : '';
 	}

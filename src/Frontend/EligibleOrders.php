@@ -6,21 +6,21 @@
  *
  * Shared by the WooCommerce My Account "Right of withdrawal" tab (WooMyAccount),
  * the FluentCart customer-portal endpoint (FluentCartPortal) and the public
- * [wwu_wb_form] page when opened without a specific order, so every surface
+ * [webwakeupwdb_form] page when opened without a specific order, so every surface
  * presents the customer with something actionable instead of an empty page.
  * Platform-agnostic: it merges the customer's WooCommerce and FluentCart orders,
  * each source guarded so an inactive platform simply contributes nothing.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Frontend;
+namespace WebWakeUpWdb\WithdrawalButton\Frontend;
 
-use WWU\WithdrawalButton\Core\Services;
-use WWU\WithdrawalButton\Core\Settings;
-use WWU\WithdrawalButton\Platform\OrderDataSource;
+use WebWakeUpWdb\WithdrawalButton\Core\Services;
+use WebWakeUpWdb\WithdrawalButton\Core\Settings;
+use WebWakeUpWdb\WithdrawalButton\Platform\OrderDataSource;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -86,10 +86,10 @@ final class EligibleOrders {
 			)
 		);
 
-		// Opt-in admin diagnostic (?wwu_wb_diag=1): explains, per FluentCart order,
+		// Opt-in admin diagnostic (?webwakeupwdb_diag=1): explains, per FluentCart order,
 		// what was found and why it is shown/hidden. Admin-only, read-only, never
 		// rendered for customers. Use it on the standalone public form page.
-		if ( isset( $_GET['wwu_wb_diag'] ) && current_user_can( 'manage_options' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only admin diagnostic, no state change.
+		if ( isset( $_GET['webwakeupwdb_diag'] ) && current_user_can( 'manage_options' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only admin diagnostic, no state change.
 			$html .= self::render_diagnostic( $user_id );
 		}
 
@@ -135,7 +135,7 @@ final class EligibleOrders {
 						$orders   = $order_model::where( 'customer_id', $customer->id )->orderBy( 'created_at', 'desc' )->take( self::SCAN_LIMIT )->get();
 						$count    = is_countable( $orders ) ? count( $orders ) : 0;
 						$lines[]  = 'FluentCart orders for customer: ' . $count;
-						$orders   = \WWU\WithdrawalButton\Platform\FluentCartAdapter::unwrap_collection( $orders );
+						$orders   = \WebWakeUpWdb\WithdrawalButton\Platform\FluentCartAdapter::unwrap_collection( $orders );
 						$services = Services::instance();
 						foreach ( $orders as $fc ) {
 							$ref = isset( $fc->id ) ? (string) $fc->id : '';
@@ -164,7 +164,7 @@ final class EligibleOrders {
 		}
 
 		$body = esc_html( implode( "\n", $lines ) );
-		return '<pre class="wwu-wb-diag" style="margin-top:24px;padding:12px;border:1px solid #ccd0d4;background:#fff;color:#1d2327;font:12px/1.5 monospace;white-space:pre-wrap;overflow:auto;">'
+		return '<pre class="webwakeupwdb-diag" style="margin-top:24px;padding:12px;border:1px solid #ccd0d4;background:#fff;color:#1d2327;font:12px/1.5 monospace;white-space:pre-wrap;overflow:auto;">'
 			. "WWU Withdrawal — diagnostic (admin only)\n" . $body . '</pre>';
 	}
 
@@ -180,7 +180,7 @@ final class EligibleOrders {
 		}
 		// Respect the FluentCart handling mode (off / auto-defer to a native add-on):
 		// list no FluentCart orders on the public form when our handling is suppressed.
-		if ( ! \WWU\WithdrawalButton\Platform\FluentCartAdapter::should_render() ) {
+		if ( ! \WebWakeUpWdb\WithdrawalButton\Platform\FluentCartAdapter::should_render() ) {
 			return array();
 		}
 		$adapter = Services::instance()->platforms->get( 'fluentcart' );
@@ -219,7 +219,7 @@ final class EligibleOrders {
 		// Unwrap the Eloquent collection to its models. Casting a collection with
 		// (array) iterates the collection object's INTERNALS, not the orders — the
 		// bug that produced empty refs and hid every FluentCart order.
-		$orders = \WWU\WithdrawalButton\Platform\FluentCartAdapter::unwrap_collection( $orders );
+		$orders = \WebWakeUpWdb\WithdrawalButton\Platform\FluentCartAdapter::unwrap_collection( $orders );
 
 		$services = Services::instance();
 		$enabled  = Settings::enabled();
@@ -334,12 +334,12 @@ final class EligibleOrders {
 	 * @return string
 	 */
 	private static function fluentcart_form_url( string $order_ref ): string {
-		$settings = (array) get_option( 'wwu_wb_settings', array() );
+		$settings = (array) get_option( 'webwakeupwdb_settings', array() );
 		$page_id  = (int) ( $settings['public_form_page_id'] ?? 0 );
 		if ( $page_id > 0 ) {
 			$permalink = get_permalink( $page_id );
 			if ( is_string( $permalink ) && '' !== $permalink ) {
-				return add_query_arg( 'wwu_wb_order', rawurlencode( $order_ref ), $permalink );
+				return add_query_arg( 'webwakeupwdb_order', rawurlencode( $order_ref ), $permalink );
 			}
 		}
 		return self::form_url( $order_ref );

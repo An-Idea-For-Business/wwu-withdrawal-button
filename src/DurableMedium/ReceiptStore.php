@@ -6,12 +6,12 @@
  * through the token-gated REST endpoint. Filenames use the request UUID, which is
  * unguessable.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\DurableMedium;
+namespace WebWakeUpWdb\WithdrawalButton\DurableMedium;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -29,7 +29,7 @@ final class ReceiptStore {
 	 */
 	private function base_dir(): string {
 		$uploads = wp_upload_dir();
-		return trailingslashit( $uploads['basedir'] ) . 'wwu-wb/receipts';
+		return trailingslashit( $uploads['basedir'] ) . 'webwakeupwdb/receipts';
 	}
 
 	/**

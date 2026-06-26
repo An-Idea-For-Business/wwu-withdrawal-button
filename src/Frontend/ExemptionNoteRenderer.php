@@ -11,17 +11,17 @@
  *       `$decision->reason === 'no_withdrawal_right'` — callers are responsible for
  *       enforcing both conditions before delegating here.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Frontend;
+namespace WebWakeUpWdb\WithdrawalButton\Frontend;
 
-use WWU\WithdrawalButton\Core\Settings;
-use WWU\WithdrawalButton\Domain\ExceptionTypes;
-use WWU\WithdrawalButton\Domain\ExemptionResolver;
-use WWU\WithdrawalButton\Platform\NormalizedOrder;
+use WebWakeUpWdb\WithdrawalButton\Core\Settings;
+use WebWakeUpWdb\WithdrawalButton\Domain\ExceptionTypes;
+use WebWakeUpWdb\WithdrawalButton\Domain\ExemptionResolver;
+use WebWakeUpWdb\WithdrawalButton\Platform\NormalizedOrder;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -84,7 +84,7 @@ final class ExemptionNoteRenderer {
 		$settings             = Settings::main();
 		$custom_note          = isset( $settings['custom_exemption_note'] ) ? (string) $settings['custom_exemption_note'] : '';
 		if ( '' !== $custom_note ) {
-			$html = '<div class="wwu-wb-exempt-note">' . wp_kses_post( $custom_note ) . '</div>';
+			$html = '<div class="webwakeupwdb-exempt-note">' . wp_kses_post( $custom_note ) . '</div>';
 			/**
 			 * Filters the exemption transparency note HTML.
 			 *
@@ -92,7 +92,7 @@ final class ExemptionNoteRenderer {
 			 * @param string[]        $reason_ids Matched Art. 59 reason ids.
 			 * @param NormalizedOrder $order      The exempt order.
 			 */
-			return (string) apply_filters( 'wwu_wb_exemption_note_text', $html, $reason_ids, $order );
+			return (string) apply_filters( 'webwakeupwdb_exemption_note_text', $html, $reason_ids, $order );
 		}
 
 		/*
@@ -144,9 +144,9 @@ final class ExemptionNoteRenderer {
 			);
 		}
 
-		$html = '<div class="wwu-wb-exempt-note"><p>' . $inner . '</p></div>';
+		$html = '<div class="webwakeupwdb-exempt-note"><p>' . $inner . '</p></div>';
 
 		/** This filter is documented above in the custom-note branch. */
-		return (string) apply_filters( 'wwu_wb_exemption_note_text', $html, $reason_ids, $order );
+		return (string) apply_filters( 'webwakeupwdb_exemption_note_text', $html, $reason_ids, $order );
 	}
 }

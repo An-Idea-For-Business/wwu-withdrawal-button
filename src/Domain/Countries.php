@@ -3,12 +3,12 @@
  * Country sets for applicability (Rome I Art. 6 — the obligation follows the
  * consumer's country, not the trader's).
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Domain;
+namespace WebWakeUpWdb\WithdrawalButton\Domain;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -68,7 +68,7 @@ final class Countries {
 		 *
 		 * @param string[] $countries Uppercase ISO-3166 alpha-2 codes.
 		 */
-		$countries = (array) apply_filters( 'wwu_wb_in_scope_countries', $countries );
+		$countries = (array) apply_filters( 'webwakeupwdb_in_scope_countries', $countries );
 		return array_values( array_unique( array_map( 'strtoupper', $countries ) ) );
 	}
 

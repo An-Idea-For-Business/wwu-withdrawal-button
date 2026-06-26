@@ -2,13 +2,13 @@
 /**
  * WooCommerce-wrapped acknowledgement-of-receipt email (plain text).
  *
- * Override in a theme at: woocommerce/emails/plain/wwu-wb-withdrawal-ack.php
+ * Override in a theme at: woocommerce/emails/plain/webwakeupwdb-withdrawal-ack.php
  *
  * @var array  $data               Receipt data.
  * @var string $email_heading      Email heading.
  * @var string $additional_content Merchant's additional content.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );

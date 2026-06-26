@@ -1,12 +1,12 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "wwu-wb/withdrawal-form",
+	"name": "webwakeupwdb/withdrawal-form",
 	"version": "1.0.0",
 	"title": "Withdrawal — self-service",
 	"category": "widgets",
 	"icon": "undo",
-	"description": "Lets a logged-in customer pick an eligible order and withdraw from it, or shows the two-step withdrawal form for a specific order. Server-rendered with the same applicability and ownership checks as the [wwu_wb_form] shortcode.",
+	"description": "Lets a logged-in customer pick an eligible order and withdraw from it, or shows the two-step withdrawal form for a specific order. Server-rendered with the same applicability and ownership checks as the [webwakeupwdb_form] shortcode.",
 	"keywords": [ "withdrawal", "recesso", "refund", "right of withdrawal", "woocommerce" ],
 	"textdomain": "wwu-withdrawal-button",
 	"supports": {

@@ -10,12 +10,12 @@
  * Note: WC_Order::get_status() returns the slug WITHOUT the 'wc-' prefix, so
  * the unprefixed form 'wb-requested' is what comparisons see.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Platform\WooCommerce;
+namespace WebWakeUpWdb\WithdrawalButton\Platform\WooCommerce;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -45,7 +45,7 @@ final class OrderStatus {
 	 *
 	 * @var string
 	 */
-	private const BULK_ACTION = 'wwu_wb_mark_requested';
+	private const BULK_ACTION = 'webwakeupwdb_mark_requested';
 
 	/**
 	 * Wire all hooks.
@@ -143,6 +143,6 @@ final class OrderStatus {
 				++$changed;
 			}
 		}
-		return add_query_arg( 'wwu_wb_marked', $changed, $redirect );
+		return add_query_arg( 'webwakeupwdb_marked', $changed, $redirect );
 	}
 }

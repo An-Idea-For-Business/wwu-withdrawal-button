@@ -3,7 +3,7 @@
  * Plugin Name:          WWU Right of Withdrawal for Popular Ecommerce Platforms
  * Plugin URI:           https://webwakeup.it/wwu-withdrawal-button/
  * Description:          EU online right-of-withdrawal function ("withdrawal button", Art. 11a Dir. 2011/83/EU as amended by Dir. (EU) 2023/2673; Italy: Art. 54-bis Codice del Consumo). Adds the legally-mandated, statutory-labelled two-step withdrawal flow, durable-medium acknowledgement (email + PDF + verifiable link) and a tamper-evident immutable log to WooCommerce, FluentCart & Easy Digital Downloads. Applies from 19 June 2026.
- * Version:              1.2.13
+ * Version:              1.3.1
  * Requires at least:    5.8
  * Requires PHP:         8.1
  * Author:               mredodos, Matteo Alfieri (An Idea for Business), WebWakeUp
@@ -20,7 +20,7 @@
  * Software Foundation, either version 3 of the License, or (at your option) any
  * later version.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Double-load guard: never define the plugin twice (e.g. plugin + mu-plugin copy).
-if ( defined( 'WWU_WB_VERSION' ) ) {
+if ( defined( 'WEBWAKEUPWDB_VERSION' ) ) {
 	return;
 }
 
@@ -40,47 +40,47 @@ if ( defined( 'WWU_WB_VERSION' ) ) {
  * Constants
  * ---------------------------------------------------------------------------
  */
-define( 'WWU_WB_VERSION', '1.2.13' );
-define( 'WWU_WB_MIN_PHP', '8.1' );
-define( 'WWU_WB_MIN_WP', '5.8' );
-define( 'WWU_WB_PLUGIN_FILE', __FILE__ );
-define( 'WWU_WB_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
-define( 'WWU_WB_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
-define( 'WWU_WB_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
-define( 'WWU_WB_SLUG', 'wwu-withdrawal-button' );
-define( 'WWU_WB_TEXT_DOMAIN', 'wwu-withdrawal-button' );
-define( 'WWU_WB_OPTION_PREFIX', 'wwu_wb_' );
-define( 'WWU_WB_META_PREFIX', '_wwu_wb_' );
-define( 'WWU_WB_REST_NAMESPACE', 'wwu-wb/v1' );
-define( 'WWU_WB_NONCE_ACTION', 'wwu_wb_nonce' );
+define( 'WEBWAKEUPWDB_VERSION', '1.3.1' );
+define( 'WEBWAKEUPWDB_MIN_PHP', '8.1' );
+define( 'WEBWAKEUPWDB_MIN_WP', '5.8' );
+define( 'WEBWAKEUPWDB_PLUGIN_FILE', __FILE__ );
+define( 'WEBWAKEUPWDB_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+define( 'WEBWAKEUPWDB_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
+define( 'WEBWAKEUPWDB_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
+define( 'WEBWAKEUPWDB_SLUG', 'wwu-withdrawal-button' );
+define( 'WEBWAKEUPWDB_TEXT_DOMAIN', 'wwu-withdrawal-button' );
+define( 'WEBWAKEUPWDB_OPTION_PREFIX', 'webwakeupwdb_' );
+define( 'WEBWAKEUPWDB_META_PREFIX', '_webwakeupwdb_' );
+define( 'WEBWAKEUPWDB_REST_NAMESPACE', 'webwakeupwdb/v1' );
+define( 'WEBWAKEUPWDB_NONCE_ACTION', 'webwakeupwdb_nonce' );
 
 /**
  * Database schema version.
  *
  * Bump this integer whenever a new numbered migration is added under
  * src/Storage/Database/Migrations/. The Migrator runs every migration whose
- * number is greater than the stored wwu_wb_db_version option.
+ * number is greater than the stored webwakeupwdb_db_version option.
  */
-define( 'WWU_WB_SCHEMA_VERSION', 3 );
+define( 'WEBWAKEUPWDB_SCHEMA_VERSION', 5 );
 
 /**
  * Legal application ("go-live") date for the EU/IT market.
  *
  * The obligation applies to distance contracts concluded on or after this date.
  * Exposed as a constant so the value is auditable in one place; the merchant can
- * still override it from the settings (wwu_wb_settings['go_live_date']).
+ * still override it from the settings (webwakeupwdb_settings['go_live_date']).
  *
- * @see docs/legal/wwu-wb-legal-reference.md
+ * @see docs/legal/webwakeupwdb-legal-reference.md
  */
-define( 'WWU_WB_GO_LIVE_DATE', '2026-06-19' );
+define( 'WEBWAKEUPWDB_GO_LIVE_DATE', '2026-06-19' );
 
 /*
  * ---------------------------------------------------------------------------
  * Autoloader (PSR-4, no Composer runtime dependency)
  * ---------------------------------------------------------------------------
  */
-require_once WWU_WB_PATH . '/src/Autoloader.php';
-\WWU\WithdrawalButton\Autoloader::register();
+require_once WEBWAKEUPWDB_PATH . '/src/Autoloader.php';
+\WebWakeUpWdb\WithdrawalButton\Autoloader::register();
 
 /*
  * ---------------------------------------------------------------------------
@@ -102,7 +102,7 @@ add_action(
 		if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
 			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility(
 				'custom_order_tables',
-				WWU_WB_PLUGIN_FILE,
+				WEBWAKEUPWDB_PLUGIN_FILE,
 				true
 			);
 		}
@@ -117,14 +117,14 @@ add_action(
 register_activation_hook(
 	__FILE__,
 	static function ( $network_wide = false ) {
-		\WWU\WithdrawalButton\Core\Install::activate( (bool) $network_wide );
+		\WebWakeUpWdb\WithdrawalButton\Core\Install::activate( (bool) $network_wide );
 	}
 );
 
 register_deactivation_hook(
 	__FILE__,
 	static function ( $network_wide = false ) {
-		\WWU\WithdrawalButton\Core\Install::deactivate( (bool) $network_wide );
+		\WebWakeUpWdb\WithdrawalButton\Core\Install::deactivate( (bool) $network_wide );
 	}
 );
 
@@ -137,7 +137,7 @@ add_action(
 	'plugins_loaded',
 	static function () {
 		// Environment guard: deactivate gracefully if PHP/WP are too old.
-		if ( version_compare( PHP_VERSION, WWU_WB_MIN_PHP, '<' ) ) {
+		if ( version_compare( PHP_VERSION, WEBWAKEUPWDB_MIN_PHP, '<' ) ) {
 			add_action(
 				'admin_notices',
 				static function () {
@@ -146,7 +146,7 @@ add_action(
 						sprintf(
 							/* translators: 1: required PHP version, 2: current PHP version. */
 							__( 'WWU Withdrawal Button requires PHP %1$s or higher. You are running PHP %2$s.', 'wwu-withdrawal-button' ),
-							WWU_WB_MIN_PHP,
+							WEBWAKEUPWDB_MIN_PHP,
 							PHP_VERSION
 						)
 					);
@@ -156,11 +156,11 @@ add_action(
 			return;
 		}
 
-		\WWU\WithdrawalButton\Core\Plugin::instance()->boot();
+		\WebWakeUpWdb\WithdrawalButton\Core\Plugin::instance()->boot();
 
 			// One-time rewrite-rules flush after activation, once the My Account
 			// endpoint has been registered on init. See Install::maybe_deferred_flush.
-			add_action( 'wp_loaded', array( \WWU\WithdrawalButton\Core\Install::class, 'maybe_deferred_flush' ) );
+			add_action( 'wp_loaded', array( \WebWakeUpWdb\WithdrawalButton\Core\Install::class, 'maybe_deferred_flush' ) );
 	},
 	5
 );

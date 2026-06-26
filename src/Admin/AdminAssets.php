@@ -6,12 +6,12 @@
  * own admin pages, and localises the REST base + nonce. The WWU UI Kit is
  * enqueued via its loader when present (copied into assets/ui-kit/ during build).
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Admin;
+namespace WebWakeUpWdb\WithdrawalButton\Admin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -38,32 +38,32 @@ final class AdminAssets {
 	 * @return void
 	 */
 	public function enqueue( string $hook ): void {
-		if ( false === strpos( $hook, 'wwu-wb' ) && false === strpos( $hook, 'wwu-withdrawal-button' ) ) {
+		if ( false === strpos( $hook, 'webwakeupwdb' ) && false === strpos( $hook, 'wwu-withdrawal-button' ) ) {
 			return;
 		}
 
 		$this->maybe_enqueue_ui_kit();
 
 		wp_enqueue_style(
-			'wwu-wb-admin',
-			WWU_WB_URL . '/assets/admin/admin.css',
+			'webwakeupwdb-admin',
+			WEBWAKEUPWDB_URL . '/assets/admin/admin.css',
 			array(),
-			WWU_WB_VERSION
+			WEBWAKEUPWDB_VERSION
 		);
 
 		wp_enqueue_script(
-			'wwu-wb-inspector',
-			WWU_WB_URL . '/assets/admin/inspector.js',
+			'webwakeupwdb-inspector',
+			WEBWAKEUPWDB_URL . '/assets/admin/inspector.js',
 			array(),
-			WWU_WB_VERSION,
+			WEBWAKEUPWDB_VERSION,
 			true
 		);
 
 		wp_localize_script(
-			'wwu-wb-inspector',
-			'wwuWbData',
+			'webwakeupwdb-inspector',
+			'webwakeupwdbData',
 			array(
-				'restUrl'   => esc_url_raw( rest_url( WWU_WB_REST_NAMESPACE . '/' ) ),
+				'restUrl'   => esc_url_raw( rest_url( WEBWAKEUPWDB_REST_NAMESPACE . '/' ) ),
 				'restNonce' => wp_create_nonce( 'wp_rest' ),
 				'i18n'      => array(
 					'pollOn'  => __( 'Polling: on', 'wwu-withdrawal-button' ),
@@ -83,19 +83,19 @@ final class AdminAssets {
 	 * @return void
 	 */
 	private function maybe_enqueue_ui_kit(): void {
-		$loader = WWU_WB_PATH . '/assets/ui-kit/php/class-ui-kit-loader.php';
+		$loader = WEBWAKEUPWDB_PATH . '/assets/ui-kit/php/class-ui-kit-loader.php';
 		if ( ! is_readable( $loader ) ) {
 			return;
 		}
 		require_once $loader;
-		if ( class_exists( '\\WWU_UI_Kit_Loader' ) ) {
+		if ( class_exists( '\\WebWakeUpWdb_UI_Kit_Loader' ) ) {
 			// Only the components actually used by the admin UI. `.wwu-ui-notice`
 			// lives in `utilities` (there is no standalone `notice` component); the
 			// loader auto-pulls the `tokens` + `core` baseline. (The old list also
 			// requested unused components — toast/ajax/form-field/switch/save-bar —
 			// and an invalid `notice` id that the loader silently skipped.)
-			\WWU_UI_Kit_Loader::enqueue(
-				'wwu-wb',
+			\WebWakeUpWdb_UI_Kit_Loader::enqueue(
+				'webwakeupwdb',
 				array( 'accordion', 'badge', 'utilities' )
 			);
 		}

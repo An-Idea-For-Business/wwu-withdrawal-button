@@ -6,12 +6,12 @@
  * and timers. Context is sanitised and any key that looks like a secret is masked
  * before storage, so a snapshot can be copy-pasted into a support ticket safely.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Debug;
+namespace WebWakeUpWdb\WithdrawalButton\Debug;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

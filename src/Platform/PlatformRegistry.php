@@ -5,12 +5,12 @@
  * Resolves which adapter owns a given order reference and exposes the list of
  * active platforms. Both WooCommerce and FluentCart can be active at once.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Platform;
+namespace WebWakeUpWdb\WithdrawalButton\Platform;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -44,10 +44,10 @@ final class PlatformRegistry {
 	 */
 	public static function create_default(): PlatformRegistry {
 		$adapters = array( new WooCommerceAdapter() );
-		if ( class_exists( '\\WWU\\WithdrawalButton\\Platform\\FluentCartAdapter' ) ) {
+		if ( class_exists( '\\WebWakeUpWdb\\WithdrawalButton\\Platform\\FluentCartAdapter' ) ) {
 			$adapters[] = new FluentCartAdapter();
 		}
-		if ( class_exists( '\\WWU\\WithdrawalButton\\Platform\\EddAdapter' ) ) {
+		if ( class_exists( '\\WebWakeUpWdb\\WithdrawalButton\\Platform\\EddAdapter' ) ) {
 			$adapters[] = new EddAdapter();
 		}
 		/**
@@ -55,7 +55,7 @@ final class PlatformRegistry {
 		 *
 		 * @param OrderDataSource[] $adapters Adapter instances.
 		 */
-		$adapters = (array) apply_filters( 'wwu_wb_platform_adapters', $adapters );
+		$adapters = (array) apply_filters( 'webwakeupwdb_platform_adapters', $adapters );
 		return new self( $adapters );
 	}
 

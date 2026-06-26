@@ -26,15 +26,15 @@
  * qualified verifier at audit time — the token is self-contained and independently
  * verifiable.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Timestamp;
+namespace WebWakeUpWdb\WithdrawalButton\Timestamp;
 
-use WWU\WithdrawalButton\Debug\Debug;
-use WWU\WithdrawalButton\Security\OutboundUrlGuard;
+use WebWakeUpWdb\WithdrawalButton\Debug\Debug;
+use WebWakeUpWdb\WithdrawalButton\Security\OutboundUrlGuard;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -192,7 +192,7 @@ final class Rfc3161Provider implements TimestampProvider {
 		// Require HTTPS by default: the TSA signature is verified out-of-band (see
 		// stamp()), so a plaintext channel would let a MITM substitute the response.
 		// A merchant with a legacy http-only TSA can opt back in via the filter.
-		$allow_http = (bool) apply_filters( 'wwu_wb_rfc3161_allow_insecure_http', false );
+		$allow_http = (bool) apply_filters( 'webwakeupwdb_rfc3161_allow_insecure_http', false );
 		if ( 'https' !== $scheme && ! ( 'http' === $scheme && $allow_http ) ) {
 			return false;
 		}

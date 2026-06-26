@@ -47,7 +47,7 @@ content, immediate access). Exemptions match by **download id _and_ category**
 5. [ ] **Withdrawal Button → Consent records**: a new PII-free row (download id, reason `59_o`,
    date, wording hash).
 6. [ ] **Downloads → Orders → the order** has the plugin's EDD order meta (`edd_*_order_meta`,
-   keys prefixed `wwu_wb_`).
+   keys prefixed `webwakeupwdb_`).
 7. [ ] The **consumer received the durable-medium e-mail** (subject ends with *"confirmation of
    your right of withdrawal"*). Its dispatch is logged as a separate `exemption_confirmation_sent`
    event.
@@ -83,7 +83,7 @@ content, immediate access). Exemptions match by **download id _and_ category**
 ## If something is off
 
 - **No checkbox** → confirm EDD ≥ 3.0, and that the download (or its category) is tagged in
-  Settings → Exemptions. Use `?wwu_wb_diag=1` (as admin) to print the resolved reason.
+  Settings → Exemptions. Use `?webwakeupwdb_diag=1` (as admin) to print the resolved reason.
 - **Box ticked but no Consent record** → capture runs on `edd_built_order`; confirm no other plugin
   short-circuits the order build. The button still stays (fail-safe) — report it.
 - **No e-mail** → check EDD's own mail settings / a transactional-mail plugin; the consent is still

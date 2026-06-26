@@ -5,14 +5,14 @@
  * standard X-WP-Nonce header. Polls for new collector entries every 2 seconds
  * and renders the smoke-test report.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 ( function () {
 	'use strict';
 
-	var data = window.wwuWbData || {};
+	var data = window.webwakeupwdbData || {};
 	var i18n = data.i18n || {};
-	var root = document.querySelector( '.wwu-wb-inspector' );
+	var root = document.querySelector( '.webwakeupwdb-inspector' );
 	if ( ! root || ! data.restUrl ) {
 		return;
 	}
@@ -90,7 +90,7 @@
 				since = entry.at;
 			}
 			var tr = document.createElement( 'tr' );
-			tr.className = 'wwu-wb-level-' + esc( entry.level );
+			tr.className = 'webwakeupwdb-level-' + esc( entry.level );
 			tr.innerHTML =
 				'<td>' + esc( entry.level ) + '</td>' +
 				'<td>' + esc( entry.channel ) + '</td>' +
@@ -135,7 +135,7 @@
 			html += '<details open><summary>' + esc( suite.name ) + '</summary><ul>';
 			toArray( suite.tests ).forEach( function ( t ) {
 				var icon = 'pass' === t.status ? '✓' : ( 'skip' === t.status ? '∅' : '✗' );
-				html += '<li class="wwu-wb-test-' + esc( t.status ) + '">' + icon + ' <code>' +
+				html += '<li class="webwakeupwdb-test-' + esc( t.status ) + '">' + icon + ' <code>' +
 					esc( t.name ) + '</code> — ' + esc( t.output ) + '</li>';
 			} );
 			html += '</ul></details>';

@@ -30,9 +30,9 @@
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<property name="prefixes" type="array">
-				<element value="wwu_wb"/>
-				<element value="WWU_WB"/>
-				<element value="WWU\WithdrawalButton"/>
+				<element value="webwakeupwdb"/>
+				<element value="WEBWAKEUPWDB"/>
+				<element value="WebWakeUpWdb\WithdrawalButton"/>
 			</property>
 		</properties>
 	</rule>

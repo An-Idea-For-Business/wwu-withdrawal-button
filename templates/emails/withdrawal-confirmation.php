@@ -17,7 +17,7 @@
  * @var string $download_url  Receipt PDF link.
  * @var string $verify_url    Verification link.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );

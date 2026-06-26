@@ -93,7 +93,7 @@ Exemptions are matched by **product id _and_ category** (`product-categories` ta
 ## If something is off
 
 - **No checkbox** → confirm the product (or its category) is tagged in Settings → Exemptions, and
-  that you're on a FluentCart checkout. Use `?wwu_wb_diag=1` (as admin) to print the resolved
+  that you're on a FluentCart checkout. Use `?webwakeupwdb_diag=1` (as admin) to print the resolved
   reason for the order/items.
 - **Box ticked but no Consent record** → capture runs on `prepare_other_data` reading the order's
   items; confirm no other plugin aborts that hook. The button still stays (fail-safe) — report it.

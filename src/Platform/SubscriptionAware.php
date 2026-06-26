@@ -11,12 +11,12 @@
  * restart the 14-day right (Art. 9 CRD) — and (b) cancel the subscription when a
  * consumer withdraws from its initial order.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Platform;
+namespace WebWakeUpWdb\WithdrawalButton\Platform;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

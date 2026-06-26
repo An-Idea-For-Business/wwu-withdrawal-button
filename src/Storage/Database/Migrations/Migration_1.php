@@ -5,15 +5,15 @@
  * Creates the immutable withdrawal log table and the trusted-timestamp proofs
  * table. Idempotent: dbDelta() only applies the diff, so re-running is safe.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Storage\Database\Migrations;
+namespace WebWakeUpWdb\WithdrawalButton\Storage\Database\Migrations;
 
-use WWU\WithdrawalButton\Storage\Database\LogTable;
-use WWU\WithdrawalButton\Storage\Database\TimestampTable;
+use WebWakeUpWdb\WithdrawalButton\Storage\Database\LogTable;
+use WebWakeUpWdb\WithdrawalButton\Storage\Database\TimestampTable;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

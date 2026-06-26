@@ -19,14 +19,14 @@
  * rewritten — their raw IP stays in `ip_address` (part of their v1 hash) and they
  * verify under chain_version = 1.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Storage\Database\Migrations;
+namespace WebWakeUpWdb\WithdrawalButton\Storage\Database\Migrations;
 
-use WWU\WithdrawalButton\Storage\Database\LogTable;
+use WebWakeUpWdb\WithdrawalButton\Storage\Database\LogTable;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

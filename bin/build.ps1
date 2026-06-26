@@ -13,7 +13,7 @@
   -Php74 run (derived artifact, no separate branch):
   - temporarily rewrites the 5 known PHP-version deltas in a backup-and-restore
     wrapper (composer.json dompdf ^2.0 + php >=7.4 + no platform pin; the plugin
-    header Requires PHP / WWU_WB_MIN_PHP; readme Requires PHP),
+    header Requires PHP / WEBWAKEUPWDB_MIN_PHP; readme Requires PHP),
   - re-resolves Dompdf to the 2.x line (PHP 7.4-compatible),
   - produces dist\wwu-withdrawal-button-php7.4.zip,
   - ALWAYS restores the PHP 8.1 source + Dompdf 3.x afterwards (try/finally),
@@ -68,10 +68,10 @@ try {
 		$c = $c -replace '(?s),\s*"platform":\s*\{[^}]*\}', ''
 		Set-Content -LiteralPath $composerFile -Value $c -NoNewline
 
-		# Plugin header -> Requires PHP 7.4 + WWU_WB_MIN_PHP 7.4.
+		# Plugin header -> Requires PHP 7.4 + WEBWAKEUPWDB_MIN_PHP 7.4.
 		$b = $backups[$bootFile]
 		$b = $b -replace 'Requires PHP:(\s+)8\.1', 'Requires PHP:${1}7.4'
-		$b = $b -replace "(WWU_WB_MIN_PHP',\s*)'8\.1'", "`${1}'7.4'"
+		$b = $b -replace "(WEBWAKEUPWDB_MIN_PHP',\s*)'8\.1'", "`${1}'7.4'"
 		Set-Content -LiteralPath $bootFile -Value $b -NoNewline
 
 		# readme.txt -> Requires PHP 7.4.

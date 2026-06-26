@@ -34,7 +34,7 @@ the statutory withdrawal button, the two-step statement→confirmation, the dura
    - **Notification e-mail** (`merchant_email`) = an inbox you can read.
    - Note the **My Account endpoint slug** (`endpoint_slug`, default `wwu-withdrawal`).
 4. [ ] **Public withdrawal page (recommended):** create a normal WP page (e.g. *"Right of withdrawal"*),
-   put the **`[wwu_wb_form]`** shortcode (or the **"Withdrawal — self-service"** block) on it, publish,
+   put the **`[webwakeupwdb_form]`** shortcode (or the **"Withdrawal — self-service"** block) on it, publish,
    and set it as the plugin's public form page (Settings → it stores `public_form_page_id`). This is the
    guest/standalone entry point.
 5. [ ] If you changed the endpoint slug, visit **Settings → Permalinks → Save** once (flush rewrite rules).
@@ -55,7 +55,7 @@ As the **customer**:
   opens the form.
 
 > If a button is missing: confirm the order is paid + non-exempt + Applicability = Always, then append
-> **`?wwu_wb_diag=1`** (as admin) to the order/page to print the applicability decision.
+> **`?webwakeupwdb_diag=1`** (as admin) to the order/page to print the applicability decision.
 
 ## 4. The two-step withdrawal (the legal core)
 
@@ -84,7 +84,7 @@ As the **customer**:
 - [ ] **Withdrawal Button → Requests:** the confirmed request is listed with date, order, e-mail,
   country, an **in-time badge**, and a status of **Open**.
 - [ ] The page shows a **"chain intact"** badge (green). This is the hash-chained immutable log
-  (`{prefix}wwu_wb_log`); there is no edit/delete path.
+  (`{prefix}webwakeupwdb_log`); there is no edit/delete path.
 - [ ] If you chose OpenTimestamps, the proof starts **pending** and is upgraded to **confirmed** by an
   hourly cron (Bitcoin calendars) — you don't need to wait for the test.
 
@@ -107,21 +107,21 @@ As the **customer**:
 ## 9. Compliance helpers (admin)
 
 - [ ] **Withdrawal Button → Compliance:** go-live countdown, the **Annex I-B model form**
-  (`[wwu_wb_model_form]`), the **pre-contractual** info (`[wwu_wb_info]`), and ready-to-paste
+  (`[webwakeupwdb_model_form]`), the **pre-contractual** info (`[webwakeupwdb_info]`), and ready-to-paste
   **legal clauses** (pre-contractual / terms / privacy / consent-privacy). Copy what you need into your
   store's policies. (Have them reviewed by counsel — the plugin is an aid, not legal advice.)
 
 ## 10. Smoke test (optional, fast)
 
 - [ ] **Withdrawal Button → Debug Inspector** → enable debug for your user → **Run ALL** smoke tests →
-  expect 0 fail. (Or via REST: `POST /wp-json/wwu-wb/v1/debug/run-tests` with the `wp_rest` nonce.)
+  expect 0 fail. (Or via REST: `POST /wp-json/webwakeupwdb/v1/debug/run-tests` with the `wp_rest` nonce.)
 
 ## 11. Uninstall / data hygiene
 
 - [ ] Deactivate + delete the plugin. By default (`erase_on_uninstall` **off** = legal-hold) the
   **evidence tables are kept** (you may need the proof for years); plugin **options are removed**.
-- [ ] Only if you set **`erase_on_uninstall` = on** does uninstall **drop** `wwu_wb_log` +
-  `wwu_wb_timestamps` and the secret — irreversible, explicit opt-in. (Multisite: handled per site.)
+- [ ] Only if you set **`erase_on_uninstall` = on** does uninstall **drop** `webwakeupwdb_log` +
+  `webwakeupwdb_timestamps` and the secret — irreversible, explicit opt-in. (Multisite: handled per site.)
 
 ## Pass criteria
 
@@ -133,7 +133,7 @@ As the **customer**:
 
 ## Troubleshooting
 
-- **No button** → order not paid / exempt / Applicability hides it. Use `?wwu_wb_diag=1` (admin).
+- **No button** → order not paid / exempt / Applicability hides it. Use `?webwakeupwdb_diag=1` (admin).
 - **No e-mail** → check WooCommerce → Settings → E-mails (our *"Acknowledgement of receipt of your
   withdrawal"* e-mail) or your SMTP/mail plugin; with WC e-mails off, a plain `wp_mail()` fallback is used.
 - **No PDF** → `send_pdf` off or Dompdf vendor missing (admin notice). E-mail-only still satisfies the duty.

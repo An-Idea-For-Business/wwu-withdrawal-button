@@ -6,12 +6,12 @@
  * Domain and Frontend layers depend only on this contract, never on platform
  * internals, so a new platform is added without touching business logic.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Platform;
+namespace WebWakeUpWdb\WithdrawalButton\Platform;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

@@ -35,7 +35,7 @@ verifiable link), the tamper-evident evidence log, and the admin side.
 2. [ ] **Settings → Where the button applies:** **Applicability = "Always"** for testing.
 3. [ ] **Settings → Receipt & evidence:** timestamp provider, **Attach PDF** on, **notification e-mail**.
 4. [ ] **Public withdrawal page (required for EDD):** create a WP page (e.g. *"Right of withdrawal"*) with
-   the **`[wwu_wb_form]`** shortcode (or the **"Withdrawal — self-service"** block), publish it, and set it
+   the **`[webwakeupwdb_form]`** shortcode (or the **"Withdrawal — self-service"** block), publish it, and set it
    as the plugin's public form page (`public_form_page_id`). **This is the EDD customer's entry point** —
    link to it from your account/receipt area or e-mails.
 
@@ -59,12 +59,12 @@ Alternative entry points (still supported):
   lookup form** shows (order number + e-mail). Enter the EDD **order number** + the **purchase e-mail** →
   it verifies and grants a short-lived access token → the form opens for that order.
 - [ ] **(b) Direct link with payment key:** open
-  `…/<public-page>/?wwu_wb_order=<edd_order_id>&key=<edd_payment_key>` → authenticates directly.
+  `…/<public-page>/?webwakeupwdb_order=<edd_order_id>&key=<edd_payment_key>` → authenticates directly.
 - [ ] **(c) Logged-in customer:** if the buyer has a WP account, just open the public page while logged
   in → the chooser lists their eligible EDD orders.
 
 > If the order isn't found/eligible: confirm it's **complete** + non-exempt + Applicability = Always, and
-> that the e-mail matches the purchase e-mail. As admin, `?wwu_wb_diag=1` prints the applicability
+> that the e-mail matches the purchase e-mail. As admin, `?webwakeupwdb_diag=1` prints the applicability
 > decision. (Lookup is rate-limited to 10 attempts / 5 min per IP.)
 
 ## 4. The two-step withdrawal (the legal core)
@@ -87,7 +87,7 @@ Alternative entry points (still supported):
 ## 6. Evidence-log integrity (tamper-evidence)
 
 - [ ] **Withdrawal Button → Requests:** the confirmed request is listed; **"chain intact"** badge green
-  (append-only hash-chained `{prefix}wwu_wb_log`).
+  (append-only hash-chained `{prefix}webwakeupwdb_log`).
 - [ ] OpenTimestamps proof **pending → confirmed** by the hourly cron (no need to wait).
 
 ## 7. Merchant processing
@@ -113,12 +113,12 @@ Alternative entry points (still supported):
 ## 10. Smoke test (optional, fast)
 
 - [ ] **Withdrawal Button → Debug Inspector** → enable debug → **Run ALL** → 0 fail. (Or REST
-  `POST /wp-json/wwu-wb/v1/debug/run-tests` with the `wp_rest` nonce.)
+  `POST /wp-json/webwakeupwdb/v1/debug/run-tests` with the `wp_rest` nonce.)
 
 ## 11. Uninstall / data hygiene
 
 - [ ] By default (`erase_on_uninstall` **off** = legal-hold) the **evidence tables are kept**; plugin
-  **options** are removed (EDD keeps its own `wwu_wb_*` order meta in EDD order-meta — covered by the
+  **options** are removed (EDD keeps its own `webwakeupwdb_*` order meta in EDD order-meta — covered by the
   options/meta cleanup).
 - [ ] Only with **`erase_on_uninstall` = on** does uninstall **drop** the evidence tables + secret
   (irreversible). Multisite: handled per site.
@@ -145,8 +145,8 @@ Alternative entry points (still supported):
 ## Troubleshooting
 
 - **No button on the receipt / history** → no public page set (§1.4), order ineligible/already-requested,
-  or `enabled` off. `?wwu_wb_diag=1` (admin) prints the applicability decision.
+  or `enabled` off. `?webwakeupwdb_diag=1` (admin) prints the applicability decision.
 - **Order not found in lookup** → wrong e-mail / order not complete / exempt / rate-limited (10 / 5 min).
-  `?wwu_wb_diag=1` (admin) prints the decision.
+  `?webwakeupwdb_diag=1` (admin) prints the decision.
 - **No e-mail** → check your SMTP/mail plugin (EDD uses the plain `wp_mail()` fallback).
 - **No PDF** → `send_pdf` off or Dompdf vendor missing (admin notice). E-mail-only still satisfies the duty.

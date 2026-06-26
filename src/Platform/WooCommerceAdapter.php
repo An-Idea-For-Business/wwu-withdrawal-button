@@ -6,12 +6,12 @@
  * get_post()/get_post_meta(), which do not address the HPOS data store. Meta is
  * written via update_meta_data()/save().
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Platform;
+namespace WebWakeUpWdb\WithdrawalButton\Platform;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -115,7 +115,7 @@ final class WooCommerceAdapter implements OrderDataSource, SubscriptionAware {
 		 * @param string $order_ref  Order reference.
 		 * @param string $platform   Adapter key.
 		 */
-		return (bool) apply_filters( 'wwu_wb_order_is_renewal', $is_renewal, $order_ref, $this->key() );
+		return (bool) apply_filters( 'webwakeupwdb_order_is_renewal', $is_renewal, $order_ref, $this->key() );
 	}
 
 	/**
@@ -226,7 +226,7 @@ final class WooCommerceAdapter implements OrderDataSource, SubscriptionAware {
 	 */
 	public function get_meta( string $order_ref, string $key ) {
 		$order = $this->load( $order_ref );
-		return $order ? $order->get_meta( WWU_WB_META_PREFIX . $key ) : null;
+		return $order ? $order->get_meta( WEBWAKEUPWDB_META_PREFIX . $key ) : null;
 	}
 
 	/**
@@ -235,7 +235,7 @@ final class WooCommerceAdapter implements OrderDataSource, SubscriptionAware {
 	public function set_meta( string $order_ref, string $key, $value ): void {
 		$order = $this->load( $order_ref );
 		if ( $order ) {
-			$order->update_meta_data( WWU_WB_META_PREFIX . $key, $value );
+			$order->update_meta_data( WEBWAKEUPWDB_META_PREFIX . $key, $value );
 			$order->save();
 		}
 	}
@@ -249,7 +249,7 @@ final class WooCommerceAdapter implements OrderDataSource, SubscriptionAware {
 			return;
 		}
 		foreach ( $pairs as $key => $value ) {
-			$order->update_meta_data( WWU_WB_META_PREFIX . $key, $value );
+			$order->update_meta_data( WEBWAKEUPWDB_META_PREFIX . $key, $value );
 		}
 		$order->save(); // single persist for all keys.
 	}
@@ -305,7 +305,7 @@ final class WooCommerceAdapter implements OrderDataSource, SubscriptionAware {
 	 */
 	private function detect_locale( \WC_Order $order ): string {
 		$candidates = array(
-			(string) $order->get_meta( WWU_WB_META_PREFIX . 'locale' ),
+			(string) $order->get_meta( WEBWAKEUPWDB_META_PREFIX . 'locale' ),
 			(string) $order->get_meta( 'trp_language' ),
 			(string) $order->get_meta( 'wpml_language' ),
 		);
@@ -338,6 +338,6 @@ final class WooCommerceAdapter implements OrderDataSource, SubscriptionAware {
 		 * @param bool      $found Whether a VAT number was detected.
 		 * @param \WC_Order $order The order.
 		 */
-		return (bool) apply_filters( 'wwu_wb_order_has_vat_number', $found, $order );
+		return (bool) apply_filters( 'webwakeupwdb_order_has_vat_number', $found, $order );
 	}
 }

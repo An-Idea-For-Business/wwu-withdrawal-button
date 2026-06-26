@@ -8,17 +8,17 @@
  * only when the applicability engine says so, with the statutory label resolved
  * per consumer country/locale.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Frontend;
+namespace WebWakeUpWdb\WithdrawalButton\Frontend;
 
-use WWU\WithdrawalButton\Core\Services;
-use WWU\WithdrawalButton\Frontend\ExemptionNoteRenderer;
-use WWU\WithdrawalButton\Platform\NormalizedOrder;
-use WWU\WithdrawalButton\Platform\OrderDataSource;
+use WebWakeUpWdb\WithdrawalButton\Core\Services;
+use WebWakeUpWdb\WithdrawalButton\Frontend\ExemptionNoteRenderer;
+use WebWakeUpWdb\WithdrawalButton\Platform\NormalizedOrder;
+use WebWakeUpWdb\WithdrawalButton\Platform\OrderDataSource;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -40,7 +40,7 @@ final class WooMyAccount {
 	 * Constructor.
 	 */
 	public function __construct() {
-		$settings       = (array) get_option( 'wwu_wb_settings', array() );
+		$settings       = (array) get_option( 'webwakeupwdb_settings', array() );
 		$this->endpoint = sanitize_title( (string) ( $settings['endpoint_slug'] ?? 'wwu-withdrawal' ) );
 	}
 
@@ -108,7 +108,7 @@ final class WooMyAccount {
 			return;
 		}
 
-		$order_ref = isset( $_GET['wwu_wb_order'] ) ? sanitize_text_field( wp_unslash( $_GET['wwu_wb_order'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$order_ref = isset( $_GET['webwakeupwdb_order'] ) ? sanitize_text_field( wp_unslash( $_GET['webwakeupwdb_order'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$user_id   = get_current_user_id();
 
 		if ( '' !== $order_ref && $adapter->verify_owner( $order_ref, $user_id ) ) {
@@ -165,7 +165,7 @@ final class WooMyAccount {
 		// button (shared label — never the raw internal status).
 		$status_label = EligibleOrders::request_status_label( $adapter, $order->order_ref );
 		if ( '' !== $status_label ) {
-			echo '<p class="wwu-wb-status-notice">' . esc_html( $status_label ) . '</p>';
+			echo '<p class="webwakeupwdb-status-notice">' . esc_html( $status_label ) . '</p>';
 			return;
 		}
 
@@ -173,7 +173,7 @@ final class WooMyAccount {
 		 * Call decide() directly here (not should_show()) so we can inspect ->reason
 		 * and emit the exemption transparency note when the right is removed by Art. 59.
 		 */
-		if ( ! \WWU\WithdrawalButton\Core\Settings::enabled() ) {
+		if ( ! \WebWakeUpWdb\WithdrawalButton\Core\Settings::enabled() ) {
 			return;
 		}
 		$decision = Services::instance()->applicability->decide( $order );
@@ -256,7 +256,7 @@ final class WooMyAccount {
 	 * @return bool
 	 */
 	private function should_show( NormalizedOrder $order ): bool {
-		if ( ! \WWU\WithdrawalButton\Core\Settings::enabled() ) {
+		if ( ! \WebWakeUpWdb\WithdrawalButton\Core\Settings::enabled() ) {
 			return false;
 		}
 		// The status-eligibility gate (no button on failed/cancelled/refunded

@@ -14,17 +14,18 @@
  * Page-creation guidance is shown ONLY when a form page is actually missing —
  * if everything is in place the page explains how the plugin works instead.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Admin;
+namespace WebWakeUpWdb\WithdrawalButton\Admin;
 
-use WWU\WithdrawalButton\Core\Settings;
-use WWU\WithdrawalButton\DurableMedium\PdfBuilder;
-use WWU\WithdrawalButton\Mail\Mailer;
-use WWU\WithdrawalButton\REST\Authentication;
+use WebWakeUpWdb\WithdrawalButton\Core\Install;
+use WebWakeUpWdb\WithdrawalButton\Core\Settings;
+use WebWakeUpWdb\WithdrawalButton\DurableMedium\PdfBuilder;
+use WebWakeUpWdb\WithdrawalButton\Mail\Mailer;
+use WebWakeUpWdb\WithdrawalButton\REST\Authentication;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -40,21 +41,30 @@ final class DashboardPage {
 	 *
 	 * @var string
 	 */
-	private const TEST_EMAIL_NONCE = 'wwu_wb_test_email';
+	private const TEST_EMAIL_NONCE = 'webwakeupwdb_test_email';
 
 	/**
 	 * Transient holding the throttle flag for the test-email button.
 	 *
 	 * @var string
 	 */
-	private const TEST_EMAIL_THROTTLE = 'wwu_wb_test_email_throttle';
+	private const TEST_EMAIL_THROTTLE = 'webwakeupwdb_test_email_throttle';
 
 	/**
 	 * Transient holding the last test-email result for display.
 	 *
 	 * @var string
 	 */
-	private const TEST_EMAIL_RESULT = 'wwu_wb_test_email_result';
+	private const TEST_EMAIL_RESULT = 'webwakeupwdb_test_email_result';
+
+	/**
+	 * Nonce action for the "recreate page" buttons (form / policy page).
+	 *
+	 * @var string
+	 */
+	public const RECREATE_PAGE_NONCE = 'webwakeupwdb_recreate_page';
+	public const FREEZE_POLICY_NONCE = 'webwakeupwdb_freeze_policy';
+	public const POLICY_PDF_NONCE    = 'webwakeupwdb_policy_pdf';
 
 	/**
 	 * Render the dashboard.
@@ -67,7 +77,7 @@ final class DashboardPage {
 		}
 
 		$settings = Settings::main();
-		$app      = (array) get_option( 'wwu_wb_applicability', array() );
+		$app      = (array) get_option( 'webwakeupwdb_applicability', array() );
 		$enabled  = ! empty( $settings['enabled'] );
 		$page_id  = (int) ( $settings['public_form_page_id'] ?? 0 );
 		$page_ok  = $page_id > 0 && 'publish' === get_post_status( $page_id );
@@ -77,11 +87,12 @@ final class DashboardPage {
 		$mode     = (string) ( $app['mode'] ?? 'eu_eea_only' );
 		$mail     = $this->mail_transport();
 
-		echo '<div class="wrap wwu-wb-wrap">';
+		echo '<div class="wrap webwakeupwdb-wrap">';
 		echo '<h1>' . esc_html__( 'WWU Withdrawal Button', 'wwu-withdrawal-button' ) . '</h1>';
 		echo '<p>' . esc_html__( 'The EU online right-of-withdrawal function (Art. 11a / Art. 54-bis) for WooCommerce & FluentCart.', 'wwu-withdrawal-button' ) . '</p>';
 
 		$this->maybe_render_test_email_result();
+		$this->maybe_render_recreate_notice();
 		$this->render_go_live( $settings );
 
 		// --- Setup checklist ---
@@ -113,10 +124,43 @@ final class DashboardPage {
 				array( get_permalink( $page_id ), __( 'View page', 'wwu-withdrawal-button' ) )
 			);
 		} else {
+			$recreate_url = wp_nonce_url(
+				admin_url( 'admin-post.php?action=webwakeupwdb_recreate_page&which=form' ),
+				self::RECREATE_PAGE_NONCE
+			);
 			$this->row(
 				false,
 				__( 'Withdrawal form page', 'wwu-withdrawal-button' ),
-				__( 'No published form page yet. Guests without an account need one. Re-activate the plugin to create it automatically, or publish a page containing the [wwu_wb_form] shortcode.', 'wwu-withdrawal-button' )
+				__( 'No published form page found — it may have been deleted or trashed. Guests without an account need one; recreate it in one click:', 'wwu-withdrawal-button' ),
+				array( $recreate_url, __( 'Recreate the page', 'wwu-withdrawal-button' ) )
+			);
+		}
+
+		// Policy page (optional): a consolidated "Right of withdrawal" notice. Same
+		// recreate action (which=policy), so a deleted/trashed one is one click to restore.
+		$policy_id = (int) ( $settings['policy_page_id'] ?? 0 );
+		$policy_ok = $policy_id > 0 && 'page' === get_post_type( $policy_id ) && 'trash' !== get_post_status( $policy_id );
+		if ( $policy_ok ) {
+			$edit_url  = get_edit_post_link( $policy_id, 'url' );
+			$open_url  = ( is_string( $edit_url ) && '' !== $edit_url ) ? $edit_url : (string) get_permalink( $policy_id );
+			$published = ( 'publish' === get_post_status( $policy_id ) );
+			$this->row(
+				true,
+				__( 'Withdrawal policy page', 'wwu-withdrawal-button' ),
+				$published
+					? __( 'Published — a consolidated "Right of withdrawal" notice assembled from your settings and exemptions.', 'wwu-withdrawal-button' )
+					: __( 'Created as a draft — review it and publish when ready.', 'wwu-withdrawal-button' ),
+				array( $open_url, __( 'Open page', 'wwu-withdrawal-button' ) ),
+				$published ? 'ok' : 'warn'
+			);
+		} else {
+			$policy_act = wp_nonce_url( admin_url( 'admin-post.php?action=webwakeupwdb_recreate_page&which=policy' ), self::RECREATE_PAGE_NONCE );
+			$this->row(
+				false,
+				__( 'Withdrawal policy page (optional)', 'wwu-withdrawal-button' ),
+				__( 'A single consolidated "Right of withdrawal" notice (assembled from your settings + exemptions) you can link from your footer. Create it as a draft to review:', 'wwu-withdrawal-button' ),
+				array( $policy_act, __( 'Create the policy page', 'wwu-withdrawal-button' ) ),
+				'warn'
 			);
 		}
 
@@ -145,7 +189,7 @@ final class DashboardPage {
 		// Trusted timestamp ("data certa"): off by default (no external call without
 		// opt-in), but strongly recommended — it is the independent legal proof of WHEN
 		// a withdrawal was received. Surface it prominently here so the admin enables it.
-		$ts_provider = (string) ( ( (array) get_option( 'wwu_wb_timestamp', array() ) )['provider'] ?? 'none' );
+		$ts_provider = (string) ( ( (array) get_option( 'webwakeupwdb_timestamp', array() ) )['provider'] ?? 'none' );
 		$ts_on       = ( 'none' !== $ts_provider );
 		$this->row(
 			$ts_on,
@@ -183,7 +227,7 @@ final class DashboardPage {
 		echo '<ul style="list-style:disc;margin-left:1.4em;max-width:880px;">';
 		echo '<li>' . esc_html__( 'In the customer account, on each eligible order (order list + order detail) and in the "Right of withdrawal" account tab.', 'wwu-withdrawal-button' ) . '</li>';
 		echo '<li>' . esc_html__( 'As a link inside the WooCommerce order emails, so guests without an account can reach it.', 'wwu-withdrawal-button' ) . '</li>';
-		echo '<li>' . wp_kses_post( sprintf( /* translators: %s: shortcodes. */ __( 'Anywhere you place a shortcode: %s.', 'wwu-withdrawal-button' ), '<code>[wwu_wb_button]</code>, <code>[wwu_wb_form]</code>' ) ) . '</li>';
+		echo '<li>' . wp_kses_post( sprintf( /* translators: %s: shortcodes. */ __( 'Anywhere you place a shortcode: %s.', 'wwu-withdrawal-button' ), '<code>[webwakeupwdb_button]</code>, <code>[webwakeupwdb_form]</code>' ) ) . '</li>';
 		echo '</ul>';
 
 		// --- Why it might not appear ---
@@ -242,7 +286,7 @@ final class DashboardPage {
 	private function render_test_email_box( array $mail ): void {
 		$to = $this->test_recipient();
 
-		echo '<div class="wwu-wb-clause" style="max-width:880px;margin:1em 0;padding:1em 1.2em;border:1px solid #dcdcde;border-radius:6px;background:#f6f7f7;">';
+		echo '<div class="webwakeupwdb-clause" style="max-width:880px;margin:1em 0;padding:1em 1.2em;border:1px solid #dcdcde;border-radius:6px;background:#f6f7f7;">';
 		echo '<p style="margin-top:0;"><strong>' . esc_html__( 'Test email delivery', 'wwu-withdrawal-button' ) . '</strong></p>';
 		echo '<p class="description">' . esc_html(
 			sprintf(
@@ -252,7 +296,7 @@ final class DashboardPage {
 			)
 		) . '</p>';
 		echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
-		echo '<input type="hidden" name="action" value="wwu_wb_send_test_email" />';
+		echo '<input type="hidden" name="action" value="webwakeupwdb_send_test_email" />';
 		wp_nonce_field( self::TEST_EMAIL_NONCE );
 		echo '<button type="submit" class="button">' . esc_html__( 'Send test email', 'wwu-withdrawal-button' ) . '</button>';
 		echo '</form>';
@@ -284,7 +328,7 @@ final class DashboardPage {
 	 * @return void
 	 */
 	private function maybe_render_test_email_result(): void {
-		if ( isset( $_GET['wwu_wb_test_throttled'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( isset( $_GET['webwakeupwdb_test_throttled'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			echo '<div class="notice notice-warning is-dismissible"><p>' . esc_html__( 'Please wait a few seconds before sending another test email.', 'wwu-withdrawal-button' ) . '</p></div>';
 		}
 
@@ -334,7 +378,7 @@ final class DashboardPage {
 
 		// Rate limit: one test every 15 seconds, to avoid hammering the mailer.
 		if ( get_transient( self::TEST_EMAIL_THROTTLE ) ) {
-			wp_safe_redirect( add_query_arg( 'wwu_wb_test_throttled', '1', $redirect ) );
+			wp_safe_redirect( add_query_arg( 'webwakeupwdb_test_throttled', '1', $redirect ) );
 			exit;
 		}
 		set_transient( self::TEST_EMAIL_THROTTLE, 1, 15 );
@@ -405,6 +449,131 @@ final class DashboardPage {
 	}
 
 	/**
+	 * Recreate an auto-managed plugin page (form or policy) on demand — for when a
+	 * merchant deleted/trashed it by mistake, a one-click fix instead of a plugin
+	 * re-activation. Capability + nonce gated; idempotent (no duplicate when the
+	 * page still exists, via Install::ensure_*); PRG redirect with a result flag.
+	 *
+	 * @return void
+	 */
+	public function handle_recreate_page(): void {
+		if ( ! current_user_can( Authentication::capability() ) ) {
+			wp_die( esc_html__( 'Insufficient permissions.', 'wwu-withdrawal-button' ) );
+		}
+		check_admin_referer( self::RECREATE_PAGE_NONCE );
+
+		$which = isset( $_REQUEST['which'] ) ? sanitize_key( wp_unslash( $_REQUEST['which'] ) ) : 'form';
+		if ( 'policy' === $which ) {
+			$id       = Install::ensure_policy_page();
+			$redirect = admin_url( 'admin.php?page=' . AdminController::COMPLIANCE_SLUG );
+		} else {
+			$id       = Install::ensure_form_page();
+			$redirect = admin_url( 'admin.php?page=' . AdminController::MENU_SLUG );
+		}
+
+		wp_safe_redirect( add_query_arg( 'webwakeupwdb_page_recreated', $id > 0 ? $which : 'fail', $redirect ) );
+		exit;
+	}
+
+	/**
+	 * Freeze the consolidated policy into static HTML on the policy page.
+	 *
+	 * The page normally renders the live [webwakeupwdb_policy] shortcode (auto-updates
+	 * from settings). "Freeze" snapshots the currently-assembled notice into the
+	 * page content as plain HTML so it stays fixed (e.g. to archive a version, or
+	 * to stop it changing). The page is created first if missing. To return to the
+	 * auto-updating version, edit the page and put the [webwakeupwdb_policy] shortcode
+	 * back (or trash it and recreate it). Capability + nonce gated; PRG redirect.
+	 *
+	 * @return void
+	 */
+	public function handle_freeze_policy(): void {
+		if ( ! current_user_can( Authentication::capability() ) ) {
+			wp_die( esc_html__( 'Insufficient permissions.', 'wwu-withdrawal-button' ) );
+		}
+		check_admin_referer( self::FREEZE_POLICY_NONCE );
+
+		$page_id = Install::ensure_policy_page();
+		$ok      = false;
+		if ( $page_id > 0 ) {
+			$doc    = \WebWakeUpWdb\WithdrawalButton\Legal\PolicyBuilder::build();
+			$frozen = '<div class="webwakeupwdb-policy-wrap">' . \WebWakeUpWdb\WithdrawalButton\Legal\PolicyBuilder::disclaimer_html() . $doc->to_html() . '</div>';
+			$result = wp_update_post(
+				array(
+					'ID'           => $page_id,
+					'post_content' => $frozen,
+				),
+				true
+			);
+			$ok = ! is_wp_error( $result ) && (int) $result > 0;
+		}
+
+		$redirect = admin_url( 'admin.php?page=' . AdminController::COMPLIANCE_SLUG );
+		wp_safe_redirect( add_query_arg( 'webwakeupwdb_policy_frozen', $ok ? '1' : 'fail', $redirect ) );
+		exit;
+	}
+
+	/**
+	 * Stream the consolidated policy as a downloadable PDF (plain branding, mirrors
+	 * the receipt PDF). Capability + nonce gated. If the PDF library is unavailable
+	 * the merchant is told to install the packaged ZIP instead of getting a broken
+	 * download — the policy page and [webwakeupwdb_policy] shortcode work without it.
+	 *
+	 * @return void
+	 */
+	public function handle_policy_pdf(): void {
+		if ( ! current_user_can( Authentication::capability() ) ) {
+			wp_die( esc_html__( 'Insufficient permissions.', 'wwu-withdrawal-button' ) );
+		}
+		check_admin_referer( self::POLICY_PDF_NONCE );
+
+		if ( ! \WebWakeUpWdb\WithdrawalButton\DurableMedium\PdfBuilder::is_available() ) {
+			wp_die( esc_html__( 'The PDF library is not available on this site. Install the plugin from the official packaged ZIP to enable PDF export — the policy page and the [webwakeupwdb_policy] shortcode still work without it.', 'wwu-withdrawal-button' ) );
+		}
+
+		$doc  = \WebWakeUpWdb\WithdrawalButton\Legal\PolicyBuilder::build();
+		$html = \WebWakeUpWdb\WithdrawalButton\Frontend\Template::render(
+			'pdf/policy-pdf.php',
+			array(
+				'content_html'    => $doc->to_html(),
+				'disclaimer_html' => \WebWakeUpWdb\WithdrawalButton\Legal\PolicyBuilder::disclaimer_html(),
+				'site_name'       => (string) get_bloginfo( 'name' ),
+				'generated_local' => wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ) ),
+			)
+		);
+		$bytes = ( new \WebWakeUpWdb\WithdrawalButton\DurableMedium\PdfBuilder() )->render( $html );
+
+		nocache_headers();
+		header( 'Content-Type: application/pdf' );
+		header( 'Content-Disposition: attachment; filename="withdrawal-policy.pdf"' );
+		header( 'Content-Length: ' . (string) strlen( (string) $bytes ) );
+		echo $bytes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- binary PDF stream.
+		exit;
+	}
+
+	/**
+	 * Render the success/failure notice after a "Recreate page" action.
+	 *
+	 * @return void
+	 */
+	private function maybe_render_recreate_notice(): void {
+		// Display-only flag set by handle_recreate_page() after its nonce-checked PRG redirect.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$flag = isset( $_GET['webwakeupwdb_page_recreated'] ) ? sanitize_key( wp_unslash( $_GET['webwakeupwdb_page_recreated'] ) ) : '';
+		if ( '' === $flag ) {
+			return;
+		}
+		if ( 'fail' === $flag ) {
+			echo '<div class="notice notice-error is-dismissible"><p>' . esc_html__( 'Could not recreate the page. Please try again, or create it manually with the relevant shortcode.', 'wwu-withdrawal-button' ) . '</p></div>';
+			return;
+		}
+		$msg = ( 'policy' === $flag )
+			? __( 'The withdrawal policy page has been recreated as a draft — review and publish it.', 'wwu-withdrawal-button' )
+			: __( 'The withdrawal form page has been recreated and published.', 'wwu-withdrawal-button' );
+		echo '<div class="notice notice-success is-dismissible"><p>' . esc_html( $msg ) . '</p></div>';
+	}
+
+	/**
 	 * Render a checklist row.
 	 *
 	 * @param bool              $ok     Pass/fail.
@@ -439,8 +608,8 @@ final class DashboardPage {
 	 * @return void
 	 */
 	private function render_go_live( array $settings ): void {
-		$go_live = (string) ( $settings['go_live_date'] ?? WWU_WB_GO_LIVE_DATE );
-		echo '<p><span class="wwu-wb-badge wwu-wb-badge--warn">' . esc_html(
+		$go_live = (string) ( $settings['go_live_date'] ?? WEBWAKEUPWDB_GO_LIVE_DATE );
+		echo '<p><span class="webwakeupwdb-badge webwakeupwdb-badge--warn">' . esc_html(
 			sprintf(
 				/* translators: %s: date. */
 				__( 'Mandatory for EU/EEA consumers on contracts concluded on or after %s.', 'wwu-withdrawal-button' ),

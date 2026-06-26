@@ -6,16 +6,16 @@
  * F8), Settings (plugin enable + debug audience), and Debug Inspector. Later
  * phases add the Requests Dashboard and Compliance Status pages.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Admin;
+namespace WebWakeUpWdb\WithdrawalButton\Admin;
 
-use WWU\WithdrawalButton\REST\Authentication;
-use WWU\WithdrawalButton\Core\Settings;
-use WWU\WithdrawalButton\DurableMedium\PdfBuilder;
+use WebWakeUpWdb\WithdrawalButton\REST\Authentication;
+use WebWakeUpWdb\WithdrawalButton\Core\Settings;
+use WebWakeUpWdb\WithdrawalButton\DurableMedium\PdfBuilder;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -27,11 +27,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class AdminController {
 
 	public const MENU_SLUG       = 'wwu-withdrawal-button';
-	public const REQUESTS_SLUG   = 'wwu-wb-requests';
-	public const CONSENT_SLUG    = 'wwu-wb-consents';
-	public const COMPLIANCE_SLUG = 'wwu-wb-compliance';
-	public const SETTINGS_SLUG   = 'wwu-wb-settings';
-	public const INSPECTOR_SLUG  = 'wwu-wb-inspector';
+	public const REQUESTS_SLUG   = 'webwakeupwdb-requests';
+	public const CONSENT_SLUG    = 'webwakeupwdb-consents';
+	public const COMPLIANCE_SLUG = 'webwakeupwdb-compliance';
+	public const SETTINGS_SLUG   = 'webwakeupwdb-settings';
+	public const INSPECTOR_SLUG  = 'webwakeupwdb-inspector';
 
 	/**
 	 * Settings page handler.
@@ -102,12 +102,15 @@ final class AdminController {
 	 */
 	public function register(): void {
 		add_action( 'admin_menu', array( $this, 'register_menu' ) );
-		add_action( 'admin_post_wwu_wb_save_settings', array( $this->settings, 'handle_save' ) );
-		add_action( 'admin_post_wwu_wb_send_test_email', array( $this->dashboard, 'handle_test_email' ) );
-		add_action( 'admin_post_wwu_wb_preview_email', array( $this->settings, 'handle_preview_email' ) );
-		add_action( 'admin_post_wwu_wb_mark_processed', array( $this->requests, 'handle_mark_processed' ) );
-		add_action( 'admin_post_wwu_wb_resend', array( $this->requests, 'handle_resend' ) );
-		add_action( 'admin_post_wwu_wb_export_consents', array( $this->consents, 'handle_export' ) );
+		add_action( 'admin_post_webwakeupwdb_save_settings', array( $this->settings, 'handle_save' ) );
+		add_action( 'admin_post_webwakeupwdb_send_test_email', array( $this->dashboard, 'handle_test_email' ) );
+		add_action( 'admin_post_webwakeupwdb_preview_email', array( $this->settings, 'handle_preview_email' ) );
+		add_action( 'admin_post_webwakeupwdb_mark_processed', array( $this->requests, 'handle_mark_processed' ) );
+		add_action( 'admin_post_webwakeupwdb_resend', array( $this->requests, 'handle_resend' ) );
+		add_action( 'admin_post_webwakeupwdb_export_consents', array( $this->consents, 'handle_export' ) );
+		add_action( 'admin_post_webwakeupwdb_recreate_page', array( $this->dashboard, 'handle_recreate_page' ) );
+		add_action( 'admin_post_webwakeupwdb_freeze_policy', array( $this->dashboard, 'handle_freeze_policy' ) );
+		add_action( 'admin_post_webwakeupwdb_policy_pdf', array( $this->dashboard, 'handle_policy_pdf' ) );
 		add_action( 'admin_notices', array( $this, 'maybe_mail_failure_notice' ) );
 		add_action( 'admin_notices', array( $this, 'maybe_pdf_missing_notice' ) );
 		add_action( 'admin_notices', array( $this, 'maybe_timestamp_off_notice' ) );
@@ -158,11 +161,11 @@ final class AdminController {
 		if ( empty( Settings::main()['enabled'] ) ) {
 			return;
 		}
-		$provider = (string) ( ( (array) get_option( 'wwu_wb_timestamp', array() ) )['provider'] ?? 'none' );
+		$provider = (string) ( ( (array) get_option( 'webwakeupwdb_timestamp', array() ) )['provider'] ?? 'none' );
 		if ( 'none' !== $provider ) {
 			return;
 		}
-		$url = admin_url( 'admin.php?page=' . self::SETTINGS_SLUG . '#wwu-wb-timestamp' );
+		$url = admin_url( 'admin.php?page=' . self::SETTINGS_SLUG . '#webwakeupwdb-timestamp' );
 		echo '<div class="notice notice-warning"><p><strong>'
 			. esc_html__( 'WWU Withdrawal Button — action recommended: turn on the trusted timestamp.', 'wwu-withdrawal-button' )
 			. '</strong> '
@@ -178,10 +181,10 @@ final class AdminController {
 	 * @return void
 	 */
 	public function maybe_mail_failure_notice(): void {
-		if ( ! current_user_can( \WWU\WithdrawalButton\REST\Authentication::capability() ) ) {
+		if ( ! current_user_can( \WebWakeUpWdb\WithdrawalButton\REST\Authentication::capability() ) ) {
 			return;
 		}
-		$failed = get_transient( 'wwu_wb_mail_failed' );
+		$failed = get_transient( 'webwakeupwdb_mail_failed' );
 		if ( empty( $failed ) ) {
 			return;
 		}

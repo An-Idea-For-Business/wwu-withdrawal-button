@@ -6,13 +6,13 @@
  * COEXISTS with the digital withdrawal button (recital 37). The text is the
  * official model form from Directive 2011/83/EU Annex I(B), per language.
  *
- * @see docs/legal/wwu-wb-legal-reference.md §3
- * @package WWU\WithdrawalButton
+ * @see docs/legal/webwakeupwdb-legal-reference.md §3
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Legal;
+namespace WebWakeUpWdb\WithdrawalButton\Legal;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

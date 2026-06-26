@@ -27,7 +27,7 @@ evidence log, and the admin side.
 2. [ ] **Settings → Where the button applies:** set **Applicability = "Always"** for testing.
 3. [ ] **Settings → Receipt & evidence:** timestamp provider (`OpenTimestamps`/`RFC 3161`/`none`),
    **Attach PDF** on, **notification e-mail** = a readable inbox.
-4. [ ] **Public withdrawal page (recommended):** create a WP page with **`[wwu_wb_form]`** (or the
+4. [ ] **Public withdrawal page (recommended):** create a WP page with **`[webwakeupwdb_form]`** (or the
    **"Withdrawal — self-service"** block) and set it as the plugin's public form page
    (`public_form_page_id`). The FluentCart portal buttons link here when it's set.
 
@@ -47,7 +47,7 @@ As the **customer**, open the **FluentCart customer portal**:
   (or a status notice if a request already exists). It links to the form (the public page when set).
 
 > If an entry point is missing: confirm the order is **paid** + non-exempt + Applicability = Always, and
-> that the customer is the order's owner. As admin, `?wwu_wb_diag=1` prints the applicability decision.
+> that the customer is the order's owner. As admin, `?webwakeupwdb_diag=1` prints the applicability decision.
 > (The FluentCart portal is a Vue SPA; in-portal styling of the chooser is best-effort, but the links to
 > the standalone page always work — see Troubleshooting.)
 
@@ -71,7 +71,7 @@ As the **customer**, open the **FluentCart customer portal**:
 ## 6. Evidence-log integrity (tamper-evidence)
 
 - [ ] **Withdrawal Button → Requests:** the confirmed request is listed; the page shows the **"chain
-  intact"** badge (hash-chained `{prefix}wwu_wb_log`, append-only).
+  intact"** badge (hash-chained `{prefix}webwakeupwdb_log`, append-only).
 - [ ] OpenTimestamps proof starts **pending** → **confirmed** by the hourly cron (no need to wait).
 
 ## 7. Merchant processing
@@ -97,13 +97,13 @@ As the **customer**, open the **FluentCart customer portal**:
 ## 10. Smoke test (optional, fast)
 
 - [ ] **Withdrawal Button → Debug Inspector** → enable debug → **Run ALL** → expect 0 fail. (Or REST
-  `POST /wp-json/wwu-wb/v1/debug/run-tests` with the `wp_rest` nonce.)
+  `POST /wp-json/webwakeupwdb/v1/debug/run-tests` with the `wp_rest` nonce.)
 
 ## 11. Uninstall / data hygiene
 
 - [ ] By default (`erase_on_uninstall` **off** = legal-hold) the **evidence tables are kept**; plugin
-  **options** (incl. the FluentCart per-order meta `wwu_wb_fc_*`) are removed.
-- [ ] Only with **`erase_on_uninstall` = on** does uninstall **drop** `wwu_wb_log` + `wwu_wb_timestamps`
+  **options** (incl. the FluentCart per-order meta `webwakeupwdb_fc_*`) are removed.
+- [ ] Only with **`erase_on_uninstall` = on** does uninstall **drop** `webwakeupwdb_log` + `webwakeupwdb_timestamps`
   + secret (irreversible). Multisite: handled per site.
 
 ## Pass criteria
@@ -118,7 +118,7 @@ As the **customer**, open the **FluentCart customer portal**:
 ## Troubleshooting
 
 - **No portal entry point** → order not `paid` / exempt / not owned by this customer / Applicability
-  hides it. `?wwu_wb_diag=1` (admin) prints the decision.
+  hides it. `?webwakeupwdb_diag=1` (admin) prints the decision.
 - **Chooser looks unstyled in the portal** → the FluentCart portal is a Vue SPA and its shortcode tag
   isn't documented for asset detection, so in-portal styling is best-effort; the **standalone public
   page** always loads the plugin CSS/JS and is the reliable surface.

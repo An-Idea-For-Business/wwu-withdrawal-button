@@ -9,13 +9,13 @@
  * Anchoring is asynchronous: a row is created with status 'pending' on submission
  * and upgraded to 'confirmed' by a WP-Cron poller once the Bitcoin block is mined.
  *
- * @see \WWU\WithdrawalButton\Timestamp\OpenTimestampsProvider
- * @package WWU\WithdrawalButton
+ * @see \WebWakeUpWdb\WithdrawalButton\Timestamp\OpenTimestampsProvider
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Storage\Database;
+namespace WebWakeUpWdb\WithdrawalButton\Storage\Database;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -31,7 +31,7 @@ final class TimestampTable {
 	 *
 	 * @var string
 	 */
-	public const SUFFIX = 'wwu_wb_timestamps';
+	public const SUFFIX = 'webwakeupwdb_timestamps';
 
 	/**
 	 * Fully-qualified table name including the site table prefix.

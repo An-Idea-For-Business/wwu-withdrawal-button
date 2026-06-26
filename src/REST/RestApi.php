@@ -5,18 +5,18 @@
  * F0 wires the diagnostic /debug/* routes. Later phases append the withdrawal,
  * receipt and verify routes to build_routes().
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\REST;
+namespace WebWakeUpWdb\WithdrawalButton\REST;
 
-use WWU\WithdrawalButton\REST\Routes\ApiRoutes;
-use WWU\WithdrawalButton\REST\Routes\DebugRoute;
-use WWU\WithdrawalButton\REST\Routes\DebugTestsRoute;
-use WWU\WithdrawalButton\REST\Routes\WithdrawalRoute;
-use WWU\WithdrawalButton\REST\Routes\ReceiptRoute;
+use WebWakeUpWdb\WithdrawalButton\REST\Routes\ApiRoutes;
+use WebWakeUpWdb\WithdrawalButton\REST\Routes\DebugRoute;
+use WebWakeUpWdb\WithdrawalButton\REST\Routes\DebugTestsRoute;
+use WebWakeUpWdb\WithdrawalButton\REST\Routes\WithdrawalRoute;
+use WebWakeUpWdb\WithdrawalButton\REST\Routes\ReceiptRoute;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -50,7 +50,7 @@ final class RestApi {
 	/**
 	 * Build the list of route objects.
 	 *
-	 * @return \WWU\WithdrawalButton\REST\Routes\AbstractRoute[]
+	 * @return \WebWakeUpWdb\WithdrawalButton\REST\Routes\AbstractRoute[]
 	 */
 	private function build_routes(): array {
 		return array(

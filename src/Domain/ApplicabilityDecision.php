@@ -2,12 +2,12 @@
 /**
  * Result of an applicability evaluation for one order.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Domain;
+namespace WebWakeUpWdb\WithdrawalButton\Domain;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

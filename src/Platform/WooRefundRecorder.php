@@ -9,16 +9,16 @@
  * `refund_issued` event (amount, currency, refund id, timestamp, acting user) to
  * the append-only log, linked to the request. It never mutates prior rows.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Platform;
+namespace WebWakeUpWdb\WithdrawalButton\Platform;
 
-use WWU\WithdrawalButton\Core\Services;
-use WWU\WithdrawalButton\Debug\Debug;
-use WWU\WithdrawalButton\Storage\LogRepository;
+use WebWakeUpWdb\WithdrawalButton\Core\Services;
+use WebWakeUpWdb\WithdrawalButton\Debug\Debug;
+use WebWakeUpWdb\WithdrawalButton\Storage\LogRepository;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

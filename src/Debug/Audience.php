@@ -10,12 +10,12 @@
  *   - specific_users     : whitelisted user IDs (admin capability still required)
  *   - current_user_only  : a single configured user ID
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Debug;
+namespace WebWakeUpWdb\WithdrawalButton\Debug;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -59,7 +59,7 @@ final class Audience {
 	 * @return array
 	 */
 	public static function config(): array {
-		$config = get_option( 'wwu_wb_debug', array() );
+		$config = get_option( 'webwakeupwdb_debug', array() );
 		if ( ! is_array( $config ) ) {
 			$config = array();
 		}
@@ -99,7 +99,7 @@ final class Audience {
 			return true;
 		}
 
-		$capability = (string) apply_filters( 'wwu_wb_admin_capability', 'manage_woocommerce' );
+		$capability = (string) apply_filters( 'webwakeupwdb_admin_capability', 'manage_woocommerce' );
 		$user       = wp_get_current_user();
 		$decision   = false;
 

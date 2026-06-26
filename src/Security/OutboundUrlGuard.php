@@ -14,12 +14,12 @@
  * Keep `redirection => 0` on the actual request so a host that validates here cannot
  * 30x-rebind to an internal target after the check (TOCTOU/DNS-rebinding defence).
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Security;
+namespace WebWakeUpWdb\WithdrawalButton\Security;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

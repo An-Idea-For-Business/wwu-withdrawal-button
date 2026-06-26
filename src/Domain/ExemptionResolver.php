@@ -2,25 +2,25 @@
 /**
  * Resolves which statutory exemption reason (if any) applies to a line item.
  *
- * Reads the `wwu_wb_exclusions` option in its per-reason shape
+ * Reads the `webwakeupwdb_exclusions` option in its per-reason shape
  * `{ by_reason: { '<reason>': { products:[], categories:[] }, ... } }` and answers
  * "what reason, if any, tags this item?". Back-compat: the legacy flat
  * `excluded_product_ids` / `excluded_category_ids` lists (and the
- * `wwu_wb_excluded_product_ids` filter) are folded into the generic `manual`
+ * `webwakeupwdb_excluded_product_ids` filter) are folded into the generic `manual`
  * reason at read time, so old installs keep working before/without migration.
  *
  * This only maps an item to a reason. Whether that reason actually REMOVES the
  * withdrawal right (unconditional vs consent-gated vs seal-based) is decided by
  * {@see ArticleFiftyNineEvaluator}, using {@see ExceptionTypes}.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Domain;
+namespace WebWakeUpWdb\WithdrawalButton\Domain;
 
-use WWU\WithdrawalButton\Platform\NormalizedOrder;
+use WebWakeUpWdb\WithdrawalButton\Platform\NormalizedOrder;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -45,7 +45,7 @@ final class ExemptionResolver {
 		// Back-compat filter (legacy integrators) → treated as a 'manual' exclusion.
 		// Only this order-aware path needs the order context; the rest of the lookup
 		// is order-independent and shared with the checkout path via reason_for().
-		$filtered = array_map( 'intval', (array) apply_filters( 'wwu_wb_excluded_product_ids', array(), $order ) );
+		$filtered = array_map( 'intval', (array) apply_filters( 'webwakeupwdb_excluded_product_ids', array(), $order ) );
 		if ( $product_id > 0 && in_array( $product_id, $filtered, true ) ) {
 			return 'manual';
 		}
@@ -59,7 +59,7 @@ final class ExemptionResolver {
 	 * Order-independent counterpart of {@see reason_for_item()}: it consults only the
 	 * merchant's per-reason map, so it can run at CHECKOUT (cart items, no order yet)
 	 * as well as for a placed order. It deliberately does NOT apply the legacy
-	 * `wwu_wb_excluded_product_ids` filter — that filter is scoped to a placed order.
+	 * `webwakeupwdb_excluded_product_ids` filter — that filter is scoped to a placed order.
 	 *
 	 * @param int   $product_id   Product id.
 	 * @param int[] $category_ids Product category ids.
@@ -89,7 +89,7 @@ final class ExemptionResolver {
 	 * @return array<string,array{products:int[],categories:int[]}>
 	 */
 	public static function map(): array {
-		$opt = (array) \WWU\WithdrawalButton\Core\Settings::get( 'wwu_wb_exclusions' );
+		$opt = (array) \WebWakeUpWdb\WithdrawalButton\Core\Settings::get( 'webwakeupwdb_exclusions' );
 
 		$by_reason = ( isset( $opt['by_reason'] ) && is_array( $opt['by_reason'] ) ) ? $opt['by_reason'] : array();
 

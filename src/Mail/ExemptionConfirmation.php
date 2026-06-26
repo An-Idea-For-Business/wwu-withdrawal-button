@@ -12,25 +12,25 @@
  *
  * Two distinct legally-operative acts must be logged separately:
  *   1. the CHECKOUT CAPTURE — what wording was shown and accepted (handled by
- *      {@see \WWU\WithdrawalButton\Frontend\WooCheckoutConsent});
+ *      {@see \WebWakeUpWdb\WithdrawalButton\Frontend\WooCheckoutConsent});
  *   2. the CONFIRMATION DELIVERY — that the durable-medium confirmation was sent
  *      (this class) — the consent log alone does not prove delivery.
  *
  * This sends a self-contained e-mail (an e-mail IS a durable medium, recital 23
  * CRD) reproducing the verbatim consent wording, and appends its own immutable-log
  * event so the dispatch is provable. See
- * docs/legal/wwu-wb-exemption-consent-evidence-NOTE.md.
+ * docs/legal/webwakeupwdb-exemption-consent-evidence-NOTE.md.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Mail;
+namespace WebWakeUpWdb\WithdrawalButton\Mail;
 
-use WWU\WithdrawalButton\Domain\ConsentText;
-use WWU\WithdrawalButton\Domain\ExceptionTypes;
-use WWU\WithdrawalButton\Storage\LogRepository;
+use WebWakeUpWdb\WithdrawalButton\Domain\ConsentText;
+use WebWakeUpWdb\WithdrawalButton\Domain\ExceptionTypes;
+use WebWakeUpWdb\WithdrawalButton\Storage\LogRepository;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -177,6 +177,6 @@ final class ExemptionConfirmation {
 		 * @param string $number  Order number.
 		 * @param array  $entries Stored consent entries.
 		 */
-		return (string) apply_filters( 'wwu_wb_exemption_confirmation_html', $out, $number, $entries );
+		return (string) apply_filters( 'webwakeupwdb_exemption_confirmation_html', $out, $number, $entries );
 	}
 }

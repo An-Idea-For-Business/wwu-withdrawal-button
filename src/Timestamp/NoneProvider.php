@@ -2,12 +2,12 @@
 /**
  * Null timestamp provider (audit-only mode — the hash chain alone is the evidence).
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Timestamp;
+namespace WebWakeUpWdb\WithdrawalButton\Timestamp;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

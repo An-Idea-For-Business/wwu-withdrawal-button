@@ -2,31 +2,31 @@
 /**
  * Shortcodes for placing and customising the withdrawal surfaces.
  *
- *   [wwu_wb_button order_id="" label="" style=""]
- *   [wwu_wb_form order_id="" ]            (reads ?wwu_wb_order + ?key for guests)
- *   [wwu_wb_status order_id=""]
- *   [wwu_wb_model_form lang=""]           (Annex I-B model form)
- *   [wwu_wb_info type="precontractual|terms|privacy" lang=""]
+ *   [webwakeupwdb_button order_id="" label="" style=""]
+ *   [webwakeupwdb_form order_id="" ]            (reads ?webwakeupwdb_order + ?key for guests)
+ *   [webwakeupwdb_status order_id=""]
+ *   [webwakeupwdb_model_form lang=""]           (Annex I-B model form)
+ *   [webwakeupwdb_info type="precontractual|terms|privacy" lang=""]
  *
  * Order-scoped shortcodes pass through an ownership/token access check and never
  * leak another customer's order; failures render nothing.
  *
- * @package WWU\WithdrawalButton
+ * @package WebWakeUpWdb\WithdrawalButton
  */
 
 declare( strict_types=1 );
 
-namespace WWU\WithdrawalButton\Shortcodes;
+namespace WebWakeUpWdb\WithdrawalButton\Shortcodes;
 
-use WWU\WithdrawalButton\Core\Services;
-use WWU\WithdrawalButton\Frontend\ExemptionNoteRenderer;
-use WWU\WithdrawalButton\Frontend\GuestAccess;
-use WWU\WithdrawalButton\Frontend\Template;
-use WWU\WithdrawalButton\Frontend\WithdrawalUrl;
-use WWU\WithdrawalButton\Legal\ClauseLibrary;
-use WWU\WithdrawalButton\Legal\ModelForm;
-use WWU\WithdrawalButton\Platform\NormalizedOrder;
-use WWU\WithdrawalButton\Platform\OrderDataSource;
+use WebWakeUpWdb\WithdrawalButton\Core\Services;
+use WebWakeUpWdb\WithdrawalButton\Frontend\ExemptionNoteRenderer;
+use WebWakeUpWdb\WithdrawalButton\Frontend\GuestAccess;
+use WebWakeUpWdb\WithdrawalButton\Frontend\Template;
+use WebWakeUpWdb\WithdrawalButton\Frontend\WithdrawalUrl;
+use WebWakeUpWdb\WithdrawalButton\Legal\ClauseLibrary;
+use WebWakeUpWdb\WithdrawalButton\Legal\ModelForm;
+use WebWakeUpWdb\WithdrawalButton\Platform\NormalizedOrder;
+use WebWakeUpWdb\WithdrawalButton\Platform\OrderDataSource;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -43,21 +43,42 @@ final class Shortcodes {
 	 * @return void
 	 */
 	public function register(): void {
-		add_shortcode( 'wwu_wb_button', array( $this, 'button' ) );
-		add_shortcode( 'wwu_wb_form', array( $this, 'form' ) );
-		add_shortcode( 'wwu_wb_status', array( $this, 'status' ) );
-		add_shortcode( 'wwu_wb_model_form', array( $this, 'model_form' ) );
-		add_shortcode( 'wwu_wb_info', array( $this, 'info' ) );
+		add_shortcode( 'webwakeupwdb_button', array( $this, 'button' ) );
+		add_shortcode( 'webwakeupwdb_form', array( $this, 'form' ) );
+		add_shortcode( 'webwakeupwdb_status', array( $this, 'status' ) );
+		add_shortcode( 'webwakeupwdb_model_form', array( $this, 'model_form' ) );
+		add_shortcode( 'webwakeupwdb_info', array( $this, 'info' ) );
+		add_shortcode( 'webwakeupwdb_policy', array( $this, 'policy' ) );
 	}
 
 	/**
-	 * [wwu_wb_button] — render the withdrawal button for an order.
+	 * [webwakeupwdb_policy] — render the consolidated "Right of withdrawal — information
+	 * notice", assembled live from the merchant's settings + selected Art. 59
+	 * exemptions. Carries the global "complements, not replaces / have your lawyer
+	 * review it" disclaimer. Optional atts: lang (override), sections (csv allow-list).
+	 *
+	 * @param array|string $atts Attributes.
+	 * @return string
+	 */
+	public function policy( $atts ): string {
+		$atts = shortcode_atts( array( 'lang' => '', 'sections' => '' ), (array) $atts, 'webwakeupwdb_policy' );
+		$opts = array();
+		if ( '' !== (string) $atts['sections'] ) {
+			$opts['sections'] = array_values( array_filter( array_map( 'trim', explode( ',', (string) $atts['sections'] ) ) ) );
+		}
+		$doc = \WebWakeUpWdb\WithdrawalButton\Legal\PolicyBuilder::build( sanitize_text_field( (string) $atts['lang'] ), $opts );
+
+		return '<div class="webwakeupwdb-policy-wrap">' . \WebWakeUpWdb\WithdrawalButton\Legal\PolicyBuilder::disclaimer_html() . $doc->to_html() . '</div>';
+	}
+
+	/**
+	 * [webwakeupwdb_button] — render the withdrawal button for an order.
 	 *
 	 * @param array|string $atts Attributes.
 	 * @return string
 	 */
 	public function button( $atts ): string {
-		$atts = shortcode_atts( array( 'order_id' => '' ), (array) $atts, 'wwu_wb_button' );
+		$atts = shortcode_atts( array( 'order_id' => '' ), (array) $atts, 'webwakeupwdb_button' );
 		$ctx  = $this->resolve_order_access( sanitize_text_field( (string) $atts['order_id'] ) );
 		if ( ! $ctx ) {
 			return '';
@@ -79,34 +100,34 @@ final class Shortcodes {
 	}
 
 	/**
-	 * [wwu_wb_form] — render the two-step withdrawal form.
+	 * [webwakeupwdb_form] — render the two-step withdrawal form.
 	 *
 	 * @param array|string $atts Attributes.
 	 * @return string
 	 */
 	public function form( $atts ): string {
-		$atts      = shortcode_atts( array( 'order_id' => '' ), (array) $atts, 'wwu_wb_form' );
+		$atts      = shortcode_atts( array( 'order_id' => '' ), (array) $atts, 'webwakeupwdb_form' );
 		$order_ref = sanitize_text_field( (string) $atts['order_id'] );
-		if ( '' === $order_ref && isset( $_GET['wwu_wb_order'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$order_ref = sanitize_text_field( wp_unslash( $_GET['wwu_wb_order'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( '' === $order_ref && isset( $_GET['webwakeupwdb_order'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$order_ref = sanitize_text_field( wp_unslash( $_GET['webwakeupwdb_order'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		}
 		// No specific order in context: instead of an unhelpful error, show the
 		// logged-in customer their withdrawal-relevant orders to choose from (and
 		// guide guests to the email link). A failed access for a *given* order ref
 		// still returns the not-found notice below.
 		if ( '' === $order_ref ) {
-			return \WWU\WithdrawalButton\Frontend\EligibleOrders::render_for_user( get_current_user_id() );
+			return \WebWakeUpWdb\WithdrawalButton\Frontend\EligibleOrders::render_for_user( get_current_user_id() );
 		}
 
 		$ctx = $this->resolve_order_access( $order_ref );
 		if ( ! $ctx ) {
-			return '<p class="wwu-wb-notice">' . esc_html__( 'Order not found or access could not be verified.', 'wwu-withdrawal-button' ) . '</p>';
+			return '<p class="webwakeupwdb-notice">' . esc_html__( 'Order not found or access could not be verified.', 'wwu-withdrawal-button' ) . '</p>';
 		}
 		list( $adapter, $order ) = $ctx;
 
 		// Close the direct-shortcode path: a renewal order (or any order the
 		// applicability engine excludes) must not render the two-step form even when
-		// reached via [wwu_wb_form order_id=…]. The button surfaces already gate on
+		// reached via [webwakeupwdb_form order_id=…]. The button surfaces already gate on
 		// applicability; this matches them.
 		$decision = Services::instance()->applicability->decide( $order );
 		if ( ! $decision->show ) {
@@ -122,7 +143,7 @@ final class Shortcodes {
 					return $note;
 				}
 			}
-			return '<p class="wwu-wb-notice">' . esc_html__( 'The right of withdrawal is not available for this order.', 'wwu-withdrawal-button' ) . '</p>';
+			return '<p class="webwakeupwdb-notice">' . esc_html__( 'The right of withdrawal is not available for this order.', 'wwu-withdrawal-button' ) . '</p>';
 		}
 
 		$services = Services::instance();
@@ -144,13 +165,13 @@ final class Shortcodes {
 	}
 
 	/**
-	 * [wwu_wb_status] — show the status of an order's withdrawal request.
+	 * [webwakeupwdb_status] — show the status of an order's withdrawal request.
 	 *
 	 * @param array|string $atts Attributes.
 	 * @return string
 	 */
 	public function status( $atts ): string {
-		$atts = shortcode_atts( array( 'order_id' => '' ), (array) $atts, 'wwu_wb_status' );
+		$atts = shortcode_atts( array( 'order_id' => '' ), (array) $atts, 'webwakeupwdb_status' );
 		$ctx  = $this->resolve_order_access( sanitize_text_field( (string) $atts['order_id'] ) );
 		if ( ! $ctx ) {
 			return '';
@@ -158,9 +179,9 @@ final class Shortcodes {
 		list( $adapter, $order ) = $ctx;
 		$status = (string) $adapter->get_meta( $order->order_ref, 'status' );
 		if ( '' === $status ) {
-			return '<p class="wwu-wb-notice">' . esc_html__( 'No withdrawal request for this order.', 'wwu-withdrawal-button' ) . '</p>';
+			return '<p class="webwakeupwdb-notice">' . esc_html__( 'No withdrawal request for this order.', 'wwu-withdrawal-button' ) . '</p>';
 		}
-		return '<p class="wwu-wb-status-notice">' . esc_html(
+		return '<p class="webwakeupwdb-status-notice">' . esc_html(
 			sprintf(
 				/* translators: %s: status. */
 				__( 'Withdrawal request status: %s', 'wwu-withdrawal-button' ),
@@ -170,32 +191,32 @@ final class Shortcodes {
 	}
 
 	/**
-	 * [wwu_wb_model_form] — render the Annex I-B model withdrawal form.
+	 * [webwakeupwdb_model_form] — render the Annex I-B model withdrawal form.
 	 *
 	 * @param array|string $atts Attributes.
 	 * @return string
 	 */
 	public function model_form( $atts ): string {
-		$atts = shortcode_atts( array( 'lang' => '' ), (array) $atts, 'wwu_wb_model_form' );
+		$atts = shortcode_atts( array( 'lang' => '' ), (array) $atts, 'webwakeupwdb_model_form' );
 		$lang = '' !== $atts['lang'] ? sanitize_key( (string) $atts['lang'] ) : determine_locale();
 		return Template::render( 'legal/model-form.php', array( 'form' => ModelForm::for_language( $lang ) ) );
 	}
 
 	/**
-	 * [wwu_wb_info] — render a pre-contractual / terms / privacy clause.
+	 * [webwakeupwdb_info] — render a pre-contractual / terms / privacy clause.
 	 *
 	 * @param array|string $atts Attributes.
 	 * @return string
 	 */
 	public function info( $atts ): string {
-		$atts = shortcode_atts( array( 'type' => 'precontractual', 'lang' => '' ), (array) $atts, 'wwu_wb_info' );
+		$atts = shortcode_atts( array( 'type' => 'precontractual', 'lang' => '' ), (array) $atts, 'webwakeupwdb_info' );
 		$type = sanitize_key( (string) $atts['type'] );
 		$lang = '' !== $atts['lang'] ? sanitize_key( (string) $atts['lang'] ) : determine_locale();
 		$text = ClauseLibrary::get( $type, $lang );
 		if ( '' === $text ) {
 			return '';
 		}
-		return '<div class="wwu-wb-info">' . wpautop( esc_html( $text ) ) . '</div>';
+		return '<div class="webwakeupwdb-info">' . wpautop( esc_html( $text ) ) . '</div>';
 	}
 
 	/**
