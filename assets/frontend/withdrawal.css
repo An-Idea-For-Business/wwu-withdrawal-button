@@ -232,6 +232,40 @@
 	border-radius: var(--wwu-wb-field-radius);
 }
 
+/* Consolidated "Right of withdrawal" information notice (shortcode / page / PDF). */
+.wwu-wb-policy-wrap {
+	max-width: 820px;
+	margin: 1.5em 0;
+}
+.wwu-wb-policy__disclaimer {
+	font-size: 0.9rem;
+	color: var(--wwu-wb-note-color);
+	background: var(--wwu-wb-notice-bg);
+	border-left: 4px solid var(--wwu-wb-notice-accent);
+	padding: 0.6em 1em;
+	margin: 0 0 1.2em;
+}
+.wwu-wb-policy__title {
+	margin: 0 0 0.6em;
+}
+.wwu-wb-policy__section {
+	margin: 0 0 1.4em;
+}
+.wwu-wb-policy__heading {
+	margin: 0 0 0.4em;
+}
+.wwu-wb-policy__ref {
+	color: var(--wwu-wb-note-color);
+	font-size: 0.9em;
+}
+.wwu-wb-policy__exceptions {
+	margin: 0.4em 0 0;
+	padding-left: 1.2em;
+}
+.wwu-wb-policy__exceptions li {
+	margin-bottom: 0.6em;
+}
+
 .wwu-wb-step2-intro {
 	font-weight: 600;
 }

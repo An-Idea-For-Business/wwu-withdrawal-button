@@ -134,6 +134,34 @@ final class DashboardPage {
 			);
 		}
 
+		// Policy page (optional): a consolidated "Right of withdrawal" notice. Same
+		// recreate action (which=policy), so a deleted/trashed one is one click to restore.
+		$policy_id = (int) ( $settings['policy_page_id'] ?? 0 );
+		$policy_ok = $policy_id > 0 && 'page' === get_post_type( $policy_id ) && 'trash' !== get_post_status( $policy_id );
+		if ( $policy_ok ) {
+			$edit_url  = get_edit_post_link( $policy_id, 'url' );
+			$open_url  = ( is_string( $edit_url ) && '' !== $edit_url ) ? $edit_url : (string) get_permalink( $policy_id );
+			$published = ( 'publish' === get_post_status( $policy_id ) );
+			$this->row(
+				true,
+				__( 'Withdrawal policy page', 'wwu-withdrawal-button' ),
+				$published
+					? __( 'Published — a consolidated "Right of withdrawal" notice assembled from your settings and exemptions.', 'wwu-withdrawal-button' )
+					: __( 'Created as a draft — review it and publish when ready.', 'wwu-withdrawal-button' ),
+				array( $open_url, __( 'Open page', 'wwu-withdrawal-button' ) ),
+				$published ? 'ok' : 'warn'
+			);
+		} else {
+			$policy_act = wp_nonce_url( admin_url( 'admin-post.php?action=wwu_wb_recreate_page&which=policy' ), self::RECREATE_PAGE_NONCE );
+			$this->row(
+				false,
+				__( 'Withdrawal policy page (optional)', 'wwu-withdrawal-button' ),
+				__( 'A single consolidated "Right of withdrawal" notice (assembled from your settings + exemptions) you can link from your footer. Create it as a draft to review:', 'wwu-withdrawal-button' ),
+				array( $policy_act, __( 'Create the policy page', 'wwu-withdrawal-button' ) ),
+				'warn'
+			);
+		}
+
 		// Email delivery — the row that actually answers "why didn't I get an email?".
 		$mail_detail = '' !== $mail['name']
 			? sprintf( /* translators: %s: SMTP plugin name. */ __( 'Sending through %s. Use the test below to confirm it reaches your inbox.', 'wwu-withdrawal-button' ), $mail['name'] )

@@ -48,6 +48,31 @@ final class Shortcodes {
 		add_shortcode( 'wwu_wb_status', array( $this, 'status' ) );
 		add_shortcode( 'wwu_wb_model_form', array( $this, 'model_form' ) );
 		add_shortcode( 'wwu_wb_info', array( $this, 'info' ) );
+		add_shortcode( 'wwu_wb_policy', array( $this, 'policy' ) );
+	}
+
+	/**
+	 * [wwu_wb_policy] — render the consolidated "Right of withdrawal — information
+	 * notice", assembled live from the merchant's settings + selected Art. 59
+	 * exemptions. Carries the global "complements, not replaces / have your lawyer
+	 * review it" disclaimer. Optional atts: lang (override), sections (csv allow-list).
+	 *
+	 * @param array|string $atts Attributes.
+	 * @return string
+	 */
+	public function policy( $atts ): string {
+		$atts = shortcode_atts( array( 'lang' => '', 'sections' => '' ), (array) $atts, 'wwu_wb_policy' );
+		$opts = array();
+		if ( '' !== (string) $atts['sections'] ) {
+			$opts['sections'] = array_values( array_filter( array_map( 'trim', explode( ',', (string) $atts['sections'] ) ) ) );
+		}
+		$doc = \WWU\WithdrawalButton\Legal\PolicyBuilder::build( sanitize_text_field( (string) $atts['lang'] ), $opts );
+
+		$disclaimer = '<p class="wwu-wb-policy__disclaimer">'
+			. esc_html__( 'This notice complements — and does not replace — your Terms of Sale and pre-contractual information. It is a generic template; have it reviewed by your own legal counsel.', 'wwu-withdrawal-button' )
+			. '</p>';
+
+		return '<div class="wwu-wb-policy-wrap">' . $disclaimer . $doc->to_html() . '</div>';
 	}
 
 	/**
