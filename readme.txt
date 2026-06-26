@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 1.3.0-alpha.2
+Stable tag: 1.3.0-alpha.3
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -125,6 +125,9 @@ The plugin records withdrawal declarations (name, identified contract, email, IP
 For the conditional Art. 59 exemptions, the plugin also stores the consumer's checkout consent + acknowledgement (the agreed wording, a hash, the date/time and — unless you turn it off — the IP) as evidence to prove the exemption is valid. The lawful basis is **legitimate interest** (GDPR Art. 6(1)(f); defence of legal claims), **not** GDPR consent. The IP lives only on the order (never in the immutable log) and is automatically anonymised once the retention period lapses. A second ready-to-paste privacy clause is generated for this processing.
 
 == Changelog ==
+
+= 1.3.0-alpha.3 =
+* **Italian translation of the new legal-documents strings + an i18n refresh** (Phase C). The consolidated policy, the Complianz toggles, the freeze / recreate buttons and the reworded timestamp copy are now in Italian (it_IT ~99%). German, French and Spanish carry the new strings untranslated for now (coming via the same pipeline); Swedish awaits a native review.
 
 = 1.3.0-alpha.2 =
 * **New — add the withdrawal clauses to your Complianz documents** (Phase B). If you use Complianz, two opt-in toggles under **Settings → Complianz documents** append the right-of-withdrawal clauses to your **Privacy Policy** (always) and **Terms & Conditions** (when Complianz's free Terms & Conditions add-on is installed). Off by default, **EU only**, with a live "what will be added" preview — turning a toggle off removes the clauses again on the next regeneration. They **complement, not replace** your own legal texts (have your lawyer review them).
