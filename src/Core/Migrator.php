@@ -131,7 +131,13 @@ final class Migrator {
 			}
 			$content = str_replace( '[wwu_wb_', '[webwakeupwdb_', (string) $post->post_content );
 			if ( $content !== $post->post_content ) {
-				wp_update_post( array( 'ID' => $pid, 'post_content' => $content ) );
+				// Low-level write — NOT wp_update_post(). On plugins_loaded (incl. under
+				// WP-CLI) the wp_insert_post() revision cascade reads WP_POST_REVISIONS
+				// before it is defined and fatals. The page body is plain text, so a
+				// direct UPDATE is safe + sufficient. (Migration_4 is the belt for any
+				// install whose adoption ran before this fix shipped.)
+				$wpdb->update( $wpdb->posts, array( 'post_content' => $content ), array( 'ID' => $pid ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				clean_post_cache( $pid );
 			}
 		}
 

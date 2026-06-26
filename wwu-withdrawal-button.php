@@ -61,7 +61,7 @@ define( 'WEBWAKEUPWDB_NONCE_ACTION', 'webwakeupwdb_nonce' );
  * src/Storage/Database/Migrations/. The Migrator runs every migration whose
  * number is greater than the stored webwakeupwdb_db_version option.
  */
-define( 'WEBWAKEUPWDB_SCHEMA_VERSION', 3 );
+define( 'WEBWAKEUPWDB_SCHEMA_VERSION', 4 );
 
 /**
  * Legal application ("go-live") date for the EU/IT market.
