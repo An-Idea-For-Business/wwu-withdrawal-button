@@ -12,7 +12,7 @@ EU statutory withdrawal button (Art. 11a) for WooCommerce, FluentCart & EDD: two
 
 == Description ==
 
-Product page & documentation: https://webwakeup.it/wwu-withdrawal-button/
+Product page & docs: https://webwakeup.it/wwu-withdrawal-button/ | Source code, issues & contributions on GitHub: https://github.com/An-Idea-For-Business/wwu-withdrawal-button
 
 From 19 June 2026, EU law (Directive (EU) 2023/2673, new Art. 11a of the Consumer Rights Directive; Italy: Art. 54-bis Codice del Consumo) requires online stores to provide a **withdrawal function** that lets consumers withdraw from a distance contract as easily as they concluded it. WWU Withdrawal Button adds that function — and everything around it you need to run it and to prove you did it right — to WooCommerce, FluentCart and Easy Digital Downloads.
 
