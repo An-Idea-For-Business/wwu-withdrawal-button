@@ -3,6 +3,16 @@
 All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); the project uses Semantic Versioning.
 
+## [1.4.0] — 2026-07-02 — Seller details on the Annex I(B) model form
+
+From a merchant support question: the `[webwakeupwdb_model_form]` shortcode rendered the statutory model withdrawal form with the raw "To [the trader inserts here his name, geographical address and, where available, his e-mail address]:" placeholder, and there was no way to fill it — the text was a hardcoded constant with no setting or filter. This adds the missing seller identity.
+
+- **New Settings section "Seller details (model withdrawal form)"** (`SettingsPage::render_seller_section`, rendered after Legal clauses) with three fields — business name, geographical address, contact e-mail — saved into the existing `webwakeupwdb_settings` option (`seller_name` / `seller_address` / `seller_email`; `sanitize_text_field` ×2 + `sanitize_email`). A collapsible "Show example" renders the actual recipient line (Standard #12: description + example).
+- **`ModelForm::for_language()` gains an optional `?array $trader`** — when supplied, the statutory recipient placeholder is replaced with the configured identity, keeping the official recipient label (the text before the "[…]") and skipping empty parts, e.g. `Destinatario: Name, Address, e-mail`. The rest of the Annex I(B) wording is never altered; a null/empty trader leaves the placeholder untouched.
+- **`Shortcodes::model_form()`** reads the seller details (`Shortcodes::seller_details()`) and passes them through. **Fallbacks:** name → site name, e-mail → admin e-mail; the geographical address has no fallback (it must be entered by the merchant, so an unset address simply stays out of the line). Output is escaped by the template (`esc_html`), so the fill is XSS-safe.
+
+Additive, no schema change. PHP lint 0 errors.
+
 ## [1.3.2] — 2026-06-26 — Fix: evidence-log hash-chain genesis seed (upgrade regression)
 
 The 1.3.0 WordPress.org prefix rename (`s/wwu_wb_/webwakeupwdb_/`) swept up a literal that is **not** a code identifier: the genesis seed in `LogChain::genesis()` (`'wwu_wb_genesis|'` → `'webwakeupwdb_genesis|'`). That seed is baked into the genesis hash of every immutable-log row ever written, so changing it re-based the genesis and broke chain verification at row 1 on any install carrying pre-1.3 rows. It surfaced only once `Migration_5` (1.3.1) populated the renamed log table on the test subsite: `log.chain_intact` went red while `log.genesis_stable` stayed green — the seed is deterministic but no longer matched the stored rows.

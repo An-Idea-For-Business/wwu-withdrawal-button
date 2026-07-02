@@ -19,6 +19,7 @@ declare( strict_types=1 );
 namespace WebWakeUpWdb\WithdrawalButton\Shortcodes;
 
 use WebWakeUpWdb\WithdrawalButton\Core\Services;
+use WebWakeUpWdb\WithdrawalButton\Core\Settings;
 use WebWakeUpWdb\WithdrawalButton\Frontend\ExemptionNoteRenderer;
 use WebWakeUpWdb\WithdrawalButton\Frontend\GuestAccess;
 use WebWakeUpWdb\WithdrawalButton\Frontend\Template;
@@ -199,7 +200,37 @@ final class Shortcodes {
 	public function model_form( $atts ): string {
 		$atts = shortcode_atts( array( 'lang' => '' ), (array) $atts, 'webwakeupwdb_model_form' );
 		$lang = '' !== $atts['lang'] ? sanitize_key( (string) $atts['lang'] ) : determine_locale();
-		return Template::render( 'legal/model-form.php', array( 'form' => ModelForm::for_language( $lang ) ) );
+		return Template::render( 'legal/model-form.php', array( 'form' => ModelForm::for_language( $lang, self::seller_details() ) ) );
+	}
+
+	/**
+	 * Resolve the seller identity for the Annex I(B) model form.
+	 *
+	 * Reads the configured seller name / address / e-mail (Settings -> Seller
+	 * details) and falls back to the site name and admin e-mail so the recipient
+	 * line is never left with the raw "[the trader inserts here …]" placeholder
+	 * once at least a name/e-mail is known. The geographical address has no
+	 * fallback: it must be entered by the merchant, so an unset address simply
+	 * stays out of the recipient line.
+	 *
+	 * @return array{name:string,address:string,email:string}
+	 */
+	private static function seller_details(): array {
+		$main    = Settings::main();
+		$name    = trim( (string) ( $main['seller_name'] ?? '' ) );
+		$address = trim( (string) ( $main['seller_address'] ?? '' ) );
+		$email   = trim( (string) ( $main['seller_email'] ?? '' ) );
+		if ( '' === $name ) {
+			$name = (string) get_bloginfo( 'name' );
+		}
+		if ( '' === $email ) {
+			$email = (string) get_option( 'admin_email' );
+		}
+		return array(
+			'name'    => $name,
+			'address' => $address,
+			'email'   => $email,
+		);
 	}
 
 	/**
