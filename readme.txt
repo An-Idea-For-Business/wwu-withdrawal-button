@@ -132,6 +132,7 @@ For the conditional Art. 59 exemptions, the plugin also stores the consumer's ch
 
 = 1.4.0 =
 * **New — Seller details on the model withdrawal form.** A new **Settings → Seller details** section (business name, geographical address, contact e-mail) fills the "To […]" recipient line of the statutory model withdrawal form (Annex I-B) shown by `[webwakeupwdb_model_form]`, replacing the generic "[the trader inserts here …]" placeholder. Leave a field empty to fall back to your site name / admin e-mail; the geographical address is required by law, so add it there. The rest of that form remains the official, unmodifiable statutory wording. (From a merchant support question.)
+* **Translations.** All five locales (Italian, German, Spanish, French, Swedish) re-translated to ~99–100%, closing a pre-existing gap where recent (1.3.x) admin strings — the Right-of-withdrawal notice, policy document and timestamping prompts — were still showing in English.
 
 = 1.3.2 =
 * **Fix — evidence-log chain on upgrade.** The 1.3.0 prefix rename accidentally changed the genesis seed of the tamper-evident log's hash chain, so a site upgrading from a pre-1.3 version failed chain verification (the stored rows were genuinely intact — only the verification seed had drifted). The seed is restored to its original, frozen value, so existing logs verify again. No effect on a clean install; the per-site secret and all verifiable receipt links were unaffected.
