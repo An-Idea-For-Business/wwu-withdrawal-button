@@ -91,6 +91,7 @@ final class SettingsPage {
 		$this->render_platforms_section( $settings );
 		$this->render_guidance_section( $settings );
 		$this->render_clauses_section( $settings );
+		$this->render_seller_section( $settings );
 		$this->render_complianz_section( $settings );
 		$this->render_exemptions_section();
 		$this->render_receipt_section( $settings );
@@ -530,6 +531,57 @@ final class SettingsPage {
 		}
 
 		echo '</tbody></table>';
+	}
+
+	/**
+	 * Render the "Seller details (model withdrawal form)" section.
+	 *
+	 * These fill the recipient line of the statutory Annex I(B) model form
+	 * ([webwakeupwdb_model_form]); the rest of that form is fixed by law.
+	 *
+	 * @param array $settings Current settings.
+	 * @return void
+	 */
+	private function render_seller_section( array $settings ): void {
+		$name     = (string) ( $settings['seller_name'] ?? '' );
+		$address  = (string) ( $settings['seller_address'] ?? '' );
+		$email    = (string) ( $settings['seller_email'] ?? '' );
+		$ph_name  = (string) get_bloginfo( 'name' );
+		$ph_email = (string) get_option( 'admin_email' );
+
+		echo '<h2>' . esc_html__( 'Seller details (model withdrawal form)', 'wwu-withdrawal-button' ) . '</h2>';
+		echo '<p class="description" style="max-width:60em;">' . esc_html__( 'These fill the "To […]" recipient line of the statutory model withdrawal form (Annex I-B), shown by the [webwakeupwdb_model_form] shortcode. The rest of that form is the official wording set by law and cannot be changed. Leave a field empty to fall back to your site name / admin e-mail; the geographical address is required by law, so add it here.', 'wwu-withdrawal-button' ) . '</p>';
+		echo '<table class="form-table" role="presentation"><tbody>';
+
+		echo '<tr><th scope="row"><label for="webwakeupwdb-seller-name">' . esc_html__( 'Business name', 'wwu-withdrawal-button' ) . '</label></th><td>';
+		echo '<input type="text" id="webwakeupwdb-seller-name" name="seller_name" class="regular-text" value="' . esc_attr( $name ) . '" placeholder="' . esc_attr( $ph_name ) . '" />';
+		echo '</td></tr>';
+
+		echo '<tr><th scope="row"><label for="webwakeupwdb-seller-address">' . esc_html__( 'Geographical address', 'wwu-withdrawal-button' ) . '</label></th><td>';
+		echo '<input type="text" id="webwakeupwdb-seller-address" name="seller_address" class="regular-text" value="' . esc_attr( $address ) . '" placeholder="' . esc_attr__( 'Street, postcode, city, country', 'wwu-withdrawal-button' ) . '" />';
+		echo '<p class="description">' . esc_html__( 'Required on the statutory form. Without it the recipient line shows only your name and e-mail.', 'wwu-withdrawal-button' ) . '</p>';
+		echo '</td></tr>';
+
+		echo '<tr><th scope="row"><label for="webwakeupwdb-seller-email">' . esc_html__( 'Contact e-mail', 'wwu-withdrawal-button' ) . '</label></th><td>';
+		echo '<input type="email" id="webwakeupwdb-seller-email" name="seller_email" class="regular-text" value="' . esc_attr( $email ) . '" placeholder="' . esc_attr( $ph_email ) . '" />';
+		echo '</td></tr>';
+
+		echo '</tbody></table>';
+
+		// Live example: the actual recipient line as it will render, using the admin
+		// language and the current values (falling back to site name / admin e-mail
+		// exactly like the frontend).
+		$preview = \WebWakeUpWdb\WithdrawalButton\Legal\ModelForm::for_language(
+			determine_locale(),
+			array(
+				'name'    => '' !== trim( $name ) ? $name : $ph_name,
+				'address' => $address,
+				'email'   => '' !== trim( $email ) ? $email : $ph_email,
+			)
+		);
+		echo '<details style="margin:-8px 0 10px;"><summary style="cursor:pointer;color:#2271b1;">' . esc_html__( 'Show example', 'wwu-withdrawal-button' ) . '</summary>';
+		echo '<p style="margin-top:6px;"><code>' . esc_html( (string) $preview['to'] ) . '</code></p>';
+		echo '</details>';
 	}
 
 	/**
@@ -1196,6 +1248,10 @@ final class SettingsPage {
 		// clauses to the merchant's Complianz Privacy Policy / Terms documents.
 		$settings['complianz_inject_privacy'] = Sanitizer::bool( wp_unslash( $_POST['complianz_inject_privacy'] ?? '' ) );
 		$settings['complianz_inject_terms']   = Sanitizer::bool( wp_unslash( $_POST['complianz_inject_terms'] ?? '' ) );
+		// Seller identity for the Annex I(B) model form (fills the "To […]" recipient line).
+		$settings['seller_name']    = sanitize_text_field( (string) wp_unslash( $_POST['seller_name'] ?? '' ) );
+		$settings['seller_address'] = sanitize_text_field( (string) wp_unslash( $_POST['seller_address'] ?? '' ) );
+		$settings['seller_email']   = sanitize_email( (string) wp_unslash( $_POST['seller_email'] ?? '' ) );
 		update_option( 'webwakeupwdb_settings', $settings );
 
 		// Legal clause overrides (Settings -> Legal clauses), per type for the current

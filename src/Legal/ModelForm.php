@@ -94,12 +94,39 @@ final class ModelForm {
 	/**
 	 * Get the model-form strings for a language (falls back to English).
 	 *
-	 * @param string $lang Language code (it/en/de/fr/es).
+	 * When a seller identity is supplied, the statutory "To [the trader inserts
+	 * here …]" placeholder on the recipient line is replaced with the configured
+	 * name / address / e-mail, keeping the official recipient label (the text
+	 * before the bracket). Empty parts are skipped; a null $trader (or one with no
+	 * usable parts) leaves the placeholder untouched. The rest of the form is the
+	 * official Annex I(B) wording and is never altered.
+	 *
+	 * @param string     $lang   Language code (it/en/de/fr/es).
+	 * @param array|null $trader Optional seller identity: name, address, email.
 	 * @return array<string,string>
 	 */
-	public static function for_language( string $lang ): array {
+	public static function for_language( string $lang, ?array $trader = null ): array {
 		$lang = strtolower( substr( $lang, 0, 2 ) );
-		return self::FORM[ $lang ] ?? self::FORM['en'];
+		$form = self::FORM[ $lang ] ?? self::FORM['en'];
+
+		if ( null !== $trader ) {
+			$parts = array();
+			foreach ( array( 'name', 'address', 'email' ) as $field ) {
+				$value = isset( $trader[ $field ] ) ? trim( (string) $trader[ $field ] ) : '';
+				if ( '' !== $value ) {
+					$parts[] = $value;
+				}
+			}
+			if ( ! empty( $parts ) ) {
+				// Keep the statutory recipient label (everything before the "[…]"
+				// placeholder) and append the configured seller identity, e.g.
+				// "Destinatario: Name, Address, email". Escaped by the template.
+				$label      = trim( (string) preg_replace( '/\s*\[.*/s', '', $form['to'] ) );
+				$form['to'] = ( '' !== $label ? $label . ': ' : '' ) . implode( ', ', $parts );
+			}
+		}
+
+		return $form;
 	}
 
 	/**

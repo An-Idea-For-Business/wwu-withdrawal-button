@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 1.3.2
+Stable tag: 1.4.0
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -60,7 +60,7 @@ That is the whole customer experience. Everything below exists to make it correc
 
 = Documents & compliance =
 
-* Generates the **Annex I-B model withdrawal form** and ready clauses for **pre-contractual information, Terms & Conditions and Privacy** — and reminds you, clearly, that installing the button is **not enough**: your Terms and pre-contractual withdrawal article must be updated to describe the new button modality (the plugin gives you the exact text to paste).
+* Generates the **Annex I-B model withdrawal form** — with its "To …" recipient line filled from your **Settings → Seller details** (business name, geographical address, contact e-mail) — and ready clauses for **pre-contractual information, Terms & Conditions and Privacy** — and reminds you, clearly, that installing the button is **not enough**: your Terms and pre-contractual withdrawal article must be updated to describe the new button modality (the plugin gives you the exact text to paste).
 * A single **consolidated "Right of withdrawal" notice**, assembled live from your settings and the Art. 59 exceptions you selected, published three ways: the **`[webwakeupwdb_policy]` shortcode**, an **auto-created page** (one click to recreate it if you delete it) or a downloadable **PDF** — all managed from **Compliance → "Informativa sul diritto di recesso"** (preview / create / open / **freeze** to static HTML / download). Optionally, two opt-in toggles append the same clauses to your **Complianz** Privacy Policy and Terms & Conditions (EU-only, off by default, with a live preview). It complements — it does **not** replace — your own legal texts.
 
 = Integrations & automation =
@@ -129,6 +129,10 @@ The plugin records withdrawal declarations (name, identified contract, email, IP
 For the conditional Art. 59 exemptions, the plugin also stores the consumer's checkout consent + acknowledgement (the agreed wording, a hash, the date/time and — unless you turn it off — the IP) as evidence to prove the exemption is valid. The lawful basis is **legitimate interest** (GDPR Art. 6(1)(f); defence of legal claims), **not** GDPR consent. The IP lives only on the order (never in the immutable log) and is automatically anonymised once the retention period lapses. A second ready-to-paste privacy clause is generated for this processing.
 
 == Changelog ==
+
+= 1.4.0 =
+* **New — Seller details on the model withdrawal form.** A new **Settings → Seller details** section (business name, geographical address, contact e-mail) fills the "To […]" recipient line of the statutory model withdrawal form (Annex I-B) shown by `[webwakeupwdb_model_form]`, replacing the generic "[the trader inserts here …]" placeholder. Leave a field empty to fall back to your site name / admin e-mail; the geographical address is required by law, so add it there. The rest of that form remains the official, unmodifiable statutory wording. (From a merchant support question.)
+* **Translations.** All five locales (Italian, German, Spanish, French, Swedish) re-translated to ~99–100%, closing a pre-existing gap where recent (1.3.x) admin strings — the Right-of-withdrawal notice, policy document and timestamping prompts — were still showing in English.
 
 = 1.3.2 =
 * **Fix — evidence-log chain on upgrade.** The 1.3.0 prefix rename accidentally changed the genesis seed of the tamper-evident log's hash chain, so a site upgrading from a pre-1.3 version failed chain verification (the stored rows were genuinely intact — only the verification seed had drifted). The seed is restored to its original, frozen value, so existing logs verify again. No effect on a clean install; the per-site secret and all verifiable receipt links were unaffected.
