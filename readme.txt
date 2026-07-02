@@ -60,7 +60,7 @@ That is the whole customer experience. Everything below exists to make it correc
 
 = Documents & compliance =
 
-* Generates the **Annex I-B model withdrawal form** and ready clauses for **pre-contractual information, Terms & Conditions and Privacy** — and reminds you, clearly, that installing the button is **not enough**: your Terms and pre-contractual withdrawal article must be updated to describe the new button modality (the plugin gives you the exact text to paste).
+* Generates the **Annex I-B model withdrawal form** — with its "To …" recipient line filled from your **Settings → Seller details** (business name, geographical address, contact e-mail) — and ready clauses for **pre-contractual information, Terms & Conditions and Privacy** — and reminds you, clearly, that installing the button is **not enough**: your Terms and pre-contractual withdrawal article must be updated to describe the new button modality (the plugin gives you the exact text to paste).
 * A single **consolidated "Right of withdrawal" notice**, assembled live from your settings and the Art. 59 exceptions you selected, published three ways: the **`[webwakeupwdb_policy]` shortcode**, an **auto-created page** (one click to recreate it if you delete it) or a downloadable **PDF** — all managed from **Compliance → "Informativa sul diritto di recesso"** (preview / create / open / **freeze** to static HTML / download). Optionally, two opt-in toggles append the same clauses to your **Complianz** Privacy Policy and Terms & Conditions (EU-only, off by default, with a live preview). It complements — it does **not** replace — your own legal texts.
 
 = Integrations & automation =
