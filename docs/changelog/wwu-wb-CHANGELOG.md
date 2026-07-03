@@ -3,6 +3,14 @@
 All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); the project uses Semantic Versioning.
 
+## [1.4.1] — 2026-07-03 — Fix: load bundled translations on WP 5.8–6.0
+
+1.2.4 removed `load_plugin_textdomain()` on the assumption that WP 4.6+ JIT-loads a plugin's bundled `/languages` catalogue automatically. That holds for a plugin's OWN bundled translations only from **WP 6.1+** (`WP_Textdomain_Registry` resolves the path from the `Domain Path` header); on the declared floor (**WP 5.8–6.0**) the bundled `it/de/es/fr/sv` `.mo` would not load without an explicit registration, so those users saw English despite the shipped catalogues.
+
+- Re-added an `init`-hooked `load_plugin_textdomain( WEBWAKEUPWDB_TEXT_DOMAIN, false, dirname( WEBWAKEUPWDB_PLUGIN_BASENAME ) . '/languages' )` in the bootstrap. Harmless on WP 6.1+ (auto-discovery already works); WordPress.org language packs (translate.wordpress.org) still take precedence over the bundled files once generated. `wwu-withdrawal-button.php`.
+
+Note: translate.wordpress.org showing 0% is separate and expected — GlotPress does not import bundled `.po`, and official language packs require ~90% **human-reviewed** translations there (unreviewed AI/machine translations are not accepted per the Polyglots policy).
+
 ## [1.4.0] — 2026-07-02 — Seller details on the Annex I(B) model form
 
 From a merchant support question: the `[webwakeupwdb_model_form]` shortcode rendered the statutory model withdrawal form with the raw "To [the trader inserts here his name, geographical address and, where available, his e-mail address]:" placeholder, and there was no way to fill it — the text was a hardcoded constant with no setting or filter. This adds the missing seller identity.
