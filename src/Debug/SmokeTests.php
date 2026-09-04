@@ -474,6 +474,16 @@ final class SmokeTests {
 		$d_paid  = $resolver->decide( $this->fake_order( 'IT', 'paid', false, array( $this->fake_item( false ) ) ) );
 		$tests[] = $this->assert( 'applicability.paid_status_eligible', $d_paid->show && $d_paid->mandatory, "'paid' status is an eligible concluded contract." );
 
+		// 'on-hold' is contract-bearing only when the order is actually paid. An unpaid
+		// bank-transfer order sits in 'on-hold' awaiting payment → no concluded, paid
+		// contract → the function must stay hidden (parity with FluentCart's unpaid gate).
+		$d_oh_unpaid = $resolver->decide( $this->fake_order( 'IT', 'on-hold', false, array( $this->fake_item( false ) ), null, false, '', null ) );
+		$tests[]     = $this->assert( 'applicability.onhold_unpaid_hidden', ! $d_oh_unpaid->show && 'ineligible_status' === $d_oh_unpaid->reason, "Unpaid 'on-hold' order (awaiting bank transfer) is hidden (reason: " . $d_oh_unpaid->reason . ').' );
+
+		// A PAID order held 'on-hold' for manual review keeps the function.
+		$d_oh_paid = $resolver->decide( $this->fake_order( 'IT', 'on-hold', false, array( $this->fake_item( false ) ), null, false, '', new \DateTimeImmutable( '-1 day' ) ) );
+		$tests[]   = $this->assert( 'applicability.onhold_paid_eligible', $d_oh_paid->show, "Paid 'on-hold' order (held for review) remains eligible." );
+
 		// Regression (alpha.20): an undeterminable country is out of scope (hidden)
 		// in the default eu_eea_only mode.
 		$d_noc   = $resolver->decide( $this->fake_order( '', 'paid', false, array( $this->fake_item( false ) ) ) );
@@ -947,8 +957,11 @@ final class SmokeTests {
 	 * @param string                  $subscription_ref Subscription id tied to the order, or ''.
 	 * @return \WebWakeUpWdb\WithdrawalButton\Platform\NormalizedOrder
 	 */
-	private function fake_order( string $country, string $status, bool $vat, array $items, ?\DateTimeImmutable $created = null, bool $is_renewal = false, string $subscription_ref = '' ): \WebWakeUpWdb\WithdrawalButton\Platform\NormalizedOrder {
+	private function fake_order( string $country, string $status, bool $vat, array $items, ?\DateTimeImmutable $created = null, bool $is_renewal = false, string $subscription_ref = '', $paid = false ): \WebWakeUpWdb\WithdrawalButton\Platform\NormalizedOrder {
 		$created = $created ?? new \DateTimeImmutable( '-1 day' );
+		// $paid sentinel: false = default to the created date (paid order); null =
+		// explicitly unpaid (no payment recorded); a DateTimeImmutable = explicit paid date.
+		$paid_date = ( false === $paid ) ? $created : $paid;
 		return new \WebWakeUpWdb\WithdrawalButton\Platform\NormalizedOrder(
 			'woocommerce',
 			'TEST-1',
@@ -959,7 +972,7 @@ final class SmokeTests {
 			$status,
 			'en_US',
 			$created,
-			$created,
+			$paid_date,
 			$status === 'completed' ? $created : null,
 			$items,
 			$vat,

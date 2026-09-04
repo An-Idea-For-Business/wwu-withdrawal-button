@@ -132,7 +132,17 @@ final class ApplicabilityResolver {
 		$status = strtolower( (string) $order->status );
 
 		// Allowlist of contract-bearing statuses across WooCommerce + FluentCart.
-		$eligible = array( 'processing', 'completed', 'on-hold', 'paid', 'partially-paid', 'partially_paid', 'shipped', 'delivered' );
+		$eligible = array( 'processing', 'completed', 'paid', 'partially-paid', 'partially_paid', 'shipped', 'delivered' );
+
+		// 'on-hold' is ambiguous in WooCommerce: it is the canonical AWAITING-PAYMENT
+		// status for offline gateways (bank transfer / cheque), but is also used for a
+		// PAID order held for manual review. A withdrawal right presupposes a concluded,
+		// paid contract, so treat 'on-hold' as eligible only when a payment date was
+		// actually recorded — keeping WooCommerce consistent with FluentCart, which never
+		// surfaces an unpaid order as eligible (see FluentCartAdapter::eligible_status).
+		if ( null !== $order->paid ) {
+			$eligible[] = 'on-hold';
+		}
 
 		/**
 		 * Filter the order statuses for which a withdrawal right is presumed to exist.

@@ -81,6 +81,13 @@ final class NoScriptFlow {
 		}
 
 		$result = Services::instance()->withdrawal->submit_statement( $adapter, $order, $req );
+		if ( is_wp_error( $result ) ) {
+			$this->render_page(
+				__( 'Withdrawal', 'wwu-withdrawal-button' ),
+				'<p>' . esc_html( $result->get_error_message() ) . '</p>'
+			);
+			return;
+		}
 
 		$locale  = '' !== $order->locale ? $order->locale : determine_locale();
 		$confirm = Services::instance()->labels->confirm_label( $order->country, $locale );
