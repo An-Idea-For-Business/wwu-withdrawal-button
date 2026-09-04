@@ -22,3 +22,9 @@ CODE_OF_CONDUCT.md
 SECURITY.md
 MASTER-wwu-wb.md
 .editorconfig
+
+# Editor / AI-assistant config (internal dev notes — never ship in the ZIP).
+# NOTE: the build script filters by THIS file only, not by .gitignore, so an
+# untracked editor file present on disk would otherwise be packaged.
+.cursorrules
+/.cursor
