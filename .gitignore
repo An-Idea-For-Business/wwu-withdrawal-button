@@ -44,3 +44,8 @@ desktop.ini
 
 # Logs
 *.log
+
+# AI agent / editor config — personal, never versioned.
+# NOTE: `.cursor/` does NOT cover `.cursorrules` — Cursor keeps rules in two
+# places (modern `.cursor/rules/` directory + legacy root file). Both needed.
+.claude/
