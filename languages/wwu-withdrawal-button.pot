@@ -2,9 +2,9 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WWU Right of Withdrawal for Popular Ecommerce Platforms 1.4.0\n"
+"Project-Id-Version: WWU Right of Withdrawal for Popular Ecommerce Platforms 1.4.1\n"
 "Report-Msgid-Bugs-To: https://webwakeup.it/wwu-withdrawal-button/\n"
-"POT-Creation-Date: 2026-07-02 20:58+0000\n"
+"POT-Creation-Date: 2026-09-04 09:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: WebWakeUp\n"
@@ -2032,32 +2032,36 @@ msgstr ""
 msgid "Contracts concluded at a public auction."
 msgstr ""
 
-#: src/Domain/WithdrawalService.php:125
+#: src/Domain/WithdrawalService.php:142
 msgid "No pending withdrawal to confirm. Please start again."
 msgstr ""
 
-#: src/Domain/WithdrawalService.php:128
+#: src/Domain/WithdrawalService.php:145
 msgid "This confirmation has expired. Please start the withdrawal again."
 msgstr ""
 
-#: src/Domain/WithdrawalService.php:131
+#: src/Domain/WithdrawalService.php:148
 msgid "Invalid confirmation. Please start the withdrawal again."
 msgstr ""
 
-#: src/Domain/WithdrawalService.php:178
+#: src/Domain/WithdrawalService.php:195
 msgid "Right of withdrawal exercised by the consumer (within the period)."
 msgstr ""
 
-#: src/Domain/WithdrawalService.php:179
+#: src/Domain/WithdrawalService.php:196
 msgid "Right of withdrawal exercised by the consumer — flagged outside the computed period; please verify validity."
 msgstr ""
 
-#: src/Domain/WithdrawalService.php:264
+#: src/Domain/WithdrawalService.php:281
 msgid "Subscription cancelled automatically following the withdrawal (future renewals stopped). Refund / any pro-rata: handle manually."
 msgstr ""
 
-#: src/Domain/WithdrawalService.php:265
+#: src/Domain/WithdrawalService.php:282
 msgid "Automatic subscription cancellation could not be completed — please cancel the subscription manually and process the refund."
+msgstr ""
+
+#: src/Domain/WithdrawalService.php:79
+msgid "This order is not eligible for the right of withdrawal."
 msgstr ""
 
 #: src/DurableMedium/ConfirmationDispatcher.php:184
@@ -2085,7 +2089,7 @@ msgid "Your withdrawal has been registered. We have emailed you a confirmation."
 msgstr ""
 
 #: src/Frontend/Assets.php:110
-#: src/Frontend/NoScriptFlow.php:91
+#: src/Frontend/NoScriptFlow.php:98
 #: templates/form/withdrawal-form.php:106
 msgid "Please confirm your withdrawal. This is the final step."
 msgstr ""
@@ -2129,37 +2133,38 @@ msgstr ""
 msgid "Open the withdrawal page"
 msgstr ""
 
-#: src/Frontend/NoScriptFlow.php:151
+#: src/Frontend/NoScriptFlow.php:158
 msgid "Withdrawal registered"
 msgstr ""
 
-#: src/Frontend/NoScriptFlow.php:152
+#: src/Frontend/NoScriptFlow.php:159
 msgid "Your withdrawal has been registered. We have emailed you a confirmation on a durable medium."
 msgstr ""
 
-#: src/Frontend/NoScriptFlow.php:166
+#: src/Frontend/NoScriptFlow.php:173
 #: src/REST/Routes/WithdrawalRoute.php:139
 #: src/REST/Routes/WithdrawalRoute.php:173
-#: src/REST/Routes/WithdrawalRoute.php:208
+#: src/REST/Routes/WithdrawalRoute.php:211
 msgid "Too many attempts. Please try again in a few minutes."
 msgstr ""
 
-#: src/Frontend/NoScriptFlow.php:178
+#: src/Frontend/NoScriptFlow.php:185
 msgid "Security check failed. Please reload the form and try again."
 msgstr ""
 
-#: src/Frontend/NoScriptFlow.php:192
+#: src/Frontend/NoScriptFlow.php:199
 #: src/REST/Routes/WithdrawalRoute.php:41
 msgid "Invalid request."
 msgstr ""
 
-#: src/Frontend/NoScriptFlow.php:232
+#: src/Frontend/NoScriptFlow.php:239
 msgid "Back to the site"
 msgstr ""
 
 #: src/Frontend/NoScriptFlow.php:77
-#: src/Frontend/NoScriptFlow.php:146
-#: src/Frontend/NoScriptFlow.php:165
+#: src/Frontend/NoScriptFlow.php:86
+#: src/Frontend/NoScriptFlow.php:153
+#: src/Frontend/NoScriptFlow.php:172
 msgid "Withdrawal"
 msgstr ""
 
@@ -2342,7 +2347,7 @@ msgstr ""
 msgid "Receipt not available."
 msgstr ""
 
-#: src/REST/Routes/WithdrawalRoute.php:220
+#: src/REST/Routes/WithdrawalRoute.php:223
 msgid "Missing confirmation token. Please start again."
 msgstr ""
 
@@ -2640,6 +2645,6 @@ msgstr ""
 msgid "Checked on %s."
 msgstr ""
 
-#: wwu-withdrawal-button.php:148
+#: wwu-withdrawal-button.php:172
 msgid "WWU Withdrawal Button requires PHP %1$s or higher. You are running PHP %2$s."
 msgstr ""

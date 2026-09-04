@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -129,6 +129,9 @@ The plugin records withdrawal declarations (name, identified contract, email, IP
 For the conditional Art. 59 exemptions, the plugin also stores the consumer's checkout consent + acknowledgement (the agreed wording, a hash, the date/time and — unless you turn it off — the IP) as evidence to prove the exemption is valid. The lawful basis is **legitimate interest** (GDPR Art. 6(1)(f); defence of legal claims), **not** GDPR consent. The IP lives only on the order (never in the immutable log) and is automatically anonymised once the retention period lapses. A second ready-to-paste privacy clause is generated for this processing.
 
 == Changelog ==
+
+= 1.4.2 =
+* **Translations repaired and completed.** A translation-platform sync had emptied roughly 110 strings per language in the source catalogues, while the compiled files WordPress actually loads still contained them — so the next routine rebuild would have silently reverted those strings to English. The sources are restored and recompiled (Italian, German, Spanish, French and Swedish back to 99–100%), and the message introduced in 1.4.1 is now translated in all five languages. Translations only: no change to the withdrawal flow.
 
 = 1.4.1 =
 * **Fix — unpaid orders no longer offer withdrawal.** A WooCommerce order still awaiting a bank transfer sits in the "On hold" status; that status was mistakenly treated as a concluded contract, so the withdrawal function appeared (and a request could be filed) before the customer had paid. An "On hold" order is now eligible only once a payment has actually been recorded — matching how FluentCart already behaved. A paid order held for manual review still shows the function.

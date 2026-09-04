@@ -3,6 +3,17 @@
 All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); the project uses Semantic Versioning.
 
+## [1.4.2] — 2026-09-04 — Translation catalogues repaired (`.po` back-filled from `.mo`)
+
+Closes the finding recorded in 1.4.1. The l10n sync in merge #56 emptied ~110 `msgstr` per locale in the `.po` while the shipped `.mo` — the file WordPress actually loads — still carried the full ~99% catalogues. Nothing was user-visible, but the `.po` are the *source*: the next routine `wwu-i18n.php compile` would have silently downgraded every locale to ~81% and shown English to users. 1.4.1 deliberately shipped the stale-but-correct `.mo`; this release repairs the source so the trap cannot spring.
+
+- **Back-filled each `.po` from its own `.mo`.** For every entry untranslated in the `.po` but translated in the `.mo`, the `.mo` value was written back through the existing `wwu-i18n.php apply` path — which only fills *empty* entries, so no existing translation was overwritten. Recovered: it 110, de 112, es 111, fr 121, sv 117.
+- **Translated the string added in 1.4.1** (`This order is not eligible for the right of withdrawal.`) in all five locales, using each jurisdiction's statutory term — recesso / Widerrufsrecht / desistimiento / rétractation / ångerrätt.
+- **Recompiled the `.mo` and verified no regression.** Every locale gained exactly the one new string versus the previously shipped `.mo` (it 623→624, de 625→626, es 627→628, fr 630→631, sv 630→631), and the "translated in `.mo` but empty in `.po`" count is now **0** everywhere — the two are consistent again.
+- Everything still untranslated is deliberate: the English brand / dev-tool labels (Dashboard, Debug, Debug Inspector, Snapshot, IP, FluentCart, WWU Withdrawal Button).
+
+Coverage: it 99% · de 99% · es 100% · fr 100% · sv 100%. Translations only — no code change, no schema change.
+
 ## [1.4.1] — 2026-09-04 — Unpaid orders excluded, server-side applicability gate, bundled-translation load fix
 
 From a merchant question: an unpaid bank-transfer order for a fixed-date retreat showed the withdrawal function and a request was filed before payment. Two defects, both closed (the retreat being a dated leisure service is a separate Art. 59 *config* action — tag the product/category as exempt).
