@@ -58,12 +58,29 @@ final class WithdrawalService {
 	/**
 	 * Step 1 — record the statement and issue a confirmation token.
 	 *
+	 * Enforces applicability server-side: the flow may only be started for an order the
+	 * resolver would actually show the function for (concluded/paid contract, in scope,
+	 * not a suppressed renewal, not Art. 59-exempt). This mirrors the UI gate so a
+	 * crafted or stale POST cannot record a withdrawal for an order that is not eligible
+	 * (e.g. an unpaid bank-transfer order still awaiting payment).
+	 *
 	 * @param OrderDataSource   $adapter Platform adapter.
 	 * @param NormalizedOrder   $order   Order.
 	 * @param WithdrawalRequest $req     Statement.
-	 * @return array{request_uid:string,confirm_token:string}
+	 * @return array{request_uid:string,confirm_token:string}|\WP_Error
 	 */
-	public function submit_statement( OrderDataSource $adapter, NormalizedOrder $order, WithdrawalRequest $req ): array {
+	public function submit_statement( OrderDataSource $adapter, NormalizedOrder $order, WithdrawalRequest $req ) {
+		// Server-side applicability gate (defense-in-depth; the UI hides the button for
+		// the same orders). Filter-aware — honours webwakeupwdb_applicability_decision.
+		if ( ! \WebWakeUpWdb\WithdrawalButton\Core\Services::instance()->applicability->decide( $order )->show ) {
+			Debug::log( 'withdrawal', 'statement.blocked_not_eligible', array( 'order_ref' => $order->order_ref, 'status' => $order->status ) );
+			return new \WP_Error(
+				'webwakeupwdb_not_withdrawable',
+				__( 'This order is not eligible for the right of withdrawal.', 'wwu-withdrawal-button' ),
+				array( 'status' => 403 )
+			);
+		}
+
 		$request_uid = wp_generate_uuid4();
 		$token       = wp_generate_password( 24, false );
 

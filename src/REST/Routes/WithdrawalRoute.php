@@ -194,6 +194,9 @@ final class WithdrawalRoute extends AbstractRoute {
 		}
 
 		$result = Services::instance()->withdrawal->submit_statement( $adapter, $order, $req );
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
 		return $this->success( $result );
 	}
 

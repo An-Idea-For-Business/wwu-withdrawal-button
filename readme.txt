@@ -4,7 +4,7 @@ Tags: woocommerce, fluentcart, right of withdrawal, recesso, gdpr
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -129,6 +129,11 @@ The plugin records withdrawal declarations (name, identified contract, email, IP
 For the conditional Art. 59 exemptions, the plugin also stores the consumer's checkout consent + acknowledgement (the agreed wording, a hash, the date/time and — unless you turn it off — the IP) as evidence to prove the exemption is valid. The lawful basis is **legitimate interest** (GDPR Art. 6(1)(f); defence of legal claims), **not** GDPR consent. The IP lives only on the order (never in the immutable log) and is automatically anonymised once the retention period lapses. A second ready-to-paste privacy clause is generated for this processing.
 
 == Changelog ==
+
+= 1.4.1 =
+* **Fix — unpaid orders no longer offer withdrawal.** A WooCommerce order still awaiting a bank transfer sits in the "On hold" status; that status was mistakenly treated as a concluded contract, so the withdrawal function appeared (and a request could be filed) before the customer had paid. An "On hold" order is now eligible only once a payment has actually been recorded — matching how FluentCart already behaved. A paid order held for manual review still shows the function.
+* **Hardening — the withdrawal flow is now verified on the server, not only in the page.** Starting a withdrawal is refused for any order that is not eligible (unpaid, out of scope, business/VAT, a subscription renewal, or exempt under Art. 59), so a stale page or a crafted request can no longer record a withdrawal that the button would not have offered.
+* **Fix — bundled translations now load on older WordPress.** Re-added `load_plugin_textdomain()` so the shipped Italian/German/Spanish/French/Swedish catalogues load reliably on WordPress 5.8–6.0 too (auto-discovery of a plugin's own bundled `.mo` only covers WP 6.1+). Newer WordPress is unaffected; WordPress.org language packs still take precedence when available.
 
 = 1.4.0 =
 * **New — Seller details on the model withdrawal form.** A new **Settings → Seller details** section (business name, geographical address, contact e-mail) fills the "To […]" recipient line of the statutory model withdrawal form (Annex I-B) shown by `[webwakeupwdb_model_form]`, replacing the generic "[the trader inserts here …]" placeholder. Leave a field empty to fall back to your site name / admin e-mail; the geographical address is required by law, so add it there. The rest of that form remains the official, unmodifiable statutory wording. (From a merchant support question.)
