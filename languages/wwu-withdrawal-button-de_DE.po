@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wwu-withdrawal-button\n"
 "Report-Msgid-Bugs-To: https://webwakeup.it/wwu-withdrawal-button/\n"
-"POT-Creation-Date: 2026-07-02 20:58+0000\n"
-"PO-Revision-Date: 2026-07-02 22:18\n"
+"POT-Creation-Date: 2026-09-04 09:40+0000\n"
+"PO-Revision-Date: 2026-09-04 10:03\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -53,15 +53,15 @@ msgstr "WWU Widerrufsschaltfläche: Die PDF-Bibliothek wurde nicht gefunden, dah
 
 #: src/Admin/AdminController.php:170
 msgid "WWU Withdrawal Button — action recommended: turn on the trusted timestamp."
-msgstr "WWU Withdrawal Button — Handlung empfohlen: Aktivieren Sie den qualifizierten Zeitstempel."
+msgstr ""
 
 #: src/Admin/AdminController.php:172
 msgid "The plugin is live but trusted timestamping is OFF, so your withdrawal records have no independent \"data certa\" — the legally decisive proof of when each withdrawal was received (the fact the statutory 14-day deadline turns on). Turn it on now: it is free, and only an anonymous one-way hash ever leaves your site (never personal data)."
-msgstr "Das Plugin ist aktiv, aber der qualifizierte Zeitstempel ist AUS. Dadurch fehlt Ihren Widerrufsdatensätzen ein unabhängiger, rechtssicherer Nachweis des Empfangszeitpunkts — die entscheidende Grundlage für die gesetzliche 14-tägige Widerrufsfrist. Aktivieren Sie ihn jetzt: Er ist kostenlos, und es verlässt lediglich ein anonymer Einweg-Hashwert Ihre Website (niemals personenbezogene Daten)."
+msgstr ""
 
 #: src/Admin/AdminController.php:174
 msgid "Enable trusted timestamping →"
-msgstr "Qualifizierten Zeitstempel aktivieren →"
+msgstr ""
 
 #: src/Admin/AdminController.php:195
 msgid "WWU Withdrawal Button: a withdrawal acknowledgement email could not be sent. The consumer is legally entitled to receive it. Check your site's email/SMTP configuration and resend from the Requests page."
@@ -69,7 +69,7 @@ msgstr "WWU Widerrufsschaltfläche: Eine Widerrufsbestätigungs-E-Mail konnte ni
 
 #: src/Admin/AdminController.php:199
 msgid "Reported reason: %s"
-msgstr "Angegebener Grund: %s"
+msgstr ""
 
 #: src/Admin/AdminController.php:215
 #: src/Admin/AdminController.php:216
@@ -101,7 +101,7 @@ msgstr "Einwilligungsprotokolle"
 #: src/Admin/AdminController.php:254
 #: src/Admin/ComplianceStatusPage.php:43
 msgid "Compliance"
-msgstr "Compliance"
+msgstr ""
 
 #: src/Admin/AdminController.php:262
 #: src/Admin/AdminController.php:263
@@ -130,67 +130,67 @@ msgstr "Die Verpflichtung gilt seit %s."
 #: src/Core/Install.php:355
 #: src/Legal/PolicyBuilder.php:78
 msgid "Right of withdrawal — information notice"
-msgstr "Widerrufsrecht — Informationshinweis"
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:150
 msgid "A single consolidated notice, assembled live from your settings and the exemptions you selected. It complements — it does not replace — your Terms of Sale. Publish it on a page and link it from your footer, or freeze a static copy."
-msgstr "Ein einziger konsolidierter Hinweis, live aus Ihren Einstellungen und den von Ihnen gewählten Ausnahmen zusammengestellt. Er ergänzt Ihre Verkaufsbedingungen, ersetzt sie jedoch nicht. Veröffentlichen Sie ihn auf einer Seite und verlinken Sie ihn in Ihrer Fußzeile, oder erstellen Sie eine statische Kopie."
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:157
 msgid "Published"
-msgstr "Veröffentlicht"
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:158
 msgid "Draft"
-msgstr "Entwurf"
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:159
 msgid "Open the policy page"
-msgstr "Richtlinienseite öffnen"
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:163
 msgid "Create the policy page (draft)"
-msgstr "Richtlinienseite erstellen (Entwurf)"
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:166
 msgid "Freeze to static HTML"
-msgstr "Als statisches HTML einfrieren"
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:169
 msgid "Download PDF"
-msgstr "PDF herunterladen"
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:174
 msgid "Auto-updating shortcode:"
-msgstr "Automatisch aktualisierender Shortcode:"
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:175
 msgid "“Freeze” snapshots the current text into the page as plain HTML so it stops changing; to return to the auto-updating version, edit the page and put the shortcode back."
-msgstr "„Einfrieren“ speichert den aktuellen Text als reines HTML in der Seite, sodass er sich nicht mehr ändert. Um zur automatisch aktualisierenden Version zurückzukehren, bearbeiten Sie die Seite und fügen Sie den Shortcode wieder ein."
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:184
 msgid "Preview the assembled notice"
-msgstr "Zusammengestellten Hinweis als Vorschau anzeigen"
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:204
 msgid "The withdrawal policy page has been created as a draft — review and publish it."
-msgstr "Die Widerrufsrichtlinien-Seite wurde als Entwurf erstellt — prüfen und veröffentlichen Sie sie."
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:206
 msgid "Could not create the policy page. Please try again."
-msgstr "Die Richtlinienseite konnte nicht erstellt werden. Bitte versuchen Sie es erneut."
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:210
 msgid "The policy was frozen into static HTML on the policy page. It will no longer update automatically until you put the shortcode back."
-msgstr "Die Richtlinie wurde auf der Richtlinienseite als statisches HTML eingefroren. Sie wird nicht mehr automatisch aktualisiert, bis Sie den Shortcode wieder einfügen."
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:212
 msgid "Could not freeze the policy. Please try again."
-msgstr "Die Richtlinie konnte nicht eingefroren werden. Bitte versuchen Sie es erneut."
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:227
 msgid "No published withdrawal form page is configured. Guests (and FluentCart customers) cannot withdraw. Create a page with the [webwakeupwdb_form] shortcode and set it in Settings."
-msgstr "Es ist keine veröffentlichte Seite mit dem Widerrufsformular konfiguriert. Gäste (und FluentCart-Kunden) können nicht widerrufen. Erstellen Sie eine Seite mit dem Shortcode [webwakeupwdb_form] und legen Sie sie in den Einstellungen fest."
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:231
 msgid "Complianz is active. The withdrawal flow is functional (consent-exempt); the plugin marks its scripts so they are not blocked. Verify on the front end after first activation."
@@ -231,11 +231,11 @@ msgstr "Zu aktualisierende Dokumente (Anforderung 6)"
 #: src/Admin/ComplianceStatusPage.php:58
 #: src/Admin/DashboardPage.php:319
 msgid "Installing the button is not enough — update your legal texts too."
-msgstr "Die Installation des Buttons allein genügt nicht — aktualisieren Sie auch Ihre Rechtstexte."
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:59
 msgid "EU law requires your Terms & Conditions of sale and your pre-contractual information to describe how the consumer withdraws — and that now includes the new online \"withdrawal button\". Edit the withdrawal article in your own documents to mention it: copy the ready-to-paste clauses below. The plugin adds the button, but it cannot change your published terms for you."
-msgstr "Das EU-Recht verlangt, dass Ihre Allgemeinen Geschäftsbedingungen und Ihre vorvertraglichen Informationen beschreiben, wie der Verbraucher widerruft — und dazu gehört nun auch der neue Online-„Widerrufsbutton“. Passen Sie den Widerrufsartikel in Ihren eigenen Dokumenten entsprechend an: Kopieren Sie dazu die unten stehenden fertigen Klauseln. Das Plugin fügt den Button hinzu, kann jedoch Ihre veröffentlichten Bedingungen nicht selbstständig ändern."
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:62
 msgid "The withdrawal button is additional to the Annex I-B model form, which stays mandatory. Update these documents and place the model form in your pre-contractual information."
@@ -251,12 +251,12 @@ msgstr "Shortcode für vorvertragliche Informationen:"
 
 #: src/Admin/ComplianceStatusPage.php:73
 msgid "The texts below are the ones in use. To replace them with your own wording (no code needed), edit them in <a href=\"%s\">Settings &rarr; Legal clauses</a> — your version then appears here and wherever the <code>[webwakeupwdb_info]</code> shortcode is used."
-msgstr "Die unten stehenden Texte sind die aktuell verwendeten. Um sie durch Ihren eigenen Wortlaut zu ersetzen (kein Code erforderlich), bearbeiten Sie sie unter <a href=\"%s\">Einstellungen &rarr; Rechtsklauseln</a> — Ihre Version erscheint dann hier und überall dort, wo der Shortcode <code>[webwakeupwdb_info]</code> verwendet wird."
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:84
 #: src/Admin/SettingsPage.php:523
 msgid "customised"
-msgstr "angepasst"
+msgstr ""
 
 #: src/Admin/ConsentRecordsPage.php:103
 #: src/Admin/RequestsDashboard.php:117
@@ -273,7 +273,7 @@ msgstr "Bestellung"
 
 #: src/Admin/ConsentRecordsPage.php:104
 msgid "Platform"
-msgstr "Plattform"
+msgstr ""
 
 #: src/Admin/ConsentRecordsPage.php:105
 #: templates/myaccount/withdrawal-list.php:73
@@ -359,7 +359,7 @@ msgstr "Eine Zeile pro Einwilligung; bis zu den %d neuesten Bestellungen."
 
 #: src/Admin/ConsentRecordsPage.php:92
 msgid "No consent records yet. Consent is captured at checkout for the conditional Art. 59 exemptions on WooCommerce, Easy Digital Downloads and FluentCart."
-msgstr "Noch keine Einwilligungsdatensätze vorhanden. Die Einwilligung wird beim Checkout für die bedingten Ausnahmen nach Art. 59 bei WooCommerce, Easy Digital Downloads und FluentCart erfasst."
+msgstr ""
 
 #: src/Admin/DashboardPage.php:104
 msgid "Withdrawal function enabled"
@@ -404,39 +404,39 @@ msgstr "Seite ansehen"
 
 #: src/Admin/DashboardPage.php:134
 msgid "No published form page found — it may have been deleted or trashed. Guests without an account need one; recreate it in one click:"
-msgstr "Keine veröffentlichte Formularseite gefunden — sie wurde möglicherweise gelöscht oder in den Papierkorb verschoben. Gäste ohne Konto benötigen eine solche Seite; erstellen Sie sie mit einem Klick erneut:"
+msgstr ""
 
 #: src/Admin/DashboardPage.php:135
 msgid "Recreate the page"
-msgstr "Seite neu erstellen"
+msgstr ""
 
 #: src/Admin/DashboardPage.php:149
 msgid "Withdrawal policy page"
-msgstr "Widerrufsrichtlinien-Seite"
+msgstr ""
 
 #: src/Admin/DashboardPage.php:151
 msgid "Published — a consolidated \"Right of withdrawal\" notice assembled from your settings and exemptions."
-msgstr "Veröffentlicht — ein konsolidierter Hinweis „Widerrufsrecht“, zusammengestellt aus Ihren Einstellungen und Ausnahmen."
+msgstr ""
 
 #: src/Admin/DashboardPage.php:152
 msgid "Created as a draft — review it and publish when ready."
-msgstr "Als Entwurf erstellt — prüfen Sie ihn und veröffentlichen Sie ihn, sobald er fertig ist."
+msgstr ""
 
 #: src/Admin/DashboardPage.php:153
 msgid "Open page"
-msgstr "Seite öffnen"
+msgstr ""
 
 #: src/Admin/DashboardPage.php:160
 msgid "Withdrawal policy page (optional)"
-msgstr "Widerrufsrichtlinien-Seite (optional)"
+msgstr ""
 
 #: src/Admin/DashboardPage.php:161
 msgid "A single consolidated \"Right of withdrawal\" notice (assembled from your settings + exemptions) you can link from your footer. Create it as a draft to review:"
-msgstr "Ein einziger konsolidierter Hinweis „Widerrufsrecht“ (zusammengestellt aus Ihren Einstellungen und Ausnahmen), den Sie in Ihrer Fußzeile verlinken können. Erstellen Sie ihn zunächst als Entwurf zur Prüfung:"
+msgstr ""
 
 #: src/Admin/DashboardPage.php:162
 msgid "Create the policy page"
-msgstr "Richtlinienseite erstellen"
+msgstr ""
 
 #: src/Admin/DashboardPage.php:169
 msgid "Sending through %s. Use the test below to confirm it reaches your inbox."
@@ -464,19 +464,19 @@ msgstr "PDF-Bibliothek nicht gefunden. Die E-Mail-Quittung funktioniert weiterhi
 
 #: src/Admin/DashboardPage.php:196
 msgid "Trusted timestamp — legal \"data certa\" (recommended)"
-msgstr "Qualifizierter Zeitstempel — rechtssicherer Nachweis (empfohlen)"
+msgstr ""
 
 #: src/Admin/DashboardPage.php:200
 msgid "Enabled (%s). Each confirmed withdrawal is anchored to an independent, tamper-proof timestamp — the legally decisive proof of WHEN it was received."
-msgstr "Aktiviert (%s). Jeder bestätigte Widerruf wird mit einem unabhängigen, manipulationssicheren Zeitstempel verankert — dem rechtlich entscheidenden Nachweis darüber, WANN er eingegangen ist."
+msgstr ""
 
 #: src/Admin/DashboardPage.php:203
 msgid "OFF — please turn this on. The log is already tamper-evident, but a trusted timestamp adds an independent \"data certa\": proof of the exact date and time a withdrawal was received, which is the fact the statutory 14-day deadline turns on. OpenTimestamps is free and sends only an anonymous one-way hash — never personal data."
-msgstr "AUS — bitte aktivieren Sie diese Funktion. Das Protokoll ist bereits manipulationssicher, doch ein qualifizierter Zeitstempel liefert zusätzlich einen unabhängigen, rechtssicheren Nachweis: den Beweis für Datum und Uhrzeit des Widerrufseingangs, auf den die gesetzliche 14-tägige Widerrufsfrist abstellt. OpenTimestamps ist kostenlos und übermittelt lediglich einen anonymen Einweg-Hashwert — niemals personenbezogene Daten."
+msgstr ""
 
 #: src/Admin/DashboardPage.php:204
 msgid "Enable it now"
-msgstr "Jetzt aktivieren"
+msgstr ""
 
 #: src/Admin/DashboardPage.php:217
 msgid "How it works"
@@ -572,11 +572,11 @@ msgstr "Test-E-Mail senden"
 
 #: src/Admin/DashboardPage.php:320
 msgid "EU law requires your Terms & Conditions of sale and your pre-contractual information to describe how the consumer withdraws — and that now includes the new online \"withdrawal button\". Edit the withdrawal article in your own documents to mention it. The plugin generates ready-to-paste clauses, but it cannot change your published terms for you."
-msgstr "Das EU-Recht verlangt, dass Ihre Allgemeinen Geschäftsbedingungen und Ihre vorvertraglichen Informationen beschreiben, wie der Verbraucher widerruft — und dazu gehört nun auch der neue Online-„Widerrufsbutton“. Passen Sie den Widerrufsartikel in Ihren eigenen Dokumenten entsprechend an. Das Plugin erzeugt fertige Klauseln zum Einfügen, kann jedoch Ihre veröffentlichten Bedingungen nicht selbstständig ändern."
+msgstr ""
 
 #: src/Admin/DashboardPage.php:321
 msgid "Get the ready-to-paste clauses"
-msgstr "Fertige Klauseln abrufen"
+msgstr ""
 
 #: src/Admin/DashboardPage.php:332
 msgid "Please wait a few seconds before sending another test email."
@@ -604,19 +604,19 @@ msgstr "Wenn Sie diese erhalten haben, funktioniert der E-Mail-Versand und Wider
 
 #: src/Admin/DashboardPage.php:531
 msgid "The PDF library is not available on this site. Install the plugin from the official packaged ZIP to enable PDF export — the policy page and the [webwakeupwdb_policy] shortcode still work without it."
-msgstr "Die PDF-Bibliothek ist auf dieser Website nicht verfügbar. Installieren Sie das Plugin aus der offiziellen gepackten ZIP-Datei, um den PDF-Export zu aktivieren — die Richtlinienseite und der Shortcode [webwakeupwdb_policy] funktionieren auch ohne diese Bibliothek."
+msgstr ""
 
 #: src/Admin/DashboardPage.php:567
 msgid "Could not recreate the page. Please try again, or create it manually with the relevant shortcode."
-msgstr "Die Seite konnte nicht neu erstellt werden. Bitte versuchen Sie es erneut oder erstellen Sie sie manuell mit dem entsprechenden Shortcode."
+msgstr ""
 
 #: src/Admin/DashboardPage.php:571
 msgid "The withdrawal policy page has been recreated as a draft — review and publish it."
-msgstr "Die Widerrufsrichtlinien-Seite wurde als Entwurf neu erstellt — prüfen und veröffentlichen Sie sie."
+msgstr ""
 
 #: src/Admin/DashboardPage.php:572
 msgid "The withdrawal form page has been recreated and published."
-msgstr "Die Widerrufsformular-Seite wurde neu erstellt und veröffentlicht."
+msgstr ""
 
 #: src/Admin/DashboardPage.php:615
 #: src/Admin/SettingsPage.php:82
@@ -734,7 +734,7 @@ msgstr "Fristgerecht"
 
 #: src/Admin/RequestsDashboard.php:122
 msgid "Status"
-msgstr "Status"
+msgstr ""
 
 #: src/Admin/RequestsDashboard.php:123
 msgid "Evidence"
@@ -747,7 +747,7 @@ msgstr "Aktionen"
 #: src/Admin/RequestsDashboard.php:149
 #: src/DurableMedium/ReceiptBuilder.php:57
 msgid "%1$s × %2$d"
-msgstr "%1$s × %2$d"
+msgstr ""
 
 #: src/Admin/RequestsDashboard.php:153
 #: templates/public/verify-receipt.php:73
@@ -854,8 +854,8 @@ msgstr "Nachweisprotokoll: Integrität bei Zeile #%d unterbrochen – bitte unte
 #: src/Admin/RequestsDashboard.php:99
 msgid "Timestamp: %d confirmed record is not yet externally anchored — the hourly job retries automatically."
 msgid_plural "Timestamp: %d confirmed records are not yet externally anchored — the hourly job retries automatically."
-msgstr[0] "Zeitstempel: %d bestätigter Datensatz ist noch nicht extern verankert — der stündliche Auftrag wiederholt den Versuch automatisch."
-msgstr[1] "Zeitstempel: %d bestätigter Datensatz ist noch nicht extern verankert — der stündliche Auftrag wiederholt den Versuch automatisch."
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/Admin/SettingsPage.php:100
 msgid "Debug"
@@ -1081,39 +1081,39 @@ msgstr "WWU Widerrufsschaltfläche — ein kostenloses Open-Source-Compliance-To
 
 #: src/Admin/SettingsPage.php:168
 msgid "Complianz documents"
-msgstr "Complianz-Dokumente"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:170
 msgid "These toggles add ready-made withdrawal clauses to your Complianz Privacy Policy and Terms. They are generic templates that complement — not replace — your own legal texts; have them reviewed by your lawyer. Nothing is added until you turn a toggle on, and turning it off removes the clauses on the next regeneration."
-msgstr "Diese Schalter fügen fertige Widerrufsklauseln zu Ihrer Complianz-Datenschutzerklärung und den Nutzungsbedingungen hinzu. Es handelt sich um generische Vorlagen, die Ihre eigenen Rechtstexte ergänzen, nicht ersetzen; lassen Sie sie von Ihrem Rechtsanwalt prüfen. Es wird nichts hinzugefügt, bis Sie einen Schalter aktivieren; das Deaktivieren entfernt die Klauseln bei der nächsten Neugenerierung."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:176
 msgid "Privacy Policy"
-msgstr "Datenschutzerklärung"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:178
 msgid "Add the right-of-withdrawal record-keeping clauses to my Complianz Privacy Policy."
-msgstr "Die Klauseln zur Aufbewahrung von Widerrufsdaten zu meiner Complianz-Datenschutzerklärung hinzufügen."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:183
 msgid "Terms & Conditions"
-msgstr "Allgemeine Geschäftsbedingungen"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:186
 msgid "Add the withdrawal article (and the online / Annex I-B modality) to my Complianz Terms & Conditions."
-msgstr "Den Widerrufsartikel (einschließlich der Online-Variante / Anlage I-B) zu meinen Complianz-Nutzungsbedingungen hinzufügen."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:190
 msgid "Add the withdrawal article to my Complianz Terms & Conditions."
-msgstr "Den Widerrufsartikel zu meinen Complianz-Nutzungsbedingungen hinzufügen."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:194
 msgid "Complianz does not generate a Terms &amp; Conditions document on its own. Install the free %s to enable this."
-msgstr "Complianz erstellt Allgemeine Geschäftsbedingungen nicht eigenständig. Installieren Sie das kostenlose %s, um dies zu ermöglichen."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:220
 msgid "Preview what will be added"
-msgstr "Vorschau der hinzuzufügenden Inhalte"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:251
 msgid "Where the button applies"
@@ -1228,11 +1228,11 @@ msgstr "Das eigene Widerrufs-Add-on von FluentCart wurde erkannt. Im Auto-Modus 
 
 #: src/Admin/SettingsPage.php:366
 msgid "FluentCart now ships its own native withdrawal add-on (since FluentCart 1.4.2)."
-msgstr "FluentCart wird nun mit einem eigenen nativen Widerrufs-Add-on ausgeliefert (seit FluentCart 1.4.2)."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:369
 msgid "This plugin does not yet auto-detect it. If you have enabled FluentCart's \"customer rights\" add-on, set the handling below to <strong>Off</strong> (or have your developer return true from the %s filter) so customers do not see two withdrawal flows on FluentCart orders. Automatic detection will ship in an update. Your WooCommerce and EDD handling is unaffected."
-msgstr "Dieses Plugin erkennt es noch nicht automatisch. Wenn Sie das FluentCart-Add-on „Verbraucherrechte“ aktiviert haben, stellen Sie die untenstehende Behandlung auf <strong>Aus</strong> (oder lassen Sie Ihren Entwickler den Filter %s true zurückgeben lassen), damit Kunden bei FluentCart-Bestellungen nicht zwei Widerrufsabläufe sehen. Die automatische Erkennung wird mit einem Update nachgeliefert. Ihre WooCommerce- und EDD-Behandlung ist davon nicht betroffen."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:376
 msgid "Withdrawal handling"
@@ -1260,35 +1260,35 @@ msgstr "Steuert nur unsere verbraucherseitigen FluentCart-Oberflächen: die Port
 
 #: src/Admin/SettingsPage.php:396
 msgid "FluentCart shipped a dedicated withdrawal add-on (\"customer rights\") in 1.4.2. Automatic detection is not wired into this plugin yet, so for now: if you use FluentCart's add-on, pick <strong>Off</strong> here (or return true from the %s filter) to avoid two flows; pick <strong>Always</strong> to keep ours regardless. A future update will detect the add-on so Auto can step aside on its own."
-msgstr "FluentCart hat in Version 1.4.2 ein eigenes Widerrufs-Add-on („Verbraucherrechte“) eingeführt. Die automatische Erkennung ist in diesem Plugin noch nicht implementiert. Wählen Sie daher vorerst: Wenn Sie das FluentCart-Add-on verwenden, wählen Sie hier <strong>Aus</strong> (oder lassen Sie den Filter %s true zurückgeben), um zwei Abläufe zu vermeiden; wählen Sie <strong>Immer</strong>, um unseren Ablauf unabhängig davon beizubehalten. Ein zukünftiges Update wird das Add-on erkennen, sodass „Automatisch“ eigenständig zurücktreten kann."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:413
 msgid "Add the withdrawal link to FluentCart e-mails (optional)"
-msgstr "Widerrufslink zu FluentCart-E-Mails hinzufügen (optional)"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:414
 msgid "WooCommerce and Easy Digital Downloads order e-mails get the withdrawal link automatically. FluentCart does not let plugins add content to its e-mails automatically, so to include the link in your FluentCart order e-mails add this shortcode once to your receipt template:"
-msgstr "WooCommerce- und Easy-Digital-Downloads-Bestell-E-Mails erhalten den Widerrufslink automatisch. FluentCart erlaubt es Plugins nicht, Inhalte automatisch zu seinen E-Mails hinzuzufügen. Um den Link in Ihre FluentCart-Bestell-E-Mails aufzunehmen, fügen Sie diesen Shortcode einmalig zu Ihrer Quittungsvorlage hinzu:"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:416
 msgid "How to add it (3 steps)"
-msgstr "So fügen Sie ihn hinzu (3 Schritte)"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:418
 msgid "In FluentCart open Settings → Emails and edit your order receipt / order confirmation notification."
-msgstr "Öffnen Sie in FluentCart Einstellungen → E-Mails und bearbeiten Sie Ihre Bestellquittungs- bzw. Bestellbestätigungs-Benachrichtigung."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:419
 msgid "Switch the body to \"Customized Body\", then use the shortcode picker ({;}) above the editor — or simply paste the shortcode above where you want the link to appear."
-msgstr "Stellen Sie den Textkörper auf „Angepasster Textkörper“ um und verwenden Sie dann die Shortcode-Auswahl ({;}) oberhalb des Editors — oder fügen Sie den oben genannten Shortcode einfach an der gewünschten Stelle ein."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:420
 msgid "Save. FluentCart replaces the shortcode with the consumer's personal, pre-authenticated withdrawal link when the e-mail is sent."
-msgstr "Speichern. FluentCart ersetzt den Shortcode beim Versand der E-Mail durch den persönlichen, vorautorisierten Widerrufslink des Verbrauchers."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:422
 msgid "Optional: customers can always reach the withdrawal from the FluentCart \"Right of withdrawal\" portal page and the public form, regardless of the e-mail."
-msgstr "Optional: Kunden können den Widerruf unabhängig von der E-Mail jederzeit über die FluentCart-Portalseite „Widerrufsrecht“ und das öffentliche Formular erreichen."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:456
 msgid "Consumer guidance"
@@ -1340,63 +1340,63 @@ msgstr "Das Widerrufsrecht gilt für diese Bestellung nicht: jeder Artikel fäll
 
 #: src/Admin/SettingsPage.php:500
 msgid "Pre-contractual information"
-msgstr "Vorvertragliche Informationen"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:501
 msgid "General terms (\"How to withdraw\")"
-msgstr "Allgemeine Bedingungen („So widerrufen Sie“)"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:502
 msgid "Privacy policy (withdrawal log)"
-msgstr "Datenschutzerklärung (Widerrufsprotokoll)"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:503
 msgid "Privacy policy (exemption-consent evidence)"
-msgstr "Datenschutzerklärung (Nachweis der Einwilligung zu Ausnahmen)"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:506
 msgid "Legal clauses"
-msgstr "Rechtsklauseln"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:510
 msgid "Customise the ready-to-paste legal clauses (language: %s). Leave a field empty to use the built-in sample template. When you type your own wording it replaces the default everywhere — the Compliance page and the [webwakeupwdb_info] shortcode — and the \"sample text\" note is dropped. This is your own text: have your lawyer review it."
-msgstr "Passen Sie die fertigen Rechtsklauseln an (Sprache: %s). Lassen Sie ein Feld leer, um die integrierte Beispielvorlage zu verwenden. Sobald Sie Ihren eigenen Wortlaut eingeben, ersetzt dieser überall den Standardtext — auf der Compliance-Seite und im Shortcode [webwakeupwdb_info] — und der Hinweis „Beispieltext“ entfällt. Es handelt sich dann um Ihren eigenen Text: Lassen Sie ihn von Ihrem Rechtsanwalt prüfen."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:526
 msgid "Leave empty to use the built-in sample template."
-msgstr "Leer lassen, um die integrierte Beispielvorlage zu verwenden."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:527
 msgid "Show the built-in default (copy it to start from there)"
-msgstr "Integrierten Standardtext anzeigen (zum Ausgangspunkt kopieren)"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:552
 msgid "Seller details (model withdrawal form)"
-msgstr "Verkäuferangaben (Muster-Widerrufsformular)"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:553
 msgid "These fill the \"To […]\" recipient line of the statutory model withdrawal form (Annex I-B), shown by the [webwakeupwdb_model_form] shortcode. The rest of that form is the official wording set by law and cannot be changed. Leave a field empty to fall back to your site name / admin e-mail; the geographical address is required by law, so add it here."
-msgstr "Diese Angaben füllen die Empfängerzeile „An […]“ des gesetzlichen Muster-Widerrufsformulars (Anlage I-B), das über den Shortcode [webwakeupwdb_model_form] angezeigt wird. Der übrige Wortlaut dieses Formulars ist der gesetzlich vorgeschriebene amtliche Text und kann nicht geändert werden. Lassen Sie ein Feld leer, um auf Ihren Website-Namen bzw. Ihre Administrator-E-Mail-Adresse zurückzugreifen; die ladungsfähige Anschrift ist gesetzlich vorgeschrieben, fügen Sie sie daher hier hinzu."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:556
 msgid "Business name"
-msgstr "Firmenname"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:560
 msgid "Geographical address"
-msgstr "Ladungsfähige Anschrift"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:561
 msgid "Street, postcode, city, country"
-msgstr "Straße, Postleitzahl, Ort, Land"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:562
 msgid "Required on the statutory form. Without it the recipient line shows only your name and e-mail."
-msgstr "Auf dem gesetzlichen Formular erforderlich. Ohne diese Angabe zeigt die Empfängerzeile nur Ihren Namen und Ihre E-Mail-Adresse an."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:565
 msgid "Contact e-mail"
-msgstr "Kontakt-E-Mail"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:599
 msgid "Receipt & evidence"
@@ -1416,11 +1416,11 @@ msgstr "PDF-Bibliothek nicht erkannt – PDF-Quittungen sind derzeit deaktiviert
 
 #: src/Admin/SettingsPage.php:610
 msgid "Notification email(s)"
-msgstr "Benachrichtigungs-E-Mail(s)"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:612
 msgid "Where to notify you of new withdrawal requests. Separate several addresses with commas to notify more than one person; the first address is also shown to the customer as the shop contact."
-msgstr "Wohin Sie über neue Widerrufsanfragen benachrichtigt werden. Trennen Sie mehrere Adressen durch Kommas, um mehr als eine Person zu benachrichtigen; die erste Adresse wird dem Kunden außerdem als Shop-Kontakt angezeigt."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:615
 msgid "Evidence retention (years)"
@@ -1436,15 +1436,15 @@ msgstr "Vertrauenswürdiger Zeitstempel"
 
 #: src/Admin/SettingsPage.php:632
 msgid "None — no external calls (default; the hash chain alone is the evidence)"
-msgstr "Keiner — keine externen Aufrufe (Standard; die Hash-Kette allein dient als Nachweis)"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:633
 msgid "OpenTimestamps (opt-in; free, Bitcoin-anchored; sends only a one-way hash)"
-msgstr "OpenTimestamps (optional; kostenlos, in Bitcoin verankert; überträgt nur einen Einweg-Hashwert)"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:634
 msgid "RFC 3161 timestamp authority (opt-in; immediate; eIDAS-qualified options)"
-msgstr "RFC-3161-Zeitstempeldienst (optional; sofortig; eIDAS-qualifizierte Optionen)"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:64
 msgid "WWU Withdrawal Button — Settings"
@@ -1452,11 +1452,11 @@ msgstr "WWU Widerrufsschaltfläche — Einstellungen"
 
 #: src/Admin/SettingsPage.php:640
 msgid "Recommended — turn this on."
-msgstr "Empfohlen — aktivieren Sie diese Funktion."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:640
 msgid "A trusted timestamp gives you an independent \"data certa\": proof of the exact date and time each withdrawal was received — the fact the statutory 14-day deadline turns on. It is OFF by default (the plugin makes no external call until you pick a provider here). When enabled, only a one-way hash ever leaves your site — never personal data: OpenTimestamps anchors it to Bitcoin (free, completes in ~hours); RFC 3161 returns an immediate signed token from a Time-Stamp Authority."
-msgstr "Ein qualifizierter Zeitstempel liefert Ihnen einen unabhängigen, rechtssicheren Nachweis: den Beweis für Datum und Uhrzeit jedes Widerrufseingangs — die Grundlage der gesetzlichen 14-tägigen Widerrufsfrist. Er ist standardmäßig AUS (das Plugin führt keinen externen Aufruf durch, bis Sie hier einen Anbieter auswählen). Bei Aktivierung verlässt lediglich ein Einweg-Hashwert Ihre Website — niemals personenbezogene Daten: OpenTimestamps verankert ihn in Bitcoin (kostenlos, abgeschlossen nach einigen Stunden); RFC 3161 liefert ein sofortiges signiertes Token von einem Zeitstempeldienst."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:644
 msgid "RFC 3161 — TSA endpoint"
@@ -1508,7 +1508,7 @@ msgstr "Einstellungen gespeichert."
 
 #: src/Admin/SettingsPage.php:683
 msgid "Free, Bitcoin-anchored, no account (opt-in). Proof completes after a block (~hours)."
-msgstr "Kostenlos, in Bitcoin verankert, kein Konto erforderlich (optional). Der Nachweis wird nach einem Block (ca. Stunden) abgeschlossen."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:684
 msgid "Free RFC 3161. Its /qualified endpoint is eIDAS-qualified and needs no account — recommended free option."
@@ -1576,11 +1576,11 @@ msgstr "Die Widerrufsschaltfläche berechtigten Verbrauchern anzeigen."
 
 #: src/Admin/SettingsPage.php:783
 msgid "Appearance — styling reference"
-msgstr "Erscheinungsbild — Referenz für Formatierung"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:784
 msgid "To restyle the withdrawal flow, add your rules in Appearance → Customize → Additional CSS (built into WordPress), targeting the CSS variables and classes listed below — they load after the plugin styles, so your overrides win."
-msgstr "Um den Widerrufsablauf umzugestalten, fügen Sie Ihre Regeln unter Design → Customizer → Zusätzliches CSS (in WordPress integriert) hinzu und richten Sie sie auf die unten aufgeführten CSS-Variablen und -Klassen — sie werden nach den Plugin-Stilen geladen, sodass Ihre Überschreibungen Vorrang haben."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:785
 msgid "Compliance note:"
@@ -1732,7 +1732,7 @@ msgstr "CSS-Variablen (schnelle Anpassungen)"
 
 #: src/Admin/SettingsPage.php:831
 msgid "Variable"
-msgstr "Variable"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:831
 msgid "Default"
@@ -1768,7 +1768,7 @@ msgstr "Das Widerrufsrecht gilt <strong>standardmäßig für jedes Produkt</stro
 
 #: src/Admin/SettingsPage.php:874
 msgid "For the two conditional reasons the plugin <strong>captures the consent first, then hides the button</strong>: on the <strong>WooCommerce checkout</strong> it adds the required tick-box automatically and stores the agreed wording on the order. Until that tick-box is confirmed — and on platforms/checkouts where capture is not available yet — the button <strong>stays visible, even on digital items</strong> (fail-safe toward the consumer's right). The plugin never hides the button \"on digital\" blindly. The acknowledgement wording is filterable via <code>webwakeupwdb_consent_text</code>. Seal-based reasons depend on the consumer unsealing after delivery, so they are never auto-hidden."
-msgstr "Bei den beiden bedingten Gründen <strong>erfasst das Plugin zunächst die Einwilligung und blendet den Button erst danach aus</strong>: Beim <strong>WooCommerce-Checkout</strong> fügt es automatisch das erforderliche Kontrollkästchen hinzu und speichert den zugestimmten Wortlaut in der Bestellung. Bis dieses Kontrollkästchen bestätigt wurde — und auf Plattformen bzw. Checkouts, bei denen die Erfassung noch nicht verfügbar ist — <strong>bleibt der Button auch bei digitalen Artikeln sichtbar</strong> (Fail-Safe zugunsten des Verbraucherrechts). Das Plugin blendet den Button niemals blind „bei digitalen Inhalten“ aus. Der Bestätigungstext ist über <code>webwakeupwdb_consent_text</code> filterbar. Auf Versiegelung basierende Gründe hängen davon ab, dass der Verbraucher die Versiegelung nach Lieferung entfernt, und werden daher niemals automatisch ausgeblendet."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:876
 msgid "The stored consent is <strong>evidence to discharge your burden of proof</strong> (Art. 6(9) Dir. 2011/83/EU; GDPR accountability Art. 5(2)) — not a legally-named \"register\". For the <strong>digital</strong> exemption the law also requires you to send the consumer a confirmation on a <strong>durable medium</strong> (e-mail) before access begins, or the exemption does not hold. See the plugin's legal note for the full basis."
@@ -1855,11 +1855,11 @@ msgstr "Widerrufsrecht"
 
 #: src/Compat/ComplianzDocuments.php:117
 msgid "You may withdraw using the model withdrawal form (Annex I-B) or directly online through the \"withdraw from contract\" function available in your order area throughout the withdrawal period."
-msgstr "Sie können das Muster-Widerrufsformular (Anlage I-B) verwenden oder direkt online über die Funktion „Vom Vertrag zurücktreten“ widerrufen, die während der gesamten Widerrufsfrist in Ihrem Bestellbereich zur Verfügung steht."
+msgstr ""
 
 #: src/Compat/ComplianzDocuments.php:131
 msgid "Right-of-withdrawal records"
-msgstr "Widerrufsdatensätze"
+msgstr ""
 
 #: src/Domain/ConsentText.php:59
 msgid "I request immediate access to this digital content and I acknowledge that, once the download or streaming has begun, I lose my right of withdrawal."
@@ -2037,33 +2037,37 @@ msgstr "Öffentliche Versteigerung"
 msgid "Contracts concluded at a public auction."
 msgstr "Verträge, die bei einer öffentlichen Versteigerung geschlossen werden."
 
-#: src/Domain/WithdrawalService.php:125
+#: src/Domain/WithdrawalService.php:142
 msgid "No pending withdrawal to confirm. Please start again."
 msgstr "Kein ausstehender Widerruf zur Bestätigung. Bitte beginnen Sie erneut."
 
-#: src/Domain/WithdrawalService.php:128
+#: src/Domain/WithdrawalService.php:145
 msgid "This confirmation has expired. Please start the withdrawal again."
 msgstr "Diese Bestätigung ist abgelaufen. Bitte starten Sie den Widerruf erneut."
 
-#: src/Domain/WithdrawalService.php:131
+#: src/Domain/WithdrawalService.php:148
 msgid "Invalid confirmation. Please start the withdrawal again."
 msgstr "Ungültige Bestätigung. Bitte starten Sie den Widerruf erneut."
 
-#: src/Domain/WithdrawalService.php:178
+#: src/Domain/WithdrawalService.php:195
 msgid "Right of withdrawal exercised by the consumer (within the period)."
 msgstr "Widerrufsrecht durch den Verbraucher ausgeübt (innerhalb der Frist)."
 
-#: src/Domain/WithdrawalService.php:179
+#: src/Domain/WithdrawalService.php:196
 msgid "Right of withdrawal exercised by the consumer — flagged outside the computed period; please verify validity."
 msgstr "Widerrufsrecht durch den Verbraucher ausgeübt — als außerhalb der berechneten Frist markiert; bitte Gültigkeit prüfen."
 
-#: src/Domain/WithdrawalService.php:264
+#: src/Domain/WithdrawalService.php:281
 msgid "Subscription cancelled automatically following the withdrawal (future renewals stopped). Refund / any pro-rata: handle manually."
 msgstr "Abonnement nach dem Widerruf automatisch gekündigt (künftige Verlängerungen gestoppt). Erstattung / etwaiger anteiliger Betrag: manuell bearbeiten."
 
-#: src/Domain/WithdrawalService.php:265
+#: src/Domain/WithdrawalService.php:282
 msgid "Automatic subscription cancellation could not be completed — please cancel the subscription manually and process the refund."
 msgstr "Die automatische Kündigung des Abonnements konnte nicht abgeschlossen werden — bitte kündigen Sie das Abonnement manuell und führen Sie die Erstattung durch."
+
+#: src/Domain/WithdrawalService.php:79
+msgid "This order is not eligible for the right of withdrawal."
+msgstr ""
 
 #: src/DurableMedium/ConfirmationDispatcher.php:184
 msgid "New withdrawal request — order %s"
@@ -2090,7 +2094,7 @@ msgid "Your withdrawal has been registered. We have emailed you a confirmation."
 msgstr "Ihr Widerruf wurde registriert. Wir haben Ihnen eine Bestätigung per E-Mail gesendet."
 
 #: src/Frontend/Assets.php:110
-#: src/Frontend/NoScriptFlow.php:91
+#: src/Frontend/NoScriptFlow.php:98
 #: templates/form/withdrawal-form.php:106
 msgid "Please confirm your withdrawal. This is the final step."
 msgstr "Bitte bestätigen Sie Ihren Widerruf. Dies ist der letzte Schritt."
@@ -2134,37 +2138,38 @@ msgstr "Meinung geändert? Sie können Ihr Widerrufsrecht bei berechtigten Beste
 msgid "Open the withdrawal page"
 msgstr "Widerrufsseite öffnen"
 
-#: src/Frontend/NoScriptFlow.php:151
+#: src/Frontend/NoScriptFlow.php:158
 msgid "Withdrawal registered"
 msgstr "Widerruf registriert"
 
-#: src/Frontend/NoScriptFlow.php:152
+#: src/Frontend/NoScriptFlow.php:159
 msgid "Your withdrawal has been registered. We have emailed you a confirmation on a durable medium."
 msgstr "Ihr Widerruf wurde registriert. Wir haben Ihnen eine Bestätigung auf einem dauerhaften Datenträger per E-Mail gesendet."
 
-#: src/Frontend/NoScriptFlow.php:166
+#: src/Frontend/NoScriptFlow.php:173
 #: src/REST/Routes/WithdrawalRoute.php:139
 #: src/REST/Routes/WithdrawalRoute.php:173
-#: src/REST/Routes/WithdrawalRoute.php:208
+#: src/REST/Routes/WithdrawalRoute.php:211
 msgid "Too many attempts. Please try again in a few minutes."
 msgstr "Zu viele Versuche. Bitte versuchen Sie es in einigen Minuten erneut."
 
-#: src/Frontend/NoScriptFlow.php:178
+#: src/Frontend/NoScriptFlow.php:185
 msgid "Security check failed. Please reload the form and try again."
 msgstr "Sicherheitsprüfung fehlgeschlagen. Bitte laden Sie das Formular neu und versuchen Sie es erneut."
 
-#: src/Frontend/NoScriptFlow.php:192
+#: src/Frontend/NoScriptFlow.php:199
 #: src/REST/Routes/WithdrawalRoute.php:41
 msgid "Invalid request."
 msgstr "Ungültige Anfrage."
 
-#: src/Frontend/NoScriptFlow.php:232
+#: src/Frontend/NoScriptFlow.php:239
 msgid "Back to the site"
 msgstr "Zurück zur Website"
 
 #: src/Frontend/NoScriptFlow.php:77
-#: src/Frontend/NoScriptFlow.php:146
-#: src/Frontend/NoScriptFlow.php:165
+#: src/Frontend/NoScriptFlow.php:86
+#: src/Frontend/NoScriptFlow.php:153
+#: src/Frontend/NoScriptFlow.php:172
 msgid "Withdrawal"
 msgstr "Widerruf"
 
@@ -2187,51 +2192,51 @@ msgstr "Gilt für: %s"
 
 #: src/Legal/PolicyBuilder.php:107
 msgid "You have %d days to withdraw from this contract without giving any reason. The period runs from the day you (or a third party you indicate) take physical possession of the goods, or from the conclusion of the contract for services and digital content."
-msgstr "Sie haben das Recht, binnen %d Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen. Die Frist beginnt mit dem Tag, an dem Sie oder ein von Ihnen benannter Dritter die Waren in Besitz genommen haben, bzw. bei Dienstleistungen und digitalen Inhalten mit dem Tag des Vertragsabschlusses."
+msgstr ""
 
 #: src/Legal/PolicyBuilder.php:111
 msgid "Your right of withdrawal"
-msgstr "Ihr Widerrufsrecht"
+msgstr ""
 
 #: src/Legal/PolicyBuilder.php:121
 msgid "How to withdraw"
-msgstr "So widerrufen Sie"
+msgstr ""
 
 #: src/Legal/PolicyBuilder.php:132
 msgid "If you withdraw, we reimburse all payments received from you, including standard delivery costs, without undue delay and no later than 14 days from the day we are informed of your decision. We use the same means of payment you used, at no cost to you. For goods, we may withhold the refund until we receive the goods back or you provide proof of return; you must send the goods back without undue delay and within 14 days, bearing the direct cost of return unless we agreed otherwise. You are only liable for any diminished value resulting from handling beyond what is necessary to establish the nature, characteristics and functioning of the goods."
-msgstr "Wenn Sie widerrufen, erstatten wir Ihnen alle von Ihnen erhaltenen Zahlungen, einschließlich der Standardlieferkosten, unverzüglich und spätestens binnen 14 Tagen ab dem Tag, an dem wir über Ihren Widerruf informiert wurden. Wir verwenden dasselbe Zahlungsmittel, das Sie bei der ursprünglichen Transaktion eingesetzt haben, ohne dass Ihnen hierfür Kosten entstehen. Bei Waren können wir die Rückzahlung verweigern, bis wir die Waren zurückerhalten haben oder Sie einen Nachweis über die Rücksendung erbracht haben; Sie müssen die Waren unverzüglich und binnen 14 Tagen zurücksenden und tragen die unmittelbaren Kosten der Rücksendung, sofern nichts anderes vereinbart wurde. Sie haften nur für einen etwaigen Wertverlust, der auf einen Umgang mit den Waren zurückzuführen ist, der über das zur Prüfung von Beschaffenheit, Eigenschaften und Funktionsweise der Waren notwendige Maß hinausgeht."
+msgstr ""
 
 #: src/Legal/PolicyBuilder.php:133
 msgid "Refunds and returns"
-msgstr "Rückerstattungen und Rücksendungen"
+msgstr ""
 
 #: src/Legal/PolicyBuilder.php:166
 msgid "This exception applies only where your prior express consent and acknowledgement were captured at checkout; otherwise the right of withdrawal still applies."
-msgstr "Diese Ausnahme gilt nur, wenn Ihre vorherige ausdrückliche Einwilligung und Kenntnisnahme beim Checkout erfasst wurde; andernfalls besteht das Widerrufsrecht weiterhin."
+msgstr ""
 
 #: src/Legal/PolicyBuilder.php:175
 msgid "For some of the products or services in this shop, the law excludes or limits the right of withdrawal:"
-msgstr "Für einige der Produkte oder Dienstleistungen in diesem Shop schließt das Gesetz das Widerrufsrecht aus oder schränkt es ein:"
+msgstr ""
 
 #: src/Legal/PolicyBuilder.php:177
 msgid "Exceptions that apply to this shop"
-msgstr "Für diesen Shop geltende Ausnahmen"
+msgstr ""
 
 #: src/Legal/PolicyBuilder.php:188
 msgid "Evidence and privacy"
-msgstr "Nachweis und Datenschutz"
+msgstr ""
 
 #: src/Legal/PolicyBuilder.php:208
 msgid "Contact for withdrawals: %s"
-msgstr "Kontakt für Widerrufe: %s"
+msgstr ""
 
 #: src/Legal/PolicyBuilder.php:211
 msgid "Who we are"
-msgstr "Wer wir sind"
+msgstr ""
 
 #: src/Legal/PolicyBuilder.php:93
 msgid "This notice complements — and does not replace — your Terms of Sale and pre-contractual information. It is a generic template; have it reviewed by your own legal counsel."
-msgstr "Dieser Hinweis ergänzt Ihre Verkaufsbedingungen und vorvertraglichen Informationen, ersetzt sie jedoch nicht. Es handelt sich um eine generische Vorlage; lassen Sie sie von Ihrem eigenen Rechtsberater prüfen."
+msgstr ""
 
 #: src/Mail/ExemptionConfirmation.php:120
 msgid "EXAMPLE"
@@ -2347,7 +2352,7 @@ msgstr "Nicht gefunden."
 msgid "Receipt not available."
 msgstr "Quittung nicht verfügbar."
 
-#: src/REST/Routes/WithdrawalRoute.php:220
+#: src/REST/Routes/WithdrawalRoute.php:223
 msgid "Missing confirmation token. Please start again."
 msgstr "Bestätigungstoken fehlt. Bitte beginnen Sie erneut."
 
@@ -2502,15 +2507,15 @@ msgstr "Möchten Sie nur von einigen Produkten widerrufen?"
 
 #: templates/form/withdrawal-form.php:75
 msgid "Tick them — leave empty to withdraw from the whole order. If you bought more than one of an item, you can set how many to withdraw (leave blank for all)."
-msgstr "Wählen Sie sie aus — lassen Sie das Feld leer, um von der gesamten Bestellung zurückzutreten. Wenn Sie mehr als ein Exemplar eines Artikels gekauft haben, können Sie festlegen, wie viele widerrufen werden sollen (leer lassen für alle)."
+msgstr ""
 
 #: templates/form/withdrawal-form.php:91
 msgid "Quantity to withdraw (of %d):"
-msgstr "Zu widerrufende Menge (von %d):"
+msgstr ""
 
 #: templates/form/withdrawal-form.php:93
 msgid "all %d"
-msgstr "alle %d"
+msgstr ""
 
 #: templates/myaccount/withdrawal-list.php:42
 msgid "Enter your order number and the email you used at checkout to start a withdrawal. You can also use the link in your order confirmation email, or log in to your account."
@@ -2645,10 +2650,7 @@ msgstr "Der Widerrufseintrag konnte nicht mit dem unveränderlichen Protokoll ab
 msgid "Checked on %s."
 msgstr "Geprüft am %s."
 
-#: wwu-withdrawal-button.php:148
+#: wwu-withdrawal-button.php:172
 msgid "WWU Withdrawal Button requires PHP %1$s or higher. You are running PHP %2$s."
 msgstr "WWU Widerrufsschaltfläche erfordert PHP %1$s oder höher. Sie verwenden PHP %2$s."
 
-#: src/Domain/WithdrawalService.php:79
-msgid "This order is not eligible for the right of withdrawal."
-msgstr "Das Widerrufsrecht gilt für diese Bestellung nicht."
