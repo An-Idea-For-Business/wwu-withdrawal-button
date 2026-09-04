@@ -35,6 +35,8 @@ coverage/
 # Editor / OS noise
 .idea/
 .vscode/
+.cursor/
+.cursorrules
 *.sublime-*
 .DS_Store
 Thumbs.db
