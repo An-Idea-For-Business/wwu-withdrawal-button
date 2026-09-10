@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wwu-withdrawal-button\n"
 "Report-Msgid-Bugs-To: https://webwakeup.it/wwu-withdrawal-button/\n"
-"POT-Creation-Date: 2026-07-02 20:58+0000\n"
-"PO-Revision-Date: 2026-07-02 22:18\n"
+"POT-Creation-Date: 2026-09-04 09:40+0000\n"
+"PO-Revision-Date: 2026-09-04 10:03\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -53,15 +53,15 @@ msgstr "WWU Withdrawal Button: PDF-biblioteket hittades inte, kvittot skickas d�
 
 #: src/Admin/AdminController.php:170
 msgid "WWU Withdrawal Button — action recommended: turn on the trusted timestamp."
-msgstr "WWU Withdrawal Button – rekommenderad åtgärd: aktivera den betrodda tidsstämpeln."
+msgstr ""
 
 #: src/Admin/AdminController.php:172
 msgid "The plugin is live but trusted timestamping is OFF, so your withdrawal records have no independent \"data certa\" — the legally decisive proof of when each withdrawal was received (the fact the statutory 14-day deadline turns on). Turn it on now: it is free, and only an anonymous one-way hash ever leaves your site (never personal data)."
-msgstr "Tillägget är aktivt men betrodd tidsstämpling är AVSTÄNGD, så dina ångerregister saknar ett oberoende \"data certa\" – det juridiskt avgörande beviset på när varje ångerrätt togs emot (avgörande för den lagstadgade 14-dagarsfristen). Aktivera det nu: det är gratis, och endast en anonym envägshash lämnar din webbplats (aldrig personuppgifter)."
+msgstr ""
 
 #: src/Admin/AdminController.php:174
 msgid "Enable trusted timestamping →"
-msgstr "Aktivera betrodd tidsstämpling →"
+msgstr ""
 
 #: src/Admin/AdminController.php:195
 msgid "WWU Withdrawal Button: a withdrawal acknowledgement email could not be sent. The consumer is legally entitled to receive it. Check your site's email/SMTP configuration and resend from the Requests page."
@@ -69,7 +69,7 @@ msgstr "WWU Withdrawal Button: ett bekräftelsemail om frånträde kunde inte sk
 
 #: src/Admin/AdminController.php:199
 msgid "Reported reason: %s"
-msgstr "Angiven anledning: %s"
+msgstr ""
 
 #: src/Admin/AdminController.php:215
 #: src/Admin/AdminController.php:216
@@ -112,7 +112,7 @@ msgstr "Inställningar"
 #: src/Admin/AdminController.php:271
 #: src/Admin/AdminController.php:272
 msgid "Debug Inspector"
-msgstr "Debug Inspector"
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:107
 msgid "Legal go-live"
@@ -130,67 +130,67 @@ msgstr "Skyldigheten har gällt sedan %s."
 #: src/Core/Install.php:355
 #: src/Legal/PolicyBuilder.php:78
 msgid "Right of withdrawal — information notice"
-msgstr "Ångerrätt – informationsmeddelande"
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:150
 msgid "A single consolidated notice, assembled live from your settings and the exemptions you selected. It complements — it does not replace — your Terms of Sale. Publish it on a page and link it from your footer, or freeze a static copy."
-msgstr "Ett enda samlat meddelande som byggs live utifrån dina inställningar och de undantag du valt. Det kompletterar – ersätter inte – dina försäljningsvillkor. Publicera det på en sida och länka till det från din sidfot, eller frys en statisk kopia."
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:157
 msgid "Published"
-msgstr "Publicerad"
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:158
 msgid "Draft"
-msgstr "Utkast"
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:159
 msgid "Open the policy page"
-msgstr "Öppna policysidan"
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:163
 msgid "Create the policy page (draft)"
-msgstr "Skapa policysidan (utkast)"
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:166
 msgid "Freeze to static HTML"
-msgstr "Frys till statisk HTML"
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:169
 msgid "Download PDF"
-msgstr "Ladda ner PDF"
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:174
 msgid "Auto-updating shortcode:"
-msgstr "Automatiskt uppdaterande shortcode:"
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:175
 msgid "“Freeze” snapshots the current text into the page as plain HTML so it stops changing; to return to the auto-updating version, edit the page and put the shortcode back."
-msgstr "\"Frys\" sparar en ögonblicksbild av den aktuella texten på sidan som ren HTML så att den slutar ändras; för att återgå till den automatiskt uppdaterande versionen, redigera sidan och lägg tillbaka shortcode."
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:184
 msgid "Preview the assembled notice"
-msgstr "Förhandsgranska det sammanställda meddelandet"
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:204
 msgid "The withdrawal policy page has been created as a draft — review and publish it."
-msgstr "Sidan för ångerrättspolicy har skapats som ett utkast – granska och publicera den."
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:206
 msgid "Could not create the policy page. Please try again."
-msgstr "Kunde inte skapa policysidan. Försök igen."
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:210
 msgid "The policy was frozen into static HTML on the policy page. It will no longer update automatically until you put the shortcode back."
-msgstr "Policyn frystes till statisk HTML på policysidan. Den kommer inte längre att uppdateras automatiskt förrän du lägger tillbaka shortcode."
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:212
 msgid "Could not freeze the policy. Please try again."
-msgstr "Kunde inte frysa policyn. Försök igen."
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:227
 msgid "No published withdrawal form page is configured. Guests (and FluentCart customers) cannot withdraw. Create a page with the [webwakeupwdb_form] shortcode and set it in Settings."
-msgstr "Ingen publicerad sida för ångerblanketten har konfigurerats. Gäster (och FluentCart-kunder) kan inte utöva ångerrätten. Skapa en sida med shortcode [webwakeupwdb_form] och ange den i Inställningar."
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:231
 msgid "Complianz is active. The withdrawal flow is functional (consent-exempt); the plugin marks its scripts so they are not blocked. Verify on the front end after first activation."
@@ -231,11 +231,11 @@ msgstr "Dokument att uppdatera (krav 6)"
 #: src/Admin/ComplianceStatusPage.php:58
 #: src/Admin/DashboardPage.php:319
 msgid "Installing the button is not enough — update your legal texts too."
-msgstr "Det räcker inte att installera knappen – uppdatera även dina juridiska texter."
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:59
 msgid "EU law requires your Terms & Conditions of sale and your pre-contractual information to describe how the consumer withdraws — and that now includes the new online \"withdrawal button\". Edit the withdrawal article in your own documents to mention it: copy the ready-to-paste clauses below. The plugin adds the button, but it cannot change your published terms for you."
-msgstr "EU-lagstiftningen kräver att dina försäljningsvillkor och din förhandsinformation beskriver hur konsumenten utövar ångerrätten – och det omfattar nu den nya digitala \"ångerknappen\". Redigera avsnittet om ångerrätt i dina egna dokument för att nämna den: kopiera de klistra-in-färdiga klausulerna nedan. Tillägget lägger till knappen, men det kan inte ändra dina publicerade villkor åt dig."
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:62
 msgid "The withdrawal button is additional to the Annex I-B model form, which stays mandatory. Update these documents and place the model form in your pre-contractual information."
@@ -251,12 +251,12 @@ msgstr "Shortcode för förköpsinformation:"
 
 #: src/Admin/ComplianceStatusPage.php:73
 msgid "The texts below are the ones in use. To replace them with your own wording (no code needed), edit them in <a href=\"%s\">Settings &rarr; Legal clauses</a> — your version then appears here and wherever the <code>[webwakeupwdb_info]</code> shortcode is used."
-msgstr "Texterna nedan är de som används. För att ersätta dem med din egen formulering (ingen kod krävs), redigera dem under <a href=\"%s\">Inställningar &rarr; Juridiska klausuler</a> – din version visas sedan här och överallt där shortcode <code>[webwakeupwdb_info]</code> används."
+msgstr ""
 
 #: src/Admin/ComplianceStatusPage.php:84
 #: src/Admin/SettingsPage.php:523
 msgid "customised"
-msgstr "anpassad"
+msgstr ""
 
 #: src/Admin/ConsentRecordsPage.php:103
 #: src/Admin/RequestsDashboard.php:117
@@ -269,11 +269,11 @@ msgstr "anpassad"
 #: templates/pdf/receipt-pdf.php:48
 #: templates/public/verify-receipt.php:66
 msgid "Order"
-msgstr "Order"
+msgstr ""
 
 #: src/Admin/ConsentRecordsPage.php:104
 msgid "Platform"
-msgstr "Plattform"
+msgstr ""
 
 #: src/Admin/ConsentRecordsPage.php:105
 #: templates/myaccount/withdrawal-list.php:73
@@ -298,7 +298,7 @@ msgstr "Bekräftelsemail"
 
 #: src/Admin/ConsentRecordsPage.php:110
 msgid "IP"
-msgstr "IP"
+msgstr ""
 
 #: src/Admin/ConsentRecordsPage.php:134
 msgid "stored"
@@ -359,7 +359,7 @@ msgstr "En rad per samtycke; upp till de %d senaste beställningarna."
 
 #: src/Admin/ConsentRecordsPage.php:92
 msgid "No consent records yet. Consent is captured at checkout for the conditional Art. 59 exemptions on WooCommerce, Easy Digital Downloads and FluentCart."
-msgstr "Inga samtyckesregister ännu. Samtycke registreras vid kassan för de villkorade undantagen enligt artikel 59 på WooCommerce, Easy Digital Downloads och FluentCart."
+msgstr ""
 
 #: src/Admin/DashboardPage.php:104
 msgid "Withdrawal function enabled"
@@ -404,39 +404,39 @@ msgstr "Visa sida"
 
 #: src/Admin/DashboardPage.php:134
 msgid "No published form page found — it may have been deleted or trashed. Guests without an account need one; recreate it in one click:"
-msgstr "Ingen publicerad blankettsida hittades – den kan ha tagits bort eller flyttats till papperskorgen. Gäster utan konto behöver en; återskapa den med ett klick:"
+msgstr ""
 
 #: src/Admin/DashboardPage.php:135
 msgid "Recreate the page"
-msgstr "Återskapa sidan"
+msgstr ""
 
 #: src/Admin/DashboardPage.php:149
 msgid "Withdrawal policy page"
-msgstr "Sida för ångerrättspolicy"
+msgstr ""
 
 #: src/Admin/DashboardPage.php:151
 msgid "Published — a consolidated \"Right of withdrawal\" notice assembled from your settings and exemptions."
-msgstr "Publicerad – ett samlat meddelande om \"Ångerrätt\" sammanställt utifrån dina inställningar och undantag."
+msgstr ""
 
 #: src/Admin/DashboardPage.php:152
 msgid "Created as a draft — review it and publish when ready."
-msgstr "Skapad som utkast – granska den och publicera när den är klar."
+msgstr ""
 
 #: src/Admin/DashboardPage.php:153
 msgid "Open page"
-msgstr "Öppna sida"
+msgstr ""
 
 #: src/Admin/DashboardPage.php:160
 msgid "Withdrawal policy page (optional)"
-msgstr "Sida för ångerrättspolicy (valfritt)"
+msgstr ""
 
 #: src/Admin/DashboardPage.php:161
 msgid "A single consolidated \"Right of withdrawal\" notice (assembled from your settings + exemptions) you can link from your footer. Create it as a draft to review:"
-msgstr "Ett enda samlat meddelande om \"Ångerrätt\" (sammanställt utifrån dina inställningar och undantag) som du kan länka till från din sidfot. Skapa det som ett utkast för granskning:"
+msgstr ""
 
 #: src/Admin/DashboardPage.php:162
 msgid "Create the policy page"
-msgstr "Skapa policysidan"
+msgstr ""
 
 #: src/Admin/DashboardPage.php:169
 msgid "Sending through %s. Use the test below to confirm it reaches your inbox."
@@ -464,19 +464,19 @@ msgstr "PDF-biblioteket hittades inte. E-postkvittot fungerar fortfarande (det �
 
 #: src/Admin/DashboardPage.php:196
 msgid "Trusted timestamp — legal \"data certa\" (recommended)"
-msgstr "Betrodd tidsstämpel – juridiskt \"data certa\" (rekommenderas)"
+msgstr ""
 
 #: src/Admin/DashboardPage.php:200
 msgid "Enabled (%s). Each confirmed withdrawal is anchored to an independent, tamper-proof timestamp — the legally decisive proof of WHEN it was received."
-msgstr "Aktiverad (%s). Varje bekräftad ångerrätt förankras till en oberoende, manipulationssäker tidsstämpel – det juridiskt avgörande beviset på NÄR den togs emot."
+msgstr ""
 
 #: src/Admin/DashboardPage.php:203
 msgid "OFF — please turn this on. The log is already tamper-evident, but a trusted timestamp adds an independent \"data certa\": proof of the exact date and time a withdrawal was received, which is the fact the statutory 14-day deadline turns on. OpenTimestamps is free and sends only an anonymous one-way hash — never personal data."
-msgstr "AVSTÄNGD – aktivera denna funktion. Loggen är redan manipulationssäker, men en betrodd tidsstämpel lägger till ett oberoende \"data certa\": bevis på exakt datum och tid när en ångerrätt togs emot, vilket är avgörande för den lagstadgade 14-dagarsfristen. OpenTimestamps är gratis och skickar endast en anonym envägshash – aldrig personuppgifter."
+msgstr ""
 
 #: src/Admin/DashboardPage.php:204
 msgid "Enable it now"
-msgstr "Aktivera nu"
+msgstr ""
 
 #: src/Admin/DashboardPage.php:217
 msgid "How it works"
@@ -572,11 +572,11 @@ msgstr "Skicka testmail"
 
 #: src/Admin/DashboardPage.php:320
 msgid "EU law requires your Terms & Conditions of sale and your pre-contractual information to describe how the consumer withdraws — and that now includes the new online \"withdrawal button\". Edit the withdrawal article in your own documents to mention it. The plugin generates ready-to-paste clauses, but it cannot change your published terms for you."
-msgstr "EU-lagstiftningen kräver att dina försäljningsvillkor och din förhandsinformation beskriver hur konsumenten utövar ångerrätten – och det omfattar nu den nya digitala \"ångerknappen\". Redigera avsnittet om ångerrätt i dina egna dokument för att nämna den. Tillägget genererar klistra-in-färdiga klausuler, men det kan inte ändra dina publicerade villkor åt dig."
+msgstr ""
 
 #: src/Admin/DashboardPage.php:321
 msgid "Get the ready-to-paste clauses"
-msgstr "Hämta de klistra-in-färdiga klausulerna"
+msgstr ""
 
 #: src/Admin/DashboardPage.php:332
 msgid "Please wait a few seconds before sending another test email."
@@ -604,19 +604,19 @@ msgstr "Om du tog emot det fungerar utgående e-post och bekräftelser om frånt
 
 #: src/Admin/DashboardPage.php:531
 msgid "The PDF library is not available on this site. Install the plugin from the official packaged ZIP to enable PDF export — the policy page and the [webwakeupwdb_policy] shortcode still work without it."
-msgstr "PDF-biblioteket är inte tillgängligt på denna webbplats. Installera tillägget från den officiella paketerade ZIP-filen för att aktivera PDF-export – policysidan och shortcode [webwakeupwdb_policy] fungerar ändå utan det."
+msgstr ""
 
 #: src/Admin/DashboardPage.php:567
 msgid "Could not recreate the page. Please try again, or create it manually with the relevant shortcode."
-msgstr "Kunde inte återskapa sidan. Försök igen, eller skapa den manuellt med den relevanta shortcode."
+msgstr ""
 
 #: src/Admin/DashboardPage.php:571
 msgid "The withdrawal policy page has been recreated as a draft — review and publish it."
-msgstr "Sidan för ångerrättspolicy har återskapats som ett utkast – granska och publicera den."
+msgstr ""
 
 #: src/Admin/DashboardPage.php:572
 msgid "The withdrawal form page has been recreated and published."
-msgstr "Sidan för ångerblanketten har återskapats och publicerats."
+msgstr ""
 
 #: src/Admin/DashboardPage.php:615
 #: src/Admin/SettingsPage.php:82
@@ -637,7 +637,7 @@ msgstr "Endast EU/EES-konsumenter"
 
 #: src/Admin/DashboardPage.php:91
 msgid "WWU Withdrawal Button"
-msgstr "WWU Withdrawal Button"
+msgstr ""
 
 #: src/Admin/DashboardPage.php:92
 msgid "The EU online right-of-withdrawal function (Art. 11a / Art. 54-bis) for WooCommerce & FluentCart."
@@ -649,7 +649,7 @@ msgstr "Konfigurationschecklista"
 
 #: src/Admin/InspectorPage.php:39
 msgid "WWU Withdrawal Button — Debug Inspector"
-msgstr "WWU Withdrawal Button – Debug Inspector"
+msgstr ""
 
 #: src/Admin/InspectorPage.php:45
 msgid "Debug is not enabled for your account. Enable it under <a href=\"%s\">Settings → Debug</a>, then reload this page."
@@ -734,7 +734,7 @@ msgstr "I tid"
 
 #: src/Admin/RequestsDashboard.php:122
 msgid "Status"
-msgstr "Status"
+msgstr ""
 
 #: src/Admin/RequestsDashboard.php:123
 msgid "Evidence"
@@ -747,7 +747,7 @@ msgstr "Åtgärder"
 #: src/Admin/RequestsDashboard.php:149
 #: src/DurableMedium/ReceiptBuilder.php:57
 msgid "%1$s × %2$d"
-msgstr "%1$s × %2$d"
+msgstr ""
 
 #: src/Admin/RequestsDashboard.php:153
 #: templates/public/verify-receipt.php:73
@@ -854,12 +854,12 @@ msgstr "Bevislogg: integriteten bruten vid rad nr %d — undersök."
 #: src/Admin/RequestsDashboard.php:99
 msgid "Timestamp: %d confirmed record is not yet externally anchored — the hourly job retries automatically."
 msgid_plural "Timestamp: %d confirmed records are not yet externally anchored — the hourly job retries automatically."
-msgstr[0] "Tidsstämpel: %d bekräftat register är ännu inte externt förankrat – den timvisa uppgiften försöker automatiskt igen."
-msgstr[1] "Tidsstämpel: %d bekräftat register är ännu inte externt förankrat – den timvisa uppgiften försöker automatiskt igen."
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/Admin/SettingsPage.php:100
 msgid "Debug"
-msgstr "Debug"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:1002
 msgid "And receives this confirmation e-mail:"
@@ -1081,39 +1081,39 @@ msgstr "WWU Withdrawal Button — ett gratis open source-verktyg för regelefter
 
 #: src/Admin/SettingsPage.php:168
 msgid "Complianz documents"
-msgstr "Complianz-dokument"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:170
 msgid "These toggles add ready-made withdrawal clauses to your Complianz Privacy Policy and Terms. They are generic templates that complement — not replace — your own legal texts; have them reviewed by your lawyer. Nothing is added until you turn a toggle on, and turning it off removes the clauses on the next regeneration."
-msgstr "Dessa reglage lägger till färdiga klausuler om ångerrätt till din Complianz-integritetspolicy och dina villkor. De är generiska mallar som kompletterar – inte ersätter – dina egna juridiska texter; låt din jurist granska dem. Inget läggs till förrän du aktiverar ett reglage, och att stänga av det tar bort klausulerna vid nästa återgenerering."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:176
 msgid "Privacy Policy"
-msgstr "Integritetspolicy"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:178
 msgid "Add the right-of-withdrawal record-keeping clauses to my Complianz Privacy Policy."
-msgstr "Lägg till klausuler om registerhållning för ångerrätt i min Complianz-integritetspolicy."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:183
 msgid "Terms & Conditions"
-msgstr "Villkor"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:186
 msgid "Add the withdrawal article (and the online / Annex I-B modality) to my Complianz Terms & Conditions."
-msgstr "Lägg till avsnittet om ångerrätt (och det digitala förfarandet / bilaga I-B) i mina Complianz-villkor."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:190
 msgid "Add the withdrawal article to my Complianz Terms & Conditions."
-msgstr "Lägg till avsnittet om ångerrätt i mina Complianz-villkor."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:194
 msgid "Complianz does not generate a Terms &amp; Conditions document on its own. Install the free %s to enable this."
-msgstr "Complianz genererar inte ett dokument med villkor på egen hand. Installera den kostnadsfria %s för att aktivera detta."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:220
 msgid "Preview what will be added"
-msgstr "Förhandsgranska vad som kommer att läggas till"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:251
 msgid "Where the button applies"
@@ -1216,7 +1216,7 @@ msgstr "En kund prenumererar den 1 mars (initial beställning). De får 14 dagar
 
 #: src/Admin/SettingsPage.php:359
 msgid "FluentCart"
-msgstr "FluentCart"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:362
 msgid "FluentCart is not active. This setting takes effect only once FluentCart is installed."
@@ -1228,11 +1228,11 @@ msgstr "FluentCarts eget tillägg för frånträde upptäcktes. I Auto-läge tr�
 
 #: src/Admin/SettingsPage.php:366
 msgid "FluentCart now ships its own native withdrawal add-on (since FluentCart 1.4.2)."
-msgstr "FluentCart levereras nu med ett eget inbyggt tillägg för ångerrätt (sedan FluentCart 1.4.2)."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:369
 msgid "This plugin does not yet auto-detect it. If you have enabled FluentCart's \"customer rights\" add-on, set the handling below to <strong>Off</strong> (or have your developer return true from the %s filter) so customers do not see two withdrawal flows on FluentCart orders. Automatic detection will ship in an update. Your WooCommerce and EDD handling is unaffected."
-msgstr "Detta tillägg upptäcker det ännu inte automatiskt. Om du har aktiverat FluentCarts tillägg för \"kundrättigheter\", ställ in hanteringen nedan på <strong>Av</strong> (eller be din utvecklare returnera true från filtret %s) så att kunderna inte ser två ångerflöden på FluentCart-ordrar. Automatisk upptäckt kommer i en kommande uppdatering. Din hantering av WooCommerce och EDD påverkas inte."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:376
 msgid "Withdrawal handling"
@@ -1260,35 +1260,35 @@ msgstr "Styr endast våra konsumentvända FluentCart-ytor: portalknappen, samtyc
 
 #: src/Admin/SettingsPage.php:396
 msgid "FluentCart shipped a dedicated withdrawal add-on (\"customer rights\") in 1.4.2. Automatic detection is not wired into this plugin yet, so for now: if you use FluentCart's add-on, pick <strong>Off</strong> here (or return true from the %s filter) to avoid two flows; pick <strong>Always</strong> to keep ours regardless. A future update will detect the add-on so Auto can step aside on its own."
-msgstr "FluentCart levererade ett eget tillägg för ångerrätt (\"kundrättigheter\") i version 1.4.2. Automatisk upptäckt är ännu inte inbyggd i detta tillägg, så för tillfället: om du använder FluentCarts tillägg, välj <strong>Av</strong> här (eller returnera true från filtret %s) för att undvika två flöden; välj <strong>Alltid</strong> för att behålla vårt oavsett. En kommande uppdatering kommer att upptäcka tillägget så att Auto kan träda tillbaka på egen hand."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:413
 msgid "Add the withdrawal link to FluentCart e-mails (optional)"
-msgstr "Lägg till länken för ångerrätt i FluentCart-e-postmeddelanden (valfritt)"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:414
 msgid "WooCommerce and Easy Digital Downloads order e-mails get the withdrawal link automatically. FluentCart does not let plugins add content to its e-mails automatically, so to include the link in your FluentCart order e-mails add this shortcode once to your receipt template:"
-msgstr "WooCommerce- och Easy Digital Downloads-orderbekräftelser får automatiskt länken för ångerrätt. FluentCart tillåter inte att tillägg automatiskt lägger till innehåll i sina e-postmeddelanden, så för att inkludera länken i dina FluentCart-orderbekräftelser, lägg till denna shortcode en gång i din kvittomall:"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:416
 msgid "How to add it (3 steps)"
-msgstr "Så här lägger du till den (3 steg)"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:418
 msgid "In FluentCart open Settings → Emails and edit your order receipt / order confirmation notification."
-msgstr "Öppna i FluentCart Inställningar → E-post och redigera din kvitto- / orderbekräftelsenotifiering."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:419
 msgid "Switch the body to \"Customized Body\", then use the shortcode picker ({;}) above the editor — or simply paste the shortcode above where you want the link to appear."
-msgstr "Byt innehållet till \"Anpassat innehåll\" och använd sedan shortcode-väljaren ({;}) ovanför redigeraren – eller klistra helt enkelt in shortcode ovan där du vill att länken ska visas."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:420
 msgid "Save. FluentCart replaces the shortcode with the consumer's personal, pre-authenticated withdrawal link when the e-mail is sent."
-msgstr "Spara. FluentCart ersätter shortcode med konsumentens personliga, förautentiserade länk för ångerrätt när e-postmeddelandet skickas."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:422
 msgid "Optional: customers can always reach the withdrawal from the FluentCart \"Right of withdrawal\" portal page and the public form, regardless of the e-mail."
-msgstr "Valfritt: kunder kan alltid nå ångerrätten via FluentCarts portalsida för \"Ångerrätt\" och den offentliga blanketten, oavsett e-postmeddelandet."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:456
 msgid "Consumer guidance"
@@ -1340,63 +1340,63 @@ msgstr "Ångerrätten gäller inte för denna beställning: varje artikel omfatt
 
 #: src/Admin/SettingsPage.php:500
 msgid "Pre-contractual information"
-msgstr "Förhandsinformation"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:501
 msgid "General terms (\"How to withdraw\")"
-msgstr "Allmänna villkor (\"Så här utövar du ångerrätten\")"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:502
 msgid "Privacy policy (withdrawal log)"
-msgstr "Integritetspolicy (ångerrättslogg)"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:503
 msgid "Privacy policy (exemption-consent evidence)"
-msgstr "Integritetspolicy (bevis för undantagssamtycke)"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:506
 msgid "Legal clauses"
-msgstr "Juridiska klausuler"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:510
 msgid "Customise the ready-to-paste legal clauses (language: %s). Leave a field empty to use the built-in sample template. When you type your own wording it replaces the default everywhere — the Compliance page and the [webwakeupwdb_info] shortcode — and the \"sample text\" note is dropped. This is your own text: have your lawyer review it."
-msgstr "Anpassa de klistra-in-färdiga juridiska klausulerna (språk: %s). Lämna ett fält tomt för att använda den inbyggda exempelmallen. När du skriver in din egen formulering ersätter den standardtexten överallt – sidan Efterlevnad och shortcode [webwakeupwdb_info] – och anmärkningen om \"exempeltext\" tas bort. Detta är din egen text: låt din jurist granska den."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:526
 msgid "Leave empty to use the built-in sample template."
-msgstr "Lämna tomt för att använda den inbyggda exempelmallen."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:527
 msgid "Show the built-in default (copy it to start from there)"
-msgstr "Visa den inbyggda standardtexten (kopiera den för att utgå från den)"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:552
 msgid "Seller details (model withdrawal form)"
-msgstr "Säljarens uppgifter (standardblankett för ångerrätt)"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:553
 msgid "These fill the \"To […]\" recipient line of the statutory model withdrawal form (Annex I-B), shown by the [webwakeupwdb_model_form] shortcode. The rest of that form is the official wording set by law and cannot be changed. Leave a field empty to fall back to your site name / admin e-mail; the geographical address is required by law, so add it here."
-msgstr "Dessa fyller i mottagarraden \"Till […]\" i den lagstadgade standardblanketten för ångerrätt (bilaga I-B), som visas av shortcode [webwakeupwdb_model_form]. Resten av blanketten är den officiella formuleringen som fastställts i lag och kan inte ändras. Lämna ett fält tomt för att falla tillbaka på ditt webbplatsnamn/admin-e-post; den geografiska adressen krävs enligt lag, så lägg till den här."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:556
 msgid "Business name"
-msgstr "Företagsnamn"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:560
 msgid "Geographical address"
-msgstr "Geografisk adress"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:561
 msgid "Street, postcode, city, country"
-msgstr "Gata, postnummer, ort, land"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:562
 msgid "Required on the statutory form. Without it the recipient line shows only your name and e-mail."
-msgstr "Krävs på den lagstadgade blanketten. Utan den visar mottagarraden endast ditt namn och din e-post."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:565
 msgid "Contact e-mail"
-msgstr "Kontakt-e-post"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:599
 msgid "Receipt & evidence"
@@ -1416,11 +1416,11 @@ msgstr "PDF-biblioteket detekterades inte — PDF-kvitton är för närvarande i
 
 #: src/Admin/SettingsPage.php:610
 msgid "Notification email(s)"
-msgstr "E-postadress(er) för notifiering"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:612
 msgid "Where to notify you of new withdrawal requests. Separate several addresses with commas to notify more than one person; the first address is also shown to the customer as the shop contact."
-msgstr "Var du ska meddelas om nya ångerbegäranden. Skilj flera adresser åt med kommatecken för att meddela mer än en person; den första adressen visas även för kunden som butikens kontaktuppgift."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:615
 msgid "Evidence retention (years)"
@@ -1436,15 +1436,15 @@ msgstr "Betrodd tidsstämpel"
 
 #: src/Admin/SettingsPage.php:632
 msgid "None — no external calls (default; the hash chain alone is the evidence)"
-msgstr "Ingen – inga externa anrop (standard; hash-kedjan är i sig beviset)"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:633
 msgid "OpenTimestamps (opt-in; free, Bitcoin-anchored; sends only a one-way hash)"
-msgstr "OpenTimestamps (valbart; gratis, Bitcoin-förankrat; skickar endast en envägshash)"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:634
 msgid "RFC 3161 timestamp authority (opt-in; immediate; eIDAS-qualified options)"
-msgstr "RFC 3161-tidsstämpelmyndighet (valbart; omedelbart; eIDAS-kvalificerade alternativ)"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:64
 msgid "WWU Withdrawal Button — Settings"
@@ -1452,11 +1452,11 @@ msgstr "WWU Withdrawal Button — Inställningar"
 
 #: src/Admin/SettingsPage.php:640
 msgid "Recommended — turn this on."
-msgstr "Rekommenderas – aktivera detta."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:640
 msgid "A trusted timestamp gives you an independent \"data certa\": proof of the exact date and time each withdrawal was received — the fact the statutory 14-day deadline turns on. It is OFF by default (the plugin makes no external call until you pick a provider here). When enabled, only a one-way hash ever leaves your site — never personal data: OpenTimestamps anchors it to Bitcoin (free, completes in ~hours); RFC 3161 returns an immediate signed token from a Time-Stamp Authority."
-msgstr "En betrodd tidsstämpel ger dig ett oberoende \"data certa\": bevis på exakt datum och tid när varje ångerrätt togs emot – avgörande för den lagstadgade 14-dagarsfristen. Den är AVSTÄNGD som standard (tillägget gör inga externa anrop förrän du väljer en leverantör här). När den är aktiverad lämnar endast en envägshash din webbplats – aldrig personuppgifter: OpenTimestamps förankrar den till Bitcoin (gratis, slutförs på ~timmar); RFC 3161 returnerar omedelbart en signerad token från en tidsstämpelmyndighet."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:644
 msgid "RFC 3161 — TSA endpoint"
@@ -1508,7 +1508,7 @@ msgstr "Inställningar sparade."
 
 #: src/Admin/SettingsPage.php:683
 msgid "Free, Bitcoin-anchored, no account (opt-in). Proof completes after a block (~hours)."
-msgstr "Gratis, Bitcoin-förankrat, inget konto krävs (valbart). Beviset slutförs efter ett block (~timmar)."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:684
 msgid "Free RFC 3161. Its /qualified endpoint is eIDAS-qualified and needs no account — recommended free option."
@@ -1576,11 +1576,11 @@ msgstr "Visa ångerrätt-knappen för berättigade konsumenter."
 
 #: src/Admin/SettingsPage.php:783
 msgid "Appearance — styling reference"
-msgstr "Utseende – stilreferens"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:784
 msgid "To restyle the withdrawal flow, add your rules in Appearance → Customize → Additional CSS (built into WordPress), targeting the CSS variables and classes listed below — they load after the plugin styles, so your overrides win."
-msgstr "För att ändra utseendet på ångerrättsflödet, lägg till dina regler under Utseende → Anpassa → Ytterligare CSS (inbyggt i WordPress), riktade mot CSS-variablerna och klasserna som listas nedan – de laddas efter tilläggets stilar, så dina åsidosättanden vinner."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:785
 msgid "Compliance note:"
@@ -1768,7 +1768,7 @@ msgstr "Ångerrätten gäller <strong>som standard för varje produkt</strong>, 
 
 #: src/Admin/SettingsPage.php:874
 msgid "For the two conditional reasons the plugin <strong>captures the consent first, then hides the button</strong>: on the <strong>WooCommerce checkout</strong> it adds the required tick-box automatically and stores the agreed wording on the order. Until that tick-box is confirmed — and on platforms/checkouts where capture is not available yet — the button <strong>stays visible, even on digital items</strong> (fail-safe toward the consumer's right). The plugin never hides the button \"on digital\" blindly. The acknowledgement wording is filterable via <code>webwakeupwdb_consent_text</code>. Seal-based reasons depend on the consumer unsealing after delivery, so they are never auto-hidden."
-msgstr "För de två villkorade anledningarna <strong>registrerar tillägget samtycket först och döljer sedan knappen</strong>: i <strong>WooCommerce-kassan</strong> läggs den obligatoriska kryssrutan till automatiskt och den överenskomna formuleringen sparas på ordern. Fram tills den kryssrutan bekräftas – och på plattformar/kassor där registrering ännu inte är tillgänglig – <strong>förblir knappen synlig, även för digitala artiklar</strong> (en säkerhetsåtgärd till förmån för konsumentens rättighet). Tillägget döljer aldrig knappen \"för digitalt\" blint. Formuleringen för bekräftelsen kan filtreras via <code>webwakeupwdb_consent_text</code>. Anledningar baserade på förseglingar beror på att konsumenten bryter förseglingen efter leverans, så de döljs aldrig automatiskt."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:876
 msgid "The stored consent is <strong>evidence to discharge your burden of proof</strong> (Art. 6(9) Dir. 2011/83/EU; GDPR accountability Art. 5(2)) — not a legally-named \"register\". For the <strong>digital</strong> exemption the law also requires you to send the consumer a confirmation on a <strong>durable medium</strong> (e-mail) before access begins, or the exemption does not hold. See the plugin's legal note for the full basis."
@@ -1855,11 +1855,11 @@ msgstr "Ångerrätt"
 
 #: src/Compat/ComplianzDocuments.php:117
 msgid "You may withdraw using the model withdrawal form (Annex I-B) or directly online through the \"withdraw from contract\" function available in your order area throughout the withdrawal period."
-msgstr "Du kan utöva din ångerrätt med hjälp av standardblanketten för utövande av ångerrätt (bilaga I-B) eller direkt online via funktionen \"utöva ångerrätt\" som finns i ditt orderområde under hela ångerfristen."
+msgstr ""
 
 #: src/Compat/ComplianzDocuments.php:131
 msgid "Right-of-withdrawal records"
-msgstr "Register över ångerrätt"
+msgstr ""
 
 #: src/Domain/ConsentText.php:59
 msgid "I request immediate access to this digital content and I acknowledge that, once the download or streaming has begun, I lose my right of withdrawal."
@@ -2037,33 +2037,37 @@ msgstr "Offentlig auktion"
 msgid "Contracts concluded at a public auction."
 msgstr "Avtal ingångna vid en offentlig auktion."
 
-#: src/Domain/WithdrawalService.php:125
+#: src/Domain/WithdrawalService.php:142
 msgid "No pending withdrawal to confirm. Please start again."
 msgstr "Inget pågående frånträde att bekräfta. Börja om."
 
-#: src/Domain/WithdrawalService.php:128
+#: src/Domain/WithdrawalService.php:145
 msgid "This confirmation has expired. Please start the withdrawal again."
 msgstr "Denna bekräftelse har gått ut. Påbörja frånträdet igen."
 
-#: src/Domain/WithdrawalService.php:131
+#: src/Domain/WithdrawalService.php:148
 msgid "Invalid confirmation. Please start the withdrawal again."
 msgstr "Ogiltig bekräftelse. Påbörja frånträdet igen."
 
-#: src/Domain/WithdrawalService.php:178
+#: src/Domain/WithdrawalService.php:195
 msgid "Right of withdrawal exercised by the consumer (within the period)."
 msgstr "Ångerrätten utövad av konsumenten (inom fristen)."
 
-#: src/Domain/WithdrawalService.php:179
+#: src/Domain/WithdrawalService.php:196
 msgid "Right of withdrawal exercised by the consumer — flagged outside the computed period; please verify validity."
 msgstr "Ångerrätt utövad av konsumenten — flaggad utanför den beräknade fristen; verifiera giltigheten."
 
-#: src/Domain/WithdrawalService.php:264
+#: src/Domain/WithdrawalService.php:281
 msgid "Subscription cancelled automatically following the withdrawal (future renewals stopped). Refund / any pro-rata: handle manually."
 msgstr "Prenumeration automatiskt avbruten efter frånträdet (framtida förnyelser stoppade). Återbetalning / eventuell proportionell avräkning: hanteras manuellt."
 
-#: src/Domain/WithdrawalService.php:265
+#: src/Domain/WithdrawalService.php:282
 msgid "Automatic subscription cancellation could not be completed — please cancel the subscription manually and process the refund."
 msgstr "Automatisk prenumerationsavbokning kunde inte slutföras — avboka prenumerationen manuellt och behandla återbetalningen."
+
+#: src/Domain/WithdrawalService.php:79
+msgid "This order is not eligible for the right of withdrawal."
+msgstr ""
 
 #: src/DurableMedium/ConfirmationDispatcher.php:184
 msgid "New withdrawal request — order %s"
@@ -2090,7 +2094,7 @@ msgid "Your withdrawal has been registered. We have emailed you a confirmation."
 msgstr "Ditt frånträde har registrerats. Vi har skickat en bekräftelse till dig via mail."
 
 #: src/Frontend/Assets.php:110
-#: src/Frontend/NoScriptFlow.php:91
+#: src/Frontend/NoScriptFlow.php:98
 #: templates/form/withdrawal-form.php:106
 msgid "Please confirm your withdrawal. This is the final step."
 msgstr "Bekräfta din ångerbegäran. Det här är det sista steget."
@@ -2134,37 +2138,38 @@ msgstr "Ändrat dig? Du kan utöva din ångerrätt på berättigade beställning
 msgid "Open the withdrawal page"
 msgstr "Öppna ångersidan"
 
-#: src/Frontend/NoScriptFlow.php:151
+#: src/Frontend/NoScriptFlow.php:158
 msgid "Withdrawal registered"
 msgstr "Ångerbegäran registrerad"
 
-#: src/Frontend/NoScriptFlow.php:152
+#: src/Frontend/NoScriptFlow.php:159
 msgid "Your withdrawal has been registered. We have emailed you a confirmation on a durable medium."
 msgstr "Ditt frånträde har registrerats. Vi har skickat dig en bekräftelse på ett varaktigt medium via e-post."
 
-#: src/Frontend/NoScriptFlow.php:166
+#: src/Frontend/NoScriptFlow.php:173
 #: src/REST/Routes/WithdrawalRoute.php:139
 #: src/REST/Routes/WithdrawalRoute.php:173
-#: src/REST/Routes/WithdrawalRoute.php:208
+#: src/REST/Routes/WithdrawalRoute.php:211
 msgid "Too many attempts. Please try again in a few minutes."
 msgstr "För många försök. Försök igen om några minuter."
 
-#: src/Frontend/NoScriptFlow.php:178
+#: src/Frontend/NoScriptFlow.php:185
 msgid "Security check failed. Please reload the form and try again."
 msgstr "Säkerhetskontrollen misslyckades. Ladda om formuläret och försök igen."
 
-#: src/Frontend/NoScriptFlow.php:192
+#: src/Frontend/NoScriptFlow.php:199
 #: src/REST/Routes/WithdrawalRoute.php:41
 msgid "Invalid request."
 msgstr "Ogiltig begäran."
 
-#: src/Frontend/NoScriptFlow.php:232
+#: src/Frontend/NoScriptFlow.php:239
 msgid "Back to the site"
 msgstr "Tillbaka till webbplatsen"
 
 #: src/Frontend/NoScriptFlow.php:77
-#: src/Frontend/NoScriptFlow.php:146
-#: src/Frontend/NoScriptFlow.php:165
+#: src/Frontend/NoScriptFlow.php:86
+#: src/Frontend/NoScriptFlow.php:153
+#: src/Frontend/NoScriptFlow.php:172
 msgid "Withdrawal"
 msgstr "Ångerbegäran"
 
@@ -2187,51 +2192,51 @@ msgstr "Gäller för: %s"
 
 #: src/Legal/PolicyBuilder.php:107
 msgid "You have %d days to withdraw from this contract without giving any reason. The period runs from the day you (or a third party you indicate) take physical possession of the goods, or from the conclusion of the contract for services and digital content."
-msgstr "Du har %d dagar på dig att utöva ångerrätten för detta avtal utan att ange något skäl. Fristen räknas från den dag då du (eller en tredje part du anger) tar varorna i fysisk besittning, eller från avtalets ingående för tjänster och digitalt innehåll."
+msgstr ""
 
 #: src/Legal/PolicyBuilder.php:111
 msgid "Your right of withdrawal"
-msgstr "Din ångerrätt"
+msgstr ""
 
 #: src/Legal/PolicyBuilder.php:121
 msgid "How to withdraw"
-msgstr "Så här utövar du ångerrätten"
+msgstr ""
 
 #: src/Legal/PolicyBuilder.php:132
 msgid "If you withdraw, we reimburse all payments received from you, including standard delivery costs, without undue delay and no later than 14 days from the day we are informed of your decision. We use the same means of payment you used, at no cost to you. For goods, we may withhold the refund until we receive the goods back or you provide proof of return; you must send the goods back without undue delay and within 14 days, bearing the direct cost of return unless we agreed otherwise. You are only liable for any diminished value resulting from handling beyond what is necessary to establish the nature, characteristics and functioning of the goods."
-msgstr "Om du utövar din ångerrätt återbetalar vi alla betalningar vi mottagit från dig, inklusive standardleveranskostnader, utan onödigt dröjsmål och senast 14 dagar från den dag vi informerades om ditt beslut. Vi använder samma betalningsmedel som du använde, utan kostnad för dig. För varor kan vi hålla inne återbetalningen tills vi fått tillbaka varorna eller du visat bevis på att de skickats tillbaka; du måste skicka tillbaka varorna utan onödigt dröjsmål och inom 14 dagar, och du står för den direkta returkostnaden om inte annat överenskommits. Du ansvarar endast för eventuell värdeminskning som beror på hantering utöver vad som är nödvändigt för att fastställa varornas art, egenskaper och funktion."
+msgstr ""
 
 #: src/Legal/PolicyBuilder.php:133
 msgid "Refunds and returns"
-msgstr "Återbetalningar och returer"
+msgstr ""
 
 #: src/Legal/PolicyBuilder.php:166
 msgid "This exception applies only where your prior express consent and acknowledgement were captured at checkout; otherwise the right of withdrawal still applies."
-msgstr "Detta undantag gäller endast om ditt uttryckliga förhandssamtycke och din bekräftelse registrerades vid kassan; annars gäller ångerrätten fortfarande."
+msgstr ""
 
 #: src/Legal/PolicyBuilder.php:175
 msgid "For some of the products or services in this shop, the law excludes or limits the right of withdrawal:"
-msgstr "För vissa produkter eller tjänster i denna butik utesluter eller begränsar lagen ångerrätten:"
+msgstr ""
 
 #: src/Legal/PolicyBuilder.php:177
 msgid "Exceptions that apply to this shop"
-msgstr "Undantag som gäller för denna butik"
+msgstr ""
 
 #: src/Legal/PolicyBuilder.php:188
 msgid "Evidence and privacy"
-msgstr "Bevis och integritet"
+msgstr ""
 
 #: src/Legal/PolicyBuilder.php:208
 msgid "Contact for withdrawals: %s"
-msgstr "Kontakt för ångerrätt: %s"
+msgstr ""
 
 #: src/Legal/PolicyBuilder.php:211
 msgid "Who we are"
-msgstr "Vilka vi är"
+msgstr ""
 
 #: src/Legal/PolicyBuilder.php:93
 msgid "This notice complements — and does not replace — your Terms of Sale and pre-contractual information. It is a generic template; have it reviewed by your own legal counsel."
-msgstr "Detta meddelande kompletterar – och ersätter inte – dina försäljningsvillkor och din förhandsinformation. Det är en generisk mall; låt din egen jurist granska den."
+msgstr ""
 
 #: src/Mail/ExemptionConfirmation.php:120
 msgid "EXAMPLE"
@@ -2347,7 +2352,7 @@ msgstr "Hittades inte."
 msgid "Receipt not available."
 msgstr "Kvitto ej tillgängligt."
 
-#: src/REST/Routes/WithdrawalRoute.php:220
+#: src/REST/Routes/WithdrawalRoute.php:223
 msgid "Missing confirmation token. Please start again."
 msgstr "Bekräftelsetoken saknas. Börja om."
 
@@ -2502,15 +2507,15 @@ msgstr "Frånträder du endast vissa produkter?"
 
 #: templates/form/withdrawal-form.php:75
 msgid "Tick them — leave empty to withdraw from the whole order. If you bought more than one of an item, you can set how many to withdraw (leave blank for all)."
-msgstr "Kryssa i dem – lämna tomt för att utöva ångerrätten för hela ordern. Om du köpt fler än en av en artikel kan du ange hur många du vill återlämna (lämna tomt för alla)."
+msgstr ""
 
 #: templates/form/withdrawal-form.php:91
 msgid "Quantity to withdraw (of %d):"
-msgstr "Antal att återlämna (av %d):"
+msgstr ""
 
 #: templates/form/withdrawal-form.php:93
 msgid "all %d"
-msgstr "alla %d"
+msgstr ""
 
 #: templates/myaccount/withdrawal-list.php:42
 msgid "Enter your order number and the email you used at checkout to start a withdrawal. You can also use the link in your order confirmation email, or log in to your account."
@@ -2645,10 +2650,7 @@ msgstr "Ångerposten kunde inte matchas mot den oföränderliga loggen. Kontakta
 msgid "Checked on %s."
 msgstr "Kontrollerad den %s."
 
-#: wwu-withdrawal-button.php:148
+#: wwu-withdrawal-button.php:172
 msgid "WWU Withdrawal Button requires PHP %1$s or higher. You are running PHP %2$s."
 msgstr "WWU Withdrawal Button kräver PHP %1$s eller högre. Du kör PHP %2$s."
 
-#: src/Domain/WithdrawalService.php:79
-msgid "This order is not eligible for the right of withdrawal."
-msgstr "Ångerrätten gäller inte för denna beställning."
